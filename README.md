@@ -25,3 +25,24 @@ You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
 
+## Database
+
+### Migrations
+
+To migrate the database use the following command:
+
+```bash
+npm run db:push
+```
+
+This generates the database depending on what the variable `DATABASE_URL` is set to in the `.env` file.
+
+### Seeding the Database
+
+To seed the database use the following command:
+
+```bash
+npm run db:seed
+```
+
+This will seed the database with, currently, 3 users for testing the authentication.
