@@ -9,24 +9,41 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 		throw redirect(302, '/');
 	}
 
-	if (!token) {
-		throw redirect(302, '/login');
+	if (token) {
+		// Validate token
+		try {
+			const student = await db
+				.selectFrom('Student')
+				.where('invite_token', '=', token)
+				.select(['id', 'invite_expires'])
+				.executeTakeFirst();
+
+			if (!student || (student.invite_expires && new Date(student.invite_expires) < new Date())) {
+				return { token: null, error: 'Invalid or expired invitation' };
+			}
+		} catch (error) {
+			console.error('Database error:', error);
+			return { token: null, error: 'An error occurred. Please try again later.' };
+		}
 	}
 
 	return { token };
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	register: async ({ request }) => {
 		const formData = await request.formData();
-		const token = formData.get('token') as string;
-		const password = formData.get('password') as string;
+		const data = Object.fromEntries(formData);
 
-		if (!token || !password) {
-			return fail(400, { error: 'Invalid request' });
-		}
+		const token = data.token as string;
+		const password = data.password as string;
 
 		try {
+			// const validator = vine.compile(schema);
+			// const validatedData = await validator.validate(data);
+
+			// const { token, password } = validatedData;
+
 			const student = await db
 				.selectFrom('Student')
 				.where('invite_token', '=', token)
@@ -53,10 +70,17 @@ export const actions: Actions = {
 					.execute();
 			});
 
-			// return { success: true };
-			redirect(302, '/login');
-		} catch (_err) {
-			return fail(500, { error: 'Internal server error' });
+			return redirect(302, '/login?message=registration_complete');
+		} catch (err) {
+			// if (err instanceof errors.E_VALIDATION_ERROR) {
+			// 	return fail(400, {
+			// 		error: 'Validation failed',
+			// 		errors: err.messages
+			// 	});
+			// }
+
+			console.error('Error during registration:', err);
+			return fail(500, { error: 'An error occurred during registration. Please try again.' });
 		}
 	}
 };
