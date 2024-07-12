@@ -90,9 +90,9 @@
 			on:click={togglePasswordVisibility}
 		>
 			{#if showPassword}
-				<Eye />
+				<Eye class="text-gray-400 hover:text-gray-600" />
 			{:else}
-				<EyeSlash />
+				<EyeSlash class="text-gray-400 hover:text-gray-600" />
 			{/if}
 		</button>
 	{/if}
