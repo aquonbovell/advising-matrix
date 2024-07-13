@@ -11,7 +11,7 @@ export type Advisor = {
 };
 export type Session = {
 	id: string;
-	expires_at: number;
+	expires_at: Timestamp;
 	user_id: string;
 };
 export type Student = {
@@ -19,17 +19,17 @@ export type Student = {
 	user_id: string;
 	advisor_id: string;
 	invite_token: string | null;
-	invite_expires: string | null;
-	created_at: Generated<string>;
-	updated_at: string;
+	invite_expires: Timestamp | null;
+	created_at: Generated<Timestamp>;
+	updated_at: Timestamp;
 };
 export type User = {
 	id: string;
 	email: string;
 	password: string;
 	role: 'ADMIN' | 'ADVISOR' | 'STUDENT';
-	created_at: Generated<string>;
-	updated_at: string;
+	created_at: Generated<Timestamp>;
+	updated_at: Timestamp;
 };
 export type DB = {
 	Advisor: Advisor;
