@@ -1,13 +1,13 @@
 import { Lucia, TimeSpan } from 'lucia';
-import { BetterSqlite3Adapter } from '@lucia-auth/adapter-sqlite';
+import { NodePostgresAdapter } from '@lucia-auth/adapter-postgresql';
 import { dev } from '$app/environment';
 import type { DB, User } from '$lib/db/schema';
-import { sqlite } from '$lib/db';
+import { postgresql } from '$lib/db';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { redirect, type RequestEvent } from '@sveltejs/kit';
 import { createDate } from 'oslo';
 
-const adapter = new BetterSqlite3Adapter(sqlite, {
+const adapter = new NodePostgresAdapter(postgresql, {
 	user: 'User',
 	session: 'Session'
 });

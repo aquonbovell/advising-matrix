@@ -1,13 +1,16 @@
 import { Kysely, type RawBuilder, sql, PostgresDialect } from 'kysely';
-import { Pool } from 'pg';
+import pg from 'pg';
+const { Pool } = pg;
 import { DATABASE_URL } from '$env/static/private';
 import type { DB } from './schema';
 
+export const postgresql = new Pool({
+	connectionString: DATABASE_URL
+});
+
 export const db = new Kysely<DB>({
 	dialect: new PostgresDialect({
-		pool: new Pool({
-			connectionString: DATABASE_URL
-		})
+		pool: postgresql
 	})
 });
 

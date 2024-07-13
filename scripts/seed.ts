@@ -1,15 +1,17 @@
-import { Kysely, SqliteDialect } from 'kysely';
-import Database from 'better-sqlite3';
-// import { DATABASE_URL } from '$env/static/private';
+import { Kysely, PostgresDialect } from 'kysely';
+import pg from 'pg';
+const { Pool } = pg;
+import 'dotenv/config';
 import type { DB } from '../src/lib/db/schema';
 import { Argon2id } from 'oslo/password';
 
-const sqlite = new Database('db.sqlite');
 const argon2id = new Argon2id();
 
-const db = new Kysely<DB>({
-	dialect: new SqliteDialect({
-		database: sqlite
+export const db = new Kysely<DB>({
+	dialect: new PostgresDialect({
+		pool: new Pool({
+			connectionString: process.env.DATABASE_URL
+		})
 	})
 });
 
