@@ -1,7 +1,7 @@
 import { Lucia, TimeSpan } from 'lucia';
 import { NodePostgresAdapter } from '@lucia-auth/adapter-postgresql';
 import { dev } from '$app/environment';
-import type { DB, User } from '$lib/db/schema';
+import type { DB, User, UserRole } from '$lib/db/schema';
 import { postgresql } from '$lib/db';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { redirect, type RequestEvent } from '@sveltejs/kit';
@@ -33,7 +33,7 @@ declare module 'lucia' {
 	}
 }
 
-export function requiredRole(role: User['role']) {
+export function requiredRole(role: UserRole) {
 	return async (event: RequestEvent) => {
 		const { locals } = event;
 		if (!locals.user) {
