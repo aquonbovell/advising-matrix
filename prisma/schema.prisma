@@ -25,10 +25,10 @@ model User {
 }
 
 model Session {
-  id         String @id
-  expires_at Int
+  id         String   @id
+  expires_at DateTime
   user_id    String
-  user       User   @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
 }
 
 model Advisor {
