@@ -13,6 +13,7 @@ model Course {
     level             Int
     credits           Int
     semeseter_offered Boolean
+    is_elective       Boolean
     faculty           String
     department        String
     course_groups     CourseGroup[]
