@@ -9,7 +9,7 @@
 
 <div class="relative inline-block">
 	<button
-		class="inline-block cursor-pointer rounded-md p-1 align-middle transition-colors hover:bg-gray-200"
+		class="inline-block cursor-pointer rounded-md p-1 align-middle transition-colors hover:bg-gray-300/20 active:bg-gray-300/30"
 		class:text-green-300={copied}
 		on:click={() => {
 			navigator.clipboard.writeText(textToCopy);
