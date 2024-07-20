@@ -3,6 +3,7 @@
 	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { clickOutside } from '$lib/actions/clickOutside';
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import HomeIcon from './icons/HomeIcon.svelte';
 	import SettingsIcon from './icons/SettingsIcon.svelte';
@@ -38,24 +39,12 @@
 		userMenuOpen.update((n) => !n);
 	}
 
-	function handleClickOutside(event: MouseEvent) {
-		const target = event.target as HTMLElement;
-		if (!target.closest('.sidebar') && !target.closest('.sidebar-toggle')) {
-			sidebarOpen.set(false);
-		}
-		if (!target.closest('.user-menu')) {
-			userMenuOpen.set(false);
-		}
-	}
-
 	onMount(() => {
 		handleResize();
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
 	});
 </script>
-
-<svelte:window on:click={handleClickOutside} />
 
 {#if isMobile}
 	<button
@@ -68,6 +57,8 @@
 {/if}
 
 <aside
+	use:clickOutside
+	on:clickoutside={() => sidebarOpen.set(false)}
 	class="sidebar fixed inset-y-0 left-0 z-50 h-screen w-64 transform border-r border-gray-200 bg-white shadow-lg transition-all duration-300 ease-in-out
 	{$sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
 	aria-label="Sidebar"
@@ -109,14 +100,15 @@
 				</div>
 
 				<ChevronIcon
-					class="text-gray-400 transition-transform duration-200 {$userMenuOpen
-						? 'rotate-180'
-						: ''}"
+					class="text-gray-400 transition-transform duration-200"
+					rotation={$userMenuOpen ? '180deg' : '0deg'}
 				/>
 			</button>
 
 			{#if $userMenuOpen}
 				<div
+					use:clickOutside
+					on:clickoutside={() => userMenuOpen.set(false)}
 					transition:slide={{ duration: 200 }}
 					class="absolute bottom-full left-0 right-0 z-10 mb-1 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
 				>
