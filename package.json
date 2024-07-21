@@ -14,7 +14,8 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
 		"db:push": "prisma db push",
-		"db:seed": "tsx scripts/seed.ts"
+		"db:seed": "tsx scripts/seed.ts",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@fontsource/inter": "^5.0.19",
@@ -43,6 +44,7 @@
 		"flowbite-svelte": "^0.46.15",
 		"flowbite-svelte-icons": "^1.6.1",
 		"globals": "^15.8.0",
+		"husky": "^9.1.1",
 		"lucia": "^3.2.0",
 		"postcss": "^8.4.39",
 		"prettier": "^3.3.2",

@@ -33,8 +33,7 @@
 		"id": "12804",
 		"name": "Computing II",
 		"code": "COMP1210",
-		"credits": 3,
-		"prerequisite": ["197"]
+		"credits": 3
 	},
 	{
 		"id": "154",
