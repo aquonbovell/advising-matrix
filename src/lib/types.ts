@@ -1,6 +1,6 @@
 import type { Course } from './db/schema';
 
-export type Grade = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D+' | 'D' | 'F';
+export type Grade = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'F1' | 'F2' | 'F3';
 
 export const gradePoints: Record<Grade, number> = {
 	'A+': 4.3,
@@ -11,10 +11,9 @@ export const gradePoints: Record<Grade, number> = {
 	'B-': 2.7,
 	'C+': 2.3,
 	C: 2.0,
-	'C-': 1.7,
-	'D+': 1.3,
-	D: 1.0,
-	F: 0.0
+	F1: 1.7,
+	F2: 1.3,
+	F3: 0.0
 };
 
 export type RequirementGroup =

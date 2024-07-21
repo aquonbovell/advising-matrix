@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '$lib/components/Card.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import type { PageData } from './$types';
 
@@ -23,7 +24,7 @@
 		</button>
 	</div>
 
-	<div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+	<Card>
 		<div class="flex flex-col">
 			<div class="-m-1.5 overflow-x-auto">
 				<div class="inline-block min-w-full p-1.5 align-middle">
@@ -124,5 +125,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</Card>
 </div>

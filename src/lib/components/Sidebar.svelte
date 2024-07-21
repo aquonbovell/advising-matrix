@@ -136,6 +136,7 @@
 					on:clickoutside={() => userMenuOpen.set(false)}
 					transition:slide={{ duration: 200 }}
 					class="absolute bottom-full left-0 right-0 z-10 mb-1 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
+					style="transform: translate3d(62px, 0px, 0px);"
 				>
 					<a
 						href="/settings"
