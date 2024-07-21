@@ -11,15 +11,27 @@
 	import MenuIcon from './icons/MenuIcon.svelte';
 	import ChevronIcon from './icons/ChevronIcon.svelte';
 
-	export let user: { name: string; role: string };
+	export let user: { name: string; role: 'STUDENT' | 'ADVISOR' | 'ADMIN' };
 
 	const sidebarOpen = writable(false);
 	const userMenuOpen = writable(false);
 
-	const menuItems = [
-		{ icon: HomeIcon, label: 'Home', href: '/' }
-		// Add more menu items here
-	];
+	const specificMenuItems = {
+		STUDENT: [
+			{ icon: HomeIcon, label: 'Home', href: '/' }
+			// Add more menu items here
+		],
+		ADVISOR: [
+			{ icon: HomeIcon, label: 'Home', href: '/' },
+			{ icon: HomeIcon, label: 'Courses', href: '/courses' }
+			// Add more menu items here
+		],
+		ADMIN: [
+			{ icon: HomeIcon, label: 'Home', href: '/' },
+			{ icon: HomeIcon, label: 'Users', href: '/users' }
+			// Add more menu items here
+		]
+	};
 
 	$: activeItem = $page.url.pathname;
 
@@ -69,7 +81,20 @@
 		</header>
 
 		<nav class="flex-grow space-y-1 overflow-y-auto p-4">
-			{#each menuItems as item}
+			{#if user.role in specificMenuItems}
+				{#each specificMenuItems[user.role] as item}
+					<a
+						href={item.href}
+						class="flex items-center rounded-lg px-4 py-2 transition-colors duration-200
+										{activeItem === item.href ? 'bg-gray-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}"
+					>
+						<svelte:component this={item.icon} class="mr-3 h-6 w-6" />
+						<span>{item.label}</span>
+					</a>
+				{/each}
+			{/if}
+
+			<!-- {#each menuItems as item}
 				<a
 					href={item.href}
 					class="flex items-center rounded-lg px-4 py-2 transition-colors duration-200
@@ -78,7 +103,7 @@
 					<svelte:component this={item.icon} class="mr-3 h-6 w-6" />
 					<span>{item.label}</span>
 				</a>
-			{/each}
+			{/each} -->
 		</nav>
 
 		<div class="user-menu relative border-t border-gray-200 p-4">

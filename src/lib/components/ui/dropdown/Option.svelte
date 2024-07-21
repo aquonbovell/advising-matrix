@@ -1,5 +1,4 @@
 <script lang="ts">
-	import CheckMarkIcon from '$lib/components/icons/CheckIcon.svelte';
 	import type { HTMLOptionAttributes } from 'svelte/elements';
 
 	export let value: HTMLOptionAttributes['value'];
