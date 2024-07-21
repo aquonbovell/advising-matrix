@@ -10,6 +10,7 @@
 	import LogoutIcon from './icons/LogoutIcon.svelte';
 	import MenuIcon from './icons/MenuIcon.svelte';
 	import ChevronIcon from './icons/ChevronIcon.svelte';
+	import Avatar from './ui/Avatar.svelte';
 
 	export let user: { name: string; role: 'STUDENT' | 'ADVISOR' | 'ADMIN' };
 
@@ -109,17 +110,9 @@
 		<div class="user-menu relative border-t border-gray-200 p-4">
 			<button class="flex w-full items-center justify-between" on:click={toggleUserMenu}>
 				<div class="flex items-center">
-					<div
-						class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600"
-					>
-						<!-- Uncomment the following line to display the first letter of the user's name as the avatar when database is updated to handle name -->
-						<!-- <span class="text-lg font-semibold">{user.name[0]}</span> -->
-						<span class="text-lg font-semibold">J</span>
-					</div>
+					<Avatar name={user.name} />
 					<div class="ml-3">
-						<!-- Uncomment the following line to display the first letter of the user's name as the avatar when database is updated to handle name -->
-						<!-- <p class="text-sm font-medium text-gray-700">{user.name}</p> -->
-						<p class="text-sm font-medium text-gray-700">John Doe</p>
+						<p class="text-sm font-medium text-gray-700">{user.name}</p>
 						<p class="text-xs text-gray-500">{user.role}</p>
 					</div>
 				</div>
