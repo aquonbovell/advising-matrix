@@ -12,7 +12,7 @@
 				<img src={data.advisor.image} alt="Advisor" class="mx-auto mb-4 h-24 w-24 rounded-full" />
 
 				<h2 class="text-lg font-semibold text-gray-800">Academic Advisor</h2>
-				<p class="text-sm text-gray-600">Mr. TempName</p>
+				<p class="text-sm text-gray-600">{data.advisor.name}</p>
 				<p class="text-sm text-gray-600">{data.advisor.email}</p>
 			{:else}
 				<p>No advisor found</p>
