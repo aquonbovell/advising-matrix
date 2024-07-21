@@ -6,7 +6,7 @@ export const load = (async ({ locals }) => {
 		.selectFrom('Student')
 		.leftJoin('Advisor', 'Advisor.id', 'Student.advisor_id')
 		.leftJoin('User', 'User.id', 'Advisor.user_id')
-		.select(['User.email', 'Advisor.user_id', 'User.role'])
+		.select(['User.email', 'Advisor.user_id', 'User.role', 'User.name'])
 		.where('Student.user_id', '=', `${locals.user?.id}`)
 		.executeTakeFirst();
 	if (!data) {

@@ -20,7 +20,7 @@
 	const specificMenuItems = {
 		STUDENT: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
-			{ icon: SettingsIcon, label: 'Advisor', href: 'student/advisor' },
+			{ icon: SettingsIcon, label: 'Advisor', href: 'student/advisor' }
 		],
 		ADVISOR: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
@@ -112,7 +112,7 @@
 				<div class="flex items-center">
 					<Avatar name={user.name} />
 					<div class="ml-3">
-						<p class="text-sm font-medium text-gray-700">{user.name}</p>
+						<p class="text-left text-sm font-medium text-gray-700">{user.name}</p>
 						<p class="text-left text-xs text-gray-500">{user.role}</p>
 					</div>
 				</div>

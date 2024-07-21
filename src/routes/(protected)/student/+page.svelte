@@ -14,19 +14,9 @@
 	<section id="charts" class="">
 		<PieChart />
 		<div id="completed-courses" class="border sm:grid sm:grid-cols-3">
-			<DonutChart id="mandatory" />
-			<DonutChart id="elective" />
-			<DonutChart id="foundation" />
+			<DonutChart title="mandatory" />
+			<DonutChart title="elective" />
+			<DonutChart title="foundation" />
 		</div>
-	</section>
-	<section id="bottom">
-		<span id="advisor">
-			<p>Academic Advisor</p>
-			<p>{advisorName}</p>
-		</span>
-		<span id="gpa">
-			<p>GPA</p>
-			<p>{gpa}</p>
-		</span>
 	</section>
 </div>

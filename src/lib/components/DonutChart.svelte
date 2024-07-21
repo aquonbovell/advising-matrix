@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ApexOptions } from 'apexcharts';
 	import {
 		Chart,
 		Card,
@@ -25,7 +26,7 @@
 	export let series = [50, 50];
 	export let labels = ['Credits Completed', 'Credits Remaining'];
 
-	const options = {
+	const options: ApexOptions = {
 		series: series,
 		colors: ['#272861', '#D6D6D6'],
 		chart: {
@@ -35,7 +36,7 @@
 		},
 		stroke: {
 			colors: ['transparent'],
-			lineCap: ''
+			lineCap: 'square'
 		},
 		plotOptions: {
 			pie: {
@@ -63,7 +64,7 @@
 							show: true,
 							fontFamily: 'Inter, sans-serif',
 							offsetY: -20,
-							formatter: function (value: number) {
+							formatter: function (value: string) {
 								return value + 'k';
 							}
 						}
@@ -94,7 +95,7 @@
 		},
 		xaxis: {
 			labels: {
-				formatter: function (value: number) {
+				formatter: function (value: string) {
 					return value + 'k';
 				}
 			},
