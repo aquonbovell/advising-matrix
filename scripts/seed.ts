@@ -50,6 +50,7 @@ async function seed() {
 	// Insert Users
 	await insertOrIgnore('User', {
 		id: '1',
+		name: 'Admin',
 		email: 'admin@uwi.edu',
 		role: 'ADMIN',
 		password: hashedPassword,
@@ -57,8 +58,11 @@ async function seed() {
 		updated_at: new Date().toISOString()
 	});
 
+	db.updateTable('User').set('name', 'Admin').where('User.id', '=', '1').execute();
+
 	await insertOrIgnore('User', {
 		id: '2',
+		name: 'Advisor',
 		email: 'advisor@uwi.edu',
 		role: 'ADVISOR',
 		password: hashedPassword,
@@ -66,14 +70,19 @@ async function seed() {
 		updated_at: new Date().toISOString()
 	});
 
+	db.updateTable('User').set('name', 'Advisor').where('User.id', '=', '2').execute();
+
 	await insertOrIgnore('User', {
 		id: '3',
+		name: 'Student',
 		email: 'student@uwi.edu',
 		role: 'STUDENT',
 		password: hashedPassword,
 		created_at: new Date().toISOString(),
 		updated_at: new Date().toISOString()
 	});
+
+	db.updateTable('User').set('name', 'Student').where('User.id', '=', '3').execute();
 
 	// Insert Advisor
 	await insertOrIgnore('Advisor', {
@@ -105,7 +114,7 @@ async function seed() {
 		department_id: '1'
 	});
 
-	db.deleteFrom("Course").execute();
+	db.deleteFrom('Course').execute();
 
 	// Insert Courses
 	for (const course of courseData) {
@@ -113,7 +122,7 @@ async function seed() {
 			id: course.id,
 			code: course.code,
 			name: course.name,
-			level: parseInt(course.code.match(/\d+/)[0]),
+			level: parseInt(course.code.match(/\d+/)[0][0]),
 			credits: course.credits,
 			majorId: '1'
 		} as Course);
