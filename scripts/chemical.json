@@ -1,0 +1,184 @@
+[
+  {
+    "id": "9497",
+    "name": "Preliminary Chemistry I",
+    "code": "CHEM0615",
+    "credits": 6
+  },
+  {
+    "id": "6074",
+    "name": "Preliminary Chemistry II",
+    "code": "CHEM0625",
+    "credits": 6
+  },
+  {
+    "id": "12994",
+    "name": "Introduction to Organic Chemistry",
+    "code": "CHEM1110",
+    "credits": 3
+  },
+  {
+    "id": "378",
+    "name": "Introduction to Physical Chemistry",
+    "code": "CHEM1120",
+    "credits": 3
+  },
+  {
+    "id": "12993",
+    "name": "Introduction to Experimental Chemistry",
+    "code": "CHEM1125",
+    "credits": 3
+  },
+  {
+    "id": "12992",
+    "name": "Introduction to Inorganic Chemistry",
+    "code": "CHEM1130",
+    "credits": 3
+  },
+  {
+    "id": "12831",
+    "name": "Fundamentals of Teaching Chemistry",
+    "code": "CHEM2513",
+    "credits": 3,
+    "prerequisites": ["12994", "12992", "378", "12993"]
+  },
+  {
+    "id": "12995",
+    "name": "Intermediate Inorganic Chemistry",
+    "code": "CHEM2700",
+    "credits": 3,
+    "prerequisites": ["12992", "12993"]
+  },
+  {
+    "id": "12996",
+    "name": "Intermediate Organic Chemistry",
+    "code": "CHEM2705",
+    "credits": 3,
+    "prerequisites": ["12994", "12993"]
+  },
+  {
+    "id": "12997",
+    "name": "Intermediate Physical Chemistry",
+    "code": "CHEM2710",
+    "credits": 3,
+    "prerequisites": ["378", "12993"]
+  },
+  {
+    "id": "11919",
+    "name": "Laboratory Methods in Chemistry I",
+    "code": "CHEM2715",
+    "credits": 3,
+    "prerequisites": ["12992", "12993", "12994"]
+  },
+  {
+    "id": "12999",
+    "name": "Laboratory Methods in Chemistry II",
+    "code": "CHEM2720",
+    "credits": 3,
+    "prerequisites": ["12993"]
+  },
+  {
+    "id": "12502",
+    "name": "Chemistry of the Environment",
+    "code": "CHEM2725",
+    "credits": 3,
+    "prerequisites": ["12993"]
+  },
+  {
+    "id": "13000",
+    "name": "Quantitative Chemical Analysis",
+    "code": "CHEM2730",
+    "credits": 3,
+    "prerequisites": ["12993", "378"]
+  },
+  {
+    "id": "5779",
+    "name": "Chemistry Elective",
+    "code": "CHEM2950",
+    "credits": 3
+  },
+  {
+    "id": "12830",
+    "name": "Advanced Inorganic Chemistry",
+    "code": "CHEM3167",
+    "credits": 3,
+    "prerequisites": ["12995"]
+  },
+  {
+    "id": "12829",
+    "name": "Advanced Organic Chemistry",
+    "code": "CHEM3175",
+    "credits": 3,
+    "prerequisites": ["12996"]
+  },
+  {
+    "id": "13012",
+    "name": "Environmental Chemistry and Toxicology",
+    "code": "CHEM3218",
+    "credits": 3,
+    "prerequisites": ["12502"]
+  },
+  {
+    "id": "14191",
+    "name": "Advanced Physical Chemistry",
+    "code": "CHEM3620",
+    "credits": 3,
+    "prerequisites": ["12997"]
+  },
+  {
+    "id": "12823",
+    "name": "Laboratory Methods in Chemistry III",
+    "code": "CHEM3625",
+    "credits": 3,
+    "prerequisites": ["12999", "11919"]
+  },
+  {
+    "id": "545",
+    "name": "Methods in Instrumental Analysis",
+    "code": "CHEM3630",
+    "credits": 3,
+    "prerequisites": ["13000"]
+  },
+  {
+    "id": "12822",
+    "name": "Biological Inorganic Chemistry",
+    "code": "CHEM3635",
+    "credits": 3,
+    "prerequisites": ["12995"]
+  },
+  {
+    "id": "13024",
+    "name": "Nanostructures and Supramolecular Chemistry",
+    "code": "CHEM3800",
+    "credits": 3,
+    "prerequisites": ["12995", "12996"]
+  },
+  {
+    "id": "13025",
+    "name": "Basic Project in Chemistry",
+    "code": "CHEM3950",
+    "credits": 3,
+    "prerequisites": ["12995", "12996", "12997", "12999", "11919", "13000"]
+  },
+  {
+    "id": "13026",
+    "name": "Research Project in Chemistry",
+    "code": "CHEM3955",
+    "credits": 6,
+    "prerequisites": ["12995", "12996", "12997", "12999", "11919", "13000"]
+  },
+  {
+    "id": "13027",
+    "name": "Professional Placement for Chemists",
+    "code": "CHEM3990",
+    "credits": 3,
+    "prerequisites": ["12995", "12996", "12997", "12999", "11919", "13000"]
+  },
+  {
+    "id": "7792",
+    "name": "Special Topics in Physical Chemistry",
+    "code": "CHEM3992",
+    "credits": 3,
+    "prerequisites": ["12997"]
+  }
+]

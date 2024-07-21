@@ -105,6 +105,8 @@ async function seed() {
 		department_id: '1'
 	});
 
+	db.deleteFrom("Course").execute();
+
 	// Insert Courses
 	for (const course of courseData) {
 		await insertOrIgnore('Course', {
