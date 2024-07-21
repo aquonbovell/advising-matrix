@@ -3,6 +3,7 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 
 	$: user = $page.data.user;
+	$: if (user.name === null) user.name = 'Anonymous';
 </script>
 
 <Sidebar {user} />
