@@ -1,312 +1,312 @@
 [
-  {
-    "id": "145",
-    "name": "An Introduction to Computing I",
-    "code": "SWEN1000",
-    "credits": 3
-  },
-  {
-    "id": "385",
-    "name": "An Introduction to Object Oriented Programming",
-    "code": "SWEN1001",
-    "credits": 3,
-    "prerequisite": ["145", "317"]
-  },
-  {
-    "id": "149",
-    "name": "Computing in Society",
-    "code": "SWEN1002",
-    "credits": 3
-  },
-  {
-    "id": "202",
-    "name": "Current and Future Trends in Computing for Software Engineers",
-    "code": "SWEN1003",
-    "credits": 3
-  },
-  {
-    "id": "203",
-    "name": "Mathematics for Software Engineers",
-    "code": "SWEN1004",
-    "credits": 3
-  },
-  {
-    "id": "204",
-    "name": "Mobile Web Programming",
-    "code": "SWEN1005",
-    "credits": 3
-  },
-  {
-    "id": "205",
-    "name": "Research Methods for Software Engineers",
-    "code": "SWEN1006",
-    "credits": 3
-  },
-  {
-    "id": "206",
-    "name": "Software Engineering Essentials",
-    "code": "SWEN1007",
-    "credits": 3
-  },
-  {
-    "id": "207",
-    "name": "Technical Writing for Software Engineers",
-    "code": "SWEN1008",
-    "credits": 3,
-    "prerequisite": ["205"]
-  },
-  {
-    "id": "317",
-    "name": "An Introduction to Computing II",
-    "code": "SWEN1009",
-    "credits": 3,
-    "prerequisite": ["145"]
-  },
-  {
-    "id": "12741",
-    "name": "An Introduction to Requirements Engineering",
-    "code": "SWEN2000",
-    "credits": 3,
-    "prerequisite": ["206", "160"]
-  },
-  {
-    "id": "160",
-    "name": "An Introduction to Software Engineering",
-    "code": "SWEN2001",
-    "credits": 3,
-    "prerequisite": ["385"]
-  },
-  {
-    "id": "12742",
-    "name": "An Introduction to the Analysis of Algorithms",
-    "code": "SWEN2002",
-    "credits": 3,
-    "prerequisite": ["145", "385", "203", "317"]
-  },
-  {
-    "id": "163",
-    "name": "Computer Networking and Security",
-    "code": "SWEN2003",
-    "credits": 3
-  },
-  {
-    "id": "12743",
-    "name": "Computer Organisation",
-    "code": "SWEN2004",
-    "credits": 3,
-    "prerequisite": ["145", "385", "203", "317"]
-  },
-  {
-    "id": "12744",
-    "name": "Database Systems",
-    "code": "SWEN2005",
-    "credits": 3,
-    "prerequisite": ["145", "317", "163"]
-  },
-  {
-    "id": "321",
-    "name": "Discrete Mathematics for Software Engineers",
-    "code": "SWEN2006",
-    "credits": 3,
-    "prerequisite": ["203"]
-  },
-  {
-    "id": "322",
-    "name": "Object Oriented Design and Implementation",
-    "code": "SWEN2007",
-    "credits": 3,
-    "prerequisite": ["160"]
-  },
-  {
-    "id": "8591",
-    "name": "Beginner Chinese Language",
-    "code": "SWEN2010",
-    "credits": 3
-  },
-  {
-    "id": "8593",
-    "name": "Beginners Chinese Language and IT Business Environment",
-    "code": "SWEN2011",
-    "credits": 3
-  },
-  {
-    "id": "12745",
-    "name": "Elementary Chinese Culture and Language",
-    "code": "SWEN2013",
-    "credits": 3
-  },
-  {
-    "id": "12750",
-    "name": "Intermediate Chinese Culture and Language",
-    "code": "SWEN2014",
-    "credits": 3
-  },
-  {
-    "id": "9130",
-    "name": "Big Data",
-    "code": "SWEN2015",
-    "credits": 3
-  },
+	{
+		"id": "145",
+		"name": "An Introduction to Computing I",
+		"code": "SWEN1000",
+		"credits": 3
+	},
+	{
+		"id": "385",
+		"name": "An Introduction to Object Oriented Programming",
+		"code": "SWEN1001",
+		"credits": 3,
+		"prerequisite": ["145", "317"]
+	},
+	{
+		"id": "149",
+		"name": "Computing in Society",
+		"code": "SWEN1002",
+		"credits": 3
+	},
+	{
+		"id": "202",
+		"name": "Current and Future Trends in Computing for Software Engineers",
+		"code": "SWEN1003",
+		"credits": 3
+	},
+	{
+		"id": "203",
+		"name": "Mathematics for Software Engineers",
+		"code": "SWEN1004",
+		"credits": 3
+	},
+	{
+		"id": "204",
+		"name": "Mobile Web Programming",
+		"code": "SWEN1005",
+		"credits": 3
+	},
+	{
+		"id": "205",
+		"name": "Research Methods for Software Engineers",
+		"code": "SWEN1006",
+		"credits": 3
+	},
+	{
+		"id": "206",
+		"name": "Software Engineering Essentials",
+		"code": "SWEN1007",
+		"credits": 3
+	},
+	{
+		"id": "207",
+		"name": "Technical Writing for Software Engineers",
+		"code": "SWEN1008",
+		"credits": 3,
+		"prerequisite": ["205"]
+	},
+	{
+		"id": "317",
+		"name": "An Introduction to Computing II",
+		"code": "SWEN1009",
+		"credits": 3,
+		"prerequisite": ["145"]
+	},
+	{
+		"id": "12741",
+		"name": "An Introduction to Requirements Engineering",
+		"code": "SWEN2000",
+		"credits": 3,
+		"prerequisite": ["206", "160"]
+	},
+	{
+		"id": "160",
+		"name": "An Introduction to Software Engineering",
+		"code": "SWEN2001",
+		"credits": 3,
+		"prerequisite": ["385"]
+	},
+	{
+		"id": "12742",
+		"name": "An Introduction to the Analysis of Algorithms",
+		"code": "SWEN2002",
+		"credits": 3,
+		"prerequisite": ["145", "385", "203", "317"]
+	},
+	{
+		"id": "163",
+		"name": "Computer Networking and Security",
+		"code": "SWEN2003",
+		"credits": 3
+	},
+	{
+		"id": "12743",
+		"name": "Computer Organisation",
+		"code": "SWEN2004",
+		"credits": 3,
+		"prerequisite": ["145", "385", "203", "317"]
+	},
+	{
+		"id": "12744",
+		"name": "Database Systems",
+		"code": "SWEN2005",
+		"credits": 3,
+		"prerequisite": ["145", "317", "163"]
+	},
+	{
+		"id": "321",
+		"name": "Discrete Mathematics for Software Engineers",
+		"code": "SWEN2006",
+		"credits": 3,
+		"prerequisite": ["203"]
+	},
+	{
+		"id": "322",
+		"name": "Object Oriented Design and Implementation",
+		"code": "SWEN2007",
+		"credits": 3,
+		"prerequisite": ["160"]
+	},
+	{
+		"id": "8591",
+		"name": "Beginner Chinese Language",
+		"code": "SWEN2010",
+		"credits": 3
+	},
+	{
+		"id": "8593",
+		"name": "Beginners Chinese Language and IT Business Environment",
+		"code": "SWEN2011",
+		"credits": 3
+	},
+	{
+		"id": "12745",
+		"name": "Elementary Chinese Culture and Language",
+		"code": "SWEN2013",
+		"credits": 3
+	},
+	{
+		"id": "12750",
+		"name": "Intermediate Chinese Culture and Language",
+		"code": "SWEN2014",
+		"credits": 3
+	},
+	{
+		"id": "9130",
+		"name": "Big Data",
+		"code": "SWEN2015",
+		"credits": 3
+	},
 
-  {
-    "id": "670",
-    "name": "Application Development for IOS Devices",
-    "code": "SWEN3000",
-    "credits": 3,
-    "prerequisite": ["322"]
-  },
-  {
-    "id": "12751",
-    "name": "Android Application Development I",
-    "code": "SWEN3001",
-    "credits": 3,
-    "prerequisite": ["322", "12744"]
-  },
-  {
-    "id": "672",
-    "name": "Android Application Development II",
-    "code": "SWEN3002",
-    "credits": 3,
-    "prerequisite": ["12751"]
-  },
-  {
-    "id": "12752",
-    "name": "Web & Mobile Application Development I",
-    "code": "SWEN3003",
-    "credits": 3,
-    "prerequisite": ["204", "206"]
-  },
-  {
-    "id": "12753",
-    "name": "Web & Mobile Application Development II",
-    "code": "SWEN3004",
-    "credits": 3,
-    "prerequisite": ["12752"]
-  },
-  {
-    "id": "11402",
-    "name": "Web and Mobile Application Development I",
-    "code": "SWEN3010",
-    "credits": 3
-  },
-  {
-    "id": "12754",
-    "name": "Software Architecture",
-    "code": "SWEN3120",
-    "credits": 3,
-    "prerequisite": ["12741", "160", "322"]
-  },
-  {
-    "id": "12755",
-    "name": "Software Project Management",
-    "code": "SWEN3130",
-    "credits": 3,
-    "prerequisite": ["160"]
-  },
-  {
-    "id": "9131",
-    "name": "Entrepreneurship and Professional Practice for Software Engineers",
-    "code": "SWEN3135",
-    "credits": 3
-  },
+	{
+		"id": "670",
+		"name": "Application Development for IOS Devices",
+		"code": "SWEN3000",
+		"credits": 3,
+		"prerequisite": ["322"]
+	},
+	{
+		"id": "12751",
+		"name": "Android Application Development I",
+		"code": "SWEN3001",
+		"credits": 3,
+		"prerequisite": ["322", "12744"]
+	},
+	{
+		"id": "672",
+		"name": "Android Application Development II",
+		"code": "SWEN3002",
+		"credits": 3,
+		"prerequisite": ["12751"]
+	},
+	{
+		"id": "12752",
+		"name": "Web & Mobile Application Development I",
+		"code": "SWEN3003",
+		"credits": 3,
+		"prerequisite": ["204", "206"]
+	},
+	{
+		"id": "12753",
+		"name": "Web & Mobile Application Development II",
+		"code": "SWEN3004",
+		"credits": 3,
+		"prerequisite": ["12752"]
+	},
+	{
+		"id": "11402",
+		"name": "Web and Mobile Application Development I",
+		"code": "SWEN3010",
+		"credits": 3
+	},
+	{
+		"id": "12754",
+		"name": "Software Architecture",
+		"code": "SWEN3120",
+		"credits": 3,
+		"prerequisite": ["12741", "160", "322"]
+	},
+	{
+		"id": "12755",
+		"name": "Software Project Management",
+		"code": "SWEN3130",
+		"credits": 3,
+		"prerequisite": ["160"]
+	},
+	{
+		"id": "9131",
+		"name": "Entrepreneurship and Professional Practice for Software Engineers",
+		"code": "SWEN3135",
+		"credits": 3
+	},
 
-  {
-    "id": "12756",
-    "name": "Software Modeling",
-    "code": "SWEN3145",
-    "credits": 3,
-    "prerequisite": ["322", "160"]
-  },
-  {
-    "id": "12757",
-    "name": "Software Testing",
-    "code": "SWEN3165",
-    "credits": 3,
-    "prerequisite": ["322", "160"]
-  },
-  {
-    "id": "8855",
-    "name": "Formal Methods and Software Reliability",
-    "code": "SWEN3185",
-    "credits": 3
-  },
+	{
+		"id": "12756",
+		"name": "Software Modeling",
+		"code": "SWEN3145",
+		"credits": 3,
+		"prerequisite": ["322", "160"]
+	},
+	{
+		"id": "12757",
+		"name": "Software Testing",
+		"code": "SWEN3165",
+		"credits": 3,
+		"prerequisite": ["322", "160"]
+	},
+	{
+		"id": "8855",
+		"name": "Formal Methods and Software Reliability",
+		"code": "SWEN3185",
+		"credits": 3
+	},
 
-  {
-    "id": "8871",
-    "name": "Advanced Application Development for iOS Devices",
-    "code": "SWEN3190",
-    "credits": 3
-  },
+	{
+		"id": "8871",
+		"name": "Advanced Application Development for iOS Devices",
+		"code": "SWEN3190",
+		"credits": 3
+	},
 
-  {
-    "id": "11447",
-    "name": "Internship in Computing I",
-    "code": "SWEN3911",
-    "credits": 3
-  },
+	{
+		"id": "11447",
+		"name": "Internship in Computing I",
+		"code": "SWEN3911",
+		"credits": 3
+	},
 
-  {
-    "id": "10227",
-    "name": "Internship in Computing II",
-    "code": "SWEN3912",
-    "credits": 6
-  },
+	{
+		"id": "10227",
+		"name": "Internship in Computing II",
+		"code": "SWEN3912",
+		"credits": 6
+	},
 
-  {
-    "id": "12758",
-    "name": "Capstone Project",
-    "code": "SWEN3920",
-    "credits": 6
-  },
+	{
+		"id": "12758",
+		"name": "Capstone Project",
+		"code": "SWEN3920",
+		"credits": 6
+	},
 
-  {
-    "id": "8413",
-    "name": "Advanced Database Systems",
-    "code": "SWEN4001",
-    "credits": 3,
-    "prerequisite": ["12744"]
-  },
-  {
-    "id": "8414",
-    "name": "Mobile Game Development",
-    "code": "SWEN4002",
-    "credits": 3
-  },
-  {
-    "id": "8415",
-    "name": "Mobile Cloud Computing",
-    "code": "SWEN4003",
-    "credits": 3
-  },
-  {
-    "id": "8416",
-    "name": "Advanced Android Application Development",
-    "code": "SWEN4004",
-    "credits": 3
-  },
-  {
-    "id": "8417",
-    "name": "IT Certification I",
-    "code": "SWEN4008",
-    "credits": 3
-  },
-  {
-    "id": "8418",
-    "name": "IT Certification II",
-    "code": "SWEN4009",
-    "credits": 3
-  },
-  {
-    "id": "8419",
-    "name": "Software Engineering Capstone Project I",
-    "code": "SWEN4050",
-    "credits": 6,
-    "prerequisite": ["12755", "12756", "672", "670", "12753"]
-  },
-  {
-    "id": "8420",
-    "name": "Software Engineering Capstone Project II",
-    "code": "SWEN4055",
-    "credits": 6
-  }
+	{
+		"id": "8413",
+		"name": "Advanced Database Systems",
+		"code": "SWEN4001",
+		"credits": 3,
+		"prerequisite": ["12744"]
+	},
+	{
+		"id": "8414",
+		"name": "Mobile Game Development",
+		"code": "SWEN4002",
+		"credits": 3
+	},
+	{
+		"id": "8415",
+		"name": "Mobile Cloud Computing",
+		"code": "SWEN4003",
+		"credits": 3
+	},
+	{
+		"id": "8416",
+		"name": "Advanced Android Application Development",
+		"code": "SWEN4004",
+		"credits": 3
+	},
+	{
+		"id": "8417",
+		"name": "IT Certification I",
+		"code": "SWEN4008",
+		"credits": 3
+	},
+	{
+		"id": "8418",
+		"name": "IT Certification II",
+		"code": "SWEN4009",
+		"credits": 3
+	},
+	{
+		"id": "8419",
+		"name": "Software Engineering Capstone Project I",
+		"code": "SWEN4050",
+		"credits": 6,
+		"prerequisite": ["12755", "12756", "672", "670", "12753"]
+	},
+	{
+		"id": "8420",
+		"name": "Software Engineering Capstone Project II",
+		"code": "SWEN4055",
+		"credits": 6
+	}
 ]

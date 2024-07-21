@@ -1,161 +1,161 @@
 [
-  {
-    "id": "325",
-    "name": "Introduction to Oceans and Climate",
-    "code": "METE1110",
-    "credits": 3,
-    "corequisites": ["11350", "13633", "13632"]
-  },
-  {
-    "id": "11350",
-    "name": "Introduction to Physical Meteorology",
-    "code": "METE1130",
-    "credits": 3
-  },
-  {
-    "id": "13633",
-    "name": "Meteorological Observations, Instruments and Basic Analysis",
-    "code": "METE1125",
-    "credits": 3
-  },
-  {
-    "id": "13632",
-    "name": "Introduction to Dynamic Meteorology",
-    "code": "METE1135",
-    "credits": 3
-  },
-  {
-    "id": "573",
-    "name": "Introduction to Climate Change and Society",
-    "code": "METE1305",
-    "credits": 3
-  },
-  {
-    "id": "12817",
-    "name": "Atmospheric Thermodynamics",
-    "code": "METE2110",
-    "credits": 3,
-    "prerequisites": ["383", "319", "325", "13633", "13632", "11350"]
-  },
-  {
-    "id": "12816",
-    "name": "Physical Meteorology",
-    "code": "METE2120",
-    "credits": 3,
-    "prerequisites": ["383", "319", "325", "13633", "13632", "11350"]
-  },
-  {
-    "id": "12815",
-    "name": "Dynamic Meteorology",
-    "code": "METE2125",
-    "credits": 3,
-    "prerequisites": ["383", "319", "325", "13633", "13632", "11350"]
-  },
-  {
-    "id": "8451",
-    "name": "Synoptic Meteorology I",
-    "code": "METE2200",
-    "credits": 4
-  },
-  {
-    "id": "12814",
-    "name": "Synoptic Meteorology",
-    "code": "METE2210",
-    "credits": 3,
-    "prerequisites": ["383", "319", "325", "13633", "13632", "11350", "724"]
-  },
-  {
-    "id": "12813",
-    "name": "Synoptic Meteorology Lab I",
-    "code": "METE2215",
-    "credits": 3,
-    "prerequisites": ["383", "319", "325", "13633", "13632", "11350", "724"]
-  },
-  {
-    "id": "8452",
-    "name": "Hydro-Meteorology",
-    "code": "METE2300",
-    "credits": 4
-  },
-  {
-    "id": "12812",
-    "name": "Fundamentals of Hydrometeorology",
-    "code": "METE2305",
-    "credits": 3,
-    "prerequisites": ["383", "319"]
-  },
-  {
-    "id": "5783",
-    "name": "Meteorology Elective",
-    "code": "METE2950",
-    "credits": 4
-  },
-  {
-    "id": "12811",
-    "name": "Advanced Dynamic Meteorology",
-    "code": "METE3110",
-    "credits": 3,
-    "prerequisites": ["13632", "12814", "12813"]
-  },
-  {
-    "id": "8454",
-    "name": "Synoptic Meteorology",
-    "code": "METE3200",
-    "credits": 4
-  },
-  {
-    "id": "12810",
-    "name": "Advanced Synoptic Meteorology",
-    "code": "METE3210",
-    "credits": 3,
-    "prerequisites": ["13632", "12814"]
-  },
-  {
-    "id": "12809",
-    "name": "Synoptic Meteorology Lab II",
-    "code": "METE3215",
-    "credits": 3,
-    "prerequisites": ["13632", "12814", "12813"]
-  },
-  {
-    "id": "8455",
-    "name": "Tropical Meteorology",
-    "code": "METE3300",
-    "credits": 4
-  },
-  {
-    "id": "12808",
-    "name": "The Tropics and Tropical Weather Systems",
-    "code": "METE3310",
-    "credits": 3,
-    "prerequisites": ["12811", "12810", "12809"]
-  },
-  {
-    "id": "12807",
-    "name": "Radar Meteorology",
-    "code": "METE3420",
-    "credits": 3,
-    "prerequisites": ["12817", "12816", "12814", "12813"]
-  },
-  {
-    "id": "12806",
-    "name": "Satellite Meteorology",
-    "code": "METE3425",
-    "credits": 3,
-    "prerequisites": ["12817", "12816", "12814", "12813"]
-  },
-  {
-    "id": "10547",
-    "name": "Climate, Biospherse and Ecosystems",
-    "code": "METE3505",
-    "credits": 3,
-    "prerequisites": ["325", "9290"]
-  },
-  {
-    "id": "12805",
-    "name": "Numerical Weather Prediction and Computational Methods",
-    "code": "METE3600",
-    "credits": 3,
-    "prerequisites": ["197", "12811", "12810"]
-  }
+	{
+		"id": "325",
+		"name": "Introduction to Oceans and Climate",
+		"code": "METE1110",
+		"credits": 3,
+		"corequisites": ["11350", "13633", "13632"]
+	},
+	{
+		"id": "11350",
+		"name": "Introduction to Physical Meteorology",
+		"code": "METE1130",
+		"credits": 3
+	},
+	{
+		"id": "13633",
+		"name": "Meteorological Observations, Instruments and Basic Analysis",
+		"code": "METE1125",
+		"credits": 3
+	},
+	{
+		"id": "13632",
+		"name": "Introduction to Dynamic Meteorology",
+		"code": "METE1135",
+		"credits": 3
+	},
+	{
+		"id": "573",
+		"name": "Introduction to Climate Change and Society",
+		"code": "METE1305",
+		"credits": 3
+	},
+	{
+		"id": "12817",
+		"name": "Atmospheric Thermodynamics",
+		"code": "METE2110",
+		"credits": 3,
+		"prerequisites": ["383", "319", "325", "13633", "13632", "11350"]
+	},
+	{
+		"id": "12816",
+		"name": "Physical Meteorology",
+		"code": "METE2120",
+		"credits": 3,
+		"prerequisites": ["383", "319", "325", "13633", "13632", "11350"]
+	},
+	{
+		"id": "12815",
+		"name": "Dynamic Meteorology",
+		"code": "METE2125",
+		"credits": 3,
+		"prerequisites": ["383", "319", "325", "13633", "13632", "11350"]
+	},
+	{
+		"id": "8451",
+		"name": "Synoptic Meteorology I",
+		"code": "METE2200",
+		"credits": 4
+	},
+	{
+		"id": "12814",
+		"name": "Synoptic Meteorology",
+		"code": "METE2210",
+		"credits": 3,
+		"prerequisites": ["383", "319", "325", "13633", "13632", "11350", "724"]
+	},
+	{
+		"id": "12813",
+		"name": "Synoptic Meteorology Lab I",
+		"code": "METE2215",
+		"credits": 3,
+		"prerequisites": ["383", "319", "325", "13633", "13632", "11350", "724"]
+	},
+	{
+		"id": "8452",
+		"name": "Hydro-Meteorology",
+		"code": "METE2300",
+		"credits": 4
+	},
+	{
+		"id": "12812",
+		"name": "Fundamentals of Hydrometeorology",
+		"code": "METE2305",
+		"credits": 3,
+		"prerequisites": ["383", "319"]
+	},
+	{
+		"id": "5783",
+		"name": "Meteorology Elective",
+		"code": "METE2950",
+		"credits": 4
+	},
+	{
+		"id": "12811",
+		"name": "Advanced Dynamic Meteorology",
+		"code": "METE3110",
+		"credits": 3,
+		"prerequisites": ["13632", "12814", "12813"]
+	},
+	{
+		"id": "8454",
+		"name": "Synoptic Meteorology",
+		"code": "METE3200",
+		"credits": 4
+	},
+	{
+		"id": "12810",
+		"name": "Advanced Synoptic Meteorology",
+		"code": "METE3210",
+		"credits": 3,
+		"prerequisites": ["13632", "12814"]
+	},
+	{
+		"id": "12809",
+		"name": "Synoptic Meteorology Lab II",
+		"code": "METE3215",
+		"credits": 3,
+		"prerequisites": ["13632", "12814", "12813"]
+	},
+	{
+		"id": "8455",
+		"name": "Tropical Meteorology",
+		"code": "METE3300",
+		"credits": 4
+	},
+	{
+		"id": "12808",
+		"name": "The Tropics and Tropical Weather Systems",
+		"code": "METE3310",
+		"credits": 3,
+		"prerequisites": ["12811", "12810", "12809"]
+	},
+	{
+		"id": "12807",
+		"name": "Radar Meteorology",
+		"code": "METE3420",
+		"credits": 3,
+		"prerequisites": ["12817", "12816", "12814", "12813"]
+	},
+	{
+		"id": "12806",
+		"name": "Satellite Meteorology",
+		"code": "METE3425",
+		"credits": 3,
+		"prerequisites": ["12817", "12816", "12814", "12813"]
+	},
+	{
+		"id": "10547",
+		"name": "Climate, Biospherse and Ecosystems",
+		"code": "METE3505",
+		"credits": 3,
+		"prerequisites": ["325", "9290"]
+	},
+	{
+		"id": "12805",
+		"name": "Numerical Weather Prediction and Computational Methods",
+		"code": "METE3600",
+		"credits": 3,
+		"prerequisites": ["197", "12811", "12810"]
+	}
 ]

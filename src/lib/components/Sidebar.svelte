@@ -113,7 +113,7 @@
 					<Avatar name={user.name} />
 					<div class="ml-3">
 						<p class="text-sm font-medium text-gray-700">{user.name}</p>
-						<p class="text-xs text-gray-500 text-left">{user.role}</p>
+						<p class="text-left text-xs text-gray-500">{user.role}</p>
 					</div>
 				</div>
 
