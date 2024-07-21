@@ -1,0 +1,116 @@
+[
+	{
+		"id": "52",
+		"name": "Earth and its Environment",
+		"code": "ENSC1000",
+		"credits": 3
+	},
+	{
+		"id": "155",
+		"name": "An Introduction to Physical Geology: Dynamic Earth",
+		"code": "ENSC1001",
+		"credits": 3
+	},
+	{
+		"id": "11771",
+		"name": "Landform Dynamics",
+		"code": "ENSC1005",
+		"credits": 3
+	},
+	{
+		"id": "327",
+		"name": "Essentials of Oceanography",
+		"code": "ENSC2000",
+		"credits": 3,
+		"prerequisites": ["52"]
+	},
+	{
+		"id": "9398",
+		"name": "Earth's Climate",
+		"code": "ENSC2002",
+		"credits": 3,
+		"prerequisites": ["52"]
+	},
+	{
+		"id": "491",
+		"name": "Sustainable Energy Systems",
+		"code": "ENSC2003",
+		"credits": 3
+	},
+	{
+		"id": "11792",
+		"name": "Earth-Life Cycles",
+		"code": "ENSC2005",
+		"credits": 3,
+		"prerequisites": ["11771", "52"]
+	},
+	{
+		"id": "11794",
+		"name": "Environmental Science Exchange",
+		"code": "ENSC2900",
+		"credits": 3
+	},
+	{
+		"id": "13049",
+		"name": "Climate Variation and Change",
+		"code": "ENSC3000",
+		"credits": 3,
+		"prerequisites": ["9398"]
+	},
+	{
+		"id": "13635",
+		"name": "Natural Hazards and Disasters",
+		"code": "ENSC3001",
+		"credits": 3,
+		"prerequisites": ["155", "11771", "9398"]
+	},
+	{
+		"id": "11731",
+		"name": "Urban Geomorphology",
+		"code": "ENSC3005",
+		"credits": 3,
+		"prerequisites": ["11792"]
+	},
+	{
+		"id": "495",
+		"name": "Case Study in Environmental Sciences",
+		"code": "ENSC3020",
+		"credits": 3
+	},
+	{
+		"id": "11795",
+		"name": "Professional Placement for Environmental Science",
+		"code": "ENSC3090",
+		"credits": 3
+	},
+	{
+		"id": "470",
+		"name": "Research Project in Environmental Science",
+		"code": "ENSC3900",
+		"credits": 6
+	},
+	{
+		"id": "13857",
+		"name": "Principles of Sustainability",
+		"code": "ENSC3100",
+		"credits": 3
+	},
+	{
+		"id": "13858",
+		"name": "Climate and Weather in the Caribbean",
+		"code": "ENSC3101",
+		"credits": 3
+	},
+	{
+		"id": "13859",
+		"name": "Biodiversity in the Caribbean",
+		"code": "ENSC3102",
+		"credits": 3
+	},
+	{
+		"id": "13877",
+		"name": "Barbados Research Project",
+		"code": "ENSC3901",
+		"credits": 6
+	}
+]

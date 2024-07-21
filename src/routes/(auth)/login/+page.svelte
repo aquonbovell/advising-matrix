@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import Input from '$lib/components/ui/Input.svelte';
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
-	export let form;
+	// export let form;
 
 	let loginError: string | undefined = undefined;
 	let hasError = false;
