@@ -96,7 +96,7 @@
       <div class="flex items-center mb-1">
         <h5 class="text-xl font-bold leading-none text-gray-900  me-1">{title}</h5>
         <InfoCircleSolid id="donut1" class="w-3.5 h-3.5 text-gray-500  hover:text-gray-900  cursor-pointer ms-1" />
-        <Popover triggeredBy="#donut1" class="text-sm text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm w-72 z-10">
+        <Popover triggeredBy="#donut1" class="text-sm text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm w-72 z-10 " placement="bottom-start">
           <div class="p-3 space-y-2">
             {description}
             <A href="/">Read more <ChevronRightOutline class="w-2 h-2 ms-1.5" /></A>

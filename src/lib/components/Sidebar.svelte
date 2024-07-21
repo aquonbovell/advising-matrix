@@ -16,7 +16,10 @@
 	const userMenuOpen = writable(false);
 
 	const menuItems = [
-		{ icon: HomeIcon, label: 'Home', href: '/' }
+		{ icon: HomeIcon, label: 'Home', href: '/' },
+		{ icon: SettingsIcon, label: 'Advisor', href: 'student/advisor' },
+
+
 		// Add more menu items here
 	];
 
