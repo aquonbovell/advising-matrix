@@ -17,69 +17,77 @@ export const db = new Kysely<DB>({
 
 async function seed() {
 	console.log('Seeding database...');
-	await db.transaction().execute(async (trx) => {
-		const hashedPassword = await argon2id.hash('password');
-		// Insert Admin User
-		await trx
-			.insertInto('User')
-			.values({
-				id: '1',
-				email: 'admin@uwi.edu',
-				role: 'ADMIN',
-				password: hashedPassword,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString()
-			})
-			.execute();
+	const hashedPassword = await argon2id.hash('password');
 
-		// Insert Advisor User
-		await trx
-			.insertInto('User')
-			.values({
-				id: '2',
-				email: 'advisor@uwi.edu',
-				role: 'ADVISOR',
-				password: hashedPassword,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString()
-			})
-			.execute();
+	async function insertOrIgnore(
+		table:
+			| 'Advisor'
+			| 'Course'
+			| 'Department'
+			| 'Major'
+			| 'Prerequisite'
+			| 'Session'
+			| 'Student'
+			| 'User',
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		data: any
+	) {
+		try {
+			await db.insertInto(table).values(data).execute();
+			console.log(`Inserted into ${table}`);
+		} catch (error) {
+			if (error.code === '23505') {
+				// Unique violation error code
+				console.log(`Record already exists in ${table}, skipping`);
+			} else {
+				throw error;
+			}
+		}
+	}
 
-		// Insert Advisor
-		await trx
-			.insertInto('Advisor')
-			.values({
-				id: '1',
-				user_id: '2'
-			})
-			.execute();
+	// Insert Users
+	await insertOrIgnore('User', {
+		id: '1',
+		email: 'admin@uwi.edu',
+		role: 'ADMIN',
+		password: hashedPassword,
+		created_at: new Date().toISOString(),
+		updated_at: new Date().toISOString()
+	});
 
-		// Insert Student User
-		await trx
-			.insertInto('User')
-			.values({
-				id: '3',
-				email: 'student@uwi.edu',
-				role: 'STUDENT',
-				password: hashedPassword,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString()
-			})
-			.execute();
+	await insertOrIgnore('User', {
+		id: '2',
+		email: 'advisor@uwi.edu',
+		role: 'ADVISOR',
+		password: hashedPassword,
+		created_at: new Date().toISOString(),
+		updated_at: new Date().toISOString()
+	});
 
-		// Insert Student
-		await trx
-			.insertInto('Student')
-			.values({
-				id: '1',
-				user_id: '3',
-				advisor_id: '1',
-				invite_token: null,
-				invite_expires: null,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString()
-			})
-			.execute();
+	await insertOrIgnore('User', {
+		id: '3',
+		email: 'student@uwi.edu',
+		role: 'STUDENT',
+		password: hashedPassword,
+		created_at: new Date().toISOString(),
+		updated_at: new Date().toISOString()
+	});
+
+	// Insert Advisor
+	await insertOrIgnore('Advisor', {
+		id: '1',
+		user_id: '2'
+	});
+
+	// Insert Student
+	await insertOrIgnore('Student', {
+		id: '1',
+		user_id: '3',
+		advisor_id: '1',
+		invite_token: null,
+		invite_expires: null,
+		created_at: new Date().toISOString(),
+		updated_at: new Date().toISOString()
 	});
 }
 
