@@ -1,28 +1,14 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const defaultTheme = require('tailwindcss/defaultTheme');
-
+import flowbitePlugin from 'flowbite/plugin'
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+	content: ['./src/**/*.{html,js,svelte,ts}','./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
 			fontFamily: {
 				sans: ['Inter', ...defaultTheme.fontFamily.sans]
-			}
-		}
-	},
-	plugins: [require('@tailwindcss/typography')]
-};
-
-// Dashboard Charts
-import flowbitePlugin from 'flowbite/plugin'
-import type { Config } from 'tailwindcss';
-
-export default {
-	content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'],
-
-	theme: {
-		extend: {
+			},
       colors: {
         // flowbite-svelte
         primary: {
@@ -38,8 +24,7 @@ export default {
           900: '#A5371B'
         }
       }
-    }
+		}
 	},
-
-	plugins: [flowbitePlugin]
-} as Config;
+	plugins: [require('@tailwindcss/typography'),flowbitePlugin()]
+};
