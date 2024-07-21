@@ -13,6 +13,7 @@ generator kysely {
 
 model User {
   id         String   @id
+  name       String?
   email      String   @unique
   password   String
   role       UserRole
@@ -80,11 +81,9 @@ model Course {
 }
 
 model Prerequisite {
-  id              String @id 
+  id              String @id @default(uuid())
   course_id       String
   prerequisite_id String
-
-  @@unique([course_id, prerequisite_id])
 }
 
 enum UserRole {
