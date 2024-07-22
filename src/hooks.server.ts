@@ -1,5 +1,6 @@
 import { lucia } from '$lib/server/auth';
 import type { Cookie } from 'lucia';
+import '$lib/validator/validator';
 
 export async function handle({ event, resolve }) {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);

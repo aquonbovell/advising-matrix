@@ -69,6 +69,7 @@
 		{placeholder}
 		{disabled}
 		{readonly}
+		aria-invalid={error || hasError ? 'true' : undefined}
 		class={cn(
 			'h-11 w-full rounded-md border border-gray-300 px-4 py-3 text-sm placeholder-gray-400 shadow-sm',
 			'focus:outline-none focus:ring-2',

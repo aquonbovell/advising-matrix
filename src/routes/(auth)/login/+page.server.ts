@@ -1,29 +1,34 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { isValidEmail } from '$lib/utils';
 import { Argon2id } from 'oslo/password';
 import { lucia } from '$lib/server/auth';
 import { db } from '$lib/db';
+import { superValidate } from 'sveltekit-superforms';
+import { vine } from 'sveltekit-superforms/adapters';
+import { loginSchema } from './schema';
+
+const defaults = { email: '', password: '' };
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user) {
 		throw redirect(302, `/${locals.user.role.toLowerCase()}`);
 	}
+
+	const loginForm = await superValidate(vine(loginSchema, { defaults }));
+
+	return { loginForm };
 };
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
-		const form = await request.formData();
-		const email = form.get('email');
-		const password = form.get('password');
+		const form = await superValidate(request, vine(loginSchema, { defaults }));
 
-		if (!email || typeof email !== 'string' || !isValidEmail(email)) {
-			return fail(400, { error: 'Invalid email' });
+		if (!form.valid) {
+			return fail(400, { form });
 		}
 
-		if (!password || typeof password !== 'string') {
-			return fail(400, { error: 'Invalid password' });
-		}
+		const email = form.data.email;
+		const password = form.data.password;
 
 		const user = await db
 			.selectFrom('User')
@@ -32,12 +37,19 @@ export const actions: Actions = {
 			.executeTakeFirst();
 
 		if (!user) {
-			return fail(400, { error: 'Invalid email or password' });
+			form.errors._errors = ['Invalid email or password'];
+			return fail(400, { form });
+		}
+
+		if (user.password == '') {
+			form.errors._errors = ['Invalid email or password'];
+			return fail(400, { form });
 		}
 
 		const validPassword = await new Argon2id().verify(user.password, password);
 		if (!validPassword) {
-			return fail(400, { error: 'Invalid email or password' });
+			form.errors._errors = ['Invalid email or password'];
+			return fail(400, { form });
 		}
 
 		const session = await lucia.createSession(user.id, {});
