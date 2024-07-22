@@ -1,29 +1,18 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import Input from '$lib/components/ui/Input.svelte';
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
-	export let form;
+	import Button from '$lib/components/ui/Button.svelte';
+	import { superForm } from 'sveltekit-superforms';
+	// export let form;
+	export let data;
 
-	let loginError: string | undefined = undefined;
-	let hasError = false;
-
-	function handleSubmit(event: Event) {
-		loginError = undefined;
-		hasError = false;
-	}
-
-	// function handleEnhance() {
-	// 	return ({ result }: any) => {
-	// 		if (result.type === 'failure') {
-	// 			if (typeof result.data?.message === 'string') {
-	// 				loginError = result.data.message;
-	// 			} else {
-	// 				loginError = 'Login failed. Please check your credentials.';
-	// 			}
-	// 			hasError = true;
-	// 		}
-	// 	};
-	// }
+	const { form, errors, constraints, enhance, submitting, delayed, timeout } = superForm(
+		data.loginForm,
+		{
+			delayMs: 500,
+			timeoutMs: 8000
+		}
+	);
 </script>
 
 <div
@@ -37,13 +26,13 @@
 		<h1 class="mb-2 text-center text-2xl font-semibold text-gray-800">Welcome back</h1>
 		<p class="mb-8 text-center text-sm text-gray-600">Please enter your details to sign in</p>
 
-		{#if loginError}
+		{#if $errors._errors}
 			<div class="mb-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700">
-				<p>{loginError}</p>
+				<p>{$errors._errors[0]}</p>
 			</div>
 		{/if}
 
-		<form method="POST" on:submit={handleSubmit} use:enhance class="space-y-4">
+		<form method="POST" use:enhance class="space-y-4">
 			<Input
 				type="email"
 				id="email"
@@ -51,7 +40,9 @@
 				label="Email address"
 				placeholder="Enter your email"
 				required
-				{hasError}
+				error={$errors.email?.[0]}
+				bind:value={$form.email}
+				{...$constraints.email}
 			/>
 
 			<Input
@@ -61,21 +52,18 @@
 				label="Password"
 				placeholder="Enter your password"
 				required
-				{hasError}
+				error={$errors.password?.[0]}
+				bind:value={$form.password}
+				{...$constraints.password}
 			/>
 
 			<div class="flex items-center justify-center">
-				<a href="/forgot-password" class="text-sm text-indigo-600 hover:underline"
-					>Forgot password?</a
-				>
+				<a href="/forgot-password" class="text-sm text-indigo-600 hover:underline">
+					Forgot password?
+				</a>
 			</div>
 
-			<button
-				type="submit"
-				class="w-full rounded-md bg-indigo-600 px-4 py-3 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-			>
-				Sign in
-			</button>
+			<Button type="submit" fullWidth loading={$submitting}>Sign in</Button>
 		</form>
 
 		<p class="mt-6 text-center text-sm text-gray-600">

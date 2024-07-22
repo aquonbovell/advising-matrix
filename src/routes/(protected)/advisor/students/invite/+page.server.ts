@@ -41,8 +41,8 @@ export const actions: Actions = {
 						email,
 						role: 'STUDENT',
 						password: '',
-						created_at: new Date().toISOString(),
-						updated_at: new Date().toISOString()
+						created_at: new Date(),
+						updated_at: new Date()
 					})
 					.execute();
 
@@ -53,9 +53,9 @@ export const actions: Actions = {
 						user_id: userId,
 						advisor_id: advisor.id,
 						invite_token: token,
-						invite_expires: expiresAt.toString(),
-						created_at: new Date().toISOString(),
-						updated_at: new Date().toISOString()
+						invite_expires: new Date(expiresAt),
+						created_at: new Date(),
+						updated_at: new Date()
 					})
 					.execute();
 			});

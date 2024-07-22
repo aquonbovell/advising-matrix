@@ -3,22 +3,36 @@
 	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { clickOutside } from '$lib/actions/clickOutside';
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import HomeIcon from './icons/HomeIcon.svelte';
 	import SettingsIcon from './icons/SettingsIcon.svelte';
 	import LogoutIcon from './icons/LogoutIcon.svelte';
 	import MenuIcon from './icons/MenuIcon.svelte';
 	import ChevronIcon from './icons/ChevronIcon.svelte';
+	import Avatar from './ui/Avatar.svelte';
 
-	export let user: { name: string; role: string };
+	export let user: { name: string; role: 'STUDENT' | 'ADVISOR' | 'ADMIN' };
 
 	const sidebarOpen = writable(false);
 	const userMenuOpen = writable(false);
 
-	const menuItems = [
-		{ icon: HomeIcon, label: 'Home', href: '/' }
-		// Add more menu items here
-	];
+	const specificMenuItems = {
+		STUDENT: [
+			{ icon: HomeIcon, label: 'Home', href: '/' }
+			// Add more menu items here
+		],
+		ADVISOR: [
+			{ icon: HomeIcon, label: 'Home', href: '/' },
+			{ icon: HomeIcon, label: 'Courses', href: '/courses' }
+			// Add more menu items here
+		],
+		ADMIN: [
+			{ icon: HomeIcon, label: 'Home', href: '/' },
+			{ icon: HomeIcon, label: 'Users', href: '/users' }
+			// Add more menu items here
+		]
+	};
 
 	$: activeItem = $page.url.pathname;
 
@@ -38,24 +52,12 @@
 		userMenuOpen.update((n) => !n);
 	}
 
-	function handleClickOutside(event: MouseEvent) {
-		const target = event.target as HTMLElement;
-		if (!target.closest('.sidebar') && !target.closest('.sidebar-toggle')) {
-			sidebarOpen.set(false);
-		}
-		if (!target.closest('.user-menu')) {
-			userMenuOpen.set(false);
-		}
-	}
-
 	onMount(() => {
 		handleResize();
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
 	});
 </script>
-
-<svelte:window on:click={handleClickOutside} />
 
 {#if isMobile}
 	<button
@@ -68,6 +70,8 @@
 {/if}
 
 <aside
+	use:clickOutside
+	on:clickoutside={() => sidebarOpen.set(false)}
 	class="sidebar fixed inset-y-0 left-0 z-50 h-screen w-64 transform border-r border-gray-200 bg-white shadow-lg transition-all duration-300 ease-in-out
 	{$sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
 	aria-label="Sidebar"
@@ -78,7 +82,20 @@
 		</header>
 
 		<nav class="flex-grow space-y-1 overflow-y-auto p-4">
-			{#each menuItems as item}
+			{#if user.role in specificMenuItems}
+				{#each specificMenuItems[user.role] as item}
+					<a
+						href={item.href}
+						class="flex items-center rounded-lg px-4 py-2 transition-colors duration-200
+										{activeItem === item.href ? 'bg-gray-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}"
+					>
+						<svelte:component this={item.icon} class="mr-3 h-6 w-6" />
+						<span>{item.label}</span>
+					</a>
+				{/each}
+			{/if}
+
+			<!-- {#each menuItems as item}
 				<a
 					href={item.href}
 					class="flex items-center rounded-lg px-4 py-2 transition-colors duration-200
@@ -87,38 +104,32 @@
 					<svelte:component this={item.icon} class="mr-3 h-6 w-6" />
 					<span>{item.label}</span>
 				</a>
-			{/each}
+			{/each} -->
 		</nav>
 
 		<div class="user-menu relative border-t border-gray-200 p-4">
 			<button class="flex w-full items-center justify-between" on:click={toggleUserMenu}>
 				<div class="flex items-center">
-					<div
-						class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600"
-					>
-						<!-- Uncomment the following line to display the first letter of the user's name as the avatar when database is updated to handle name -->
-						<!-- <span class="text-lg font-semibold">{user.name[0]}</span> -->
-						<span class="text-lg font-semibold">J</span>
-					</div>
+					<Avatar name={user.name} />
 					<div class="ml-3">
-						<!-- Uncomment the following line to display the first letter of the user's name as the avatar when database is updated to handle name -->
-						<!-- <p class="text-sm font-medium text-gray-700">{user.name}</p> -->
-						<p class="text-sm font-medium text-gray-700">John Doe</p>
-						<p class="text-xs text-gray-500">{user.role}</p>
+						<p class="text-left text-sm font-medium text-gray-700">{user.name}</p>
+						<p class="text-left text-xs text-gray-500">{user.role}</p>
 					</div>
 				</div>
 
 				<ChevronIcon
-					class="text-gray-400 transition-transform duration-200 {$userMenuOpen
-						? 'rotate-180'
-						: ''}"
+					class="text-gray-400 transition-transform duration-200"
+					rotation={$userMenuOpen ? '180deg' : '0deg'}
 				/>
 			</button>
 
 			{#if $userMenuOpen}
 				<div
+					use:clickOutside
+					on:clickoutside={() => userMenuOpen.set(false)}
 					transition:slide={{ duration: 200 }}
 					class="absolute bottom-full left-0 right-0 z-10 mb-1 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
+					style="transform: translate3d(62px, 0px, 0px);"
 				>
 					<a
 						href="/settings"

@@ -1,0 +1,225 @@
+[
+	{
+		"id": "9190",
+		"name": "Pre-Calculus",
+		"code": "MATH0100",
+		"credits": 6
+	},
+	{
+		"id": "13151",
+		"name": "Preliminary Mathematics I",
+		"code": "MATH0101",
+		"credits": 6
+	},
+	{
+		"id": "10026",
+		"name": "Preliminary Mathematics II",
+		"code": "MATH0102",
+		"credits": 6
+	},
+	{
+		"id": "9270",
+		"name": "Calculus and Analytical Geometry",
+		"code": "MATH0110",
+		"credits": 6
+	},
+	{
+		"id": "146",
+		"name": "Introductory Linear Algebra and Analytical Geometry",
+		"code": "MATH1141",
+		"credits": 3
+	},
+	{
+		"id": "315",
+		"name": "Sets and Number Systems",
+		"code": "MATH1152",
+		"credits": 3
+	},
+	{
+		"id": "383",
+		"name": "Calculus A",
+		"code": "MATH1190",
+		"credits": 3
+	},
+	{
+		"id": "319",
+		"name": "Calculus B",
+		"code": "MATH1195",
+		"credits": 3
+	},
+	{
+		"id": "10188",
+		"name": "Introductory Applied Statistics I",
+		"code": "MATH1230",
+		"credits": 3
+	},
+	{
+		"id": "382",
+		"name": "Python Programming and Mathematical Software",
+		"code": "MATH1235",
+		"credits": 3
+	},
+	{
+		"id": "694",
+		"name": "Multivariable Calculus",
+		"code": "MATH2304",
+		"credits": 3,
+		"prerequisite": ["146", "319", "382"]
+	},
+	{
+		"id": "693",
+		"name": "Differential Equations",
+		"code": "MATH2305",
+		"credits": 3,
+		"prerequisite": ["319", "382"],
+		"corequisite": ["694"]
+	},
+	{
+		"id": "674",
+		"name": "Abstract Algebra 1",
+		"code": "MATH2310",
+		"credits": 3,
+		"prerequisite": ["315"]
+	},
+	{
+		"id": "8432",
+		"name": "Linear Algebra 1",
+		"code": "MATH2315",
+		"credits": 3,
+		"prerequisite": ["382", "315"]
+	},
+	{
+		"id": "13638",
+		"name": "Real Analysis 1",
+		"code": "MATH2321",
+		"credits": 3,
+		"prerequisite": ["319", "315"]
+	},
+	{
+		"id": "527",
+		"name": "Elementary Number Theory",
+		"code": "MATH2325",
+		"credits": 3,
+		"prerequisite": ["382", "315"],
+		"corequisite": ["674"]
+	},
+	{
+		"id": "696",
+		"name": "Probability Theory 1",
+		"code": "MATH2330",
+		"credits": 3,
+		"prerequisite": ["319"],
+		"corequisite": ["694"]
+	},
+	{
+		"id": "476",
+		"name": "Statistics 1",
+		"code": "MATH2335",
+		"credits": 3,
+		"prerequisite": ["382", "696"]
+	},
+	{
+		"id": "12778",
+		"name": "Abstract Algebra 2",
+		"code": "MATH3543",
+		"credits": 3,
+		"prerequisite": ["674", "8432"]
+	},
+	{
+		"id": "12777",
+		"name": "Linear Algebra 2",
+		"code": "MATH3545",
+		"credits": 3,
+		"prerequisite": ["674", "8432", "693"]
+	},
+	{
+		"id": "12771",
+		"name": "Real Analysis 2",
+		"code": "MATH3550",
+		"credits": 3,
+		"prerequisite": ["13638"]
+	},
+	{
+		"id": "12772",
+		"name": "Complex Analysis",
+		"code": "MATH3555",
+		"credits": 3,
+		"prerequisite": ["12771"]
+	},
+	{
+		"id": "12776",
+		"name": "Metric Spaces",
+		"code": "MATH3560",
+		"credits": 3,
+		"prerequisite": ["12771"]
+	},
+	{
+		"id": "12775",
+		"name": "Probability Theory 2",
+		"code": "MATH3565",
+		"credits": 3,
+		"prerequisite": ["696", "476", "694", "13638"]
+	},
+	{
+		"id": "12774",
+		"name": "Statistics II",
+		"code": "MATH3570",
+		"credits": 3,
+		"prerequisite": ["476", "12775"]
+	},
+	{
+		"id": "12773",
+		"name": "Topics in Numerical Analysis",
+		"code": "MATH3575",
+		"credits": 3,
+		"prerequisite": ["694", "8432", "13638"]
+	},
+	{
+		"id": "8216",
+		"name": "Fourier Analysis with Partial Differential Equations",
+		"code": "MATH3580",
+		"credits": 3,
+		"prerequisite": ["694", "8432", "13638"]
+	},
+	{
+		"id": "12768",
+		"name": "Research Project in Mathematics",
+		"code": "MATH3590",
+		"credits": 3
+	},
+	{
+		"id": "575",
+		"name": "Topics in Discrete and Computational Geometry",
+		"code": "MATH3600",
+		"credits": 3,
+		"prerequisite": ["315", "382"]
+	},
+	{
+		"id": "576",
+		"name": "Topics in Graph Theory",
+		"code": "MATH3605",
+		"credits": 3,
+		"prerequisite": ["315", "382"]
+	},
+	{
+		"id": "12770",
+		"name": "Financial Mathematics I",
+		"code": "MATH3620",
+		"credits": 3,
+		"prerequisite": ["694", "696", "8432", "476"],
+		"corequisite": ["12775"]
+	},
+	{
+		"id": "12769",
+		"name": "Financial Mathematics II",
+		"code": "MATH3621",
+		"credits": 3,
+		"prerequisite": ["12770", "12775"]
+	},
+	{
+		"id": "13230",
+		"name": "Mathematics Internship",
+		"code": "MATH3955",
+		"credits": 3
+	}
+]

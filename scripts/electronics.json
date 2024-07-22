@@ -1,0 +1,162 @@
+[
+	{
+		"id": "12788",
+		"name": "Basic Circuit Analysis",
+		"code": "ELET1200",
+		"credits": 3,
+		"prerequisite": ["12965"]
+	},
+	{
+		"id": "12787",
+		"name": "Computer Aided Design",
+		"code": "ELET1205",
+		"credits": 3
+	},
+	{
+		"id": "9591",
+		"name": "Digital Electronics I",
+		"code": "ELET1210",
+		"credits": 3
+	},
+	{
+		"id": "157",
+		"name": "Digital Electronics II",
+		"code": "ELET1215",
+		"credits": 3,
+		"prerequisite": ["9591"]
+	},
+	{
+		"id": "12965",
+		"name": "Introduction to Electronics",
+		"code": "ELET1220",
+		"credits": 3
+	},
+	{
+		"id": "512",
+		"name": "Microprocessor Systems",
+		"code": "ELET2215",
+		"credits": 3,
+		"prerequisite": ["157"]
+	},
+	{
+		"id": "514",
+		"name": "Circuit Simulation and Applications",
+		"code": "ELET2220",
+		"credits": 3,
+		"prerequisite": ["12788"]
+	},
+	{
+		"id": "660",
+		"name": "Discrete Component Electronics",
+		"code": "ELET2225",
+		"credits": 3,
+		"prerequisite": ["12788"]
+	},
+	{
+		"id": "8050",
+		"name": "Digital Communication Systems I",
+		"code": "ELET2230",
+		"credits": 3,
+		"prerequisite": ["157", "9508", "383", "13507"]
+	},
+	{
+		"id": "587",
+		"name": "Automation Technology and Applications",
+		"code": "ELET2235",
+		"credits": 3,
+		"prerequisite": ["12788"]
+	},
+	{
+		"id": "13072",
+		"name": "Sensor and Actuation Devices",
+		"code": "ELET2240",
+		"credits": 3,
+		"prerequisite": ["9591"]
+	},
+	{
+		"id": "682",
+		"name": "Electronics Exchange Elective",
+		"code": "ELET2951",
+		"credits": 3
+	},
+	{
+		"id": "12786",
+		"name": "Microcontroller Technology",
+		"code": "ELET3215",
+		"credits": 3,
+		"prerequisite": ["512"]
+	},
+	{
+		"id": "12785",
+		"name": "Control Systems",
+		"code": "ELET3220",
+		"credits": 3,
+		"prerequisite": ["660"]
+	},
+	{
+		"id": "12784",
+		"name": "Essentials of Digital Signal Processing",
+		"code": "ELET3230",
+		"credits": 3,
+		"prerequisite": ["383", "9508", "13507"]
+	},
+	{
+		"id": "12783",
+		"name": "Digital Communication Systems II",
+		"code": "ELET3235",
+		"credits": 3,
+		"prerequisite": ["12783"]
+	},
+	{
+		"id": "12782",
+		"name": "Digital Communication Systems III",
+		"code": "ELET3240",
+		"credits": 3,
+		"prerequisite": ["12783"]
+	},
+	{
+		"id": "12781",
+		"name": "Biomedical Instrumentation",
+		"code": "ELET3250",
+		"credits": 3,
+		"prerequisite": ["587"]
+	},
+	{
+		"id": "12780",
+		"name": "Wireless Communications",
+		"code": "ELET3255",
+		"credits": 3,
+		"prerequisite": ["8050", "660"]
+	},
+	{
+		"id": "12779",
+		"name": "Advanced Microprocessors & Systems",
+		"code": "ELET3260",
+		"credits": 3,
+		"prerequisite": ["512"]
+	},
+	{
+		"id": "475",
+		"name": "Semester Electronics Research Project",
+		"code": "ELET3290",
+		"credits": 3
+	},
+	{
+		"id": "474",
+		"name": "Major Electronics Research Project",
+		"code": "ELET3295",
+		"credits": 6
+	},
+	{
+		"id": "547",
+		"name": "Group Electronics Research Project",
+		"code": "ELET3298",
+		"credits": 6
+	},
+	{
+		"id": "13213",
+		"name": "Electronics Internship",
+		"code": "ELET3955",
+		"credits": 3
+	}
+]

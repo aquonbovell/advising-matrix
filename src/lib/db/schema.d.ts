@@ -52,12 +52,13 @@ export type Student = {
     updated_at: Timestamp;
 };
 export type User = {
-    id: string;
-    email: string;
-    password: string;
-    role: UserRole;
-    created_at: Generated<Timestamp>;
-    updated_at: Timestamp;
+	id: string;
+	name: string | null;
+	email: string;
+	password: string;
+	role: UserRole;
+	created_at: Generated<Timestamp>;
+	updated_at: Timestamp;
 };
 export type DB = {
     Advisor: Advisor;
