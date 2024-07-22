@@ -3,28 +3,30 @@
 	import DonutChart from '$lib/components/DonutChart.svelte';
 	import PieChart from '$lib/components/PieChart.svelte';
 
-	let advisorName = "Mr.TempName";
+	let advisorName = 'Mr.TempName';
 	let gpa = 3.99;
 </script>
 
-<section id="welcome">
-	<h1>{$page.data.user.role} Dashboard</h1>
-</section>
-<section id="charts" class="">
-	<PieChart />
-	<div id="completed-courses"	class="">
-		<DonutChart id="mandatory"/>
-		<DonutChart id="elective"/>
-		<DonutChart id="foundation"/>
-	</div>
-</section>
-<section id="bottom">
-	<span id="advisor">
-		<p>Academic Advisor</p>
-		<p>{advisorName}</p>
-	</span>
-	<span id="gpa">
-		<p>GPA</p>
-		<p>{gpa}</p>
-	</span>
-</section>
+<div class="container px-6 py-4">
+	<section id="welcome">
+		<h1>{$page.data.user.role} Dashboard</h1>
+	</section>
+	<section id="charts" class="">
+		<PieChart />
+		<div id="completed-courses" class="border sm:grid sm:grid-cols-3">
+			<DonutChart id="mandatory" />
+			<DonutChart id="elective" />
+			<DonutChart id="foundation" />
+		</div>
+	</section>
+	<section id="bottom">
+		<span id="advisor">
+			<p>Academic Advisor</p>
+			<p>{advisorName}</p>
+		</span>
+		<span id="gpa">
+			<p>GPA</p>
+			<p>{gpa}</p>
+		</span>
+	</section>
+</div>
