@@ -11,9 +11,9 @@
 		DotsHorizontalOutline
 	} from 'flowbite-svelte-icons';
 
-	// export let id = "PieChart";
+	export let id = "PieChart";
 	export let title = 'Credits';
-	// export let description = "Credits of this category completed...";
+	export let description = "Credits of this category completed...";
 	export let series = [50, 50];
 	export let labels = ['Credits Completed', 'Credits Remaining'];
 

@@ -19,7 +19,7 @@
 		ShareNodesSolid
 	} from 'flowbite-svelte-icons';
 
-	// export let id = 'DonutChart';
+	export let id = 'DonutChart';
 	export let title = 'Credits';
 	export let description = 'Credits of this category completed...';
 	export let series = [50, 50];

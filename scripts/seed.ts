@@ -101,6 +101,65 @@ async function seed() {
 		updated_at: new Date().toISOString()
 	});
 
+	const deparments: { id: string; name: string }[] = [
+		{
+			id: '1',
+			name: 'Biochemistry'
+		},
+		{
+			id: '2',
+			name: 'Biology'
+		},
+		{
+			id: '3',
+			name: 'Ecology'
+		},
+		{
+			id: '4',
+			name: 'Microbiology'
+		},
+		{
+			id: '5',
+			name: 'Environmental Science'
+		},
+		{
+			id: '6',
+			name: 'Chemistry'
+		},
+		{
+			id: '7',
+			name: 'Computer Science'
+		},
+		{
+			id: '8',
+			name: 'Information Technology'
+		},
+		{
+			id: '9',
+			name: 'Software Engineering'
+		},
+		{
+			id: '10',
+			name: 'Mathematics'
+		},
+		{
+			id: '11',
+			name: 'Electronics'
+		},
+		{
+			id: '12',
+			name: 'Physics'
+		},
+		{
+			id: '13',
+			name: 'Meteorology'
+		}
+	];
+
+	for (const department of deparments) {
+		await insertOrIgnore('Department', department);
+	}
+
 	// Insert Departments
 	await insertOrIgnore('Department', {
 		id: '1',
@@ -108,13 +167,11 @@ async function seed() {
 	});
 
 	// Insert Majors
-	await insertOrIgnore('Major', {
-		id: '1',
-		name: 'Computer Science',
-		department_id: '1'
-	});
-
-	db.deleteFrom('Course').execute();
+	// await insertOrIgnore('Major', {
+	// 	id: '1',
+	// 	name: 'Computer Science',
+	// 	department_id: '1'
+	// });
 
 	// Insert Courses
 	for (const course of courseData) {
@@ -124,7 +181,7 @@ async function seed() {
 			name: course.name,
 			level: parseInt(course.code.match(/\d+/)[0][0]),
 			credits: course.credits,
-			majorId: '1'
+			departmentId: course.department
 		} as Course);
 
 		if (course.prerequisite) {
@@ -148,6 +205,32 @@ async function seed() {
 				}
 			}
 		}
+	}
+
+	try {
+		// Insert Computer Science Program
+		const programId = randomUUID();
+		await insertOrIgnore('Program', {
+			id: programId,
+			name: 'Computer Science'
+		});
+
+		const requirementId = randomUUID();
+		const requirementDetails = {
+			courses: ['150', '9508', '197', '12804', '154']
+		};
+
+		await insertOrIgnore('ProgramRequirement', {
+			id: requirementId,
+			programId: programId,
+			type: 'CREDITS',
+			credits: requirementDetails.courses.length * 3, // Assuming each course is 3 credits
+			details: JSON.stringify(requirementDetails)
+		});
+
+		console.log('Computer Science program seeded successfully');
+	} catch (error) {
+		console.error('Error inserting program:', error);
 	}
 }
 

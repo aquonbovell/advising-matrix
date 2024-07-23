@@ -18,7 +18,7 @@ module.exports = {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', ...defaultTheme.fontFamily.sans]
+				sans: ['Inter Variable', ...defaultTheme.fontFamily.sans]
 			},
 			colors: {
 				// flowbite-svelte

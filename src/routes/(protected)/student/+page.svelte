@@ -7,13 +7,16 @@
 	let gpa = 3.99;
 </script>
 
-<div class="container px-6 py-4">
-	<section id="welcome">
-		<h1>{$page.data.user.role} Dashboard</h1>
+<div class="container">
+	<section id="welcome" class="mb-15">
+		<h1 class="font-semibold text-5xl">
+			<!-- {$page.data.user.role} Dashboard -->
+			Welcome 
+		</h1>
 	</section>
 	<section id="charts" class="">
 		<PieChart />
-		<div id="completed-courses" class="border sm:grid sm:grid-cols-3">
+		<div id="completed-courses" class="sm:grid sm:grid-cols-3">
 			<DonutChart id="mandatory" />
 			<DonutChart id="elective" />
 			<DonutChart id="foundation" />
