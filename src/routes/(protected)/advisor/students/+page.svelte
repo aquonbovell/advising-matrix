@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import Card from '$lib/components/Card.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import type { PageData } from './$types';
@@ -106,7 +107,15 @@
 											</td>
 											<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-800">
 												{#if student.invite_token}
-													<CopyButton textToCopy={getInviteLink(student.invite_token)} />
+													<div class="flex items-center space-x-2">
+														<CopyButton textToCopy={getInviteLink(student.invite_token)} />
+														<form method="POST" action="?/removeInvite" use:enhance>
+															<input type="hidden" name="studentID" value={student.id} />
+															<button type="submit" class="text-red-600 hover:text-red-900">
+																Remove Invite
+															</button>
+														</form>
+													</div>
 												{:else}
 													<a
 														href="/advisor/students/{student.id}"
