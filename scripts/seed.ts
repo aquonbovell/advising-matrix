@@ -101,6 +101,65 @@ async function seed() {
 		updated_at: new Date().toISOString()
 	});
 
+	const deparments: { id: string; name: string }[] = [
+		{
+			id: '1',
+			name: 'Biochemistry'
+		},
+		{
+			id: '2',
+			name: 'Biology'
+		},
+		{
+			id: '3',
+			name: 'Ecology'
+		},
+		{
+			id: '4',
+			name: 'Microbiology'
+		},
+		{
+			id: '5',
+			name: 'Environmental Science'
+		},
+		{
+			id: '6',
+			name: 'Chemistry'
+		},
+		{
+			id: '7',
+			name: 'Computer Science'
+		},
+		{
+			id: '8',
+			name: 'Information Technology'
+		},
+		{
+			id: '9',
+			name: 'Software Engineering'
+		},
+		{
+			id: '10',
+			name: 'Mathematics'
+		},
+		{
+			id: '11',
+			name: 'Electronics'
+		},
+		{
+			id: '12',
+			name: 'Physics'
+		},
+		{
+			id: '13',
+			name: 'Meteorology'
+		}
+	];
+
+	for (const department of deparments) {
+		await insertOrIgnore('Department', department);
+	}
+
 	// Insert Departments
 	await insertOrIgnore('Department', {
 		id: '1',
@@ -108,11 +167,11 @@ async function seed() {
 	});
 
 	// Insert Majors
-	await insertOrIgnore('Major', {
-		id: '1',
-		name: 'Computer Science',
-		department_id: '1'
-	});
+	// await insertOrIgnore('Major', {
+	// 	id: '1',
+	// 	name: 'Computer Science',
+	// 	department_id: '1'
+	// });
 
 	db.deleteFrom('Course').execute();
 
@@ -124,7 +183,7 @@ async function seed() {
 			name: course.name,
 			level: parseInt(course.code.match(/\d+/)[0][0]),
 			credits: course.credits,
-			majorId: '1'
+			departmentId: course.department
 		} as Course);
 
 		if (course.prerequisite) {

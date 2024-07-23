@@ -3,247 +3,284 @@
 		"id": "7222",
 		"name": "Preliminary Computer Science II",
 		"code": "COMP0002",
-		"credits": 6
+		"credits": 6,
+		"department": "7"
 	},
 	{
 		"id": "6943",
 		"name": "Preliminary Computer Science I",
 		"code": "COMP0001",
-		"credits": 6
+		"credits": 6,
+		"department": "7"
 	},
 	{
 		"id": "150",
 		"name": "Entrepreneurship for Computer Scientists",
 		"code": "COMP1170",
-		"credits": 3
+		"credits": 3,
+		"department": "7"
 	},
 	{
 		"id": "9508",
 		"name": "Mathematics for Computer Science I",
 		"code": "COMP1180",
-		"credits": 3
+		"credits": 3,
+		"department": "7"
 	},
 	{
 		"id": "197",
 		"name": "Computing I",
 		"code": "COMP1205",
-		"credits": 3
+		"credits": 3,
+		"department": "7"
 	},
 	{
 		"id": "12804",
 		"name": "Computing II",
 		"code": "COMP1210",
-		"credits": 3
+		"credits": 3,
+		"department": "7"
 	},
 	{
 		"id": "154",
 		"name": "UNIX",
 		"code": "COMP1215",
-		"credits": 3
+		"credits": 3,
+		"department": "7"
 	},
 	{
 		"id": "13653",
 		"name": "Mathematics for Computer Science II",
 		"code": "COMP2210",
 		"credits": 3,
-		"prerequisite": ["9508"]
+		"prerequisite": ["9508"],
+		"department": "7"
 	},
 	{
 		"id": "11926",
 		"name": "Computer System Architecture",
 		"code": "COMP2220",
 		"credits": 3,
-		"prerequisite": ["9508", "12804"]
+		"prerequisite": ["9508", "12804"],
+		"department": "7"
 	},
 	{
 		"id": "657",
 		"name": "Software Engineering",
 		"code": "COMP2225",
 		"credits": 3,
-		"prerequisite": ["12804"]
+		"prerequisite": ["12804"],
+		"department": "7"
 	},
 	{
 		"id": "703",
 		"name": "Object-Oriented Programming Concepts",
 		"code": "COMP2232",
 		"credits": 3,
-		"prerequisite": ["12804"]
+		"prerequisite": ["12804"],
+		"department": "7"
 	},
 	{
 		"id": "13507",
 		"name": "Networks I",
 		"code": "COMP2235",
 		"credits": 3,
-		"prerequisite": ["12804", "154"]
+		"prerequisite": ["12804", "154"],
+		"department": "7"
 	},
 	{
 		"id": "705",
 		"name": "Web Development Concepts, Tools and Practices",
 		"code": "COMP2245",
 		"credits": 3,
-		"prerequisite": ["150"]
+		"prerequisite": ["150"],
+		"department": "7"
 	},
 	{
 		"id": "449",
 		"name": "Computing in the Digital Age",
 		"code": "COMP2410",
 		"credits": 3,
-		"prerequisite": ["12804"]
+		"prerequisite": ["12804"],
+		"department": "7"
 	},
 	{
 		"id": "488",
 		"name": "Information Technology Engineering",
 		"code": "COMP2415",
 		"credits": 3,
-		"prerequisite": ["12804"]
+		"prerequisite": ["12804"],
+		"department": "7"
 	},
 	{
 		"id": "8431",
 		"name": "Data Structures",
 		"code": "COMP2611",
 		"credits": 3,
-		"prerequisite": ["12804", "154"]
+		"prerequisite": ["12804", "154"],
+		"department": "7"
 	},
 	{
 		"id": "5780",
 		"name": "Computer Science Elective",
 		"code": "COMP2950",
-		"credits": 4
+		"credits": 4,
+		"department": "7"
 	},
 	{
 		"id": "12803",
 		"name": "Algorithms",
 		"code": "COMP3310",
 		"credits": 3,
-		"prerequisite": ["13653", "8431"]
+		"prerequisite": ["13653", "8431"],
+		"department": "7"
 	},
 	{
 		"id": "12802",
 		"name": "Design Principles of Operating Systems",
 		"code": "COMP3320",
 		"credits": 3,
-		"prerequisite": ["11926", "8431"]
+		"prerequisite": ["11926", "8431"],
+		"department": "7"
 	},
 	{
 		"id": "12801",
 		"name": "Database Management Systems I",
 		"code": "COMP3330",
 		"credits": 3,
-		"prerequisite": ["8431"]
+		"prerequisite": ["8431"],
+		"department": "7"
 	},
 	{
 		"id": "12800",
 		"name": "Networks II",
 		"code": "COMP3360",
 		"credits": 3,
-		"prerequisite": ["13507"]
+		"prerequisite": ["13507"],
+		"department": "7"
 	},
 	{
 		"id": "12799",
 		"name": "Networks III",
 		"code": "COMP3365",
 		"credits": 3,
-		"prerequisite": ["12800"]
+		"prerequisite": ["12800"],
+		"department": "7"
 	},
 	{
 		"id": "12798",
 		"name": "Software Engineering on a Large Scale",
 		"code": "COMP3370",
 		"credits": 3,
-		"prerequisite": ["657"]
+		"prerequisite": ["657"],
+		"department": "7"
 	},
 	{
 		"id": "12797",
 		"name": "Software Testing & Quality",
 		"code": "COMP3375",
 		"credits": 3,
-		"prerequisite": ["657"]
+		"prerequisite": ["657"],
+		"department": "7"
 	},
 	{
 		"id": "12796",
 		"name": "Framework Design for Advanced Web Development",
 		"code": "COMP3385",
 		"credits": 3,
-		"prerequisite": ["705"]
+		"prerequisite": ["705"],
+		"department": "7"
 	},
 	{
 		"id": "12795",
 		"name": "Scalable Enterprise Web Applications",
 		"code": "COMP3412",
 		"credits": 3,
-		"prerequisite": ["12801", "705"]
+		"prerequisite": ["12801", "705"],
+		"department": "7"
 	},
 	{
 		"id": "12794",
 		"name": "Database Management Systems II",
 		"code": "COMP3415",
 		"credits": 3,
-		"prerequisite": ["12801"]
+		"prerequisite": ["12801"],
+		"department": "7"
 	},
 	{
 		"id": "12793",
 		"name": "Computer Graphics",
 		"code": "COMP3420",
 		"credits": 3,
-		"prerequisite": ["8431"]
+		"prerequisite": ["8431"],
+		"department": "7"
 	},
 	{
 		"id": "453",
 		"name": "Mobile Applications for iOS Development",
 		"code": "COMP3425",
 		"credits": 3,
-		"prerequisite": ["8431", "657"]
+		"prerequisite": ["8431", "657"],
+		"department": "7"
 	},
 	{
 		"id": "12792",
 		"name": "User Interface Design",
 		"code": "COMP3435",
 		"credits": 3,
-		"prerequisite": ["8431", "657"]
+		"prerequisite": ["8431", "657"],
+		"department": "7"
 	},
 	{
 		"id": "12791",
 		"name": "E-Commerce",
 		"code": "COMP3440",
 		"credits": 3,
-		"prerequisite": ["705"]
+		"prerequisite": ["705"],
+		"department": "7"
 	},
 	{
 		"id": "12790",
 		"name": "Computer Information Systems",
 		"code": "COMP3445",
 		"credits": 3,
-		"prerequisite": ["657", "705"]
+		"prerequisite": ["657", "705"],
+		"department": "7"
 	},
 	{
 		"id": "12789",
 		"name": "Fundamentals of Artificial Intelligence",
 		"code": "COMP3450",
 		"credits": 3,
-		"prerequisite": ["13653", "8431"]
+		"prerequisite": ["13653", "8431"],
+		"department": "7"
 	},
 	{
 		"id": "541",
 		"name": "Research Project in Computer Science",
 		"code": "COMP3490",
-		"credits": 3
+		"credits": 3,
+		"department": "7"
 	},
 	{
 		"id": "542",
 		"name": "Major Research Project in Computer Science",
 		"code": "COMP3495",
-		"credits": 6
+		"credits": 6,
+		"department": "7"
 	},
 	{
 		"id": "543",
 		"name": "Group Research Project in Computer Science",
 		"code": "COMP3499",
-		"credits": 3
+		"credits": 3,
+		"department": "7"
 	},
 	{
 		"id": "10106",
 		"name": "Computer Science Internship",
 		"code": "COMP3955",
-		"credits": 3
+		"credits": 3,
+		"department": "7"
 	}
 ]
