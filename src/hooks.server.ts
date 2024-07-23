@@ -1,8 +1,18 @@
 import { lucia } from '$lib/server/auth';
 import type { Cookie } from 'lucia';
 import '$lib/validator/validator';
+import type { Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 
-export async function handle({ event, resolve }) {
+const preloadFonts: Handle = async ({ event, resolve }) => {
+	const response = await resolve(event, {
+		preload: ({ type }) => type === 'font'
+	});
+
+	return response;
+};
+
+const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
 
 	if (!sessionId) {
@@ -30,4 +40,6 @@ export async function handle({ event, resolve }) {
 	event.locals.session = session;
 
 	return resolve(event);
-}
+};
+
+export const handle = sequence(preloadFonts, handleAuth);
