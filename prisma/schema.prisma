@@ -50,9 +50,10 @@ model Student {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user    User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  advisor Advisor  @relation(fields: [advisor_id], references: [id])
-  Degree  Degree[]
+  user          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  advisor       Advisor         @relation(fields: [advisor_id], references: [id])
+  Degree        Degree[]
+  StudentCourse StudentCourse[]
 }
 
 model Department {
@@ -62,13 +63,14 @@ model Department {
 }
 
 model Course {
-  id           String     @id
-  code         String     @unique
-  name         String
-  level        Int
-  credits      Int
-  department   Department @relation(fields: [departmentId], references: [id])
-  departmentId String
+  id            String          @id
+  code          String          @unique
+  name          String
+  level         Int
+  credits       Int
+  department    Department      @relation(fields: [departmentId], references: [id])
+  departmentId  String
+  StudentCourse StudentCourse[]
 }
 
 model Prerequisite {
@@ -84,8 +86,38 @@ model Degree {
   student    Student @relation(fields: [student_id], references: [id])
 }
 
+model Program {
+  id           String               @id
+  name         String
+  requirements ProgramRequirement[]
+}
+
+model ProgramRequirement {
+  id        String          @id
+  programId String
+  program   Program         @relation(fields: [programId], references: [id])
+  type      RequirementType
+  credits   Int
+  details   Json
+}
+
+model StudentCourse {
+  id        String  @id
+  studentId String
+  courseId  String
+  grade     String
+
+  student   Student @relation(fields: [studentId], references: [id])
+  course    Course  @relation(fields: [courseId], references: [id])
+}
+
 enum UserRole {
   STUDENT
   ADVISOR
   ADMIN
+}
+
+enum RequirementType {
+  CREDITS
+  POOL
 }

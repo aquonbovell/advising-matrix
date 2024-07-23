@@ -11,6 +11,11 @@ export const UserRole = {
 	ADMIN: 'ADMIN'
 } as const;
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
+export const RequirementType = {
+	CREDITS: 'CREDITS',
+	POOL: 'POOL'
+} as const;
+export type RequirementType = (typeof RequirementType)[keyof typeof RequirementType];
 export type Advisor = {
 	id: string;
 	user_id: string;
@@ -37,6 +42,17 @@ export type Prerequisite = {
 	course_id: string;
 	prerequisite_id: string;
 };
+export type Program = {
+	id: string;
+	name: string;
+};
+export type ProgramRequirement = {
+	id: string;
+	programId: string;
+	type: RequirementType;
+	credits: number;
+	details: unknown;
+};
 export type Session = {
 	id: string;
 	expires_at: Timestamp;
@@ -51,6 +67,12 @@ export type Student = {
 	majorId: string | null;
 	created_at: Generated<Timestamp>;
 	updated_at: Timestamp;
+};
+export type StudentCourse = {
+	id: string;
+	studentId: string;
+	courseId: string;
+	grade: string;
 };
 export type User = {
 	id: string;
@@ -67,7 +89,10 @@ export type DB = {
 	Degree: Degree;
 	Department: Department;
 	Prerequisite: Prerequisite;
+	Program: Program;
+	ProgramRequirement: ProgramRequirement;
 	Session: Session;
 	Student: Student;
+	StudentCourse: StudentCourse;
 	User: User;
 };

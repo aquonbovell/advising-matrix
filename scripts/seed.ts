@@ -173,8 +173,6 @@ async function seed() {
 	// 	department_id: '1'
 	// });
 
-	db.deleteFrom('Course').execute();
-
 	// Insert Courses
 	for (const course of courseData) {
 		await insertOrIgnore('Course', {
@@ -207,6 +205,32 @@ async function seed() {
 				}
 			}
 		}
+	}
+
+	try {
+		// Insert Computer Science Program
+		const programId = randomUUID();
+		await insertOrIgnore('Program', {
+			id: programId,
+			name: 'Computer Science'
+		});
+
+		const requirementId = randomUUID();
+		const requirementDetails = {
+			courses: ['150', '9508', '197', '12804', '154']
+		};
+
+		await insertOrIgnore('ProgramRequirement', {
+			id: requirementId,
+			programId: programId,
+			type: 'CREDITS',
+			credits: requirementDetails.courses.length * 3, // Assuming each course is 3 credits
+			details: JSON.stringify(requirementDetails)
+		});
+
+		console.log('Computer Science program seeded successfully');
+	} catch (error) {
+		console.error('Error inserting program:', error);
 	}
 }
 
