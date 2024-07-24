@@ -1,5 +1,5 @@
-import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { error, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
 
 export const load = (async ({ locals, params }) => {
@@ -25,3 +25,18 @@ export const load = (async ({ locals, params }) => {
 
 	return { student: data };
 }) satisfies PageServerLoad;
+
+export const actions: Actions = {
+	delete: async ({ request }) => {
+		const data = await request.formData();
+		const email = data.get('floating_email');
+		if (!email) {
+			throw error(400, 'Bad Request');
+		}
+		const result = await db.deleteFrom('User').where('email', '=', email.toString()).execute();
+
+		console.log(result);
+
+		redirect(304, '/advisor/students');
+	}
+};

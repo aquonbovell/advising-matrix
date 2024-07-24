@@ -11,6 +11,7 @@
 	import MenuIcon from './icons/MenuIcon.svelte';
 	import ChevronIcon from './icons/ChevronIcon.svelte';
 	import Avatar from './ui/Avatar.svelte';
+	import Label from './ui/Label.svelte';
 
 	export let user: { name: string; role: 'STUDENT' | 'ADVISOR' | 'ADMIN' };
 
@@ -19,7 +20,9 @@
 
 	const specificMenuItems = {
 		STUDENT: [
-			{ icon: HomeIcon, label: 'Home', href: '/' }
+			{ icon: HomeIcon, label: 'Home', href: '/' },
+			{ icon: HomeIcon, label: 'Tracker', href: '/student/degree-tracker' },
+			{ icon: HomeIcon, label: 'Test', href: '/student/test' }
 			// Add more menu items here
 		],
 		ADVISOR: [
