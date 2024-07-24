@@ -7,6 +7,10 @@
 	export let value: HTMLOptionAttributes['value'] = undefined;
 	export let disabled: boolean = false;
 	export let placeholder: string = 'Select an option';
+	export let name: string;
+	export let id: string;
+	export let label: string | undefined = undefined;
+	export let error: string | undefined = undefined;
 
 	let show: boolean = false;
 	let selectedOption: HTMLButtonElement | null = null;
@@ -81,13 +85,18 @@
 </script>
 
 <div class="relative">
+	{#if label}
+		<label for={id} class="mb-1 block text-sm font-medium text-gray-700">{label}</label>
+	{/if}
 	<button
 		type="button"
 		bind:this={buttonRef}
 		on:click={toggleDropdown}
 		on:keydown={handleKeyDown}
 		{disabled}
+		{id}
 		class="flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-left shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+		class:border-red-500={error}
 	>
 		<span>{selectedOption ? selectedOption.textContent : placeholder}</span>
 		<ChevronIcon rotation={show ? '180deg' : '0deg'} />
@@ -107,4 +116,10 @@
 			<slot {value} />
 		</div>
 	{/if}
+
+	{#if error}
+		<p class="mt-1 text-sm text-red-600">{error}</p>
+	{/if}
+
+	<input type="hidden" {name} {value} />
 </div>

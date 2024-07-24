@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/Button.svelte';
+	import Select from '$lib/components/ui/dropdown/Select.svelte';
 	import Input from '$lib/components/ui/Input.svelte';
+	import Option from '$lib/components/ui/dropdown/Option.svelte';
 	import { superForm } from 'sveltekit-superforms';
 
 	export let data;
@@ -37,6 +39,19 @@
 			bind:value={$form.email}
 			{...$constraints.email}
 		/>
+
+		<Select
+			id="programId"
+			name="programId"
+			label="Program"
+			placeholder="Select a program"
+			error={$errors.programId?.[0]}
+			bind:value={$form.programId}
+		>
+			{#each data.programs as program}
+				<Option value={program.id}>{program.name}</Option>
+			{/each}
+		</Select>
 	</div>
 
 	<Button type="submit" loading={$delayed}>Send Invitation</Button>

@@ -8,17 +8,20 @@ import { message, superValidate } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from '../$types';
 
-const defaults = { email: '', name: '' };
+const defaults = { email: '', name: '', programId: '' };
 
 const schema = Vine.object({
 	email: Vine.string().trim().email(),
-	name: Vine.string().trim().minLength(2).maxLength(50)
+	name: Vine.string().trim().minLength(2).maxLength(50),
+	programId: Vine.string().trim()
 });
 
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(vine(schema, { defaults }));
 
-	return { form };
+	const programs = await db.selectFrom('Program').select(['id', 'name']).execute();
+
+	return { form, programs };
 };
 
 export const actions: Actions = {
@@ -33,8 +36,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const email = form.data.email;
-		const name = form.data.name;
+		const { email, name, programId } = form.data;
 
 		try {
 			const advisor = await db
@@ -71,6 +73,7 @@ export const actions: Actions = {
 						id: generateId(16),
 						user_id: userId,
 						advisor_id: advisor.id,
+						program_id: programId,
 						invite_token: token,
 						invite_expires: new Date(expiresAt),
 						created_at: new Date(),

@@ -65,6 +65,7 @@ export type Student = {
 	invite_token: string | null;
 	invite_expires: Timestamp | null;
 	majorId: string | null;
+	program_id: string | null;
 	created_at: Generated<Timestamp>;
 	updated_at: Timestamp;
 };

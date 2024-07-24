@@ -24,13 +24,16 @@ export const load: PageServerLoad = async ({ locals }) => {
 			.selectFrom('Student')
 			.where('advisor_id', '=', advisor.id)
 			.innerJoin('User', 'User.id', 'Student.user_id')
+			.leftJoin('Program', 'Program.id', 'Student.program_id')
 			.select([
+				'Student.id',
 				'Student.user_id',
 				'User.email',
 				'Student.created_at',
 				'Student.updated_at',
 				'Student.invite_token',
-				'Student.invite_expires'
+				'Student.invite_expires',
+				'Program.name as program_name'
 			])
 			.execute();
 
