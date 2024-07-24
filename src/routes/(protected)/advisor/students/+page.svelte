@@ -109,7 +109,7 @@
 													<CopyButton textToCopy={getInviteLink(student.invite_token)} />
 												{:else}
 													<a
-														href="/advisor/students/{student.id}"
+														href="/advisor/students/{student.user_id}"
 														class="text-indigo-600 hover:text-indigo-900"
 													>
 														View Details

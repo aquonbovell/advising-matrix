@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			.where('advisor_id', '=', advisor.id)
 			.innerJoin('User', 'User.id', 'Student.user_id')
 			.select([
-				'Student.id',
+				'Student.user_id',
 				'User.email',
 				'Student.created_at',
 				'Student.updated_at',
