@@ -28,6 +28,11 @@ export type Course = {
 	credits: number;
 	departmentId: string;
 };
+export type CoursePrerequisite = {
+	id: string;
+	courseId: string;
+	prerequisiteId: string;
+};
 export type Degree = {
 	id: string;
 	name: string;
@@ -65,6 +70,7 @@ export type Student = {
 	invite_token: string | null;
 	invite_expires: Timestamp | null;
 	majorId: string | null;
+	program_id: string | null;
 	created_at: Generated<Timestamp>;
 	updated_at: Timestamp;
 };
@@ -86,6 +92,7 @@ export type User = {
 export type DB = {
 	Advisor: Advisor;
 	Course: Course;
+	CoursePrerequisite: CoursePrerequisite;
 	Degree: Degree;
 	Department: Department;
 	Prerequisite: Prerequisite;

@@ -20,7 +20,9 @@
 	const specificMenuItems = {
 		STUDENT: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
-			{ icon: SettingsIcon, label: 'Advisor', href: 'student/advisor' }
+			{ icon: HomeIcon, label: 'Tracker', href: '/student/degree-tracker' },
+			{ icon: HomeIcon, label: 'Test', href: '/student/test' }
+			// Add more menu items here
 		],
 		ADVISOR: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },

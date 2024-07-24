@@ -1,65 +1,118 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
 	import Button from '$lib/components/ui/Button.svelte';
-	import Loading from '$lib/components/ui/Loading.svelte';
 	import ProgressBar from '$lib/components/ui/ProgressBar.svelte';
+	import { gradePoints, type Grade } from '$lib/types';
+	import { derived, writable } from 'svelte/store';
+	import type { PageData } from './$types';
 	import type { Course } from '$lib/db/schema';
-	import {
-		gradePoints,
-		type CourseRequirement,
-		type Grade,
-		type ProgramRequirement
-	} from '$lib/types';
-	import { writable } from 'svelte/store';
 
-	let user = $page.data.user;
-	let program = $page.data.program;
-	let programCourses: Course[] = $page.data.programCourses;
-	let requirement = program.requirement as ProgramRequirement;
+	export let data: PageData & {
+		programCourses: (Course & {
+			prerequistes: Course[];
+		})[];
+	};
 
-	let currentTerm = 'Spring 2024 (Current)';
+	$: ({ program, programCourses, studentCourses } = data);
+
 	let degree = {
 		name: ['BSc Computer Science', 'BSc Mathematics'],
 		minor: 'N/A',
-		classification: 'Level III/Third Year',
-		gpa: 1.9
+		classification: 'Level III/Third Year'
 	};
 
-	const courseGradesStore = writable<Record<string, Grade>>({});
+	const courseGradesStore = writable<Record<string, Grade | ''>>({});
+	const completedCoursesStore = writable<Record<string, boolean>>({});
+
+	$: if (programCourses && studentCourses) {
+		courseGradesStore.set(
+			Object.fromEntries(
+				programCourses.map((course) => {
+					const grade = studentCourses[course.id]?.grade;
+					return [course.id, (grade && grade in gradePoints ? grade : '') as Grade | ''];
+				})
+			) as Record<string, Grade | ''>
+		);
+		completedCoursesStore.set(
+			Object.fromEntries(
+				programCourses.map((course) => [course.id, !!studentCourses[course.id]?.grade])
+			)
+		);
+	}
 
 	function updateGrade(courseId: string, grade: Grade) {
 		courseGradesStore.update((grades) => ({ ...grades, [courseId]: grade }));
+		completedCoursesStore.update((completed) => ({ ...completed, [courseId]: !!grade }));
 	}
 
 	function handleGradeChange(courseId: string, event: Event) {
 		const target = event.target as HTMLSelectElement;
-		const grade = target.value as Grade;
-		updateGrade(courseId, grade);
+		updateGrade(courseId, target.value as Grade);
 	}
 
-	let totalCredits = 114;
-	let appliedCredits = 90;
-	let stillNeeded = 8;
-	let inProgress = 5;
-	let complete = 30;
+	$: totalCredits = programCourses?.reduce((sum, course) => sum + course.credits, 0) || 0;
+	$: appliedCredits = derived(
+		[completedCoursesStore, courseGradesStore],
+		([$completed, $grades]) =>
+			programCourses?.reduce(
+				(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
+				0
+			) || 0
+	);
 
-	$: gpa = calculateGPA($courseGradesStore);
-	$: progressPercentage = (appliedCredits / totalCredits) * 100;
+	$: stillNeeded = derived(
+		completedCoursesStore,
+		($completed) => programCourses?.filter((course) => !$completed[course.id]).length || 0
+	);
+	$: inProgress = 5; // This should be calculated based on actual data
+	$: complete = derived(
+		completedCoursesStore,
+		($completed) => programCourses?.filter((course) => $completed[course.id]).length || 0
+	);
 
-	function calculateGPA(grades: Record<string, Grade>) {
+	$: progressPercentage = derived(appliedCredits, ($applied) => ($applied / totalCredits) * 100);
+
+	const gpa = derived([courseGradesStore, completedCoursesStore], ([$grades, $completed]) => {
+		if (!programCourses) return '0.00';
+
 		let totalPoints = 0;
 		let totalCredits = 0;
 
 		programCourses.forEach((course) => {
-			const grade = grades[course.id];
-			if (grade !== null && grade !== undefined) {
-				totalPoints += gradePoints[grade] * course.credits;
-				totalCredits += course.credits;
+			if ($completed[course.id]) {
+				const grade = $grades[course.id];
+				if (grade && grade in gradePoints) {
+					totalPoints += gradePoints[grade] * course.credits;
+					totalCredits += course.credits;
+				}
 			}
 		});
 
 		return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+	});
+
+	$: if (programCourses && studentCourses) {
+		completedCoursesStore.set(
+			Object.fromEntries(
+				programCourses.map((course) => [
+					course.id,
+					!!studentCourses[course.id]?.grade && arePrerequisitesMet(course)
+				])
+			)
+		);
 	}
+
+	function arePrerequisitesMet(
+		course: Course & { prerequisites?: { id: string; code: string }[] }
+	): boolean {
+		if (!course.prerequisites || course.prerequisites.length === 0) {
+			return true;
+		}
+		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
+	}
+
+	// $: console.log('Program Courses:', programCourses);
+	// $: console.log('Completed Courses Store:', $completedCoursesStore);
 </script>
 
 <div class="mt-6 overflow-hidden">
@@ -81,12 +134,12 @@
 			<span class="font-semibold">{degree.classification}</span>
 		</div>
 		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Overall Gpa</span>
-			<span class="font-semibold">{degree.gpa}</span>
+			<span class="uppercase text-gray-500">Overall GPA</span>
+			<span class="font-semibold">{$gpa}</span>
 		</div>
 		<div class="flex flex-col items-center">
 			<span class="uppercase text-gray-500">Academic Standing</span>
-			{#if degree.gpa < 2.0}
+			{#if parseFloat($gpa) < 2.0}
 				<span class="font-semibold text-red-500">Academic Warning</span>
 			{:else}
 				<span class="font-semibold">Good Standing</span>
@@ -151,71 +204,85 @@
 
 	<div class="flex flex-col items-end">
 		<div class="mb-1 text-sm text-gray-600">
-			{appliedCredits}/{totalCredits} Credits Applied
+			{$appliedCredits}/{totalCredits} Credits Applied
 		</div>
 		<div class="w-48">
-			<ProgressBar progress={progressPercentage} size="sm" />
+			<ProgressBar progress={$progressPercentage} size="sm" />
 		</div>
 	</div>
 </div>
 
-<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
+<form method="POST" action="?/saveChanges" use:enhance>
+	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
 
-<div class="space-y-4">
-	{#each programCourses as course (course.id)}
-		<div class="rounded-lg border border-gray-200 p-4 shadow-sm">
-			<h3 class="text-lg font-semibold">{course.code} - {course.name}</h3>
-			<p class="mt-1 text-sm text-gray-600">Level: {course.level}</p>
-			<p class="text-sm text-gray-600">Credits: {course.credits}</p>
-			<div class="mt-2">
-				<label for={`grade-${course.id}`} class="mr-2">Grade:</label>
-				<select
-					id={`grade-${course.id}`}
-					on:change={(e) => handleGradeChange(course.id, e)}
-					class="rounded border p-1"
-				>
-					<option value={null}>Select Grade</option>
-					{#each Object.keys(gradePoints) as grade}
-						<option value={grade}>{grade}</option>
-					{/each}
-				</select>
-			</div>
-		</div>
-	{/each}
-</div>
-
-{#if programCourses.length === 0}
-	<p class="mt-4 text-gray-600">No courses found for this program.</p>
-{/if}
-
-<div class="mt-6 text-xl font-bold">
-	Overall GPA: {gpa}
-</div>
-
-<!-- <div class="overflow-hidden border">
-	<div class="flex items-center justify-between border-l-4 border-red-600 p-4">
-		<div class="flex items-center space-x-2">
-			<svg
-				class="flex size-5 flex-shrink-0 text-red-600"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path
-					d="M12 9v4"
-				/><path d="M12 17h.01" /></svg
-			>
-			<span class="font-semibold">{requirement.name}</span>
-			<span class="pl-6 text-sm text-gray-600"
-				>{requirement.remainingCredits} Credits Remaining</span
-			>
-		</div>
-		<div class="text-sm text-gray-600">
-			{requirement.appliedCredits}/{requirement.totalCredits} Credits Applied
-		</div>
+	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
+		<ul class="divide-y divide-gray-200">
+			{#each programCourses as course (course.id)}
+				<li>
+					<div class="flex items-center px-4 py-4 sm:px-6">
+						<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+							<div>
+								<div class="flex items-center">
+									<input
+										type="checkbox"
+										id={`course-${course.id}`}
+										name={`courses[${course.id}].completed`}
+										bind:checked={$completedCoursesStore[course.id]}
+										class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+										disabled
+									/>
+									<label for={`course-${course.id}`} class="ml-3 block">
+										<span class="font-medium text-gray-900">{course.code}</span>
+										<span class="ml-1 text-gray-500">{course.name}</span>
+									</label>
+								</div>
+								<div class="mt-1 flex items-center text-sm text-gray-500">
+									<span>Level: {course.level}</span>
+									<span
+										class="ml-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+									>
+										{course.credits} Credits
+									</span>
+								</div>
+								{#if course.prerequisites && course.prerequisites.length > 0}
+									<div class="mt-1 text-sm">
+										<span class="font-bold text-red-500">Prerequisites: </span>
+										<span class="text-gray-700">
+											{#each course.prerequisites as prereq}
+												{#if !$completedCoursesStore[prereq.id]}
+													<span class="mr-2">{prereq.code}</span>
+												{/if}
+											{/each}
+										</span>
+									</div>
+								{/if}
+							</div>
+							<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
+								<select
+									name={`courses[${course.id}].grade`}
+									value={$courseGradesStore[course.id] ?? ''}
+									on:change={(e) => handleGradeChange(course.id, e)}
+									class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+									disabled={!arePrerequisitesMet(course)}
+								>
+									<option value="">Select Grade</option>
+									{#each Object.keys(gradePoints) as grade}
+										<option value={grade}>{grade}</option>
+									{/each}
+								</select>
+							</div>
+						</div>
+					</div>
+				</li>
+			{/each}
+		</ul>
 	</div>
-</div> -->
+
+	<div class="mt-6 text-xl font-bold">
+		Overall GPA: {$gpa}
+	</div>
+
+	<div class="mt-6">
+		<Button type="submit">Save Changes</Button>
+	</div>
+</form>

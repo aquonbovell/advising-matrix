@@ -46,12 +46,14 @@ model Student {
   invite_token   String?
   invite_expires DateTime?
   majorId        String?
+  program_id     String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
   user          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
   advisor       Advisor         @relation(fields: [advisor_id], references: [id])
+  program       Program?        @relation(fields: [program_id], references: [id])
   Degree        Degree[]
   StudentCourse StudentCourse[]
 }
@@ -63,14 +65,30 @@ model Department {
 }
 
 model Course {
-  id            String          @id
-  code          String          @unique
-  name          String
-  level         Int
-  credits       Int
-  department    Department      @relation(fields: [departmentId], references: [id])
-  departmentId  String
+  id           String     @id
+  code         String     @unique
+  name         String
+  level        Int
+  credits      Int
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+
+  prerequisites   CoursePrerequisite[] @relation("CourseToPrerequisite")
+  prerequisiteFor CoursePrerequisite[] @relation("PrerequisiteToCourse")
+
   StudentCourse StudentCourse[]
+}
+
+model CoursePrerequisite {
+  id String @id @default(uuid())
+
+  courseId       String
+  prerequisiteId String
+
+  course       Course @relation("CourseToPrerequisite", fields: [courseId], references: [id])
+  prerequisite Course @relation("PrerequisiteToCourse", fields: [prerequisiteId], references: [id])
+
+  @@unique([courseId, prerequisiteId])
 }
 
 model Prerequisite {
@@ -90,6 +108,7 @@ model Program {
   id           String               @id
   name         String
   requirements ProgramRequirement[]
+  students     Student[]
 }
 
 model ProgramRequirement {
@@ -102,13 +121,13 @@ model ProgramRequirement {
 }
 
 model StudentCourse {
-  id        String  @id
+  id        String @id
   studentId String
   courseId  String
   grade     String
 
-  student   Student @relation(fields: [studentId], references: [id])
-  course    Course  @relation(fields: [courseId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
 }
 
 enum UserRole {

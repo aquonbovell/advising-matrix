@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import Card from '$lib/components/Card.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import type { PageData } from './$types';
@@ -40,6 +41,11 @@
 									<th
 										scope="col"
 										class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+										>Program</th
+									>
+									<th
+										scope="col"
+										class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
 										>Joined</th
 									>
 									<th
@@ -63,7 +69,7 @@
 								{#if data.students.length === 0}
 									<tr>
 										<td
-											colspan="5"
+											colspan="6"
 											class="whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500"
 										>
 											No students found.
@@ -74,6 +80,9 @@
 										<tr class="hover:bg-gray-50">
 											<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
 												>{student.email}</td
+											>
+											<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+												>{student.program_name || 'Not assigned'}</td
 											>
 											<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
 												>{formatDate(student.created_at)}</td
@@ -106,10 +115,18 @@
 											</td>
 											<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-800">
 												{#if student.invite_token}
-													<CopyButton textToCopy={getInviteLink(student.invite_token)} />
+													<div class="flex items-center space-x-2">
+														<CopyButton textToCopy={getInviteLink(student.invite_token)} />
+														<form method="POST" action="?/removeInvite" use:enhance>
+															<input type="hidden" name="studentID" value={student.id} />
+															<button type="submit" class="text-red-600 hover:text-red-900">
+																Remove Invite
+															</button>
+														</form>
+													</div>
 												{:else}
 													<a
-														href="/advisor/students/{student.id}"
+														href="/advisor/students/{student.user_id}"
 														class="text-indigo-600 hover:text-indigo-900"
 													>
 														View Details

@@ -96,6 +96,7 @@ async function seed() {
 		user_id: '3',
 		advisor_id: '1',
 		invite_token: null,
+		program_id: 1,
 		invite_expires: null,
 		created_at: new Date().toISOString(),
 		updated_at: new Date().toISOString()
@@ -189,19 +190,26 @@ async function seed() {
 			for (const prerequisiteId of course.prerequisite) {
 				try {
 					await db
-						.insertInto('Prerequisite')
+						.insertInto('CoursePrerequisite')
 						.values({
 							id: randomUUID(),
-							course_id: course.id,
-							prerequisite_id: prerequisiteId
+							courseId: course.id,
+							prerequisiteId: prerequisiteId
 						})
 						.execute();
 					console.log(`Inserted prerequisite ${prerequisiteId} for course ${course.id}`);
 				} catch (error) {
-					console.error(
-						`Error inserting prerequisite ${prerequisiteId} for course ${course.id}:`,
-						error
-					);
+					if (error.code === '23505') {
+						// Unique constraint violation (prerequisite already exists)
+						console.log(
+							`Prerequisite ${prerequisiteId} for course ${course.id} already exists, skipping`
+						);
+					} else {
+						console.error(
+							`Error inserting prerequisite ${prerequisiteId} for course ${course.id}:`,
+							error
+						);
+					}
 				}
 			}
 		}
