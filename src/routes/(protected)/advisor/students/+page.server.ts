@@ -59,7 +59,7 @@ export const actions: Actions = {
 		try {
 			const student = await db
 				.selectFrom('Student')
-				.where('id', '=', studentId)
+				.where('user_id', '=', studentId)
 				.select('Student.user_id')
 				.executeTakeFirst();
 

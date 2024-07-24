@@ -109,8 +109,9 @@
 												{#if student.invite_token}
 													<div class="flex items-center space-x-2">
 														<CopyButton textToCopy={getInviteLink(student.invite_token)} />
+														<a href={student.user_id}>s</a>
 														<form method="POST" action="?/removeInvite" use:enhance>
-															<input type="hidden" name="studentID" value={student.id} />
+															<input type="hidden" name="studentID" value={student.user_id} />
 															<button type="submit" class="text-red-600 hover:text-red-900">
 																Remove Invite
 															</button>
