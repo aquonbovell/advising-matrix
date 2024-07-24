@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const defaultTheme = require('tailwindcss/defaultTheme');
 
+import flowbitePlugin from 'flowbite/plugin';
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+	content: [
+		'./src/**/*.{html,js,svelte,ts}',
+		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
+	],
 	theme: {
 		container: {
 			center: true,
@@ -18,5 +22,5 @@ module.exports = {
 			}
 		}
 	},
-	plugins: [require('@tailwindcss/typography')]
+	plugins: [require('@tailwindcss/typography'), flowbitePlugin()]
 };
