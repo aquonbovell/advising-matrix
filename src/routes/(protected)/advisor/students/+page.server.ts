@@ -62,11 +62,9 @@ export const actions: Actions = {
 		try {
 			const student = await db
 				.selectFrom('Student')
-				.where('user_id', '=', studentId)
-				.select('Student.user_id')
+				.where('id', '=', studentId)
+				.select(['id', 'user_id'])
 				.executeTakeFirst();
-
-			console.log(student);
 
 			if (!student) {
 				return fail(404, { error: 'Student not found' });
@@ -74,8 +72,7 @@ export const actions: Actions = {
 
 			// Use a transaction to delete both Student and User records
 			await db.transaction().execute(async (trx) => {
-				await trx.deleteFrom('Student').where('id', '=', studentId).executeTakeFirst();
-
+				await trx.deleteFrom('Student').where('id', '=', student.id).executeTakeFirst();
 				await trx.deleteFrom('User').where('id', '=', student.user_id).executeTakeFirst();
 			});
 
