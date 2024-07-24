@@ -65,14 +65,30 @@ model Department {
 }
 
 model Course {
-  id            String          @id
-  code          String          @unique
-  name          String
-  level         Int
-  credits       Int
-  department    Department      @relation(fields: [departmentId], references: [id])
-  departmentId  String
+  id           String     @id
+  code         String     @unique
+  name         String
+  level        Int
+  credits      Int
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+
+  prerequisites   CoursePrerequisite[] @relation("CourseToPrerequisite")
+  prerequisiteFor CoursePrerequisite[] @relation("PrerequisiteToCourse")
+
   StudentCourse StudentCourse[]
+}
+
+model CoursePrerequisite {
+  id String @id @default(uuid())
+
+  courseId       String
+  prerequisiteId String
+
+  course       Course @relation("CourseToPrerequisite", fields: [courseId], references: [id])
+  prerequisite Course @relation("PrerequisiteToCourse", fields: [prerequisiteId], references: [id])
+
+  @@unique([courseId, prerequisiteId])
 }
 
 model Prerequisite {

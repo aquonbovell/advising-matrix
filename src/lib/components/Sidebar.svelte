@@ -11,7 +11,6 @@
 	import MenuIcon from './icons/MenuIcon.svelte';
 	import ChevronIcon from './icons/ChevronIcon.svelte';
 	import Avatar from './ui/Avatar.svelte';
-	import Label from './ui/Label.svelte';
 
 	export let user: { name: string; role: 'STUDENT' | 'ADVISOR' | 'ADMIN' };
 
