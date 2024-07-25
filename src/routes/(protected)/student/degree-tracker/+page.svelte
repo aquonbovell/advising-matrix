@@ -9,7 +9,7 @@
 
 	export let data: PageData & {
 		programCourses: (Course & {
-			prerequistes: Course[];
+			prerequisites: { id: string; code: string; name: string }[];
 		})[];
 	};
 
@@ -24,20 +24,27 @@
 	const courseGradesStore = writable<Record<string, Grade | ''>>({});
 	const completedCoursesStore = writable<Record<string, boolean>>({});
 
+	function arePrerequisitesMet(
+		course: Course & { prerequisites: { id: string; code: string; name: string }[] }
+	): boolean {
+		if (!course.prerequisites || course.prerequisites.length === 0) {
+			return true;
+		}
+		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
+	}
+
 	$: if (programCourses && studentCourses) {
-		courseGradesStore.set(
-			Object.fromEntries(
-				programCourses.map((course) => {
-					const grade = studentCourses[course.id]?.grade;
-					return [course.id, (grade && grade in gradePoints ? grade : '') as Grade | ''];
-				})
-			) as Record<string, Grade | ''>
-		);
-		completedCoursesStore.set(
-			Object.fromEntries(
-				programCourses.map((course) => [course.id, !!studentCourses[course.id]?.grade])
-			)
-		);
+		const grades: Record<string, Grade | ''> = {};
+		const completed: Record<string, boolean> = {};
+
+		programCourses.forEach((course) => {
+			const grade = studentCourses[course.id]?.grade;
+			grades[course.id] = (grade && grade in gradePoints ? grade : '') as Grade | '';
+			completed[course.id] = !!grade && arePrerequisitesMet(course);
+		});
+
+		courseGradesStore.set(grades);
+		completedCoursesStore.set(completed);
 	}
 
 	function updateGrade(courseId: string, grade: Grade) {
@@ -100,15 +107,6 @@
 				])
 			)
 		);
-	}
-
-	function arePrerequisitesMet(
-		course: Course & { prerequisites?: { id: string; code: string }[] }
-	): boolean {
-		if (!course.prerequisites || course.prerequisites.length === 0) {
-			return true;
-		}
-		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
 	}
 
 	// $: console.log('Program Courses:', programCourses);
@@ -231,11 +229,13 @@
 										class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
 										disabled
 									/>
+									<!-- Course Name -->
 									<label for={`course-${course.id}`} class="ml-3 block">
 										<span class="font-medium text-gray-900">{course.code}</span>
 										<span class="ml-1 text-gray-500">{course.name}</span>
 									</label>
 								</div>
+								<!-- Course level and Credits -->
 								<div class="mt-1 flex items-center text-sm text-gray-500">
 									<span>Level: {course.level}</span>
 									<span
@@ -244,19 +244,24 @@
 										{course.credits} Credits
 									</span>
 								</div>
+								<!-- Prerequisites Logic -->
 								{#if course.prerequisites && course.prerequisites.length > 0}
-									<div class="mt-1 text-sm">
-										<span class="font-bold text-red-500">Prerequisites: </span>
-										<span class="text-gray-700">
-											{#each course.prerequisites as prereq}
-												{#if !$completedCoursesStore[prereq.id]}
+									{@const unmetPrerequisites = course.prerequisites.filter(
+										(prereq) => !$completedCoursesStore[prereq.id]
+									)}
+									{#if unmetPrerequisites.length > 0}
+										<div class="mt-1 text-sm">
+											<span class="font-bold text-red-500">Prerequisites: </span>
+											<span class="text-gray-700">
+												{#each unmetPrerequisites as prereq}
 													<span class="mr-2">{prereq.code}</span>
-												{/if}
-											{/each}
-										</span>
-									</div>
+												{/each}
+											</span>
+										</div>
+									{/if}
 								{/if}
 							</div>
+							<!-- Grade Selection Logic -->
 							<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
 								<select
 									name={`courses[${course.id}].grade`}
