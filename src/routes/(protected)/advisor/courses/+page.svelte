@@ -3,9 +3,9 @@
 
 	export let data: PageData;
 
-	import DataTable from "./data-table.svelte";
+	import DataTable from './data-table.svelte';
 </script>
 
 <div class="container mx-auto py-10">
-	<DataTable data={data} />
+	<DataTable {data} />
 </div>

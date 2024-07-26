@@ -134,12 +134,17 @@
 </script>
 
 <div>
-	<div class="text-right text-muted-foreground flex-1 text-sm">
+	<div class="flex-1 text-right text-sm text-muted-foreground">
 		Page {$pageIndex + 1} of{' '}
 		{Math.floor($rows.length / $pageSize) + 1}
 	</div>
 	<div class="flex items-center py-4">
-		<Input class="max-w-sm" placeholder="Filter course names or codes..." type="text" bind:value={$filterValue} />
+		<Input
+			class="max-w-sm"
+			placeholder="Filter course names or codes..."
+			type="text"
+			bind:value={$filterValue}
+		/>
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild let:builder>
 				<Button variant="outline" class="ml-auto" builders={[builder]}>
@@ -213,7 +218,7 @@
 		</Table.Root>
 	</div>
 	<div class="flex items-center justify-end space-x-4 py-4">
-		<div class="text-muted-foreground flex-1 text-sm">
+		<div class="flex-1 text-sm text-muted-foreground">
 			{Object.keys($selectedDataIds).length} of{' '}
 			{$rows.length} row(s) selected.
 		</div>

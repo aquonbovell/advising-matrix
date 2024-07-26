@@ -7,6 +7,10 @@
 	import * as Select from '$lib/components/ui/select';
 	import Avatar from '$lib/components/ui/Avatar.svelte';
 	export let data: PageData;
+
+	let selectedMajorId: number | undefined;
+
+	$: studentMajor = data.majors.filter((major) => major.id === data.student.program_id)[0];
 </script>
 
 <div class="py-8">
@@ -61,12 +65,12 @@
 						<Label for="level">Undergraduate Major</Label>
 						<Select.Root>
 							<Select.Trigger class="w-full">
-								<Select.Value placeholder="Major" />
+								<Select.Value placeholder={studentMajor?.name} />
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="cs">cs</Select.Item>
-								<Select.Item value="bio">bio</Select.Item>
-								<Select.Item value="math">math</Select.Item>
+								{#each data.majors as major}
+									<Select.Item value={major.id}>{major.name}</Select.Item>
+								{/each}
 							</Select.Content>
 						</Select.Root>
 					</div>
