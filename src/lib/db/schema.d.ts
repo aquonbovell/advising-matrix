@@ -73,7 +73,6 @@ export type Student = {
 	program_id: string | null;
 	created_at: Generated<Timestamp>;
 	updated_at: Timestamp;
-	electivePool: string[];
 };
 export type StudentCourse = {
 	id: string;

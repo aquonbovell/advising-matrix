@@ -56,7 +56,6 @@ model Student {
   program       Program?        @relation(fields: [program_id], references: [id])
   Degree        Degree[]
   StudentCourse StudentCourse[]
-  electivePool  String[]
 }
 
 model Department {
