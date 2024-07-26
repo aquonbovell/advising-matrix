@@ -13,7 +13,7 @@
 		})[];
 	};
 
-	$: ({ program, programCourses, studentCourses } = data);
+	$: ({ program, programCourses, studentCourses, studentElectiveCourses } = data);
 
 	let degree = {
 		name: ['BSc Computer Science', 'BSc Mathematics'],
@@ -23,6 +23,7 @@
 
 	const courseGradesStore = writable<Record<string, Grade | ''>>({});
 	const completedCoursesStore = writable<Record<string, boolean>>({});
+	const electiveCoursesStore = writable<string[]>([]);
 
 	function arePrerequisitesMet(
 		course: Course & { prerequisites: { id: string; code: string; name: string }[] }
@@ -108,6 +109,8 @@
 			)
 		);
 	}
+
+	$: creditsAmt = studentElectiveCourses.reduce((acc, course) => acc + course.credits, 0);
 
 	// $: console.log('Program Courses:', programCourses);
 	// $: console.log('Completed Courses Store:', $completedCoursesStore);
@@ -213,6 +216,7 @@
 <form method="POST" action="?/saveChanges" use:enhance>
 	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
 
+	<h2 class="mb-2 text-xl font-bold">Level 1 Core</h2>
 	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
 		<ul class="divide-y divide-gray-200">
 			{#each programCourses as course (course.id)}
@@ -282,6 +286,94 @@
 			{/each}
 		</ul>
 	</div>
+	<h2 class="mb-2 mt-6 text-xl font-bold">Level 1 Electives, Require Creds:{data.level1credits}</h2>
+
+	completed credits: {creditsAmt}
+
+	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
+		<ul class="divide-y divide-gray-200">
+			{#each studentElectiveCourses as course (course.id)}
+				<li>
+					<div class="flex items-center px-4 py-4 sm:px-6">
+						<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+							<div>
+								<div class="flex items-center">
+									<input
+										type="checkbox"
+										id={`course-${course.id}`}
+										name={`courses[${course.id}].completed`}
+										bind:checked={$completedCoursesStore[course.id]}
+										class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+										disabled
+									/>
+									<!-- Course Name -->
+									<label for={`course-${course.id}`} class="ml-3 block">
+										<span class="font-medium text-gray-900">{course.code}</span>
+										<span class="ml-1 text-gray-500">{course.name}</span>
+									</label>
+								</div>
+								<!-- Course level and Credits -->
+								<div class="mt-1 flex items-center text-sm text-gray-500">
+									<span>Level: {course.level}</span>
+									<span
+										class="ml-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+									>
+										{course.credits} Credits
+									</span>
+								</div>
+								<!-- Prerequisites Logic -->
+								{#if course.prerequisites && course.prerequisites.length > 0}
+									{@const unmetPrerequisites = course.prerequisites.filter(
+										(prereq) => !$completedCoursesStore[prereq.id]
+									)}
+									{#if unmetPrerequisites.length > 0}
+										<div class="mt-1 text-sm">
+											<span class="font-bold text-red-500">Prerequisites: </span>
+											<span class="text-gray-700">
+												{#each unmetPrerequisites as prereq}
+													<span class="mr-2">{prereq.code}</span>
+												{/each}
+											</span>
+										</div>
+									{/if}
+								{/if}
+							</div>
+							<!-- Grade Selection Logic -->
+							<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
+								<select
+									name={`courses[${course.id}].grade`}
+									value={$courseGradesStore[course.id] ?? ''}
+									on:change={(e) => handleGradeChange(course.id, e)}
+									class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+								>
+									<option value="">Select Grade</option>
+									{#each Object.keys(gradePoints) as grade}
+										<option value={grade}>{grade}</option>
+									{/each}
+								</select>
+							</div>
+						</div>
+					</div>
+				</li>
+			{/each}
+		</ul>
+	</div>
+
+	{#if 12 - creditsAmt > 0}
+		<form action="?/addElectives" method="post">
+			<label for="elective">
+				<select name="elective" id="elective" required>
+					<option value="" selected disabled>Select Course</option>
+					{#each data.courses as course (course.id)}
+						<option value={course.id}>
+							{course.code} - {course.name}
+						</option>
+					{/each}
+				</select>
+			</label>
+			<button type="submit">Add</button>
+		</form>
+	{/if}
 
 	<div class="mt-6 text-xl font-bold">
 		Overall GPA: {$gpa}
