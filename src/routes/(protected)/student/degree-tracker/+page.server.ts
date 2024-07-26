@@ -1,17 +1,17 @@
 import { db } from '$lib/db';
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import type { ProgramRequirement, RequirementDetails } from '$lib/types';
 import type { Course, RequirementType } from '$lib/db/schema';
-import { fail } from 'sveltekit-superforms';
 import { generateId } from 'lucia';
 
-async function getStudent(userId: string) {
-	return db
+async function getStudentId(userId: string): Promise<string | null> {
+	return await db
 		.selectFrom('Student')
-		.where('Student.user_id', '=', userId)
+		.where('user_id', '=', userId)
 		.select('id')
-		.executeTakeFirst();
+		.executeTakeFirst()
+		.then((result) => result?.id ?? null);
 }
 
 async function getProgram(programName: string) {
@@ -47,190 +47,153 @@ async function getProgram(programName: string) {
 	return {
 		id: program[0]!.id,
 		name: program[0]!.name,
-		requirements: requirements
+		requirements
 	};
 }
 
-async function getLevel1credits(programName: string) {
-	const program = await db
-		.selectFrom('Program')
-		.leftJoin('ProgramRequirement', 'Program.id', 'ProgramRequirement.programId')
-		.select(['ProgramRequirement.credits'])
-		.where('Program.name', '=', programName)
-		.where('ProgramRequirement.type', '=', 'POOL')
-		.execute();
+async function getCourses(courseIds: string[]) {
+	const [courses, prerequisites] = await Promise.all([
+		db.selectFrom('Course').where('id', 'in', courseIds).selectAll().execute(),
+		db
+			.selectFrom('CoursePrerequisite as CP')
+			.innerJoin('Course as C', 'CP.prerequisiteId', 'C.id')
+			.where('CP.courseId', 'in', courseIds)
+			.select([
+				'CP.courseId',
+				'CP.prerequisiteId',
+				'C.code as prerequisiteCode',
+				'C.name as prerequisiteName'
+			])
+			.execute()
+	]);
 
-	return program[0]!.credits;
+	return courses.map((course: Course) => ({
+		...course,
+		prerequisites: prerequisites
+			.filter((prereq) => prereq.courseId === course.id)
+			.map(({ prerequisiteId, prerequisiteCode, prerequisiteName }) => ({
+				id: prerequisiteId,
+				code: prerequisiteCode,
+				name: prerequisiteName
+			}))
+	}));
 }
 
-async function getProgramCourses(programRequirements: ProgramRequirement[]) {
-	const courseIds = programRequirements.flatMap((req) =>
-		req.type === 'CREDITS' && 'courses' in req.details ? req.details.courses : []
+async function getElectiveCourses(requirements: ProgramRequirement[]) {
+	const poolRequirements = requirements.filter((req) => req.type === 'POOL');
+	const electiveCoursesByRequirement = await Promise.all(
+		poolRequirements.map(async (req) => {
+			const details = req.details as {
+				levelPool: string[];
+				facultyPool: string[] | 'any' | 'anyother';
+			};
+			let query = db
+				.selectFrom('Course')
+				.select(['id', 'code', 'name', 'level', 'credits'])
+				.where(
+					'level',
+					'in',
+					details.levelPool.map((level) => (level === 'I' ? 1 : level === 'II' ? 2 : 3))
+				);
+
+			if (details.facultyPool === 'anyother') {
+				query.where('Course.departmentId', '!=', 'Department.id');
+			} else if (details.facultyPool !== 'any') {
+				query = query
+					.innerJoin('Department', 'Department.id', 'Course.departmentId')
+					.where('Department.name', 'in', details.facultyPool);
+			}
+
+			const courses = await query.execute();
+			return {
+				requirementId: req.id,
+				courses: courses
+			};
+		})
 	);
 
-	const [courses, coursePrerequisites] = await Promise.all([
-		db.selectFrom('Course').where('Course.id', 'in', courseIds).selectAll().execute(),
-		db
-			.selectFrom('CoursePrerequisite as CP')
-			.innerJoin('Course as C', 'CP.prerequisiteId', 'C.id')
-			.where('CP.courseId', 'in', courseIds)
-			.select([
-				'CP.courseId',
-				'CP.prerequisiteId',
-				'C.code as prerequisiteCode',
-				'C.name as prerequisiteName'
-			])
-			.execute()
-	]);
-
-	return courses.map((course: Course) => ({
-		...course,
-		prerequisites: coursePrerequisites
-			.filter((prereq) => prereq.courseId === course.id)
-			.map(({ prerequisiteId, prerequisiteCode, prerequisiteName }) => ({
-				id: prerequisiteId,
-				code: prerequisiteCode,
-				name: prerequisiteName
-			}))
-	}));
-}
-
-async function getElectiveCourses(programRequirements: ProgramRequirement[], userId: string) {
-	const electiveIDs = await db
-		.selectFrom('Student')
-		.where('user_id', '=', userId)
-		.select('electivePool')
-		.executeTakeFirst();
-
-	console.log('electiveIDs:', electiveIDs?.electivePool);
-	const courseIds = electiveIDs?.electivePool || [];
-	console.log('courseIds:', courseIds);
-
-	const [courses, coursePrerequisites] = await Promise.all([
-		db.selectFrom('Course').where('Course.id', 'in', courseIds).selectAll().execute(),
-		db
-			.selectFrom('CoursePrerequisite as CP')
-			.innerJoin('Course as C', 'CP.prerequisiteId', 'C.id')
-			.where('CP.courseId', 'in', courseIds)
-			.select([
-				'CP.courseId',
-				'CP.prerequisiteId',
-				'C.code as prerequisiteCode',
-				'C.name as prerequisiteName'
-			])
-			.execute()
-	]);
-
-	return courses.map((course: Course) => ({
-		...course,
-		prerequisites: coursePrerequisites
-			.filter((prereq) => prereq.courseId === course.id)
-			.map(({ prerequisiteId, prerequisiteCode, prerequisiteName }) => ({
-				id: prerequisiteId,
-				code: prerequisiteCode,
-				name: prerequisiteName
-			}))
-	}));
+	return electiveCoursesByRequirement;
 }
 
 async function getStudentCourses(studentId: string) {
-	return db
+	return await db
 		.selectFrom('StudentCourse')
 		.selectAll()
-		.where('StudentCourse.studentId', '=', studentId)
-		.execute();
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function createStudentCoursesMap(studentCourses: any[]) {
-	return studentCourses.reduce(
-		(acc, sc) => {
-			acc[sc.courseId] = { id: sc.id, grade: sc.grade };
-			return acc;
-		},
-		{} as Record<string, { id: string; grade: string }>
-	);
+		.where('studentId', '=', studentId)
+		.execute()
+		.then((courses) =>
+			courses.reduce(
+				(acc, sc) => {
+					acc[sc.courseId] = { id: sc.id, grade: sc.grade };
+					return acc;
+				},
+				{} as Record<string, { id: string; grade: string }>
+			)
+		);
 }
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const userId = locals.user!.id;
+	const userId = locals.user?.id;
 	if (!userId) throw error(401, 'Unauthorized');
 
-	const [student, program] = await Promise.all([
-		getStudent(userId),
-		getProgram('Computer Science')
-	]);
+	const studentId = await getStudentId(userId);
+	if (!studentId) throw error(404, 'Student not found');
 
-	if (!student) throw error(404, 'Student not found');
+	const program = await getProgram('Computer Science');
 	if (!program) throw error(404, 'Program not found');
 
-	const [coursesWithPrerequisites, studentCourses, studentElectiveCourses] = await Promise.all([
-		getProgramCourses(program.requirements),
-		getStudentCourses(student.id),
-		getElectiveCourses(program.requirements, userId)
+	const [programCourses, electiveCourses, studentCourses] = await Promise.all([
+		getCourses(
+			program.requirements.flatMap((req) =>
+				req.type === 'CREDITS' && 'courses' in req.details ? req.details.courses : []
+			)
+		),
+		getElectiveCourses(program.requirements),
+		getStudentCourses(studentId)
 	]);
-	console.log('studentCourses:', studentElectiveCourses);
-	const studentCoursesMap = createStudentCoursesMap(studentCourses);
 
-	console.log('studentCoursesMap:', studentCoursesMap);
-
-	const courses = await db
-		.selectFrom('Course')
-		.selectAll()
-		.where('Course.code', 'like', '____1%')
-		.execute();
+	// *Debugging
+	console.log('Program:', program);
+	console.log('Program Courses:', programCourses);
+	console.log('Elective Courses:', electiveCourses);
+	console.log('Student Courses:', studentCourses);
 
 	return {
-		program: {
-			id: program.id,
-			name: program.name,
-			requirement: program.requirements
-		},
-		programCourses: coursesWithPrerequisites,
-		studentCourses: studentCoursesMap,
-		studentElectiveCourses: studentElectiveCourses,
-		level1credits: await getLevel1credits(program.name),
-		courses: courses.filter((course) => {
-			return coursesWithPrerequisites.findIndex((sc) => sc.id === course.id) === -1;
-		})
+		program,
+		programCourses,
+		electiveCourses,
+		studentCourses,
+		requirements: program.requirements
 	};
 };
 
 export const actions: Actions = {
 	saveChanges: async ({ request, locals }) => {
-		const userId = locals.user!.id;
+		const userId = locals.user?.id;
+		if (!userId) return fail(401, { message: 'Unauthorized' });
+
+		const studentId = await getStudentId(userId);
+		if (!studentId) return fail(404, { message: 'Student not found' });
+
 		const formData = await request.formData();
+		const courseEntries = Array.from(formData.entries())
+			.filter(([key, value]) => key.startsWith('courses[') && key.endsWith('].grade'))
+			.map(([key, value]) => ({
+				courseId: key.slice(8, -7),
+				grade: value as string
+			}));
 
 		try {
-			const student = await db
-				.selectFrom('Student')
-				.where('Student.user_id', '=', userId)
-				.select('id')
-				.executeTakeFirst();
-
-			if (!student) {
-				return fail(404, { message: 'Student not found' });
-			}
-
-			const courseEntries = Array.from(formData.entries())
-				.filter(([key, value]) => key.startsWith('courses[') && key.endsWith('].grade'))
-				.map(([key, value]) => ({
-					courseId: key.slice(8, -7),
-					grade: value as string
-				}));
-
 			await db.transaction().execute(async (trx) => {
-				// First, delete all existing entries for this student
-				await trx.deleteFrom('StudentCourse').where('studentId', '=', student.id).execute();
+				await trx.deleteFrom('StudentCourse').where('studentId', '=', studentId).execute();
 
-				// Then, insert new entries
 				for (const { courseId, grade } of courseEntries) {
 					if (grade) {
 						await trx
 							.insertInto('StudentCourse')
 							.values({
 								id: generateId(16),
-								studentId: student.id,
+								studentId,
 								courseId,
 								grade
 							})
