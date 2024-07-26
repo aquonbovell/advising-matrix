@@ -35,7 +35,7 @@ export type CourseRequirement = {
 
 export type PoolRequirement = {
 	levelPool: ('I' | 'II' | 'III')[];
-	facultyPool: string[] | 'any';
+	facultyPool: string[] | 'any' | 'anyother';
 };
 
 export type RequirementDetails = CourseRequirement | PoolRequirement;

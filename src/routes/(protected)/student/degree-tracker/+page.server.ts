@@ -80,29 +80,38 @@ async function getCourses(courseIds: string[]) {
 
 async function getElectiveCourses(requirements: ProgramRequirement[]) {
 	const poolRequirements = requirements.filter((req) => req.type === 'POOL');
-	const courseIds = await Promise.all(
+	const electiveCoursesByRequirement = await Promise.all(
 		poolRequirements.map(async (req) => {
-			const details = req.details as { levelPool: string[]; facultyPool: string[] | 'any' };
+			const details = req.details as {
+				levelPool: string[];
+				facultyPool: string[] | 'any' | 'anyother';
+			};
 			let query = db
 				.selectFrom('Course')
-				.select('id')
+				.select(['id', 'code', 'name', 'level', 'credits'])
 				.where(
 					'level',
 					'in',
 					details.levelPool.map((level) => (level === 'I' ? 1 : level === 'II' ? 2 : 3))
 				);
 
-			if (details.facultyPool !== 'any') {
+			if (details.facultyPool === 'anyother') {
+				query.where('Course.departmentId', '!=', 'Department.id');
+			} else if (details.facultyPool !== 'any') {
 				query = query
 					.innerJoin('Department', 'Department.id', 'Course.departmentId')
 					.where('Department.name', 'in', details.facultyPool);
 			}
 
-			return query.execute().then((results) => results.map((r) => r.id));
+			const courses = await query.execute();
+			return {
+				requirementId: req.id,
+				courses: courses
+			};
 		})
 	);
 
-	return getCourses(courseIds.flat());
+	return electiveCoursesByRequirement;
 }
 
 async function getStudentCourses(studentId: string) {
