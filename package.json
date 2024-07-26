@@ -19,6 +19,7 @@
 	},
 	"dependencies": {
 		"@fontsource-variable/inter": "^5.0.19",
+		"@xyflow/svelte": "^0.1.13",
 		"dotenv": "^16.4.5",
 		"kysely": "^0.27.3",
 		"oslo": "^1.2.1",
