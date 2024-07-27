@@ -114,10 +114,10 @@ async function getStudentCourses(studentId: string) {
 		.then((courses) =>
 			courses.reduce(
 				(acc, sc) => {
-					acc[sc.courseId] = { id: sc.id, grade: sc.grade };
+					acc[sc.courseId] = { id: sc.id, grade: sc.grade, requirementId: sc.requirementId };
 					return acc;
 				},
-				{} as Record<string, { id: string; grade: string }>
+				{} as Record<string, { id: string; grade: string; requirementId: string | null }>
 			)
 		);
 }
@@ -168,16 +168,20 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const courseEntries = Array.from(formData.entries())
 			.filter(([key, value]) => key.startsWith('courses[') && key.endsWith('].grade'))
-			.map(([key, value]) => ({
-				courseId: key.slice(8, -7),
-				grade: value as string
-			}));
+			.map(([key, value]) => {
+				const courseId = key.slice(8, -7);
+				return {
+					courseId,
+					grade: value as string,
+					requirementId: formData.get(`courses[${courseId}].requirementId`) as string | null
+				};
+			});
 
 		try {
 			await db.transaction().execute(async (trx) => {
 				await trx.deleteFrom('StudentCourse').where('studentId', '=', studentId).execute();
 
-				for (const { courseId, grade } of courseEntries) {
+				for (const { courseId, grade, requirementId } of courseEntries) {
 					if (grade) {
 						await trx
 							.insertInto('StudentCourse')
@@ -185,7 +189,8 @@ export const actions: Actions = {
 								id: generateId(16),
 								studentId,
 								courseId,
-								grade
+								grade,
+								...(requirementId ? { requirementId } : {})
 							})
 							.execute();
 					}

@@ -6,6 +6,14 @@
 	import { derived, writable } from 'svelte/store';
 	import type { PageData } from './$types';
 	import type { Course } from '$lib/db/schema';
+	import Modal from '$lib/components/ui/Modal.svelte';
+	import Select from '$lib/components/ui/dropdown/Select.svelte';
+	import Option from '$lib/components/ui/dropdown/Option.svelte';
+
+	type CourseWithRequirement = Course & {
+		prerequisites: { id: string; code: string; name: string }[];
+		requirementId?: string;
+	};
 
 	export let data: PageData & {
 		programCourses: (Course & {
@@ -15,6 +23,9 @@
 
 	$: ({ program, programCourses, electiveCourses, studentCourses, requirements } = data);
 
+	let dialogOpen = false;
+	let currentRequirement: string | null = null;
+
 	let degree = {
 		name: ['BSc Computer Science', 'BSc Mathematics'],
 		minor: 'N/A',
@@ -23,6 +34,11 @@
 
 	const courseGradesStore = writable<Record<string, Grade | ''>>({});
 	const completedCoursesStore = writable<Record<string, boolean>>({});
+	const programCoursesStore = writable<CourseWithRequirement[]>(programCourses);
+
+	$: if (programCourses) {
+		programCoursesStore.set(programCourses);
+	}
 
 	function arePrerequisitesMet(
 		course: Course & { prerequisites: { id: string; code: string; name: string }[] }
@@ -34,11 +50,34 @@
 	}
 
 	$: if (programCourses && studentCourses) {
+		const allCourses: CourseWithRequirement[] = programCourses.map((course) => ({
+			...course,
+			requirementId: undefined
+		}));
+
+		// Add courses from studentCourses that have a requirementId
+		Object.entries(studentCourses).forEach(([courseId, courseData]) => {
+			if (courseData.requirementId && !allCourses.some((c) => c.id === courseId)) {
+				const course = electiveCourses.find((c) => c.id === courseId);
+				if (course) {
+					allCourses.push({
+						...course,
+						requirementId: courseData.requirementId,
+						prerequisites: []
+					});
+				}
+			}
+		});
+
+		programCoursesStore.set(allCourses);
+
+		// Update grades and completed courses
 		const grades: Record<string, Grade | ''> = {};
 		const completed: Record<string, boolean> = {};
 
-		programCourses.forEach((course) => {
-			const grade = studentCourses[course.id]?.grade;
+		allCourses.forEach((course) => {
+			const studentCourse = studentCourses[course.id];
+			const grade = studentCourse?.grade;
 			grades[course.id] = (grade && grade in gradePoints ? grade : '') as Grade | '';
 			completed[course.id] = !!grade && arePrerequisitesMet(course);
 		});
@@ -57,11 +96,25 @@
 		updateGrade(courseId, target.value as Grade);
 	}
 
-	$: totalCredits = programCourses?.reduce((sum, course) => sum + course.credits, 0) || 0;
+	function addCourse(course: Course, requirementId: string) {
+		programCoursesStore.update((courses) => [
+			...courses,
+			{ ...course, requirementId, prerequisites: [] } as CourseWithRequirement
+		]);
+
+		courseGradesStore.update((grades) => ({ ...grades, [course.id]: '' }));
+		completedCoursesStore.update((completed) => ({ ...completed, [course.id]: false }));
+
+		console.log('Course added:', { ...course, requirementId });
+
+		dialogOpen = false;
+	}
+
+	$: totalCredits = $programCoursesStore.reduce((sum, course) => sum + course.credits, 0) || 0;
 	$: appliedCredits = derived(
 		[completedCoursesStore, courseGradesStore],
 		([$completed, $grades]) =>
-			programCourses?.reduce(
+			$programCoursesStore.reduce(
 				(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
 				0
 			) || 0
@@ -69,34 +122,41 @@
 
 	$: stillNeeded = derived(
 		completedCoursesStore,
-		($completed) => programCourses?.filter((course) => !$completed[course.id]).length || 0
+		($completed) => $programCoursesStore.filter((course) => !$completed[course.id]).length || 0
 	);
 	$: inProgress = 5; // This should be calculated based on actual data
 	$: complete = derived(
 		completedCoursesStore,
-		($completed) => programCourses?.filter((course) => $completed[course.id]).length || 0
+		($completed) => $programCoursesStore.filter((course) => $completed[course.id]).length || 0
 	);
 
 	$: progressPercentage = derived(appliedCredits, ($applied) => ($applied / totalCredits) * 100);
 
-	const gpa = derived([courseGradesStore, completedCoursesStore], ([$grades, $completed]) => {
-		if (!programCourses) return '0.00';
+	const gpa = derived(
+		[courseGradesStore, completedCoursesStore, programCoursesStore],
+		([$grades, $completed, $programCourses]) => {
+			console.log('GPA calculation triggered. $programCourses:', $programCourses);
 
-		let totalPoints = 0;
-		let totalCredits = 0;
+			let totalPoints = 0;
+			let totalCredits = 0;
 
-		programCourses.forEach((course) => {
-			if ($completed[course.id]) {
-				const grade = $grades[course.id];
-				if (grade && grade in gradePoints) {
-					totalPoints += gradePoints[grade] * course.credits;
-					totalCredits += course.credits;
-				}
+			if ($programCourses && Array.isArray($programCourses)) {
+				$programCourses.forEach((course) => {
+					if ($completed[course.id]) {
+						const grade = $grades[course.id];
+						if (grade && grade in gradePoints) {
+							totalPoints += gradePoints[grade] * course.credits;
+							totalCredits += course.credits;
+						}
+					}
+				});
+			} else {
+				console.warn('$programCourses is not an array in GPA calculation:', $programCourses);
 			}
-		});
 
-		return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
-	});
+			return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+		}
+	);
 
 	$: if (programCourses && studentCourses) {
 		completedCoursesStore.set(
@@ -107,6 +167,25 @@
 				])
 			)
 		);
+	}
+
+	function handleAddCourse() {
+		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
+		console.log('Course Element:', courseElement);
+		const selectedCourseId = courseElement?.value;
+		console.log('Selected Course ID:', selectedCourseId);
+		if (selectedCourseId && currentRequirement) {
+			const selectedCourse = electiveCourses.find((c) => c.id === selectedCourseId);
+			if (selectedCourse) {
+				addCourse(selectedCourse, currentRequirement);
+			}
+		}
+	}
+
+	function getRequirementCredits(requirementId: string) {
+		return $programCoursesStore
+			.filter((course) => course.requirementId === requirementId)
+			.reduce((sum, course) => sum + course.credits, 0);
 	}
 
 	// $: console.log('Program Courses:', programCourses);
@@ -282,40 +361,102 @@
 			{/each}
 			{#each requirements as req}
 				{#if req.type === 'POOL' && req.credits > 0}
+					{@const currentCredits = getRequirementCredits(req.id)}
 					<li>
-						<div class="flex items-center px-4 py-4 sm:px-6">
-							<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-								<div>
-									<div class="flex items-center">
-										<input
-											type="checkbox"
-											class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-											disabled
-										/>
-										<!-- Course Name -->
-									</div>
-									<!-- Course level and Credits -->
-									<div class="mt-1 flex items-center text-sm text-gray-500"></div>
-									<!-- Prerequisites Logic -->
-								</div>
-								<!-- Grade Selection Logic -->
-								<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
-									<select
-										class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+						<div class="flex flex-col px-4 py-4 sm:px-6">
+							<div class="flex items-center justify-between">
+								<span class="font-medium text-gray-900">
+									{req.type} Requirement ({currentCredits}/{req.credits} credits)
+								</span>
+								{#if currentCredits < req.credits}
+									<Button
+										on:click={() => {
+											currentRequirement = req.id;
+											console.log('Current Requirement:', currentRequirement);
+											dialogOpen = true;
+										}}
 									>
-										<option value="">Select Grade</option>
-										{#each Object.keys(gradePoints) as grade}
-											<option value={grade}>{grade}</option>
-										{/each}
-									</select>
-								</div>
+										Add Course
+									</Button>
+								{/if}
 							</div>
+							{#each $programCoursesStore.filter((course) => course.requirementId === req.id) as course}
+								<div class="mt-2 flex items-center">
+									<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+										<div>
+											<div class="flex items-center">
+												<input
+													type="checkbox"
+													id={`course-${course.id}`}
+													name={`courses[${course.id}].completed`}
+													bind:checked={$completedCoursesStore[course.id]}
+													class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+													disabled
+												/>
+												<label for={`course-${course.id}`} class="ml-3 block">
+													<span class="font-medium text-gray-900">{course.code}</span>
+													<span class="ml-1 text-gray-500">{course.name}</span>
+												</label>
+											</div>
+											<div class="mt-1 flex items-center text-sm text-gray-500">
+												<span>Level: {course.level}</span>
+												<span
+													class="ml-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+												>
+													{course.credits} Credits
+												</span>
+											</div>
+										</div>
+										<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
+											<input
+												type="hidden"
+												name={`courses[${course.id}].requirementId`}
+												value={req.id}
+											/>
+											<select
+												name={`courses[${course.id}].grade`}
+												value={$courseGradesStore[course.id] ?? ''}
+												on:change={(e) => handleGradeChange(course.id, e)}
+												class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+												disabled={!arePrerequisitesMet(course)}
+											>
+												<option value="">Select Grade</option>
+												{#each Object.keys(gradePoints) as grade}
+													<option value={grade}>{grade}</option>
+												{/each}
+											</select>
+										</div>
+									</div>
+								</div>
+							{/each}
 						</div>
 					</li>
 				{/if}
 			{/each}
 		</ul>
 	</div>
+
+	<Modal title="Add Elective Course" bind:open={dialogOpen}>
+		<select
+			name="course"
+			id="course"
+			class="w-full rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+		>
+			<option value="">Select a course...</option>
+			{#each electiveCourses as course}
+				<option value={course.id}>{course.code} - {course.name}</option>
+			{/each}
+		</select>
+		<!-- <Select label="Course" placeholder="Select a course..." name="course" id="course">
+			{#each electiveCourses as course}
+				<Option value={course.id}>{course.code} - {course.name}</Option>
+			{/each}
+		</Select> -->
+		<svelte:fragment slot="footer">
+			<Button on:click={() => (dialogOpen = false)}>Close</Button>
+			<Button on:click={handleAddCourse}>Add Course</Button>
+		</svelte:fragment>
+	</Modal>
 
 	<div class="mt-6 text-xl font-bold">
 		Overall GPA: {$gpa}

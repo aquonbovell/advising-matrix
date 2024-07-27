@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { fade, fly, scale } from 'svelte/transition';
 	import CloseIcon from '../icons/CloseIcon.svelte';
+	import { cn } from '$lib/utils';
+	import { browser } from '$app/environment';
 
 	export let open = false;
 	export let title: string;
@@ -13,15 +15,28 @@
 		dispatch('close');
 	}
 
-	$: if (open) {
-		document.body.style.overflow = 'hidden';
-	} else {
-		document.body.style.overflow = '';
+	$: if (browser) {
+		if (open) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = '';
+		}
 	}
 
 	const handleKeyDown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape' && open) closeModal();
 	};
+
+	onMount(() => {
+		return () => {
+			if (browser) {
+				document.body.style.overflow = '';
+			}
+		};
+	});
+
+	let className: string = '';
+	export { className as class };
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
@@ -30,12 +45,12 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/30 p-4 backdrop-blur-lg"
+		class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/30 p-4 backdrop-blur-md"
 		on:click|self={closeModal}
 		transition:fade={{ duration: 200 }}
 	>
 		<div
-			class="w-full max-w-md rounded-lg bg-white shadow-lg"
+			class={cn('w-full max-w-md rounded-lg bg-white shadow-lg', className)}
 			transition:fly={{ y: 20, duration: 200 }}
 			role="dialog"
 			aria-labelledby="modal-title"
