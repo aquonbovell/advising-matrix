@@ -112,7 +112,7 @@
 		<div class="user-menu relative border-t border-gray-200 p-4">
 			<button class="flex w-full items-center justify-between" on:click={toggleUserMenu}>
 				<div class="flex items-center">
-					<Avatar name={user.name} />
+					<Avatar name={user.name} size="sm" />
 					<div class="ml-3">
 						<p class="text-left text-sm font-medium text-gray-700">{user.name}</p>
 						<p class="text-left text-xs text-gray-500">{user.role}</p>
