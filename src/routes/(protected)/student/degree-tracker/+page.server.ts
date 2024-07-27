@@ -79,7 +79,10 @@ async function getCourses(courseIds: string[]) {
 	}));
 }
 
-async function getElectiveCourses(requirements: ProgramRequirement[]) {
+async function getElectiveCourses(
+	requirements: ProgramRequirement[],
+	studentCourses: Record<string, { id: string; grade: string }>
+) {
 	const poolRequirements = requirements.filter((req) => req.type === 'POOL');
 	const electiveCoursesByRequirement = await Promise.all(
 		poolRequirements.map(async (req) => {
@@ -105,9 +108,20 @@ async function getElectiveCourses(requirements: ProgramRequirement[]) {
 			}
 
 			const courses = await query.execute();
+
+			const completedCourses = courses.filter((course) => course.id in studentCourses);
+			const appliedCredits = completedCourses.reduce((sum, course) => sum + course.credits, 0);
+			const isMet = appliedCredits >= req.credits;
+
 			return {
 				requirementId: req.id,
-				courses: courses
+				requiredCredits: req.credits,
+				requiredLevelPool: details.levelPool,
+				requiredFacultyPool: details.facultyPool,
+				courses: courses,
+				completedCourses,
+				appliedCredits,
+				isMet
 			};
 		})
 	);
@@ -142,15 +156,16 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const program = await getProgram('Computer Science');
 	if (!program) throw error(404, 'Program not found');
 
-	const [programCourses, electiveCourses, studentCourses] = await Promise.all([
+	const [programCourses, studentCourses] = await Promise.all([
 		getCourses(
 			program.requirements.flatMap((req) =>
 				req.type === 'CREDITS' && 'courses' in req.details ? req.details.courses : []
 			)
 		),
-		getElectiveCourses(program.requirements),
 		getStudentCourses(studentId)
 	]);
+
+	const electiveCourses = await getElectiveCourses(program.requirements, studentCourses);
 
 	// *Debugging
 	console.log('Program:', program);
@@ -177,7 +192,7 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		const courseEntries = Array.from(formData.entries())
-			.filter(([key, value]) => key.startsWith('courses[') && key.endsWith('].grade'))
+			.filter(([key, _value]) => key.startsWith('courses[') && key.endsWith('].grade'))
 			.map(([key, value]) => ({
 				courseId: key.slice(8, -7),
 				grade: value as string
@@ -207,44 +222,5 @@ export const actions: Actions = {
 			console.error('Error saving changes:', err);
 			return fail(500, { message: 'Failed to save changes' });
 		}
-	},
-
-	addElectives: async ({ request, locals }) => {
-		const data = await request.formData();
-		const electiveID = data.get('elective');
-
-		if (!electiveID) {
-			return fail(400, { message: 'Elective ID is required' });
-		}
-
-		const existingElectives = await db
-			.selectFrom('Student')
-			.select('electivePool')
-			.where('user_id', '=', locals.user!.id)
-			.executeTakeFirst();
-
-		if (!existingElectives) {
-			return fail(404, { message: 'Student not found' });
-		}
-
-		let updatedElectivePool = existingElectives.electivePool;
-
-		if (!updatedElectivePool) {
-			updatedElectivePool = [];
-		} else if (updatedElectivePool.includes(electiveID.toString())) {
-			return fail(400, { message: 'Elective already added' });
-		}
-
-		if (!updatedElectivePool.includes(electiveID.toString())) {
-			updatedElectivePool.push(electiveID.toString());
-		}
-
-		const res = await db
-			.updateTable('Student')
-			.set({ electivePool: updatedElectivePool })
-			.where('user_id', '=', locals.user!.id)
-			.execute();
-
-		return { success: true };
 	}
 };

@@ -109,11 +109,6 @@
 			)
 		);
 	}
-
-	$: creditsAmt = studentElectiveCourses.reduce((acc, course) => acc + course.credits, 0);
-
-	// $: console.log('Program Courses:', programCourses);
-	// $: console.log('Completed Courses Store:', $completedCoursesStore);
 </script>
 
 <div class="mt-6 overflow-hidden">
@@ -283,40 +278,6 @@
 						</div>
 					</div>
 				</li>
-			{/each}
-			{#each requirements as req}
-				{#if req.type === 'POOL' && req.credits > 0}
-					<li>
-						<div class="flex items-center px-4 py-4 sm:px-6">
-							<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-								<div>
-									<div class="flex items-center">
-										<input
-											type="checkbox"
-											class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-											disabled
-										/>
-										<!-- Course Name -->
-									</div>
-									<!-- Course level and Credits -->
-									<div class="mt-1 flex items-center text-sm text-gray-500"></div>
-									<!-- Prerequisites Logic -->
-								</div>
-								<!-- Grade Selection Logic -->
-								<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
-									<select
-										class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-									>
-										<option value="">Select Grade</option>
-										{#each Object.keys(gradePoints) as grade}
-											<option value={grade}>{grade}</option>
-										{/each}
-									</select>
-								</div>
-							</div>
-						</div>
-					</li>
-				{/if}
 			{/each}
 		</ul>
 	</div>
