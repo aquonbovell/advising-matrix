@@ -17,7 +17,7 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Actions</DropdownMenu.Label>
 			<DropdownMenu.Item on:click={() => navigator.clipboard.writeText(code)}>
-				Copy course cpde
+				Copy course code
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
