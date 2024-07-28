@@ -43,16 +43,6 @@
 		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
 	}
 
-	function updateGrade(courseId: string, grade: Grade) {
-		courseGradesStore.update((grades) => ({ ...grades, [courseId]: grade }));
-		completedCoursesStore.update((completed) => ({ ...completed, [courseId]: !!grade }));
-	}
-
-	function handleGradeChange(courseId: string, event: Event) {
-		const target = event.target as HTMLSelectElement;
-		updateGrade(courseId, target.value as Grade);
-	}
-
 	function addCourse(course: Course, requirementId: string) {
 		programCoursesStore.update((courses) => [
 			...courses,
@@ -75,18 +65,6 @@
 	function openAddCourseModal(requirementId: string) {
 		currentRequirement = requirementId;
 		dialogOpen = true;
-	}
-
-	function removeCourse(courseId: string) {
-		programCoursesStore.update((courses) => courses.filter((c) => c.id !== courseId));
-		courseGradesStore.update((grades) => {
-			const { [courseId]: _, ...rest } = grades;
-			return rest;
-		});
-		completedCoursesStore.update((completed) => {
-			const { [courseId]: _, ...rest } = completed;
-			return rest;
-		});
 	}
 
 	// Reactive statements
@@ -288,7 +266,6 @@
 						{completedCoursesStore}
 						{courseGradesStore}
 						onAddCourse={openAddCourseModal}
-						onRemoveCourse={removeCourse}
 					/>
 				{/if}
 			{/each}

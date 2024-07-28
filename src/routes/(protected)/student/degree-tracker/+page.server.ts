@@ -171,9 +171,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 	]);
 
 	// *Debugging
-	console.log('Program:', program);
-	console.log('Program Courses:', programCourses);
-	console.log('Elective Courses:', electiveCourses);
+	// console.log('Program:', program);
+	// console.log('Program Courses:', programCourses);
+	// console.log('Elective Courses:', electiveCourses);
 	console.log('Student Courses:', studentCourses);
 
 	return {
@@ -229,6 +229,37 @@ export const actions: Actions = {
 		} catch (err) {
 			console.error('Error saving changes:', err);
 			return fail(500, { message: 'Failed to save changes' });
+		}
+	},
+	removeCourse: async ({ request, locals }) => {
+		const userId = locals.user?.id;
+		if (!userId) return fail(401, { message: 'Unauthorized' });
+
+		const studentId = await getStudentId(userId);
+		if (!studentId) return fail(404, { message: 'Student not found' });
+
+		const formData = await request.formData();
+		const courseId = formData.get('courseId') as string;
+		const requirementId = formData.get('requirementId') as string;
+
+		if (!courseId || !requirementId) {
+			return fail(400, { message: 'Missing course or requirement ID' });
+		}
+
+		try {
+			await db.transaction().execute(async (trx) => {
+				await trx
+					.deleteFrom('StudentCourse')
+					.where('studentId', '=', studentId)
+					.where('courseId', '=', courseId)
+					.where('requirementId', '=', requirementId)
+					.execute();
+			});
+
+			return { success: true };
+		} catch (err) {
+			console.error('Error removing course:', err);
+			return fail(500, { message: 'Failed to remove course' });
 		}
 	}
 };

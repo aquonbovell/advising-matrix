@@ -3,13 +3,13 @@
 	import type { CourseWithRequirement, Grade, ProgramRequirement } from '$lib/types';
 	import Button from '$lib/components/ui/Button.svelte';
 	import TrashIcon from '../icons/TrashIcon.svelte';
+	import { enhance } from '$app/forms';
 
 	export let requirement: ProgramRequirement;
 	export let courses: CourseWithRequirement[];
 	export let completedCoursesStore: any;
 	export let courseGradesStore: any;
 	export let onAddCourse: (requirementId: string) => void;
-	export let onRemoveCourse: (courseId: string) => void;
 
 	$: currentCredits = courses.reduce((sum, course) => sum + course.credits, 0);
 
@@ -86,7 +86,9 @@
 								<option value={grade}>{grade}</option>
 							{/each}
 						</select>
-						<form on:submit|preventDefault={() => onRemoveCourse(course.id)}>
+						<form method="POST" action="?/removeCourse" use:enhance>
+							<input type="hidden" name="courseId" value={course.id} />
+							<input type="hidden" name="requirementId" value={requirement.id} />
 							<button type="submit" class="ml-2 text-red-500 hover:text-red-700">
 								<TrashIcon />
 							</button>
