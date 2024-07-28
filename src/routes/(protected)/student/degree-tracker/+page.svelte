@@ -16,11 +16,12 @@
 	import Option from '$lib/components/ui/dropdown/Option.svelte';
 	import CourseItem from '$lib/components/degreeTracker/CourseItem.svelte';
 	import PoolRequirementItem from '$lib/components/degreeTracker/PoolRequirementPool.svelte';
+	import { poolCourses } from '$lib/stores/degreeTracker';
 
 	export let data: PageData;
 
 	// Destructure data
-	$: ({ program, programCourses, electiveCourses, studentCourses, requirements } = data);
+	let { program, programCourses, electiveCourses, studentCourses, requirements } = data;
 
 	// Local state
 	let dialogOpen = false;
@@ -36,6 +37,12 @@
 	const courseGradesStore = writable<Record<string, Grade | ''>>({});
 	const completedCoursesStore = writable<Record<string, boolean>>({});
 	const programCoursesStore = writable<CourseWithRequirement[]>([]);
+
+	// Pool courses
+	$: requirements.forEach((req) => {
+		if (req.type === 'POOL' && req.credits > 0)
+			poolCourses.set($programCoursesStore.filter((course) => course.requirementId === req.id));
+	});
 
 	// Helper functions
 	function arePrerequisitesMet(course: CourseWithPrerequisites | CourseWithRequirement): boolean {
@@ -108,26 +115,44 @@
 	}
 
 	// Derived values
-	$: totalCredits = $programCoursesStore.reduce((sum, course) => sum + course.credits, 0) || 0;
-	$: appliedCredits = derived(
-		[completedCoursesStore, courseGradesStore],
-		([$completed, $grades]) =>
-			$programCoursesStore.reduce(
+	const totalCredits = derived(
+		programCoursesStore,
+		($programCourses) => $programCourses.reduce((sum, course) => sum + course.credits, 0) || 0
+	);
+
+	const appliedCredits = derived(
+		[completedCoursesStore, courseGradesStore, programCoursesStore],
+		([$completed, $grades, $programCourses]) =>
+			$programCourses.reduce(
 				(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
 				0
 			) || 0
 	);
-	$: stillNeeded = derived(
+
+	const inProgress = derived(completedCoursesStore, ($completedCoursesStore) => {
+		return (
+			$programCoursesStore.filter(
+				(course) => !$completedCoursesStore[course.id] && arePrerequisitesMet(course)
+			).length || 0
+		);
+	});
+
+	const stillNeeded = derived(
 		completedCoursesStore,
 		($completed) => $programCoursesStore.filter((course) => !$completed[course.id]).length || 0
 	);
-	$: inProgress = 5; // This should be calculated based on actual data
-	$: complete = derived(
+
+	const complete = derived(
 		completedCoursesStore,
 		($completed) => $programCoursesStore.filter((course) => $completed[course.id]).length || 0
 	);
-	$: progressPercentage = derived(appliedCredits, ($applied) => ($applied / totalCredits) * 100);
-	$: gpa = derived(
+
+	const progressPercentage = derived(
+		appliedCredits,
+		($applied) => ($applied / $totalCredits) * 100
+	);
+
+	const gpa = derived(
 		[courseGradesStore, completedCoursesStore, programCoursesStore],
 		([$grades, $completed, $programCourses]) => {
 			let totalPoints = 0;
@@ -148,6 +173,40 @@
 			return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
 		}
 	);
+
+	// Form submission handling
+
+	let loading = false;
+	let success = false;
+	async function handleSubmit(event: Event) {
+		event.preventDefault();
+		loading = true;
+		const formEl = event.target as HTMLFormElement;
+
+		const formData = new FormData(formEl);
+
+		try {
+			const response = await fetch(formEl.action, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (response.ok) {
+				// Update the state with the new data
+				const newData = await response.json();
+				loading = false;
+				success = true;
+				setTimeout(() => {
+					success = false;
+				}, 3000);
+				data = newData; // Update the data object with the new data
+			} else {
+				console.error('Form submission failed');
+			}
+		} catch (error) {
+			console.error('Form submission error:', error);
+		}
+	}
 </script>
 
 <div class="mt-6 overflow-hidden">
@@ -174,10 +233,14 @@
 		</div>
 		<div class="flex flex-col items-center">
 			<span class="uppercase text-gray-500">Academic Standing</span>
-			{#if parseFloat($gpa) < 2.0}
-				<span class="font-semibold text-red-500">Academic Warning</span>
+			{#if Object.values($completedCoursesStore).filter((c) => c == true).length > 0}
+				{#if parseFloat($gpa) < 2.0}
+					<span class="font-semibold text-red-500">Academic Warning</span>
+				{:else}
+					<span class="font-semibold">Good Standing</span>
+				{/if}
 			{:else}
-				<span class="font-semibold">Good Standing</span>
+				<span class="font-semibold">None</span>
 			{/if}
 		</div>
 	</div>
@@ -203,7 +266,7 @@
 					d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
 				></path>
 			</svg>
-			Still Needed ({stillNeeded})
+			Still Needed ({$stillNeeded})
 		</button>
 		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
 			<svg
@@ -220,7 +283,7 @@
 					d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
 				></path>
 			</svg>
-			In Progress ({inProgress})
+			In Progress ({$inProgress})
 		</button>
 		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
 			<svg
@@ -233,13 +296,13 @@
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"
 				></path>
 			</svg>
-			Complete ({complete})
+			Complete ({$complete})
 		</button>
 	</div>
 
 	<div class="flex flex-col items-end">
 		<div class="mb-1 text-sm text-gray-600">
-			{$appliedCredits}/{totalCredits} Credits Applied
+			{$appliedCredits}/{$totalCredits} Credits Applied
 		</div>
 		<div class="w-48">
 			<ProgressBar progress={$progressPercentage} size="sm" />
@@ -247,7 +310,7 @@
 	</div>
 </div>
 
-<form method="POST" action="?/saveChanges" use:enhance>
+<form method="POST" action="?/saveChanges" on:submit|preventDefault={handleSubmit}>
 	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
 
 	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
@@ -257,12 +320,8 @@
 			{/each}
 			{#each requirements as req}
 				{#if req.type === 'POOL' && req.credits > 0}
-					{@const poolCourses = $programCoursesStore.filter(
-						(course) => course.requirementId === req.id
-					)}
 					<PoolRequirementItem
 						requirement={req}
-						courses={poolCourses}
 						{completedCoursesStore}
 						{courseGradesStore}
 						onAddCourse={openAddCourseModal}
@@ -279,7 +338,7 @@
 			class="w-full rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 		>
 			<option value="">Select a course...</option>
-			{#each electiveCourses as course}
+			{#each electiveCourses.filter((electiveCourse) => $poolCourses.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1) as course}
 				<option value={course.id}>{course.code} - {course.name}</option>
 			{/each}
 		</select>
@@ -299,6 +358,12 @@
 	</div>
 
 	<div class="mt-6">
-		<Button type="submit">Save Changes</Button>
+		<Button type="submit" {loading}>Save Changes</Button>
+		{#if loading}
+			<span class="ml-2">Saving...</span>
+		{/if}
+		{#if success}
+			<span class="ml-2 text-green-500">Changes saved successfully</span>
+		{/if}
 	</div>
 </form>

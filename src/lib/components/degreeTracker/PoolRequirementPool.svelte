@@ -4,12 +4,17 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import TrashIcon from '../icons/TrashIcon.svelte';
 	import { enhance } from '$app/forms';
+	import { poolCourses } from '$lib/stores/degreeTracker';
 
 	export let requirement: ProgramRequirement;
-	export let courses: CourseWithRequirement[];
+	let courses: CourseWithRequirement[];
 	export let completedCoursesStore: any;
 	export let courseGradesStore: any;
 	export let onAddCourse: (requirementId: string) => void;
+
+	poolCourses.subscribe((value) => {
+		courses = value;
+	});
 
 	$: currentCredits = courses.reduce((sum, course) => sum + course.credits, 0);
 
@@ -28,6 +33,33 @@
 	function arePrerequisitesMet(course: CourseWithRequirement): boolean {
 		if (!course.prerequisites || course.prerequisites.length === 0) return true;
 		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
+	}
+
+	// Form submission handling
+	async function handleSubmit(event: Event) {
+		event.preventDefault();
+		const formEl = event.target as HTMLFormElement;
+
+		const formData = new FormData(formEl);
+
+		try {
+			const response = await fetch(formEl.action, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (response.ok) {
+				courses = courses.filter((course) => course.id !== formData.get('courseId'));
+				// Update the state with the new data
+				const newData = await response.json();
+				console.log('newData:', newData);
+				// data = newData; // Update the data object with the new data
+			} else {
+				console.error('Form submission failed');
+			}
+		} catch (error) {
+			console.error('Form submission error:', error);
+		}
 	}
 </script>
 
@@ -86,7 +118,7 @@
 								<option value={grade}>{grade}</option>
 							{/each}
 						</select>
-						<form method="POST" action="?/removeCourse" use:enhance>
+						<form method="POST" action="?/removeCourse" on:submit|preventDefault={handleSubmit}>
 							<input type="hidden" name="courseId" value={course.id} />
 							<input type="hidden" name="requirementId" value={requirement.id} />
 							<button type="submit" class="ml-2 text-red-500 hover:text-red-700">
