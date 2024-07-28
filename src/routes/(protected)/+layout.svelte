@@ -11,7 +11,7 @@
 </slot>
 
 <slot name="main">
-	<main class="ms-16 h-dvh overflow-y-auto bg-gray-50 p-5 md:ms-64">
+	<main class="ms-16 h-dvh overflow-y-auto bg-gray-50 p-6 md:ms-64">
 		<slot />
 	</main>
 </slot>
