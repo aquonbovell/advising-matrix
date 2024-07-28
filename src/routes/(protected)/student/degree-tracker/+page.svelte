@@ -14,6 +14,8 @@
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import Select from '$lib/components/ui/dropdown/Select.svelte';
 	import Option from '$lib/components/ui/dropdown/Option.svelte';
+	import CourseItem from '$lib/components/degreeTracker/CourseItem.svelte';
+	import PoolRequirementItem from '$lib/components/degreeTracker/PoolRequirementPool.svelte';
 
 	export let data: PageData;
 
@@ -70,10 +72,21 @@
 		}
 	}
 
-	function getRequirementCredits(requirementId: string) {
-		return $programCoursesStore
-			.filter((course) => course.requirementId === requirementId)
-			.reduce((sum, course) => sum + course.credits, 0);
+	function openAddCourseModal(requirementId: string) {
+		currentRequirement = requirementId;
+		dialogOpen = true;
+	}
+
+	function removeCourse(courseId: string) {
+		programCoursesStore.update((courses) => courses.filter((c) => c.id !== courseId));
+		courseGradesStore.update((grades) => {
+			const { [courseId]: _, ...rest } = grades;
+			return rest;
+		});
+		completedCoursesStore.update((completed) => {
+			const { [courseId]: _, ...rest } = completed;
+			return rest;
+		});
 	}
 
 	// Reactive statements
@@ -262,142 +275,21 @@
 	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
 		<ul class="divide-y divide-gray-200">
 			{#each programCourses as course (course.id)}
-				<li>
-					<div class="flex items-center px-4 py-4 sm:px-6">
-						<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-							<div>
-								<div class="flex items-center">
-									<input
-										type="checkbox"
-										id={`course-${course.id}`}
-										name={`courses[${course.id}].completed`}
-										bind:checked={$completedCoursesStore[course.id]}
-										class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-										disabled
-									/>
-									<!-- Course Name -->
-									<label for={`course-${course.id}`} class="ml-3 block">
-										<span class="font-medium text-gray-900">{course.code}</span>
-										<span class="ml-1 text-gray-500">{course.name}</span>
-									</label>
-								</div>
-								<!-- Course level and Credits -->
-								<div class="mt-1 flex items-center text-sm text-gray-500">
-									<span>Level: {course.level}</span>
-									<span
-										class="ml-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
-									>
-										{course.credits} Credits
-									</span>
-								</div>
-								<!-- Prerequisites Logic -->
-								{#if course.prerequisites && course.prerequisites.length > 0}
-									{@const unmetPrerequisites = course.prerequisites.filter(
-										(prereq) => !$completedCoursesStore[prereq.id]
-									)}
-									{#if unmetPrerequisites.length > 0}
-										<div class="mt-1 text-sm">
-											<span class="font-bold text-red-500">Prerequisites: </span>
-											<span class="text-gray-700">
-												{#each unmetPrerequisites as prereq}
-													<span class="mr-2">{prereq.code}</span>
-												{/each}
-											</span>
-										</div>
-									{/if}
-								{/if}
-							</div>
-							<!-- Grade Selection Logic -->
-							<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
-								<select
-									name={`courses[${course.id}].grade`}
-									value={$courseGradesStore[course.id] ?? ''}
-									on:change={(e) => handleGradeChange(course.id, e)}
-									class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-									disabled={!arePrerequisitesMet(course)}
-								>
-									<option value="">Select Grade</option>
-									{#each Object.keys(gradePoints) as grade}
-										<option value={grade}>{grade}</option>
-									{/each}
-								</select>
-							</div>
-						</div>
-					</div>
-				</li>
+				<CourseItem {course} {completedCoursesStore} {courseGradesStore} />
 			{/each}
 			{#each requirements as req}
 				{#if req.type === 'POOL' && req.credits > 0}
-					{@const currentCredits = getRequirementCredits(req.id)}
-					<li>
-						<div class="flex flex-col px-4 py-4 sm:px-6">
-							<div class="flex items-center justify-between">
-								<span class="font-medium text-gray-900">
-									{req.type} Requirement ({currentCredits}/{req.credits} credits)
-								</span>
-								{#if currentCredits < req.credits}
-									<Button
-										on:click={() => {
-											currentRequirement = req.id;
-											console.log('Current Requirement:', currentRequirement);
-											dialogOpen = true;
-										}}
-									>
-										Add Course
-									</Button>
-								{/if}
-							</div>
-							{#each $programCoursesStore.filter((course) => course.requirementId === req.id) as course}
-								<div class="mt-2 flex items-center">
-									<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-										<div>
-											<div class="flex items-center">
-												<input
-													type="checkbox"
-													id={`course-${course.id}`}
-													name={`courses[${course.id}].completed`}
-													bind:checked={$completedCoursesStore[course.id]}
-													class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-													disabled
-												/>
-												<label for={`course-${course.id}`} class="ml-3 block">
-													<span class="font-medium text-gray-900">{course.code}</span>
-													<span class="ml-1 text-gray-500">{course.name}</span>
-												</label>
-											</div>
-											<div class="mt-1 flex items-center text-sm text-gray-500">
-												<span>Level: {course.level}</span>
-												<span
-													class="ml-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
-												>
-													{course.credits} Credits
-												</span>
-											</div>
-										</div>
-										<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
-											<input
-												type="hidden"
-												name={`courses[${course.id}].requirementId`}
-												value={req.id}
-											/>
-											<select
-												name={`courses[${course.id}].grade`}
-												value={$courseGradesStore[course.id] ?? ''}
-												on:change={(e) => handleGradeChange(course.id, e)}
-												class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-												disabled={!arePrerequisitesMet(course)}
-											>
-												<option value="">Select Grade</option>
-												{#each Object.keys(gradePoints) as grade}
-													<option value={grade}>{grade}</option>
-												{/each}
-											</select>
-										</div>
-									</div>
-								</div>
-							{/each}
-						</div>
-					</li>
+					{@const poolCourses = $programCoursesStore.filter(
+						(course) => course.requirementId === req.id
+					)}
+					<PoolRequirementItem
+						requirement={req}
+						courses={poolCourses}
+						{completedCoursesStore}
+						{courseGradesStore}
+						onAddCourse={openAddCourseModal}
+						onRemoveCourse={removeCourse}
+					/>
 				{/if}
 			{/each}
 		</ul>
