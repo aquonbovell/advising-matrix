@@ -111,45 +111,45 @@
 	}
 </script>
 
-<div class="mt-6 overflow-hidden">
-	<div class="flex flex-wrap items-start gap-x-12 px-4 py-2 text-sm">
-		<div class="flex min-w-[200px] flex-col items-start">
-			<span class="uppercase text-gray-500">Current Degree(S)</span>
-			<div class="font-semibold">
-				{#each degree.name as name}
-					<div>{name}</div>
-				{/each}
-			</div>
+<div class="flex flex-wrap items-start gap-x-12 text-sm">
+	<div class="flex min-w-[200px] flex-col items-start">
+		<span class="uppercase text-gray-500">Current Degree(S)</span>
+		<div class="font-semibold">
+			{#each degree.name as name}
+				<div>{name}</div>
+			{/each}
 		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Minor</span>
-			<span class="font-semibold">{degree.minor}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Classification</span>
-			<span class="font-semibold">{degree.classification}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Overall GPA</span>
-			<span class="font-semibold">{$gpa}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Academic Standing</span>
-			{#if parseFloat($gpa) < 2.0}
-				<span class="font-semibold text-red-500">Academic Warning</span>
-			{:else}
-				<span class="font-semibold">Good Standing</span>
-			{/if}
-		</div>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Minor</span>
+		<span class="font-semibold">{degree.minor}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Classification</span>
+		<span class="font-semibold">{degree.classification}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Overall GPA</span>
+		<span class="font-semibold">{$gpa}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Academic Standing</span>
+		{#if parseFloat($gpa) < 2.0}
+			<span class="font-semibold text-red-500">Academic Warning</span>
+		{:else}
+			<span class="font-semibold">Good Standing</span>
+		{/if}
 	</div>
 </div>
 
-<h2 class="mb-4 text-xl font-semibold">Course Requirements</h2>
+<h2 class="my-4 text-xl font-semibold">Course Requirements</h2>
 
 <div class="flex flex-wrap items-center justify-between gap-y-2">
 	<div class="flex flex-wrap items-center gap-2">
 		<Button>All Courses</Button>
-		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
+		<Button
+			class=" flex w-max bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-700 hover:text-white"
+		>
 			<svg
 				class="mr-1 h-4 w-4"
 				fill="none"
@@ -164,9 +164,11 @@
 					d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
 				></path>
 			</svg>
-			Still Needed ({stillNeeded})
-		</button>
-		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
+			Still Needed ({$stillNeeded})
+		</Button>
+		<Button
+			class=" flex w-max bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-700 hover:text-white"
+		>
 			<svg
 				class="mr-1 h-4 w-4"
 				fill="none"
@@ -182,8 +184,10 @@
 				></path>
 			</svg>
 			In Progress ({inProgress})
-		</button>
-		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
+		</Button>
+		<Button
+			class=" flex w-max bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-700 hover:text-white"
+		>
 			<svg
 				class="mr-1 h-4 w-4"
 				fill="none"
@@ -194,8 +198,8 @@
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"
 				></path>
 			</svg>
-			Complete ({complete})
-		</button>
+			Complete ({$complete})
+		</Button>
 	</div>
 
 	<div class="flex flex-col items-end">
