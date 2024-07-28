@@ -1,11 +1,11 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
 import flowbitePlugin from 'flowbite/plugin';
+
 /** @type {import('tailwindcss').Config} */
 const config = {
 	darkMode: ['class'],
 	content: [
 		'./src/**/*.{html,js,svelte,ts}',
-		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
 	],
 	safelist: ['dark'],
 	theme: {
@@ -17,6 +17,9 @@ const config = {
 			}
 		},
 		extend: {
+			gridAutoColumns: {
+        '2fr': 'minmax(0, 2fr)',
+      },
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
 				input: 'hsl(var(--input) / <alpha-value>)',
