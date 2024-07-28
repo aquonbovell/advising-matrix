@@ -1,7 +1,13 @@
 import { db } from '$lib/db';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import type { ProgramRequirement, RequirementDetails } from '$lib/types';
+import type {
+	CourseWithPrerequisites,
+	Program,
+	ProgramRequirement,
+	RequirementDetails,
+	StudentGrade
+} from '$lib/types';
 import type { Course, RequirementType } from '$lib/db/schema';
 import { generateId } from 'lucia';
 
@@ -14,7 +20,7 @@ async function getStudentId(userId: string): Promise<string | null> {
 		.then((result) => result?.id ?? null);
 }
 
-async function getProgram(programName: string) {
+async function getProgram(programName: string): Promise<Program | null> {
 	const program = await db
 		.selectFrom('Program')
 		.leftJoin('ProgramRequirement', 'Program.id', 'ProgramRequirement.programId')
@@ -50,7 +56,7 @@ async function getProgram(programName: string) {
 	};
 }
 
-async function getCourses(courseIds: string[]) {
+async function getCourses(courseIds: string[]): Promise<CourseWithPrerequisites[]> {
 	const [courses, prerequisites] = await Promise.all([
 		db.selectFrom('Course').where('id', 'in', courseIds).selectAll().execute(),
 		db
@@ -78,7 +84,9 @@ async function getCourses(courseIds: string[]) {
 	}));
 }
 
-async function getElectiveCourses(requirements: ProgramRequirement[]) {
+async function getElectiveCourses(
+	requirements: ProgramRequirement[]
+): Promise<CourseWithPrerequisites[]> {
 	const poolRequirements = requirements.filter((req) => req.type === 'POOL');
 	const courseIds = await Promise.all(
 		poolRequirements.map(async (req) => {
@@ -105,19 +113,39 @@ async function getElectiveCourses(requirements: ProgramRequirement[]) {
 	return getCourses(courseIds.flat());
 }
 
-async function getStudentCourses(studentId: string) {
+async function getStudentCourses(studentId: string): Promise<Record<string, StudentGrade>> {
 	return await db
 		.selectFrom('StudentCourse')
-		.selectAll()
-		.where('studentId', '=', studentId)
+		.innerJoin('Course', 'StudentCourse.courseId', 'Course.id')
+		.select([
+			'StudentCourse.courseId',
+			'StudentCourse.grade',
+			'StudentCourse.requirementId',
+			'Course.id as courseId',
+			'Course.code',
+			'Course.name',
+			'Course.level',
+			'Course.credits'
+		])
+		.where('StudentCourse.studentId', '=', studentId)
 		.execute()
 		.then((courses) =>
 			courses.reduce(
 				(acc, sc) => {
-					acc[sc.courseId] = { id: sc.id, grade: sc.grade, requirementId: sc.requirementId };
+					acc[sc.courseId] = {
+						grade: sc.grade as StudentGrade['grade'],
+						requirementId: sc.requirementId,
+						course: {
+							id: sc.courseId,
+							code: sc.code,
+							name: sc.name,
+							level: sc.level,
+							credits: sc.credits
+						}
+					};
 					return acc;
 				},
-				{} as Record<string, { id: string; grade: string; requirementId: string | null }>
+				{} as Record<string, StudentGrade>
 			)
 		);
 }

@@ -2,7 +2,12 @@
 	import { enhance } from '$app/forms';
 	import Button from '$lib/components/ui/Button.svelte';
 	import ProgressBar from '$lib/components/ui/ProgressBar.svelte';
-	import { gradePoints, type Grade } from '$lib/types';
+	import {
+		gradePoints,
+		type CourseWithPrerequisites,
+		type CourseWithRequirement,
+		type Grade
+	} from '$lib/types';
 	import { derived, writable } from 'svelte/store';
 	import type { PageData } from './$types';
 	import type { Course } from '$lib/db/schema';
@@ -10,19 +15,12 @@
 	import Select from '$lib/components/ui/dropdown/Select.svelte';
 	import Option from '$lib/components/ui/dropdown/Option.svelte';
 
-	type CourseWithRequirement = Course & {
-		prerequisites: { id: string; code: string; name: string }[];
-		requirementId?: string;
-	};
+	export let data: PageData;
 
-	export let data: PageData & {
-		programCourses: (Course & {
-			prerequisites: { id: string; code: string; name: string }[];
-		})[];
-	};
-
+	// Destructure data
 	$: ({ program, programCourses, electiveCourses, studentCourses, requirements } = data);
 
+	// Local state
 	let dialogOpen = false;
 	let currentRequirement: string | null = null;
 
@@ -32,58 +30,15 @@
 		classification: 'Level III/Third Year'
 	};
 
+	// Stores
 	const courseGradesStore = writable<Record<string, Grade | ''>>({});
 	const completedCoursesStore = writable<Record<string, boolean>>({});
-	const programCoursesStore = writable<CourseWithRequirement[]>(programCourses);
+	const programCoursesStore = writable<CourseWithRequirement[]>([]);
 
-	$: if (programCourses) {
-		programCoursesStore.set(programCourses);
-	}
-
-	function arePrerequisitesMet(
-		course: Course & { prerequisites: { id: string; code: string; name: string }[] }
-	): boolean {
-		if (!course.prerequisites || course.prerequisites.length === 0) {
-			return true;
-		}
+	// Helper functions
+	function arePrerequisitesMet(course: CourseWithPrerequisites | CourseWithRequirement): boolean {
+		if (!course.prerequisites || course.prerequisites.length === 0) return true;
 		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
-	}
-
-	$: if (programCourses && studentCourses) {
-		const allCourses: CourseWithRequirement[] = programCourses.map((course) => ({
-			...course,
-			requirementId: undefined
-		}));
-
-		// Add courses from studentCourses that have a requirementId
-		Object.entries(studentCourses).forEach(([courseId, courseData]) => {
-			if (courseData.requirementId && !allCourses.some((c) => c.id === courseId)) {
-				const course = electiveCourses.find((c) => c.id === courseId);
-				if (course) {
-					allCourses.push({
-						...course,
-						requirementId: courseData.requirementId,
-						prerequisites: []
-					});
-				}
-			}
-		});
-
-		programCoursesStore.set(allCourses);
-
-		// Update grades and completed courses
-		const grades: Record<string, Grade | ''> = {};
-		const completed: Record<string, boolean> = {};
-
-		allCourses.forEach((course) => {
-			const studentCourse = studentCourses[course.id];
-			const grade = studentCourse?.grade;
-			grades[course.id] = (grade && grade in gradePoints ? grade : '') as Grade | '';
-			completed[course.id] = !!grade && arePrerequisitesMet(course);
-		});
-
-		courseGradesStore.set(grades);
-		completedCoursesStore.set(completed);
 	}
 
 	function updateGrade(courseId: string, grade: Grade) {
@@ -101,15 +56,67 @@
 			...courses,
 			{ ...course, requirementId, prerequisites: [] } as CourseWithRequirement
 		]);
-
 		courseGradesStore.update((grades) => ({ ...grades, [course.id]: '' }));
 		completedCoursesStore.update((completed) => ({ ...completed, [course.id]: false }));
-
-		console.log('Course added:', { ...course, requirementId });
-
 		dialogOpen = false;
 	}
 
+	function handleAddCourse() {
+		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
+		const selectedCourseId = courseElement?.value;
+		if (selectedCourseId && currentRequirement) {
+			const selectedCourse = electiveCourses.find((c) => c.id === selectedCourseId);
+			if (selectedCourse) addCourse(selectedCourse, currentRequirement);
+		}
+	}
+
+	function getRequirementCredits(requirementId: string) {
+		return $programCoursesStore
+			.filter((course) => course.requirementId === requirementId)
+			.reduce((sum, course) => sum + course.credits, 0);
+	}
+
+	// Reactive statements
+	$: if (programCourses) {
+		programCoursesStore.set(programCourses.map((course) => ({ ...course, requirementId: null })));
+	}
+
+	$: if (programCourses && studentCourses) {
+		const allCourses: CourseWithRequirement[] = programCourses.map((course) => ({
+			...course,
+			requirementId: null
+		}));
+
+		Object.entries(studentCourses).forEach(([courseId, courseData]) => {
+			if (courseData.requirementId && !allCourses.some((c) => c.id === courseId)) {
+				const course = electiveCourses.find((c) => c.id === courseId);
+				if (course) {
+					allCourses.push({
+						...course,
+						requirementId: courseData.requirementId,
+						prerequisites: []
+					});
+				}
+			}
+		});
+
+		programCoursesStore.set(allCourses);
+
+		const grades: Record<string, Grade | ''> = {};
+		const completed: Record<string, boolean> = {};
+
+		allCourses.forEach((course) => {
+			const studentCourse = studentCourses[course.id];
+			const grade = studentCourse?.grade;
+			grades[course.id] = (grade && grade in gradePoints ? grade : '') as Grade | '';
+			completed[course.id] = !!grade && arePrerequisitesMet(course);
+		});
+
+		courseGradesStore.set(grades);
+		completedCoursesStore.set(completed);
+	}
+
+	// Derived values
 	$: totalCredits = $programCoursesStore.reduce((sum, course) => sum + course.credits, 0) || 0;
 	$: appliedCredits = derived(
 		[completedCoursesStore, courseGradesStore],
@@ -119,7 +126,6 @@
 				0
 			) || 0
 	);
-
 	$: stillNeeded = derived(
 		completedCoursesStore,
 		($completed) => $programCoursesStore.filter((course) => !$completed[course.id]).length || 0
@@ -129,14 +135,10 @@
 		completedCoursesStore,
 		($completed) => $programCoursesStore.filter((course) => $completed[course.id]).length || 0
 	);
-
 	$: progressPercentage = derived(appliedCredits, ($applied) => ($applied / totalCredits) * 100);
-
-	const gpa = derived(
+	$: gpa = derived(
 		[courseGradesStore, completedCoursesStore, programCoursesStore],
 		([$grades, $completed, $programCourses]) => {
-			console.log('GPA calculation triggered. $programCourses:', $programCourses);
-
 			let totalPoints = 0;
 			let totalCredits = 0;
 
@@ -150,46 +152,11 @@
 						}
 					}
 				});
-			} else {
-				console.warn('$programCourses is not an array in GPA calculation:', $programCourses);
 			}
 
 			return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
 		}
 	);
-
-	$: if (programCourses && studentCourses) {
-		completedCoursesStore.set(
-			Object.fromEntries(
-				programCourses.map((course) => [
-					course.id,
-					!!studentCourses[course.id]?.grade && arePrerequisitesMet(course)
-				])
-			)
-		);
-	}
-
-	function handleAddCourse() {
-		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
-		console.log('Course Element:', courseElement);
-		const selectedCourseId = courseElement?.value;
-		console.log('Selected Course ID:', selectedCourseId);
-		if (selectedCourseId && currentRequirement) {
-			const selectedCourse = electiveCourses.find((c) => c.id === selectedCourseId);
-			if (selectedCourse) {
-				addCourse(selectedCourse, currentRequirement);
-			}
-		}
-	}
-
-	function getRequirementCredits(requirementId: string) {
-		return $programCoursesStore
-			.filter((course) => course.requirementId === requirementId)
-			.reduce((sum, course) => sum + course.credits, 0);
-	}
-
-	// $: console.log('Program Courses:', programCourses);
-	// $: console.log('Completed Courses Store:', $completedCoursesStore);
 </script>
 
 <div class="mt-6 overflow-hidden">
