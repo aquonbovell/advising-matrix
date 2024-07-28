@@ -33,7 +33,8 @@
 		],
 		ADMIN: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
-			{ icon: HomeIcon, label: 'Users', href: '/users' }
+			{ icon: HomeIcon, label: 'Users', href: '/users' },
+			{ icon: HomeIcon, label: 'Admin Courses', href: '/admin/courses' }
 			// Add more menu items here
 		]
 	};
