@@ -20,7 +20,7 @@
 	const specificMenuItems = {
 		STUDENT: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
-			{ icon: SettingsIcon, label: 'Advisor', href: 'student/advisor' },
+			{ icon: SettingsIcon, label: 'Advisor', href: 'student/advisor' }
 		],
 		ADVISOR: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
