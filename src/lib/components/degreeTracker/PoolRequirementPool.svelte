@@ -4,14 +4,20 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import TrashIcon from '../icons/TrashIcon.svelte';
 	import { enhance } from '$app/forms';
+	import { poolCourses } from '$lib/stores/degreeTracker';
+	import type { SubmitFunction } from '@sveltejs/kit';
 
 	export let requirement: ProgramRequirement;
-	export let courses: CourseWithRequirement[];
+	let courses: CourseWithRequirement[];
 	export let completedCoursesStore: any;
 	export let courseGradesStore: any;
 	export let onAddCourse: (requirementId: string) => void;
 
-	$: currentCredits = courses.reduce((sum, course) => sum + course.credits, 0);
+	poolCourses.subscribe((value) => {
+		courses = value;
+	});
+
+	$: currentCredits = $poolCourses.reduce((sum, course) => sum + course.credits, 0);
 
 	function handleGradeChange(courseId: string, event: Event) {
 		const target = event.target as HTMLSelectElement;
@@ -41,7 +47,7 @@
 				<Button on:click={() => onAddCourse(requirement.id)}>Add Course</Button>
 			{/if}
 		</div>
-		{#each courses as course (course.id)}
+		{#each $poolCourses as course (course.id)}
 			<div class="mt-2 flex items-center">
 				<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
 					<div>
@@ -86,7 +92,18 @@
 								<option value={grade}>{grade}</option>
 							{/each}
 						</select>
-						<form method="POST" action="?/removeCourse" use:enhance>
+						<form
+							method="POST"
+							action="?/removeCourse"
+							use:enhance={() => {
+								return async ({ update }) => {
+									poolCourses.update((poolCourses) => {
+										return poolCourses.filter((poolCourse) => poolCourse.id !== course.id);
+									});
+									await update();
+								};
+							}}
+						>
 							<input type="hidden" name="courseId" value={course.id} />
 							<input type="hidden" name="requirementId" value={requirement.id} />
 							<button type="submit" class="ml-2 text-red-500 hover:text-red-700">
