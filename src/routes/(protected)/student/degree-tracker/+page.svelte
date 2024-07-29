@@ -17,7 +17,6 @@
 	import CourseItem from '$lib/components/degreeTracker/CourseItem.svelte';
 	import PoolRequirementItem from '$lib/components/degreeTracker/PoolRequirementPool.svelte';
 	import { poolCourses } from '$lib/stores/degreeTracker';
-	import { onMount } from 'svelte';
 
 	export let data: PageData;
 
@@ -40,11 +39,9 @@
 	const programCoursesStore = writable<CourseWithRequirement[]>([]);
 
 	// Pool courses
-	onMount(() => {
-		requirements.forEach((req) => {
-			if (req.type === 'POOL' && req.credits > 0)
-				poolCourses.set($programCoursesStore.filter((course) => course.requirementId === req.id));
-		});
+	$: requirements.forEach((req) => {
+		if (req.type === 'POOL' && req.credits > 0)
+			poolCourses.set($programCoursesStore.filter((course) => course.requirementId === req.id));
 	});
 
 	// Helper functions
@@ -55,10 +52,6 @@
 
 	function addCourse(course: Course, requirementId: string) {
 		programCoursesStore.update((courses) => [
-			...courses,
-			{ ...course, requirementId, prerequisites: [] } as CourseWithRequirement
-		]);
-		poolCourses.update((courses) => [
 			...courses,
 			{ ...course, requirementId, prerequisites: [] } as CourseWithRequirement
 		]);
@@ -295,14 +288,14 @@
 			await update();
 			loading = false;
 			success = true;
-			// setTimeout(() => {
-			// 	success = false;
-			// }, 3000);
+			setTimeout(() => {
+				success = false;
+			}, 3000);
 		};
 	}}
 >
 	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
-{JSON.stringify($courseGradesStore)}
+
 	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
 		<ul class="divide-y divide-gray-200">
 			{#each programCourses as course (course.id)}
