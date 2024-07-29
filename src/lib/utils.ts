@@ -68,13 +68,11 @@ export function createMajorMinor(name: string): {
 		minor: ''
 	};
 
-
 	if (name && name.includes(' with ')) {
 		const [major, minor] = name.split(' with ');
 		degree.major = [...(major || 'None')];
 		degree.minor = minor || 'None';
-	}
-	else if (name && name.includes(' and ')) {
+	} else if (name && name.includes(' and ')) {
 		const [major1, major2] = name.split(' and ');
 		degree.major = [major1 || 'None', major2 || 'None'];
 		degree.major = degree.major.filter((m) => m !== 'None');

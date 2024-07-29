@@ -27,8 +27,8 @@
 	let dialogOpen = false;
 	let currentRequirement: string | null = null;
 
-	let degreeName = createMajorMinor(data.program.name)
-	
+	let degreeName = createMajorMinor(data.program.name);
+
 	let degree = {
 		...degreeName,
 		classification: 'Level III/Third Year'
