@@ -77,7 +77,7 @@
 	};
 </script>
 
-<div class="flex w-full items-start justify-between">
+<div class="flex w-full items-start justify-center">
 	<div class="flex-col items-center">
 		<div class="mb-1 flex items-center">
 			<h5 class="me-1 text-xl font-bold leading-none text-gray-900">{title}</h5>
@@ -110,4 +110,4 @@
 	</div>
 </div>
 
-<Chart {options} class="py-6" />
+<Chart {options} class="h-full py-6" />

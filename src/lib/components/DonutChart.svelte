@@ -22,7 +22,7 @@
 	export let id = 'DonutChart';
 	export let title = 'Credits';
 	export let description = 'Credits of this category completed...';
-	export let series = [50, 50];
+	export let series = [30, 50];
 	export let labels = ['Credits Completed', 'Credits Remaining'];
 
 	const options = {
@@ -50,13 +50,13 @@
 						total: {
 							showAlways: true,
 							show: true,
-							label: 'Unique visitors',
+							label: 'Credits',
 							fontFamily: 'Inter, sans-serif',
 							formatter: function (w: any) {
 								const sum = w.globals.seriesTotals.reduce((a: number, b: number) => {
 									return a + b;
 								}, 0);
-								return `${sum}k`;
+								return `${sum}`;
 							}
 						},
 						value: {
@@ -64,7 +64,7 @@
 							fontFamily: 'Inter, sans-serif',
 							offsetY: -20,
 							formatter: function (value: number) {
-								return value + 'k';
+								return value;
 							}
 						}
 					},
@@ -95,7 +95,7 @@
 		xaxis: {
 			labels: {
 				formatter: function (value: number) {
-					return value + 'k';
+					return value;
 				}
 			},
 			axisTicks: {
@@ -108,7 +108,7 @@
 	};
 </script>
 
-<div>
+<div class="">
 	<div class="flex w-full items-start justify-between">
 		<div class="flex-col items-center">
 			<div class="mb-1 flex items-center">
@@ -135,5 +135,5 @@
 		</div>
 	</div>
 
-	<Chart {options} class="py-6" />
+	<Chart {options} class="w-full py-6" />
 </div>
