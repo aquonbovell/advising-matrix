@@ -58,3 +58,31 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
+
+export function createMajorMinor(name: string): {
+	major: string[];
+	minor: string;
+} {
+	let degree: { major: string[]; minor: string } = {
+		major: [],
+		minor: ''
+	};
+
+
+	if (name && name.includes(' with ')) {
+		const [major, minor] = name.split(' with ');
+		degree.major = [...(major || 'None')];
+		degree.minor = minor || 'None';
+	}
+	else if (name && name.includes(' and ')) {
+		const [major1, major2] = name.split(' and ');
+		degree.major = [major1 || 'None', major2 || 'None'];
+		degree.major = degree.major.filter((m) => m !== 'None');
+		degree.minor = 'None';
+	} else {
+		degree.major = [name || 'None'];
+		degree.minor = 'None';
+	}
+
+	return degree;
+}

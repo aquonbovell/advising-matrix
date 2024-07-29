@@ -16,6 +16,7 @@
 	import PoolRequirementItem from '$lib/components/degreeTracker/PoolRequirementPool.svelte';
 	import { poolCourses } from '$lib/stores/degreeTracker';
 	import { onMount } from 'svelte';
+	import { createMajorMinor } from '$lib/utils';
 
 	export let data: PageData;
 
@@ -26,9 +27,10 @@
 	let dialogOpen = false;
 	let currentRequirement: string | null = null;
 
+	let degreeName = createMajorMinor(data.program.name)
+	
 	let degree = {
-		name: ['BSc Computer Science', 'BSc Mathematics'],
-		minor: 'N/A',
+		...degreeName,
 		classification: 'Level III/Third Year'
 	};
 
@@ -188,7 +190,7 @@
 	<div class="flex min-w-[200px] flex-col items-start">
 		<span class="uppercase text-gray-500">Current Degree(S)</span>
 		<div class="font-semibold">
-			{#each degree.name as name}
+			{#each degree.major as name}
 				<div>{name}</div>
 			{/each}
 		</div>
