@@ -302,7 +302,7 @@
 	}}
 >
 	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
-	{JSON.stringify($courseGradesStore)}
+{JSON.stringify($courseGradesStore)}
 	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
 		<ul class="divide-y divide-gray-200">
 			{#each programCourses as course (course.id)}
