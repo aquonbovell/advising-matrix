@@ -12,11 +12,10 @@
 	import type { PageData } from './$types';
 	import type { Course } from '$lib/db/schema';
 	import Modal from '$lib/components/ui/Modal.svelte';
-	import Select from '$lib/components/ui/dropdown/Select.svelte';
-	import Option from '$lib/components/ui/dropdown/Option.svelte';
 	import CourseItem from '$lib/components/degreeTracker/CourseItem.svelte';
 	import PoolRequirementItem from '$lib/components/degreeTracker/PoolRequirementPool.svelte';
 	import { poolCourses } from '$lib/stores/degreeTracker';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 
@@ -39,9 +38,11 @@
 	const programCoursesStore = writable<CourseWithRequirement[]>([]);
 
 	// Pool courses
-	$: requirements.forEach((req) => {
-		if (req.type === 'POOL' && req.credits > 0)
-			poolCourses.set($programCoursesStore.filter((course) => course.requirementId === req.id));
+	onMount(() => {
+		requirements.forEach((req) => {
+			if (req.type === 'POOL' && req.credits > 0)
+				poolCourses.set($programCoursesStore.filter((course) => course.requirementId === req.id));
+		});
 	});
 
 	// Helper functions
@@ -52,6 +53,10 @@
 
 	function addCourse(course: Course, requirementId: string) {
 		programCoursesStore.update((courses) => [
+			...courses,
+			{ ...course, requirementId, prerequisites: [] } as CourseWithRequirement
+		]);
+		poolCourses.update((courses) => [
 			...courses,
 			{ ...course, requirementId, prerequisites: [] } as CourseWithRequirement
 		]);
@@ -175,38 +180,8 @@
 	);
 
 	// Form submission handling
-
 	let loading = false;
 	let success = false;
-	async function handleSubmit(event: Event) {
-		event.preventDefault();
-		loading = true;
-		const formEl = event.target as HTMLFormElement;
-
-		const formData = new FormData(formEl);
-
-		try {
-			const response = await fetch(formEl.action, {
-				method: 'POST',
-				body: formData
-			});
-
-			if (response.ok) {
-				// Update the state with the new data
-				const newData = await response.json();
-				loading = false;
-				success = true;
-				setTimeout(() => {
-					success = false;
-				}, 3000);
-				data = newData; // Update the data object with the new data
-			} else {
-				console.error('Form submission failed');
-			}
-		} catch (error) {
-			console.error('Form submission error:', error);
-		}
-	}
 </script>
 
 <div class="mt-6 overflow-hidden">
@@ -310,7 +285,21 @@
 	</div>
 </div>
 
-<form method="POST" action="?/saveChanges" on:submit|preventDefault={handleSubmit}>
+<form
+	method="POST"
+	action="?/saveChanges"
+	use:enhance={() => {
+		loading = true;
+		return async ({ update }) => {
+			await update();
+			success = true;
+			loading = false;
+			setTimeout(() => {
+				success = false;
+			}, 3000);
+		};
+	}}
+>
 	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
 
 	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
@@ -338,15 +327,10 @@
 			class="w-full rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 		>
 			<option value="">Select a course...</option>
-			{#each electiveCourses.filter((electiveCourse) => $poolCourses.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1) as course}
+			{#each electiveCourses.filter((electiveCourse) => $poolCourses.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1 && $programCoursesStore.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1) as course}
 				<option value={course.id}>{course.code} - {course.name}</option>
 			{/each}
 		</select>
-		<!-- <Select label="Course" placeholder="Select a course..." name="course" id="course">
-			{#each electiveCourses as course}
-				<Option value={course.id}>{course.code} - {course.name}</Option>
-			{/each}
-		</Select> -->
 		<svelte:fragment slot="footer">
 			<Button on:click={() => (dialogOpen = false)}>Close</Button>
 			<Button on:click={handleAddCourse}>Add Course</Button>

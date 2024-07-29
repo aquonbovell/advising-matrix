@@ -5,6 +5,7 @@
 	import TrashIcon from '../icons/TrashIcon.svelte';
 	import { enhance } from '$app/forms';
 	import { poolCourses } from '$lib/stores/degreeTracker';
+	import type { SubmitFunction } from '@sveltejs/kit';
 
 	export let requirement: ProgramRequirement;
 	let courses: CourseWithRequirement[];
@@ -16,7 +17,7 @@
 		courses = value;
 	});
 
-	$: currentCredits = courses.reduce((sum, course) => sum + course.credits, 0);
+	$: currentCredits = $poolCourses.reduce((sum, course) => sum + course.credits, 0);
 
 	function handleGradeChange(courseId: string, event: Event) {
 		const target = event.target as HTMLSelectElement;
@@ -34,33 +35,6 @@
 		if (!course.prerequisites || course.prerequisites.length === 0) return true;
 		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
 	}
-
-	// Form submission handling
-	async function handleSubmit(event: Event) {
-		event.preventDefault();
-		const formEl = event.target as HTMLFormElement;
-
-		const formData = new FormData(formEl);
-
-		try {
-			const response = await fetch(formEl.action, {
-				method: 'POST',
-				body: formData
-			});
-
-			if (response.ok) {
-				courses = courses.filter((course) => course.id !== formData.get('courseId'));
-				// Update the state with the new data
-				const newData = await response.json();
-				console.log('newData:', newData);
-				// data = newData; // Update the data object with the new data
-			} else {
-				console.error('Form submission failed');
-			}
-		} catch (error) {
-			console.error('Form submission error:', error);
-		}
-	}
 </script>
 
 <li>
@@ -73,7 +47,7 @@
 				<Button on:click={() => onAddCourse(requirement.id)}>Add Course</Button>
 			{/if}
 		</div>
-		{#each courses as course (course.id)}
+		{#each $poolCourses as course (course.id)}
 			<div class="mt-2 flex items-center">
 				<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
 					<div>
@@ -118,7 +92,18 @@
 								<option value={grade}>{grade}</option>
 							{/each}
 						</select>
-						<form method="POST" action="?/removeCourse" on:submit|preventDefault={handleSubmit}>
+						<form
+							method="POST"
+							action="?/removeCourse"
+							use:enhance={() => {
+								return async ({ update }) => {
+									poolCourses.update((poolCourses) => {
+										return poolCourses.filter((poolCourse) => poolCourse.id !== course.id);
+									});
+									await update();
+								};
+							}}
+						>
 							<input type="hidden" name="courseId" value={course.id} />
 							<input type="hidden" name="requirementId" value={requirement.id} />
 							<button type="submit" class="ml-2 text-red-500 hover:text-red-700">
