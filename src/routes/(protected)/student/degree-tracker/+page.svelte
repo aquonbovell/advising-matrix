@@ -184,49 +184,49 @@
 	let success = false;
 </script>
 
-<div class="mt-6 overflow-hidden">
-	<div class="flex flex-wrap items-start gap-x-12 px-4 py-2 text-sm">
-		<div class="flex min-w-[200px] flex-col items-start">
-			<span class="uppercase text-gray-500">Current Degree(S)</span>
-			<div class="font-semibold">
-				{#each degree.name as name}
-					<div>{name}</div>
-				{/each}
-			</div>
+<div class="flex flex-wrap items-start gap-x-12 text-sm">
+	<div class="flex min-w-[200px] flex-col items-start">
+		<span class="uppercase text-gray-500">Current Degree(S)</span>
+		<div class="font-semibold">
+			{#each degree.name as name}
+				<div>{name}</div>
+			{/each}
 		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Minor</span>
-			<span class="font-semibold">{degree.minor}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Classification</span>
-			<span class="font-semibold">{degree.classification}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Overall GPA</span>
-			<span class="font-semibold">{$gpa}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Academic Standing</span>
-			{#if Object.values($completedCoursesStore).filter((c) => c == true).length > 0}
-				{#if parseFloat($gpa) < 2.0}
-					<span class="font-semibold text-red-500">Academic Warning</span>
-				{:else}
-					<span class="font-semibold">Good Standing</span>
-				{/if}
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Minor</span>
+		<span class="font-semibold">{degree.minor}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Classification</span>
+		<span class="font-semibold">{degree.classification}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Overall GPA</span>
+		<span class="font-semibold">{$gpa}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Academic Standing</span>
+		{#if Object.values($completedCoursesStore).filter((c) => c == true).length > 0}
+			{#if parseFloat($gpa) < 2.0}
+				<span class="font-semibold text-red-500">Academic Warning</span>
 			{:else}
-				<span class="font-semibold">None</span>
+				<span class="font-semibold">Good Standing</span>
 			{/if}
-		</div>
+		{:else}
+			<span class="font-semibold">None</span>
+		{/if}
 	</div>
 </div>
 
-<h2 class="mb-4 text-xl font-semibold">Course Requirements</h2>
+<h2 class="my-4 text-xl font-semibold">Course Requirements</h2>
 
 <div class="flex flex-wrap items-center justify-between gap-y-2">
 	<div class="flex flex-wrap items-center gap-2">
 		<Button>All Courses</Button>
-		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
+		<Button
+			class=" flex w-max bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-700 hover:text-white"
+		>
 			<svg
 				class="mr-1 h-4 w-4"
 				fill="none"
@@ -242,7 +242,7 @@
 				></path>
 			</svg>
 			Still Needed ({$stillNeeded})
-		</button>
+		</Button>
 		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
 			<svg
 				class="mr-1 h-4 w-4"
@@ -302,6 +302,7 @@
 >
 	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
 
+	<h2 class="mb-2 text-xl font-bold">Level 1 Core</h2>
 	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
 		<ul class="divide-y divide-gray-200">
 			{#each programCourses as course (course.id)}
