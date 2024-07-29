@@ -35,7 +35,32 @@
 		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
 	}
 
-	let creating = false;
+	// Form submission handling
+	async function handleSubmit(event: Event) {
+		event.preventDefault();
+		const formEl = event.target as HTMLFormElement;
+
+		const formData = new FormData(formEl);
+
+		try {
+			const response = await fetch(formEl.action, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (response.ok) {
+				courses = courses.filter((course) => course.id !== formData.get('courseId'));
+				// Update the state with the new data
+				const newData = await response.json();
+				console.log('newData:', newData);
+				// data = newData; // Update the data object with the new data
+			} else {
+				console.error('Form submission failed');
+			}
+		} catch (error) {
+			console.error('Form submission error:', error);
+		}
+	}
 </script>
 
 <li>
@@ -93,25 +118,10 @@
 								<option value={grade}>{grade}</option>
 							{/each}
 						</select>
-						<form
-							method="POST"
-							action="?/removeCourse"
-							use:enhance={() => {
-								creating = true;
-								return async ({ update }) => {
-									await update();
-									courses = courses.filter((c) => c.id !== course.id);
-									creating = false;
-								};
-							}}
-						>
+						<form method="POST" action="?/removeCourse" on:submit|preventDefault={handleSubmit}>
 							<input type="hidden" name="courseId" value={course.id} />
 							<input type="hidden" name="requirementId" value={requirement.id} />
-							<button
-								type="submit"
-								class="ml-2 text-red-500 hover:text-red-700"
-								disabled={creating}
-							>
+							<button type="submit" class="ml-2 text-red-500 hover:text-red-700">
 								<TrashIcon />
 							</button>
 						</form>
