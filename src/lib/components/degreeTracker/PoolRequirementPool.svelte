@@ -5,17 +5,12 @@
 	import TrashIcon from '../icons/TrashIcon.svelte';
 	import { enhance } from '$app/forms';
 	import { poolCourses } from '$lib/stores/degreeTracker';
-	import type { SubmitFunction } from '@sveltejs/kit';
 
 	export let requirement: ProgramRequirement;
 	let courses: CourseWithRequirement[];
 	export let completedCoursesStore: any;
 	export let courseGradesStore: any;
 	export let onAddCourse: (requirementId: string) => void;
-
-	poolCourses.subscribe((value) => {
-		courses = value;
-	});
 
 	$: currentCredits = $poolCourses.reduce((sum, course) => sum + course.credits, 0);
 
@@ -73,6 +68,21 @@
 								{course.credits} Credits
 							</span>
 						</div>
+						{#if course.prerequisites && course.prerequisites.length > 0}
+							{@const unmetPrerequisites = course.prerequisites.filter(
+								(prereq) => !$completedCoursesStore[prereq.id]
+							)}
+							{#if unmetPrerequisites.length > 0}
+								<div class="mt-1 text-sm">
+									<span class="font-bold text-red-500">Prerequisites: </span>
+									<span class="text-gray-700">
+										{#each unmetPrerequisites as prereq}
+											<span class="mr-2">{prereq.code}</span>
+										{/each}
+									</span>
+								</div>
+							{/if}
+						{/if}
 					</div>
 					<div class="mt-4 flex flex-shrink-0 items-center sm:ml-5 sm:mt-0">
 						<input

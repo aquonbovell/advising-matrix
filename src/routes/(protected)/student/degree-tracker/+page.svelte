@@ -53,14 +53,14 @@
 		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
 	}
 
-	function addCourse(course: Course, requirementId: string) {
+	function addCourse(course: CourseWithPrerequisites, requirementId: string) {
 		programCoursesStore.update((courses) => [
 			...courses,
-			{ ...course, requirementId, prerequisites: [] } as CourseWithRequirement
+			{ ...course, requirementId } as CourseWithRequirement
 		]);
 		poolCourses.update((courses) => [
 			...courses,
-			{ ...course, requirementId, prerequisites: [] } as CourseWithRequirement
+			{ ...course, requirementId } as CourseWithRequirement
 		]);
 		courseGradesStore.update((grades) => ({ ...grades, [course.id]: '' }));
 		completedCoursesStore.update((completed) => ({ ...completed, [course.id]: false }));
