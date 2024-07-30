@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { gradePoints } from '$lib/types';
 	import type { CourseWithPrerequisites, Grade } from '$lib/types';
-	import { derived } from 'svelte/store';
+	import { derived, type Writable } from 'svelte/store';
 
 	export let course: CourseWithPrerequisites;
-	export let completedCoursesStore: any;
+	export let completedCoursesStore: Writable<Record<string, boolean>>;
 	export let courseGradesStore: any;
 
 	const arePrerequisitesMetStore = derived(completedCoursesStore, ($completedCoursesStore) => {
