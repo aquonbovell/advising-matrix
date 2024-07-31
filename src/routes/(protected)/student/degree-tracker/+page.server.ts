@@ -62,6 +62,9 @@ async function getProgram(userId: string): Promise<Program | null> {
 }
 
 async function getCourses(courseIds: string[]): Promise<CourseWithPrerequisites[]> {
+	if (courseIds.length === 0) {
+		return [];
+	}
 	const [courses, prerequisites] = await Promise.all([
 		db.selectFrom('Course').where('id', 'in', courseIds).selectAll().execute(),
 		db
