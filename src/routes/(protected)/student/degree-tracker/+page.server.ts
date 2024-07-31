@@ -21,7 +21,11 @@ async function getStudentId(userId: string): Promise<string | null> {
 }
 
 async function getProgram(userId: string): Promise<Program | null> {
-	const user = await db.selectFrom('Student').where('user_id', '=', userId).select('Student.program_id').executeTakeFirst();
+	const user = await db
+		.selectFrom('Student')
+		.where('user_id', '=', userId)
+		.select('Student.program_id')
+		.executeTakeFirst();
 	const program = await db
 		.selectFrom('Program')
 		.leftJoin('ProgramRequirement', 'Program.id', 'ProgramRequirement.programId')

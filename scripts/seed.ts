@@ -179,7 +179,7 @@ async function seed() {
 			for (const element of degree.requirements) {
 				if (element.name === 'Chemistry') {
 					console.log('Chemistry program detected, skipping');
-					console.log(element)
+					console.log(element);
 				}
 				const requirementId = randomUUID();
 				if (element.type === 'CREDITS') {
@@ -189,7 +189,7 @@ async function seed() {
 						programId: programId,
 						type: 'CREDITS',
 						credits: requirementDetails.courses.length * 3, // Assuming each course is 3 credits
-						details: JSON.stringify({courses: requirementDetails.courses})
+						details: JSON.stringify({ courses: requirementDetails.courses })
 					});
 					console.log('Credits seeded successfully for:', programId);
 				} else if (element.type === 'POOL') {
@@ -207,7 +207,7 @@ async function seed() {
 					console.log('Pool seeded successfully for:', programId);
 				}
 				console.log('Electives seeded successfully for:', programId);
-			};
+			}
 		}
 	} catch (error) {
 		console.error('Error inserting program:', error);

@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 for (const degree of degreeData) {
 	const programId = randomUUID();
 
-  console.log('Degree Name:', degree.name, 'Program ID:', programId);
+	console.log('Degree Name:', degree.name, 'Program ID:', programId);
 	// Insert Programs
 	// await insertOrIgnore('Program', {
 	// 	id: programId,
@@ -18,8 +18,8 @@ for (const degree of degreeData) {
 		const requirementId = randomUUID();
 		if (element.type === 'CREDITS') {
 			const requirementDetails = element.courses;
-      console.log(requirementDetails.length);
-      console.log('Courses:', requirementDetails);
+			console.log(requirementDetails.length);
+			console.log('Courses:', requirementDetails);
 			// await insertOrIgnore('ProgramRequirement', {
 			// 	id: requirementId,
 			// 	programId: programId,
@@ -33,7 +33,7 @@ for (const degree of degreeData) {
 				facultyPool: element.facultyPool
 			};
 
-      console.log('Pool:', requirementDetails);
+			console.log('Pool:', requirementDetails);
 			// await insertOrIgnore('ProgramRequirement', {
 			// 	id: requirementId,
 			// 	programId: programId,
