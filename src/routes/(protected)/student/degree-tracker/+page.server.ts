@@ -20,7 +20,8 @@ async function getStudentId(userId: string): Promise<string | null> {
 		.then((result) => result?.id ?? null);
 }
 
-async function getProgram(programName: string): Promise<Program | null> {
+async function getProgram(userId: string): Promise<Program | null> {
+	const user = await db.selectFrom('Student').where('user_id', '=', userId).select('Student.program_id').executeTakeFirst();
 	const program = await db
 		.selectFrom('Program')
 		.leftJoin('ProgramRequirement', 'Program.id', 'ProgramRequirement.programId')
@@ -33,7 +34,7 @@ async function getProgram(programName: string): Promise<Program | null> {
 			'ProgramRequirement.credits',
 			'ProgramRequirement.details'
 		])
-		.where('Program.name', '=', programName)
+		.where('Program.id', '=', user!.program_id)
 		.execute();
 
 	if (!program.length) return null;
@@ -157,7 +158,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const studentId = await getStudentId(userId);
 	if (!studentId) throw error(404, 'Student not found');
 
-	const program = await getProgram('Computer Science');
+	const program = await getProgram(userId);
 	if (!program) throw error(404, 'Program not found');
 
 	const [programCourses, electiveCourses, studentCourses] = await Promise.all([
