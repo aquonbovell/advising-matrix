@@ -96,6 +96,10 @@ async function getElectiveCourses(
 	requirements: ProgramRequirement[]
 ): Promise<CourseWithPrerequisites[]> {
 	const poolRequirements = requirements.filter((req) => req.type === 'POOL');
+	if (poolRequirements.length === 0) {
+		return [];
+	}
+
 	const courseIds = await Promise.all(
 		poolRequirements.map(async (req) => {
 			const details = req.details as { levelPool: string[]; facultyPool: string[] | 'any' };
@@ -118,7 +122,8 @@ async function getElectiveCourses(
 		})
 	);
 
-	return getCourses(courseIds.flat());
+	const flattenedCourseIds = courseIds.flat();
+	return flattenedCourseIds.length > 0 ? getCourses(flattenedCourseIds) : [];
 }
 
 async function getStudentCourses(studentId: string): Promise<Record<string, StudentGrade>> {
@@ -174,7 +179,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 				req.type === 'CREDITS' && 'courses' in req.details ? req.details.courses : []
 			)
 		),
-		getElectiveCourses(program.requirements),
+		getElectiveCourses(program.requirements.filter((req) => req.type === 'POOL')),
 		getStudentCourses(studentId)
 	]);
 
