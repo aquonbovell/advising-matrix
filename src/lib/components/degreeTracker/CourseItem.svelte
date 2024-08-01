@@ -2,23 +2,24 @@
 	import { gradePoints } from '$lib/types';
 	import type { CourseWithPrerequisites, Grade } from '$lib/types';
 	import { derived, type Writable } from 'svelte/store';
+	import { completedCourses, courseGrades } from '$lib/stores/degreeTracker';
 
 	export let course: CourseWithPrerequisites;
-	export let completedCoursesStore: Writable<Record<string, boolean>>;
-	export let courseGradesStore: any;
+	// export let completedCourses: Writable<Record<string, boolean>>;
+	// export let courseGrades: any;
 
-	const arePrerequisitesMetStore = derived(completedCoursesStore, ($completedCoursesStore) => {
+	const arePrerequisitesMetStore = derived(completedCourses, ($completedCourses) => {
 		if (!course.prerequisites || course.prerequisites.length === 0) return true;
-		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
+		return course.prerequisites.every((prereq) => $completedCourses[prereq.id]);
 	});
 
 	function handleGradeChange(courseId: string, event: Event) {
 		const target = event.target as HTMLSelectElement;
-		courseGradesStore.update((grades: Record<string, '' | Grade>) => ({
+		courseGrades.update((grades: Record<string, '' | Grade>) => ({
 			...grades,
 			[courseId]: target.value as Grade
 		}));
-		completedCoursesStore.update((completed: Record<string, boolean>) => ({
+		completedCourses.update((completed: Record<string, boolean>) => ({
 			...completed,
 			[courseId]: !!target.value
 		}));
@@ -34,7 +35,7 @@
 						type="checkbox"
 						id={`course-${course.id}`}
 						name={`courses[${course.id}].completed`}
-						bind:checked={$completedCoursesStore[course.id]}
+						bind:checked={$completedCourses[course.id]}
 						class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
 						disabled
 					/>
@@ -53,7 +54,7 @@
 				</div>
 				{#if course.prerequisites && course.prerequisites.length > 0}
 					{@const unmetPrerequisites = course.prerequisites.filter(
-						(prereq) => !$completedCoursesStore[prereq.id]
+						(prereq) => !$completedCourses[prereq.id]
 					)}
 					{#if unmetPrerequisites.length > 0}
 						<div class="mt-1 text-sm">
@@ -70,7 +71,7 @@
 			<div class="mt-4 flex-shrink-0 sm:ml-5 sm:mt-0">
 				<select
 					name={`courses[${course.id}].grade`}
-					value={$courseGradesStore[course.id] ?? ''}
+					value={$courseGrades[course.id] ?? ''}
 					on:change={(e) => handleGradeChange(course.id, e)}
 					class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 					disabled={!$arePrerequisitesMetStore}

@@ -4,23 +4,24 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import TrashIcon from '../icons/TrashIcon.svelte';
 	import { enhance } from '$app/forms';
-	import { poolCourses } from '$lib/stores/degreeTracker';
+	import { completedCourses, courseGrades } from '$lib/stores/degreeTracker';
+	import { writable, type Writable } from 'svelte/store';
 
 	export let requirement: ProgramRequirement;
-	let courses: CourseWithRequirement[];
-	export let completedCoursesStore: any;
-	export let courseGradesStore: any;
+	export let courses: Writable<CourseWithRequirement[]> = writable([]);
+	// export let completedCourses: any;
+	// export let courseGrades: any;
 	export let onAddCourse: (requirementId: string) => void;
 
-	$: currentCredits = $poolCourses.reduce((sum, course) => sum + course.credits, 0);
+	$: currentCredits = $courses.reduce((sum, course) => sum + course.credits, 0);
 
 	function handleGradeChange(courseId: string, event: Event) {
 		const target = event.target as HTMLSelectElement;
-		courseGradesStore.update((grades: Record<string, '' | Grade>) => ({
+		courseGrades.update((grades: Record<string, '' | Grade>) => ({
 			...grades,
 			[courseId]: target.value as Grade
 		}));
-		completedCoursesStore.update((completed: Record<string, boolean>) => ({
+		completedCourses.update((completed: Record<string, boolean>) => ({
 			...completed,
 			[courseId]: !!target.value
 		}));
@@ -28,7 +29,7 @@
 
 	function arePrerequisitesMet(course: CourseWithRequirement): boolean {
 		if (!course.prerequisites || course.prerequisites.length === 0) return true;
-		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
+		return course.prerequisites.every((prereq) => $completedCourses[prereq.id]);
 	}
 </script>
 
@@ -36,13 +37,14 @@
 	<div class="flex flex-col px-4 py-4 sm:px-6">
 		<div class="flex items-center justify-between">
 			<span class="font-medium text-gray-900">
-				{requirement.type} Requirement ({currentCredits}/{requirement.credits} credits)
+				Level {requirement.details?.levelPool[0]} Requirement ({currentCredits}/{requirement.credits}
+				credits)
 			</span>
 			{#if currentCredits < requirement.credits}
 				<Button on:click={() => onAddCourse(requirement.id)}>Add Course</Button>
 			{/if}
 		</div>
-		{#each $poolCourses as course (course.id)}
+		{#each $courses as course (course.id)}
 			<div class="mt-2 flex items-center">
 				<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
 					<div>
@@ -51,7 +53,7 @@
 								type="checkbox"
 								id={`course-${course.id}`}
 								name={`courses[${course.id}].completed`}
-								bind:checked={$completedCoursesStore[course.id]}
+								bind:checked={$completedCourses[course.id]}
 								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
 								disabled
 							/>
@@ -70,7 +72,7 @@
 						</div>
 						{#if course.prerequisites && course.prerequisites.length > 0}
 							{@const unmetPrerequisites = course.prerequisites.filter(
-								(prereq) => !$completedCoursesStore[prereq.id]
+								(prereq) => !$completedCourses[prereq.id]
 							)}
 							{#if unmetPrerequisites.length > 0}
 								<div class="mt-1 text-sm">
@@ -92,7 +94,7 @@
 						/>
 						<select
 							name={`courses[${course.id}].grade`}
-							value={$courseGradesStore[course.id] ?? ''}
+							value={$courseGrades[course.id] ?? ''}
 							on:change={(e) => handleGradeChange(course.id, e)}
 							class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 							disabled={!arePrerequisitesMet(course)}
@@ -107,8 +109,8 @@
 							action="?/removeCourse"
 							use:enhance={() => {
 								return async ({ update }) => {
-									poolCourses.update((poolCourses) => {
-										return poolCourses.filter((poolCourse) => poolCourse.id !== course.id);
+									courses.update((Oldcourses) => {
+										return Oldcourses.filter((poolCourse) => poolCourse.id !== course.id);
 									});
 									await update();
 								};

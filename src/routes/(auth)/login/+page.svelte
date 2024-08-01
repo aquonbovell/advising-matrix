@@ -3,7 +3,7 @@
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import Button from '$lib/components/ui/Button.svelte';
 	import { superForm } from 'sveltekit-superforms';
-	// export let form;
+
 	export let data;
 
 	const { form, errors, constraints, enhance, submitting, delayed, timeout } = superForm(
@@ -16,7 +16,7 @@
 </script>
 
 <div
-	class="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#fdfdfc] to-[#f9f9f8] font-sans"
+	class="flex min-h-full items-center justify-center bg-gradient-to-b from-[#fdfdfc] to-[#f9f9f8] font-sans"
 >
 	<div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-lg">
 		<div class="mb-8 flex justify-center">

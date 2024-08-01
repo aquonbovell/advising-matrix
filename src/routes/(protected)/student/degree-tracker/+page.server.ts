@@ -99,7 +99,6 @@ async function getElectiveCourses(
 	if (poolRequirements.length === 0) {
 		return [];
 	}
-
 	const courseIds = await Promise.all(
 		poolRequirements.map(async (req) => {
 			const details = req.details as { levelPool: string[]; facultyPool: string[] | 'any' };
@@ -187,11 +186,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 	// console.log('Program:', program);
 	// console.log('Program Courses:', programCourses);
 	// console.log('Elective Courses:', electiveCourses);
-	console.log('Student Courses:', studentCourses);
+	// console.log('Student Courses:', studentCourses);
 
 	return {
 		program,
-		programCourses,
+		degreeCourses: programCourses,
 		electiveCourses,
 		studentCourses,
 		requirements: program.requirements
@@ -207,6 +206,8 @@ export const actions: Actions = {
 		if (!studentId) return fail(404, { message: 'Student not found' });
 
 		const formData = await request.formData();
+
+		console.log('Form Data:', formData);
 		const courseEntries = Array.from(formData.entries())
 			.filter(([key, value]) => key.startsWith('courses[') && key.endsWith('].grade'))
 			.map(([key, value]) => {
@@ -218,6 +219,7 @@ export const actions: Actions = {
 				};
 			});
 
+		console.log('Course Entries:', courseEntries);
 		try {
 			await db.transaction().execute(async (trx) => {
 				await trx.deleteFrom('StudentCourse').where('studentId', '=', studentId).execute();
@@ -254,6 +256,10 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const courseId = formData.get('courseId') as string;
 		const requirementId = formData.get('requirementId') as string;
+
+		console.log('Removing course:', courseId, requirementId);
+
+		console.log('Form Data:', formData);
 
 		if (!courseId || !requirementId) {
 			return fail(400, { message: 'Missing course or requirement ID' });

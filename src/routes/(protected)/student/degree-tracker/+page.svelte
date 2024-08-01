@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Button from '$lib/components/ui/Button.svelte';
+	import UIButton from '$lib/components/UIButton.svelte';
 	import ProgressBar from '$lib/components/ui/ProgressBar.svelte';
 	import {
 		gradePoints,
@@ -8,62 +9,65 @@
 		type CourseWithRequirement,
 		type Grade
 	} from '$lib/types';
-	import { derived, writable } from 'svelte/store';
+	import { derived, get, writable } from 'svelte/store';
 	import type { PageData } from './$types';
 	import type { Course } from '$lib/db/schema';
+
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import CourseItem from '$lib/components/degreeTracker/CourseItem.svelte';
 	import PoolRequirementItem from '$lib/components/degreeTracker/PoolRequirementPool.svelte';
-	import { poolCourses } from '$lib/stores/degreeTracker';
-	import { onMount } from 'svelte';
-	import { createMajorMinor } from '$lib/utils';
+	import {
+		getPoolCourses,
+		setPoolCourses,
+		updatePoolCourses
+	} from '$lib/components/degreeTracker/context';
+	import Header from '$lib/components/degreeTracker/header.svelte';
+	import DangerIcon from '$lib/components/icons/DangerIcon.svelte';
+	import TickIcon from '$lib/components/icons/TickIcon.svelte';
+	import LoadingIcon from '$lib/components/icons/LoadingIcon.svelte';
+	import { arePrerequisitesMet } from '$lib/utils';
+	import {
+		appliedCredits,
+		completedCourses,
+		courseGrades,
+		gpa,
+		inProgress,
+		programCourses,
+		totalCredits,
+		stillNeeded,
+		complete,
+		progressPercentage
+	} from '$lib/stores/degreeTracker';
 
 	export let data: PageData;
 
 	// Destructure data
-	let { program, programCourses, electiveCourses, studentCourses, requirements } = data;
+	let { program, degreeCourses, electiveCourses, studentCourses, requirements } = data;
 
 	// Local state
 	let dialogOpen = false;
 	let currentRequirement: string | null = null;
 
-	let degreeName = createMajorMinor(data.program.name);
-
-	let degree = {
-		...degreeName,
-		classification: 'Level III/Third Year'
-	};
-
-	// Stores
-	const courseGradesStore = writable<Record<string, Grade | ''>>({});
-	const completedCoursesStore = writable<Record<string, boolean>>({});
-	const programCoursesStore = writable<CourseWithRequirement[]>([]);
-
 	// Pool courses
-	onMount(() => {
-		requirements.forEach((req) => {
-			if (req.type === 'POOL' && req.credits > 0)
-				poolCourses.set($programCoursesStore.filter((course) => course.requirementId === req.id));
-		});
+	$: requirements.forEach((req) => {
+		if (req.type === 'POOL' && req.credits > 0) {
+			console.log(req.id);
+			setPoolCourses(
+				req.id,
+				$programCourses.filter((course) => course.requirementId === req.id)
+			);
+		}
 	});
 
-	// Helper functions
-	function arePrerequisitesMet(course: CourseWithPrerequisites | CourseWithRequirement): boolean {
-		if (!course.prerequisites || course.prerequisites.length === 0) return true;
-		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
-	}
-
 	function addCourse(course: CourseWithPrerequisites, requirementId: string) {
-		programCoursesStore.update((courses) => [
+		programCourses.update((courses) => [
 			...courses,
 			{ ...course, requirementId } as CourseWithRequirement
 		]);
-		poolCourses.update((courses) => [
-			...courses,
-			{ ...course, requirementId } as CourseWithRequirement
-		]);
-		courseGradesStore.update((grades) => ({ ...grades, [course.id]: '' }));
-		completedCoursesStore.update((completed) => ({ ...completed, [course.id]: false }));
+		console.log(requirementId);
+		updatePoolCourses(requirementId, { ...course, requirementId });
+		courseGrades.update((grades) => ({ ...grades, [course.id]: '' }));
+		completedCourses.update((completed) => ({ ...completed, [course.id]: false }));
 		dialogOpen = false;
 	}
 
@@ -83,11 +87,11 @@
 
 	// Reactive statements
 	$: if (programCourses) {
-		programCoursesStore.set(programCourses.map((course) => ({ ...course, requirementId: null })));
+		programCourses.set(degreeCourses.map((course) => ({ ...course, requirementId: null })));
 	}
 
 	$: if (programCourses && studentCourses) {
-		const allCourses: CourseWithRequirement[] = programCourses.map((course) => ({
+		const allCourses: CourseWithRequirement[] = degreeCourses.map((course) => ({
 			...course,
 			requirementId: null
 		}));
@@ -105,7 +109,7 @@
 			}
 		});
 
-		programCoursesStore.set(allCourses);
+		programCourses.set(allCourses);
 
 		const grades: Record<string, Grade | ''> = {};
 		const completed: Record<string, boolean> = {};
@@ -117,171 +121,42 @@
 			completed[course.id] = !!grade && arePrerequisitesMet(course);
 		});
 
-		courseGradesStore.set(grades);
-		completedCoursesStore.set(completed);
+		courseGrades.set(grades);
+		completedCourses.set(completed);
 	}
-
-	// Derived values
-	const totalCredits = derived(
-		programCoursesStore,
-		($programCourses) => $programCourses.reduce((sum, course) => sum + course.credits, 0) || 0
-	);
-
-	const appliedCredits = derived(
-		[completedCoursesStore, courseGradesStore, programCoursesStore],
-		([$completed, $grades, $programCourses]) =>
-			$programCourses.reduce(
-				(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
-				0
-			) || 0
-	);
-
-	const inProgress = derived(completedCoursesStore, ($completedCoursesStore) => {
-		return (
-			$programCoursesStore.filter(
-				(course) => !$completedCoursesStore[course.id] && arePrerequisitesMet(course)
-			).length || 0
-		);
-	});
-
-	const stillNeeded = derived(
-		completedCoursesStore,
-		($completed) => $programCoursesStore.filter((course) => !$completed[course.id]).length || 0
-	);
-
-	const complete = derived(
-		completedCoursesStore,
-		($completed) => $programCoursesStore.filter((course) => $completed[course.id]).length || 0
-	);
-
-	const progressPercentage = derived(
-		appliedCredits,
-		($applied) => ($applied / $totalCredits) * 100
-	);
-
-	const gpa = derived(
-		[courseGradesStore, completedCoursesStore, programCoursesStore],
-		([$grades, $completed, $programCourses]) => {
-			let totalPoints = 0;
-			let totalCredits = 0;
-
-			if ($programCourses && Array.isArray($programCourses)) {
-				$programCourses.forEach((course) => {
-					if ($completed[course.id]) {
-						const grade = $grades[course.id];
-						if (grade && grade in gradePoints) {
-							totalPoints += gradePoints[grade] * course.credits;
-							totalCredits += course.credits;
-						}
-					}
-				});
-			}
-
-			return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
-		}
-	);
 
 	// Form submission handling
 	let loading = false;
 	let success = false;
 </script>
 
-<div class="flex flex-wrap items-start gap-x-12 text-sm">
-	<div class="flex min-w-[200px] flex-col items-start">
-		<span class="uppercase text-gray-500">Current Degree(S)</span>
-		<div class="font-semibold">
-			{#each degree.major as name}
-				<div>{name}</div>
-			{/each}
-		</div>
-	</div>
-	<div class="flex flex-col items-center">
-		<span class="uppercase text-gray-500">Minor</span>
-		<span class="font-semibold">{degree.minor}</span>
-	</div>
-	<div class="flex flex-col items-center">
-		<span class="uppercase text-gray-500">Classification</span>
-		<span class="font-semibold">{degree.classification}</span>
-	</div>
-	<div class="flex flex-col items-center">
-		<span class="uppercase text-gray-500">Overall GPA</span>
-		<span class="font-semibold">{$gpa}</span>
-	</div>
-	<div class="flex flex-col items-center">
-		<span class="uppercase text-gray-500">Academic Standing</span>
-		{#if Object.values($completedCoursesStore).filter((c) => c == true).length > 0}
-			{#if parseFloat($gpa) < 2.0}
-				<span class="font-semibold text-red-500">Academic Warning</span>
-			{:else}
-				<span class="font-semibold">Good Standing</span>
-			{/if}
-		{:else}
-			<span class="font-semibold">None</span>
-		{/if}
-	</div>
-</div>
+<!-- Header -->
+<Header degreeName={data.program.name} />
 
-<h2 class="my-4 text-xl font-semibold">Course Requirements</h2>
+<h2 class="my-2 text-xl font-semibold">Course Requirements</h2>
 
-<div class="flex flex-wrap items-center justify-between gap-y-2">
-	<div class="flex flex-wrap items-center gap-2">
-		<Button>All Courses</Button>
-		<Button
-			class=" flex w-max bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-700 hover:text-white"
-		>
-			<svg
-				class="mr-1 h-4 w-4"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-				></path>
-			</svg>
+<div class="grid items-center justify-between gap-y-4 md:grid-cols-12">
+	<div class="flex flex-wrap items-center gap-3 md:col-span-8">
+		<UIButton class="bg-blue-700 hover:bg-blue-500">All Courses</UIButton>
+		<UIButton class="bg-red-500  hover:bg-red-400">
+			<DangerIcon />
 			Still Needed ({$stillNeeded})
-		</Button>
-		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
-			<svg
-				class="mr-1 h-4 w-4"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-				></path>
-			</svg>
+		</UIButton>
+		<UIButton class="bg-amber-500 hover:bg-amber-300">
+			<LoadingIcon />
 			In Progress ({$inProgress})
-		</button>
-		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
-			<svg
-				class="mr-1 h-4 w-4"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"
-				></path>
-			</svg>
+		</UIButton>
+		<UIButton class="bg-green-600 hover:bg-green-400">
+			<TickIcon />
 			Complete ({$complete})
-		</button>
+		</UIButton>
 	</div>
 
-	<div class="flex flex-col items-end">
+	<div class="flex w-full flex-col items-end md:col-span-4">
 		<div class="mb-1 text-sm text-gray-600">
 			{$appliedCredits}/{$totalCredits} Credits Applied
 		</div>
-		<div class="w-48">
+		<div class="min-w-full">
 			<ProgressBar progress={$progressPercentage} size="sm" />
 		</div>
 	</div>
@@ -302,20 +177,23 @@
 		};
 	}}
 >
-	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
+	<h1 class="my-3 text-2xl font-bold">Courses for {program.name}</h1>
 
 	<h2 class="mb-2 text-xl font-bold">Level 1 Core</h2>
-	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
+	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
-			{#each programCourses as course (course.id)}
-				<CourseItem {course} {completedCoursesStore} {courseGradesStore} />
+			{#each degreeCourses as course (course.id)}
+				<CourseItem {course} />
 			{/each}
+		</ul>
+	</div>
+	<div class="my-3 rounded-lg bg-white shadow">
+		<ul class="divide-y divide-gray-200">
 			{#each requirements as req}
 				{#if req.type === 'POOL' && req.credits > 0}
 					<PoolRequirementItem
 						requirement={req}
-						{completedCoursesStore}
-						{courseGradesStore}
+						courses={getPoolCourses(req.id)}
 						onAddCourse={openAddCourseModal}
 					/>
 				{/if}
@@ -330,7 +208,7 @@
 			class="w-full rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 		>
 			<option value="">Select a course...</option>
-			{#each electiveCourses.filter((electiveCourse) => $poolCourses.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1 && $programCoursesStore.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1) as course}
+			{#each electiveCourses.filter((electiveCourse) => $programCourses.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1) as course}
 				<option value={course.id}>{course.code} - {course.name}</option>
 			{/each}
 		</select>
@@ -347,10 +225,10 @@
 	<div class="mt-6">
 		<Button type="submit" {loading}>Save Changes</Button>
 		{#if loading}
-			<span class="ml-2">Saving...</span>
+			<span class="ml-2 text-sm">Saving...</span>
 		{/if}
 		{#if success}
-			<span class="ml-2 text-green-500">Changes saved successfully</span>
+			<span class="ml-2 text-sm text-green-500">Changes saved successfully</span>
 		{/if}
 	</div>
 </form>
