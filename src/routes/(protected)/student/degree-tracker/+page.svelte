@@ -51,7 +51,6 @@
 	// Pool courses
 	$: requirements.forEach((req) => {
 		if (req.type === 'POOL' && req.credits > 0) {
-			console.log(req.id);
 			setPoolCourses(
 				req.id,
 				$programCourses.filter((course) => course.requirementId === req.id)
@@ -202,6 +201,15 @@
 						onAddCourse={openAddCourseModal}
 					/>
 				{/if}
+			{/each}
+		</ul>
+	</div>
+
+	<h2 class="mb-2 text-xl font-bold">Level 2 Core</h2>
+	<div class="rounded-lg bg-white shadow">
+		<ul class="divide-y divide-gray-200">
+			{#each degreeCourses.filter((course) => course.code[4] === '2') as course (course.id)}
+				<CourseItem {course} />
 			{/each}
 		</ul>
 	</div>

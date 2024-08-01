@@ -184,9 +184,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	// *Debugging
 	// console.log('Program:', program);
-	// console.log('Program Courses:', programCourses);
-	// console.log('Elective Courses:', electiveCourses);
-	// console.log('Student Courses:', studentCourses);
+	console.log('Program Courses:', programCourses);
+	console.log('Elective Courses:', electiveCourses);
+	console.log('Student Courses:', studentCourses);
 
 	return {
 		program,
