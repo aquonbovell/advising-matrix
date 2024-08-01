@@ -131,6 +131,11 @@
 </script>
 
 <!-- Header -->
+<!-- {JSON.stringify(
+	degreeCourses.filter((course) => course.code[4] === '1'),
+	null,
+	2
+)} -->
 <Header degreeName={data.program.name} />
 
 <h2 class="my-2 text-xl font-semibold">Course Requirements</h2>
@@ -182,7 +187,7 @@
 	<h2 class="mb-2 text-xl font-bold">Level 1 Core</h2>
 	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
-			{#each degreeCourses as course (course.id)}
+			{#each degreeCourses.filter((course) => course.code[4] === '1') as course (course.id)}
 				<CourseItem {course} />
 			{/each}
 		</ul>
