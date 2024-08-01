@@ -109,6 +109,11 @@
 							action="?/removeCourse"
 							use:enhance={() => {
 								return async ({ update }) => {
+									completedCourses.update((OldcompletedCourses) => {
+										const newCompletedCourses = { ...OldcompletedCourses };
+										delete newCompletedCourses[course.id];
+										return newCompletedCourses;
+									});
 									courses.update((Oldcourses) => {
 										return Oldcourses.filter((poolCourse) => poolCourse.id !== course.id);
 									});

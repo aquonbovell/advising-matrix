@@ -15,14 +15,14 @@ export function setPoolCourses(requirementId: string, courses: CourseWithRequire
 		poolCourses.set(requirementId, writable(courses));
 	} else {
 		const store = poolCourses.get(requirementId);
-		store.set(courses);
+		store!.set(courses);
 	}
 }
 
 export function updatePoolCourses(requirementId: string, course: CourseWithRequirement) {
 	const store = getPoolCourses(requirementId);
-	store.update((courses) => [...courses, course]);
-	setPoolCourses(requirementId, get(store));
+	store!.update((courses) => [...courses, course]);
+	// setPoolCourses(requirementId, get(store));
 	getPoolCourses(requirementId)?.subscribe((courses) => {
 		console.log('Courses:', courses);
 	});
