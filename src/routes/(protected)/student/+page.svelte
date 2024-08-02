@@ -15,7 +15,7 @@
 	let electiveCredits = 3 * 1;
 	let foundationCredits = 3 * 1;
 	// let name = data.user?.name;
-	let name = "John"
+	let name = 'John';
 	let major = 'BSc Computer Science';
 	let studentId = 400000000;
 </script>

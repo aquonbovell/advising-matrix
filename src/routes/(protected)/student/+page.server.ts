@@ -9,7 +9,7 @@ export const load = (async ({ locals }) => {
 		.executeTakeFirst();
 	if (!data) {
 		return {
-            student: null
+			student: null
 		};
 	}
 	return {
