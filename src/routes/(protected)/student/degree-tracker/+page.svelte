@@ -1,106 +1,234 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
 	import Button from '$lib/components/ui/Button.svelte';
-	import Loading from '$lib/components/ui/Loading.svelte';
 	import ProgressBar from '$lib/components/ui/ProgressBar.svelte';
-	import type { Course } from '$lib/db/schema';
 	import {
 		gradePoints,
-		type CourseRequirement,
-		type Grade,
-		type ProgramRequirement
+		type CourseWithPrerequisites,
+		type CourseWithRequirement,
+		type Grade
 	} from '$lib/types';
-	import { writable } from 'svelte/store';
+	import { derived, writable } from 'svelte/store';
+	import type { PageData } from './$types';
+	import type { Course } from '$lib/db/schema';
+	import Modal from '$lib/components/ui/Modal.svelte';
+	import CourseItem from '$lib/components/degreeTracker/CourseItem.svelte';
+	import PoolRequirementItem from '$lib/components/degreeTracker/PoolRequirementPool.svelte';
+	import { poolCourses } from '$lib/stores/degreeTracker';
+	import { onMount } from 'svelte';
+	import { createMajorMinor } from '$lib/utils';
 
-	let user = $page.data.user;
-	let program = $page.data.program;
-	let programCourses: Course[] = $page.data.programCourses;
-	let requirement = program.requirement as ProgramRequirement;
+	export let data: PageData;
 
-	let currentTerm = 'Spring 2024 (Current)';
+	// Destructure data
+	let { program, programCourses, electiveCourses, studentCourses, requirements } = data;
+
+	// Local state
+	let dialogOpen = false;
+	let currentRequirement: string | null = null;
+
+	let degreeName = createMajorMinor(data.program.name);
+
 	let degree = {
-		name: ['BSc Computer Science', 'BSc Mathematics'],
-		minor: 'N/A',
-		classification: 'Level III/Third Year',
-		gpa: 1.9
+		...degreeName,
+		classification: 'Level III/Third Year'
 	};
 
-	const courseGradesStore = writable<Record<string, Grade>>({});
+	// Stores
+	const courseGradesStore = writable<Record<string, Grade | ''>>({});
+	const completedCoursesStore = writable<Record<string, boolean>>({});
+	const programCoursesStore = writable<CourseWithRequirement[]>([]);
 
-	function updateGrade(courseId: string, grade: Grade) {
-		courseGradesStore.update((grades) => ({ ...grades, [courseId]: grade }));
+	// Pool courses
+	onMount(() => {
+		requirements.forEach((req) => {
+			if (req.type === 'POOL' && req.credits > 0)
+				poolCourses.set($programCoursesStore.filter((course) => course.requirementId === req.id));
+		});
+	});
+
+	// Helper functions
+	function arePrerequisitesMet(course: CourseWithPrerequisites | CourseWithRequirement): boolean {
+		if (!course.prerequisites || course.prerequisites.length === 0) return true;
+		return course.prerequisites.every((prereq) => $completedCoursesStore[prereq.id]);
 	}
 
-	function handleGradeChange(courseId: string, event: Event) {
-		const target = event.target as HTMLSelectElement;
-		const grade = target.value as Grade;
-		updateGrade(courseId, grade);
+	function addCourse(course: CourseWithPrerequisites, requirementId: string) {
+		programCoursesStore.update((courses) => [
+			...courses,
+			{ ...course, requirementId } as CourseWithRequirement
+		]);
+		poolCourses.update((courses) => [
+			...courses,
+			{ ...course, requirementId } as CourseWithRequirement
+		]);
+		courseGradesStore.update((grades) => ({ ...grades, [course.id]: '' }));
+		completedCoursesStore.update((completed) => ({ ...completed, [course.id]: false }));
+		dialogOpen = false;
 	}
 
-	let totalCredits = 114;
-	let appliedCredits = 90;
-	let stillNeeded = 8;
-	let inProgress = 5;
-	let complete = 30;
+	function handleAddCourse() {
+		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
+		const selectedCourseId = courseElement?.value;
+		if (selectedCourseId && currentRequirement) {
+			const selectedCourse = electiveCourses.find((c) => c.id === selectedCourseId);
+			if (selectedCourse) addCourse(selectedCourse, currentRequirement);
+		}
+	}
 
-	$: gpa = calculateGPA($courseGradesStore);
-	$: progressPercentage = (appliedCredits / totalCredits) * 100;
+	function openAddCourseModal(requirementId: string) {
+		currentRequirement = requirementId;
+		dialogOpen = true;
+	}
 
-	function calculateGPA(grades: Record<string, Grade>) {
-		let totalPoints = 0;
-		let totalCredits = 0;
+	// Reactive statements
+	$: if (programCourses) {
+		programCoursesStore.set(programCourses.map((course) => ({ ...course, requirementId: null })));
+	}
 
-		programCourses.forEach((course) => {
-			const grade = grades[course.id];
-			if (grade !== null && grade !== undefined) {
-				totalPoints += gradePoints[grade] * course.credits;
-				totalCredits += course.credits;
+	$: if (programCourses && studentCourses) {
+		const allCourses: CourseWithRequirement[] = programCourses.map((course) => ({
+			...course,
+			requirementId: null
+		}));
+
+		Object.entries(studentCourses).forEach(([courseId, courseData]) => {
+			if (courseData.requirementId && !allCourses.some((c) => c.id === courseId)) {
+				const course = electiveCourses.find((c) => c.id === courseId);
+				if (course) {
+					allCourses.push({
+						...course,
+						requirementId: courseData.requirementId,
+						prerequisites: []
+					});
+				}
 			}
 		});
 
-		return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+		programCoursesStore.set(allCourses);
+
+		const grades: Record<string, Grade | ''> = {};
+		const completed: Record<string, boolean> = {};
+
+		allCourses.forEach((course) => {
+			const studentCourse = studentCourses[course.id];
+			const grade = studentCourse?.grade;
+			grades[course.id] = (grade && grade in gradePoints ? grade : '') as Grade | '';
+			completed[course.id] = !!grade && arePrerequisitesMet(course);
+		});
+
+		courseGradesStore.set(grades);
+		completedCoursesStore.set(completed);
 	}
+
+	// Derived values
+	const totalCredits = derived(
+		programCoursesStore,
+		($programCourses) => $programCourses.reduce((sum, course) => sum + course.credits, 0) || 0
+	);
+
+	const appliedCredits = derived(
+		[completedCoursesStore, courseGradesStore, programCoursesStore],
+		([$completed, $grades, $programCourses]) =>
+			$programCourses.reduce(
+				(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
+				0
+			) || 0
+	);
+
+	const inProgress = derived(completedCoursesStore, ($completedCoursesStore) => {
+		return (
+			$programCoursesStore.filter(
+				(course) => !$completedCoursesStore[course.id] && arePrerequisitesMet(course)
+			).length || 0
+		);
+	});
+
+	const stillNeeded = derived(
+		completedCoursesStore,
+		($completed) => $programCoursesStore.filter((course) => !$completed[course.id]).length || 0
+	);
+
+	const complete = derived(
+		completedCoursesStore,
+		($completed) => $programCoursesStore.filter((course) => $completed[course.id]).length || 0
+	);
+
+	const progressPercentage = derived(
+		appliedCredits,
+		($applied) => ($applied / $totalCredits) * 100
+	);
+
+	const gpa = derived(
+		[courseGradesStore, completedCoursesStore, programCoursesStore],
+		([$grades, $completed, $programCourses]) => {
+			let totalPoints = 0;
+			let totalCredits = 0;
+
+			if ($programCourses && Array.isArray($programCourses)) {
+				$programCourses.forEach((course) => {
+					if ($completed[course.id]) {
+						const grade = $grades[course.id];
+						if (grade && grade in gradePoints) {
+							totalPoints += gradePoints[grade] * course.credits;
+							totalCredits += course.credits;
+						}
+					}
+				});
+			}
+
+			return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+		}
+	);
+
+	// Form submission handling
+	let loading = false;
+	let success = false;
 </script>
 
-<div class="mt-6 overflow-hidden">
-	<div class="flex flex-wrap items-start gap-x-12 px-4 py-2 text-sm">
-		<div class="flex min-w-[200px] flex-col items-start">
-			<span class="uppercase text-gray-500">Current Degree(S)</span>
-			<div class="font-semibold">
-				{#each degree.name as name}
-					<div>{name}</div>
-				{/each}
-			</div>
+<div class="flex flex-wrap items-start gap-x-12 text-sm">
+	<div class="flex min-w-[200px] flex-col items-start">
+		<span class="uppercase text-gray-500">Current Degree(S)</span>
+		<div class="font-semibold">
+			{#each degree.major as name}
+				<div>{name}</div>
+			{/each}
 		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Minor</span>
-			<span class="font-semibold">{degree.minor}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Classification</span>
-			<span class="font-semibold">{degree.classification}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Overall Gpa</span>
-			<span class="font-semibold">{degree.gpa}</span>
-		</div>
-		<div class="flex flex-col items-center">
-			<span class="uppercase text-gray-500">Academic Standing</span>
-			{#if degree.gpa < 2.0}
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Minor</span>
+		<span class="font-semibold">{degree.minor}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Classification</span>
+		<span class="font-semibold">{degree.classification}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Overall GPA</span>
+		<span class="font-semibold">{$gpa}</span>
+	</div>
+	<div class="flex flex-col items-center">
+		<span class="uppercase text-gray-500">Academic Standing</span>
+		{#if Object.values($completedCoursesStore).filter((c) => c == true).length > 0}
+			{#if parseFloat($gpa) < 2.0}
 				<span class="font-semibold text-red-500">Academic Warning</span>
 			{:else}
 				<span class="font-semibold">Good Standing</span>
 			{/if}
-		</div>
+		{:else}
+			<span class="font-semibold">None</span>
+		{/if}
 	</div>
 </div>
 
-<h2 class="mb-4 text-xl font-semibold">Course Requirements</h2>
+<h2 class="my-4 text-xl font-semibold">Course Requirements</h2>
 
 <div class="flex flex-wrap items-center justify-between gap-y-2">
 	<div class="flex flex-wrap items-center gap-2">
 		<Button>All Courses</Button>
-		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
+		<Button
+			class=" flex w-max bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-700 hover:text-white"
+		>
 			<svg
 				class="mr-1 h-4 w-4"
 				fill="none"
@@ -115,8 +243,8 @@
 					d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
 				></path>
 			</svg>
-			Still Needed ({stillNeeded})
-		</button>
+			Still Needed ({$stillNeeded})
+		</Button>
 		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
 			<svg
 				class="mr-1 h-4 w-4"
@@ -132,7 +260,7 @@
 					d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
 				></path>
 			</svg>
-			In Progress ({inProgress})
+			In Progress ({$inProgress})
 		</button>
 		<button class="flex items-center rounded-md bg-gray-200 px-3 py-1.5 text-sm text-gray-700">
 			<svg
@@ -145,77 +273,84 @@
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"
 				></path>
 			</svg>
-			Complete ({complete})
+			Complete ({$complete})
 		</button>
 	</div>
 
 	<div class="flex flex-col items-end">
 		<div class="mb-1 text-sm text-gray-600">
-			{appliedCredits}/{totalCredits} Credits Applied
+			{$appliedCredits}/{$totalCredits} Credits Applied
 		</div>
 		<div class="w-48">
-			<ProgressBar progress={progressPercentage} size="sm" />
+			<ProgressBar progress={$progressPercentage} size="sm" />
 		</div>
 	</div>
 </div>
 
-<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
+<form
+	method="POST"
+	action="?/saveChanges"
+	use:enhance={() => {
+		loading = true;
+		return async ({ update }) => {
+			await update();
+			success = true;
+			loading = false;
+			setTimeout(() => {
+				success = false;
+			}, 3000);
+		};
+	}}
+>
+	<h1 class="mb-6 text-2xl font-bold">Courses for {program.name}</h1>
 
-<div class="space-y-4">
-	{#each programCourses as course (course.id)}
-		<div class="rounded-lg border border-gray-200 p-4 shadow-sm">
-			<h3 class="text-lg font-semibold">{course.code} - {course.name}</h3>
-			<p class="mt-1 text-sm text-gray-600">Level: {course.level}</p>
-			<p class="text-sm text-gray-600">Credits: {course.credits}</p>
-			<div class="mt-2">
-				<label for={`grade-${course.id}`} class="mr-2">Grade:</label>
-				<select
-					id={`grade-${course.id}`}
-					on:change={(e) => handleGradeChange(course.id, e)}
-					class="rounded border p-1"
-				>
-					<option value={null}>Select Grade</option>
-					{#each Object.keys(gradePoints) as grade}
-						<option value={grade}>{grade}</option>
-					{/each}
-				</select>
-			</div>
-		</div>
-	{/each}
-</div>
-
-{#if programCourses.length === 0}
-	<p class="mt-4 text-gray-600">No courses found for this program.</p>
-{/if}
-
-<div class="mt-6 text-xl font-bold">
-	Overall GPA: {gpa}
-</div>
-
-<!-- <div class="overflow-hidden border">
-	<div class="flex items-center justify-between border-l-4 border-red-600 p-4">
-		<div class="flex items-center space-x-2">
-			<svg
-				class="flex size-5 flex-shrink-0 text-red-600"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path
-					d="M12 9v4"
-				/><path d="M12 17h.01" /></svg
-			>
-			<span class="font-semibold">{requirement.name}</span>
-			<span class="pl-6 text-sm text-gray-600"
-				>{requirement.remainingCredits} Credits Remaining</span
-			>
-		</div>
-		<div class="text-sm text-gray-600">
-			{requirement.appliedCredits}/{requirement.totalCredits} Credits Applied
-		</div>
+	<h2 class="mb-2 text-xl font-bold">Level 1 Core</h2>
+	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
+		<ul class="divide-y divide-gray-200">
+			{#each programCourses as course (course.id)}
+				<CourseItem {course} {completedCoursesStore} {courseGradesStore} />
+			{/each}
+			{#each requirements as req}
+				{#if req.type === 'POOL' && req.credits > 0}
+					<PoolRequirementItem
+						requirement={req}
+						{completedCoursesStore}
+						{courseGradesStore}
+						onAddCourse={openAddCourseModal}
+					/>
+				{/if}
+			{/each}
+		</ul>
 	</div>
-</div> -->
+
+	<Modal title="Add Elective Course" bind:open={dialogOpen}>
+		<select
+			name="course"
+			id="course"
+			class="w-full rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+		>
+			<option value="">Select a course...</option>
+			{#each electiveCourses.filter((electiveCourse) => $poolCourses.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1 && $programCoursesStore.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1) as course}
+				<option value={course.id}>{course.code} - {course.name}</option>
+			{/each}
+		</select>
+		<svelte:fragment slot="footer">
+			<Button on:click={() => (dialogOpen = false)}>Close</Button>
+			<Button on:click={handleAddCourse}>Add Course</Button>
+		</svelte:fragment>
+	</Modal>
+
+	<div class="mt-6 text-xl font-bold">
+		Overall GPA: {$gpa}
+	</div>
+
+	<div class="mt-6">
+		<Button type="submit" {loading}>Save Changes</Button>
+		{#if loading}
+			<span class="ml-2">Saving...</span>
+		{/if}
+		{#if success}
+			<span class="ml-2 text-green-500">Changes saved successfully</span>
+		{/if}
+	</div>
+</form>

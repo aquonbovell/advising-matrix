@@ -1,22 +1,10 @@
 <script lang="ts">
-	import {
-		Chart,
-		Card,
-		A,
-		Button,
-		Dropdown,
-		DropdownItem,
-		Popover,
-		Tooltip
-	} from 'flowbite-svelte';
+	import type { ApexOptions } from 'apexcharts';
+	import { Chart, A, Popover, Tooltip } from 'flowbite-svelte';
 	import {
 		InfoCircleSolid,
 		ArrowDownToBracketOutline,
-		ChevronDownOutline,
-		ChevronRightOutline,
-		PenSolid,
-		DownloadSolid,
-		ShareNodesSolid
+		ChevronRightOutline
 	} from 'flowbite-svelte-icons';
 
 	export let id = 'DonutChart';
@@ -25,17 +13,17 @@
 	export let series = [30, 50];
 	export let labels = ['Credits Completed', 'Credits Remaining'];
 
-	const options = {
+	const options: ApexOptions = {
 		series: series,
 		colors: ['#272861', '#D6D6D6'],
 		chart: {
-			height: 320,
+			height: 450,
 			width: '100%',
 			type: 'donut'
 		},
 		stroke: {
 			colors: ['transparent'],
-			lineCap: ''
+			lineCap: 'square'
 		},
 		plotOptions: {
 			pie: {

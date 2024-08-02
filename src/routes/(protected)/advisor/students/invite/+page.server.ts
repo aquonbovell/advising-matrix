@@ -1,9 +1,31 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { isValidEmail } from '$lib/utils';
 import { db } from '$lib/db';
 import { generateTokenWithExpiration } from '$lib/server/auth';
 import { generateId } from 'lucia';
+import Vine from '@vinejs/vine';
+import { message, superValidate } from 'sveltekit-superforms';
+import { vine } from 'sveltekit-superforms/adapters';
+import type { PageServerLoad } from '../$types';
+
+const defaults = { email: '', name: '', programId: '' };
+
+const schema = Vine.object({
+	email: Vine.string()
+		.trim()
+		.email()
+		.regex(/@mycavehill\.uwi\.edu$/),
+	name: Vine.string().trim().minLength(3).maxLength(50),
+	programId: Vine.string().trim()
+});
+
+export const load: PageServerLoad = async () => {
+	const form = await superValidate(vine(schema, { defaults }));
+
+	const programs = await db.selectFrom('Program').select(['id', 'name']).execute();
+
+	return { form, programs };
+};
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -11,12 +33,19 @@ export const actions: Actions = {
 			return fail(403, { error: 'Unauthorized' });
 		}
 
-		const formData = await request.formData();
-		const email = formData.get('email') as string;
+		const form = await superValidate(request, vine(schema, { defaults }));
 
-		if (!email || typeof email !== 'string' || !isValidEmail(email)) {
-			return fail(400, { error: 'Invalid email' });
+		if (form.errors.email) {
+			form.errors.email = [
+				'Please enter a valid email address with the domain @mycavehill.uwi.edu'
+			];
 		}
+
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		const { email, name, programId } = form.data;
 
 		try {
 			const advisor = await db
@@ -26,7 +55,7 @@ export const actions: Actions = {
 				.executeTakeFirst();
 
 			if (!advisor) {
-				return fail(404, { error: 'Advisor not found' });
+				return fail(404, { form, error: 'Advisor not found' });
 			}
 
 			const { expiresAt, token } = generateTokenWithExpiration();
@@ -38,6 +67,7 @@ export const actions: Actions = {
 					.insertInto('User')
 					.values({
 						id: userId,
+						name,
 						email,
 						role: 'STUDENT',
 						password: '',
@@ -52,6 +82,7 @@ export const actions: Actions = {
 						id: generateId(16),
 						user_id: userId,
 						advisor_id: advisor.id,
+						program_id: programId,
 						invite_token: token,
 						invite_expires: new Date(expiresAt),
 						created_at: new Date(),
@@ -60,7 +91,7 @@ export const actions: Actions = {
 					.execute();
 			});
 
-			return { success: true };
+			return message(form, 'Invitation sent successfully!');
 		} catch (err) {
 			console.error(err);
 			return fail(500, { error: 'Failed to invite student' });

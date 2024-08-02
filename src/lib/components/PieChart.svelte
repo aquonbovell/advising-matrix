@@ -1,23 +1,15 @@
 <script lang="ts">
-	import { Chart, Card, A, Button, Dropdown, DropdownItem, Popover } from 'flowbite-svelte';
-	import {
-		InfoCircleSolid,
-		ChevronDownOutline,
-		ChevronRightOutline,
-		PenSolid,
-		DownloadSolid,
-		ShareNodesSolid,
-		TrashBinSolid,
-		DotsHorizontalOutline
-	} from 'flowbite-svelte-icons';
+	import type { ApexOptions } from 'apexcharts';
+	import { Chart, A, Popover } from 'flowbite-svelte';
+	import { InfoCircleSolid, ChevronRightOutline } from 'flowbite-svelte-icons';
 
 	export let id = 'PieChart';
-	export let title = 'Credits';
+	export let title = 'Total Credits';
 	export let description = 'Credits of this category completed...';
 	export let series = [50, 50];
 	export let labels = ['Credits Completed', 'Credits Remaining'];
 
-	const options = {
+	const options: ApexOptions = {
 		series: series,
 		colors: ['#EFC40A', '#D6D6D6'],
 
@@ -28,14 +20,10 @@
 		},
 		stroke: {
 			colors: ['white'],
-			lineCap: ''
+			lineCap: 'square'
 		},
 		plotOptions: {
 			pie: {
-				labels: {
-					show: true
-				},
-				size: '100%',
 				dataLabels: {
 					offset: -25
 				}
@@ -63,7 +51,7 @@
 		},
 		xaxis: {
 			labels: {
-				formatter: function (value: number) {
+				formatter: function (value: string) {
 					return value + '%';
 				}
 			},
