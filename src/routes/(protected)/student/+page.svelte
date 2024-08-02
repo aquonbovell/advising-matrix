@@ -2,6 +2,10 @@
 	import { page } from '$app/stores';
 	import DonutChart from '$lib/components/DonutChart.svelte';
 	import PieChart from '$lib/components/PieChart.svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	console.log(data);
 
 	// placeholders
 	let advisorName = 'Mr.TempName';
@@ -10,7 +14,8 @@
 	let mandatoryCredits = 3 * 6;
 	let electiveCredits = 3 * 1;
 	let foundationCredits = 3 * 1;
-	let name = 'John';
+	// let name = data.user?.name;
+	let name = "John"
 	let major = 'BSc Computer Science';
 	let studentId = 400000000;
 </script>
