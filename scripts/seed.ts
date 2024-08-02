@@ -17,41 +17,101 @@ const __dirname = path.dirname(__filename);
 export const db = new Kysely<DB>({
 	dialect: new PostgresDialect({
 		pool: new Pool({
-			connectionString: process.env.DATABASE_URL
+			connectionString: process.env.DATABASE_URL,
+			ssl: {
+				rejectUnauthorized: false
+			}
 		})
 	})
-});
+}).withSchema('prod');
 
-async function seed() {
+async function insertOrIgnore<TE extends keyof DB & string>(table: TE, data: any) {
+	try {
+		await db.insertInto(table).values(data).execute();
+		console.log(`Inserted data into: ${table}`);
+	} catch (error) {
+		if (error.code === '23505') {
+			// Unique violation error code
+			console.log(`Record already exists in ${table}, skipping`);
+		} else {
+			throw error;
+		}
+	}
+}
+
+const seed = async () => {
 	console.log('Seeding database...');
 	const hashedPassword = await argon2id.hash('password');
 
-	// const courseDataRaw = await fs.readFile(path.join(__dirname, 'courses.json'), 'utf-8');
-	// const courseData = JSON.parse(courseDataRaw);
+	console.log('Reading data files...');
+	const departmentDataRaw = await fs.readFile(path.join(__dirname, 'departments.json'), 'utf-8');
+	const departmentData = JSON.parse(departmentDataRaw);
+	console.log('Departments read successfully');
+	const courseDataRaw = await fs.readFile(path.join(__dirname, 'courses.json'), 'utf-8');
+	const courseData = JSON.parse(courseDataRaw);
+	console.log('Courses read successfully');
 	const degreeDataRaw = await fs.readFile(path.join(__dirname, 'degrees.json'), 'utf-8');
 	const degreeData = JSON.parse(degreeDataRaw);
+	console.log('Degrees read successfully');
 
-	async function insertOrIgnore<TE extends keyof DB & string>(
-		table: TE,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		data: any
-	) {
-		try {
-			await db.insertInto(table).values(data).execute();
-			console.log(`Inserted data into: ${table}`);
-		} catch (error) {
-			if (error.code === '23505') {
-				// Unique violation error code
-				console.log(`Record already exists in ${table}, skipping`);
-			} else {
-				throw error;
+	await db.deleteFrom('CoursePrerequisite').execute();
+	await db.deleteFrom('Course').execute();
+	await db.deleteFrom('Degree').execute();
+	await db.deleteFrom('Department').execute();
+
+	// Insert Departments records
+	for (const department of departmentData) {
+		await insertOrIgnore('Department', department);
+	}
+	// Insert Courses
+	for (const course of courseData) {
+		await insertOrIgnore('Course', {
+			id: course.id,
+			code: course.code,
+			name: course.name,
+			level: parseInt(course.code.match(/\d+/)[0][0]),
+			credits: course.credits,
+			departmentId: course.department
+		} as Course);
+	}
+
+	// Insert Courses Prerequisites
+	for (const course of courseData) {
+		if (course.prerequisite) {
+			console.log(`Inserting prerequisites for ${course.code}`);
+			for (const prerequisiteId of course.prerequisite) {
+				try {
+					await db
+						.insertInto('CoursePrerequisite')
+						.values({
+							id: randomUUID(),
+							courseId: course.id,
+							prerequisiteId: prerequisiteId
+						})
+						.execute();
+					console.log(`Inserted prerequisite ${prerequisiteId} for course ${course.id}`);
+				} catch (error) {
+					if (error.code === '23505') {
+						// Unique constraint violation (prerequisite already exists)
+						console.log(
+							`Prerequisite ${prerequisiteId} for course ${course.id} already exists, skipping`
+						);
+					} else {
+						console.error(
+							`Error inserting prerequisite ${prerequisiteId} for course ${course.id}:`,
+							error
+						);
+					}
+				}
 			}
 		}
 	}
 
+	await db.deleteFrom('User').execute();
+
 	// Insert Users - Admin
 	await insertOrIgnore('User', {
-		id: '1',
+		id: randomUUID(),
 		name: 'Admin',
 		email: 'admin@cavehill.uwi.edu',
 		role: 'ADMIN',
@@ -60,11 +120,10 @@ async function seed() {
 		updated_at: new Date().toISOString()
 	});
 
-	db.updateTable('User').set('name', 'Admin').where('User.id', '=', '1').execute();
-
 	// Insert Users - Advisor
+	const [advisor_id, student_id] = [randomUUID(), randomUUID()];
 	await insertOrIgnore('User', {
-		id: '2',
+		id: advisor_id,
 		name: 'Advisor 1',
 		email: 'advisor1@cavehill.uwi.edu',
 		role: 'ADVISOR',
@@ -73,11 +132,9 @@ async function seed() {
 		updated_at: new Date().toISOString()
 	});
 
-	db.updateTable('User').set('name', 'Advisor 1').where('User.id', '=', '2').execute();
-
 	// Insert Users - Student
 	await insertOrIgnore('User', {
-		id: '3',
+		id: student_id,
 		name: 'Student 1',
 		email: 'student1@mycavehill.uwi.edu',
 		role: 'STUDENT',
@@ -86,101 +143,28 @@ async function seed() {
 		updated_at: new Date().toISOString()
 	});
 
-	db.updateTable('User').set('name', 'Student 1').where('User.id', '=', '3').execute();
-
 	// Insert Advisor data - Students
 	await insertOrIgnore('Advisor', {
-		id: '1',
-		user_id: '2'
+		id: advisor_id,
+		user_id: student_id
 	});
 
-	// Insert Student data - Advisor
-	await insertOrIgnore('Student', {
-		id: '1',
-		user_id: '3',
-		advisor_id: '1',
-		invite_token: null,
-		program_id: 1,
-		invite_expires: null,
-		created_at: new Date().toISOString(),
-		updated_at: new Date().toISOString()
-	});
+	await db.deleteFrom('ProgramRequirement').execute();
+	await db.deleteFrom('Program').execute();
 
-	const deparments: { id: string; name: string }[] = [
-		{
-			id: '1',
-			name: 'Computer Science, Mathematics and Physics'
-		},
-		{
-			id: '2',
-			name: 'Biological and Chemical Sciences'
-		}
-	];
-
-	// Insert Departments
-	for (const department of deparments) {
-		await insertOrIgnore('Department', department);
-	}
-
-	// // Insert Courses
-	// for (const course of courseData) {
-	// 	await insertOrIgnore('Course', {
-	// 		id: course.id,
-	// 		code: course.code,
-	// 		name: course.name,
-	// 		level: parseInt(course.code.match(/\d+/)[0][0]),
-	// 		credits: course.credits,
-	// 		departmentId: course.department
-	// 	} as Course);
-
-	// 	if (course.prerequisite) {
-	// 		console.log(`Inserting prerequisites for ${course.code}`);
-	// 		for (const prerequisiteId of course.prerequisite) {
-	// 			try {
-	// 				await db
-	// 					.insertInto('CoursePrerequisite')
-	// 					.values({
-	// 						id: randomUUID(),
-	// 						courseId: course.id,
-	// 						prerequisiteId: prerequisiteId
-	// 					})
-	// 					.execute();
-	// 				console.log(`Inserted prerequisite ${prerequisiteId} for course ${course.id}`);
-	// 			} catch (error) {
-	// 				if (error.code === '23505') {
-	// 					// Unique constraint violation (prerequisite already exists)
-	// 					console.log(
-	// 						`Prerequisite ${prerequisiteId} for course ${course.id} already exists, skipping`
-	// 					);
-	// 				} else {
-	// 					console.error(
-	// 						`Error inserting prerequisite ${prerequisiteId} for course ${course.id}:`,
-	// 						error
-	// 					);
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	try {
-		for (const degree of degreeData) {
+	// Insert Programs and Requirements
+	for (const degree of degreeData) {
+		try {
 			const programId = randomUUID();
 			// Insert Programs
 			await insertOrIgnore('Program', {
 				id: programId,
 				name: degree.name
 			});
-
-			console.log('Program seeded successfully:', degree.name);
-
-			// Insert Program Courses
-			console.log('Inserting courses for:', degree);
+			console.log('Program added successfully:', degree.name);
+			// Insert Program Requirements
+			console.log('Inserting requirements for:', degree);
 			for (const element of degree.requirements) {
-				if (element.name === 'Chemistry') {
-					console.log('Chemistry program detected, skipping');
-					console.log(element);
-				}
 				const requirementId = randomUUID();
 				if (element.type === 'CREDITS') {
 					const requirementDetails = element;
@@ -191,7 +175,7 @@ async function seed() {
 						credits: requirementDetails.courses.length * 3, // Assuming each course is 3 credits
 						details: JSON.stringify({ courses: requirementDetails.courses })
 					});
-					console.log('Credits seeded successfully for:', programId);
+					console.log('Inserted credits successfully for:', programId);
 				} else if (element.type === 'POOL') {
 					const requirementDetails = {
 						levelPool: element.levelPool,
@@ -204,15 +188,39 @@ async function seed() {
 						credits: element.credits,
 						details: JSON.stringify(requirementDetails)
 					});
-					console.log('Pool seeded successfully for:', programId);
+					console.log('Inserted pool successfully for:', programId);
 				}
-				console.log('Electives seeded successfully for:', programId);
 			}
+			console.log('Added requirements successfully for:', programId);
+		} catch (error) {
+			console.error('Error inserting program or requirements:', error);
 		}
-	} catch (error) {
-		console.error('Error inserting program:', error);
 	}
-}
+
+	await db.deleteFrom('Student').execute();
+
+	const programId = await db
+		.selectFrom('Program')
+		.where('name', '=', 'Biochemistry')
+		.select('id')
+		.executeTakeFirst();
+
+	// Insert Student data - Advisor
+	if (programId && programId.hasOwnProperty('id')) {
+		await insertOrIgnore('Student', {
+			id: randomUUID(),
+			user_id: student_id,
+			advisor_id: advisor_id,
+			invite_token: null,
+			program_id: programId.id,
+			invite_expires: null,
+			created_at: new Date().toISOString(),
+			updated_at: new Date().toISOString()
+		});
+	}
+
+	db.destroy();
+};
 
 seed()
 	.then(() => {
