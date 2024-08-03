@@ -11,7 +11,7 @@ export const load = (async ({ locals }) => {
 		.select(['Student.id', 'Student.user_id'])
 		.where('Student.user_id', '=', userId)
 		.executeTakeFirst();
-		
+
 	if (!data) {
 		return {
 			student: null
