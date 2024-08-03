@@ -3,6 +3,7 @@
 ### Todo
 
 - [ ] Implement a way for students to view their advisor
+- [ ] Check the advisor select statement
 
 ### In Progress
 

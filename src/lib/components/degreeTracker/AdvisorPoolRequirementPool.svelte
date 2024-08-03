@@ -95,38 +95,14 @@
 						<select
 							name={`courses[${course.id}].grade`}
 							value={$courseGrades[course.id] ?? ''}
-							on:change={(e) => handleGradeChange(course.id, e)}
 							class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 							disabled={!arePrerequisitesMet(course)}
 						>
-							<option value="">Select Grade</option>
+							<option value="">No Grade</option>
 							{#each Object.keys(gradePoints) as grade}
 								<option value={grade}>{grade}</option>
 							{/each}
 						</select>
-						<form
-							method="POST"
-							action="?/removeCourse"
-							use:enhance={() => {
-								return async ({ update }) => {
-									completedCourses.update((OldcompletedCourses) => {
-										const newCompletedCourses = { ...OldcompletedCourses };
-										delete newCompletedCourses[course.id];
-										return newCompletedCourses;
-									});
-									courses.update((Oldcourses) => {
-										return Oldcourses.filter((poolCourse) => poolCourse.id !== course.id);
-									});
-									await update();
-								};
-							}}
-						>
-							<input type="hidden" name="courseId" value={course.id} />
-							<input type="hidden" name="requirementId" value={requirement.id} />
-							<button type="submit" class="ml-2 text-red-500 hover:text-red-700">
-								<TrashIcon />
-							</button>
-						</form>
 					</div>
 				</div>
 			</div>

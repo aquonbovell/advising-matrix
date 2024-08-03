@@ -2,6 +2,8 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
+import { completedCourses } from './stores/degreeTracker';
+import type { CourseWithPrerequisites, CourseWithRequirement } from './types';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -83,4 +85,12 @@ export function createMajorMinor(name: string): {
 	}
 
 	return degree;
+}
+
+// Helper functions
+export function arePrerequisitesMet(
+	course: CourseWithPrerequisites | CourseWithRequirement
+): boolean {
+	if (!course.prerequisites || course.prerequisites.length === 0) return true;
+	return course.prerequisites.every((prereq) => completedCourses[prereq.id]);
 }

@@ -1,29 +1,9 @@
 <script lang="ts">
 	import { gradePoints } from '$lib/types';
-	import type { CourseWithPrerequisites, Grade } from '$lib/types';
-	import { derived, type Writable } from 'svelte/store';
+	import type { CourseWithPrerequisites } from '$lib/types';
 	import { completedCourses, courseGrades } from '$lib/stores/degreeTracker';
 
 	export let course: CourseWithPrerequisites;
-	// export let completedCourses: Writable<Record<string, boolean>>;
-	// export let courseGrades: any;
-
-	const arePrerequisitesMetStore = derived(completedCourses, ($completedCourses) => {
-		if (!course.prerequisites || course.prerequisites.length === 0) return true;
-		return course.prerequisites.every((prereq) => $completedCourses[prereq.id]);
-	});
-
-	function handleGradeChange(courseId: string, event: Event) {
-		const target = event.target as HTMLSelectElement;
-		courseGrades.update((grades: Record<string, '' | Grade>) => ({
-			...grades,
-			[courseId]: target.value as Grade
-		}));
-		completedCourses.update((completed: Record<string, boolean>) => ({
-			...completed,
-			[courseId]: !!target.value
-		}));
-	}
 </script>
 
 <li>
@@ -72,11 +52,10 @@
 				<select
 					name={`courses[${course.id}].grade`}
 					value={$courseGrades[course.id] ?? ''}
-					on:change={(e) => handleGradeChange(course.id, e)}
 					class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-					disabled={!$arePrerequisitesMetStore}
+					disabled
 				>
-					<option value="">Select Grade</option>
+					<option value="">No Grade</option>
 					{#each Object.keys(gradePoints) as grade}
 						<option value={grade}>{grade}</option>
 					{/each}

@@ -6,7 +6,6 @@ datasource db {
 
 generator kysely {
   provider = "prisma-kysely"
-
   output   = "../src/lib/db"
   fileName = "schema.d.ts"
 }
@@ -60,28 +59,26 @@ model Student {
 
 model Department {
   id     String   @id
-  name   String
+  name   String   @unique
   Course Course[]
 }
 
 model Course {
-  id           String     @id
-  code         String     @unique
+  id           String @id
+  code         String @unique
   name         String
   level        Int
   credits      Int
-  department   Department @relation(fields: [departmentId], references: [id])
   departmentId String
 
+  department      Department           @relation(fields: [departmentId], references: [id])
   prerequisites   CoursePrerequisite[] @relation("CourseToPrerequisite")
   prerequisiteFor CoursePrerequisite[] @relation("PrerequisiteToCourse")
-
-  StudentCourse StudentCourse[]
+  StudentCourse   StudentCourse[]
 }
 
 model CoursePrerequisite {
-  id String @id @default(uuid())
-
+  id             String @id @default(uuid())
   courseId       String
   prerequisiteId String
 
@@ -106,7 +103,7 @@ model Degree {
 
 model Program {
   id           String               @id
-  name         String
+  name         String               @unique
   requirements ProgramRequirement[]
   students     Student[]
 }

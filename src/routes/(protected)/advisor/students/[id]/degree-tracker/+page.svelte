@@ -38,6 +38,8 @@
 		complete,
 		progressPercentage
 	} from '$lib/stores/degreeTracker';
+	import AdvisorPoolRequirementPool from '$lib/components/degreeTracker/AdvisorPoolRequirementPool.svelte';
+	import AdvisorCourseItem from '$lib/components/degreeTracker/AdvisorCourseItem.svelte';
 
 	export let data: PageData;
 
@@ -130,11 +132,6 @@
 </script>
 
 <!-- Header -->
-<!-- {JSON.stringify(
-	degreeCourses.filter((course) => course.code[4] === '1'),
-	null,
-	2
-)} -->
 <Header degreeName={data.program.name} />
 
 <h2 class="my-2 text-xl font-semibold">Course Requirements</h2>
@@ -187,7 +184,7 @@
 	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
 			{#each degreeCourses.filter((course) => course.code[4] === '1') as course (course.id)}
-				<CourseItem {course} />
+				<AdvisorCourseItem {course} />
 			{/each}
 		</ul>
 	</div>
@@ -195,7 +192,7 @@
 		<ul class="divide-y divide-gray-200">
 			{#each requirements as req}
 				{#if req.type === 'POOL' && req.credits > 0}
-					<PoolRequirementItem
+					<AdvisorPoolRequirementPool
 						requirement={req}
 						courses={getPoolCourses(req.id)}
 						onAddCourse={openAddCourseModal}
@@ -233,15 +230,5 @@
 
 	<div class="mt-6 text-xl font-bold">
 		Overall GPA: {$gpa}
-	</div>
-
-	<div class="mt-6">
-		<Button type="submit" {loading}>Save Changes</Button>
-		{#if loading}
-			<span class="ml-2 text-sm">Saving...</span>
-		{/if}
-		{#if success}
-			<span class="ml-2 text-sm text-green-500">Changes saved successfully</span>
-		{/if}
 	</div>
 </form>
