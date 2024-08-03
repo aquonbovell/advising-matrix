@@ -12,9 +12,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 	try {
 		const advisor = await db
 			.selectFrom('Advisor')
-			.where('user_id', '=', userId)
+			.where('user_id', '<>', userId)
 			.select(['id'])
 			.executeTakeFirst();
+
+		console.log(advisor);
 
 		if (!advisor) {
 			throw error(404, 'Advisor not found');

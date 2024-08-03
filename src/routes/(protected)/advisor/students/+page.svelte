@@ -4,6 +4,7 @@
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import type { PageData } from './$types';
+	import Action from './action.svelte';
 
 	export let data: PageData;
 
@@ -124,12 +125,13 @@
 													</form>
 												</div>
 											{:else}
-												<a
+												<!-- <a
 													href="/advisor/students/{student.user_id}"
 													class="text-indigo-600 hover:text-indigo-900"
 												>
 													View Details
-												</a>
+												</a> -->
+												<Action code={student.user_id} />
 											{/if}
 										</td>
 									</tr>
