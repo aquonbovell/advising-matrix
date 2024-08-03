@@ -16,3 +16,5 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 		user
 	};
 };
+
+export const prerender = true

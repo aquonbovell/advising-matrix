@@ -63,7 +63,7 @@ const config = {
 			}
 		}
 	},
-	plugins: [require('@tailwindcss/typography'), flowbitePlugin()]
+	plugins: [require('@tailwindcss/typography'), flowbitePlugin]
 };
 
 export default config;

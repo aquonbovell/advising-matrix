@@ -37,5 +37,5 @@ module.exports = {
 			}
 		}
 	},
-	plugins: [require('@tailwindcss/typography'), flowbitePlugin()]
+	plugins: [require('@tailwindcss/typography'), flowbitePlugin]
 };
