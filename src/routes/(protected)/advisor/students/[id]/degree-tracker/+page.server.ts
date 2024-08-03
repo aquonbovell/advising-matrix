@@ -163,7 +163,6 @@ async function getStudentCourses(studentId: string): Promise<Record<string, Stud
 }
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-
 	if (!params.id) throw error(400, 'Missing student ID');
 
 	const userId = locals.user?.id;
@@ -209,12 +208,9 @@ export const actions: Actions = {
 	// saveChanges: async ({ request, locals }) => {
 	// 	const userId = locals.user?.id;
 	// 	if (!userId) return fail(401, { message: 'Unauthorized' });
-
 	// 	const studentId = await getStudentId(userId);
 	// 	if (!studentId) return fail(404, { message: 'Student not found' });
-
 	// 	const formData = await request.formData();
-
 	// 	console.log('Form Data:', formData);
 	// 	const courseEntries = Array.from(formData.entries())
 	// 		.filter(([key, value]) => key.startsWith('courses[') && key.endsWith('].grade'))
@@ -226,12 +222,10 @@ export const actions: Actions = {
 	// 				requirementId: formData.get(`courses[${courseId}].requirementId`) as string | null
 	// 			};
 	// 		});
-
 	// 	console.log('Course Entries:', courseEntries);
 	// 	try {
 	// 		await db.transaction().execute(async (trx) => {
 	// 			await trx.deleteFrom('StudentCourse').where('studentId', '=', studentId).execute();
-
 	// 			for (const { courseId, grade, requirementId } of courseEntries) {
 	// 				if (grade) {
 	// 					await trx
@@ -247,7 +241,6 @@ export const actions: Actions = {
 	// 				}
 	// 			}
 	// 		});
-
 	// 		return { success: true };
 	// 	} catch (err) {
 	// 		console.error('Error saving changes:', err);
@@ -257,22 +250,16 @@ export const actions: Actions = {
 	// removeCourse: async ({ request, locals }) => {
 	// 	const userId = locals.user?.id;
 	// 	if (!userId) return fail(401, { message: 'Unauthorized' });
-
 	// 	const studentId = await getStudentId(userId);
 	// 	if (!studentId) return fail(404, { message: 'Student not found' });
-
 	// 	const formData = await request.formData();
 	// 	const courseId = formData.get('courseId') as string;
 	// 	const requirementId = formData.get('requirementId') as string;
-
 	// 	console.log('Removing course:', courseId, requirementId);
-
 	// 	console.log('Form Data:', formData);
-
 	// 	if (!courseId || !requirementId) {
 	// 		return fail(400, { message: 'Missing course or requirement ID' });
 	// 	}
-
 	// 	try {
 	// 		await db.transaction().execute(async (trx) => {
 	// 			await trx
@@ -282,7 +269,6 @@ export const actions: Actions = {
 	// 				.where('requirementId', '=', requirementId)
 	// 				.execute();
 	// 		});
-
 	// 		return { success: true };
 	// 	} catch (err) {
 	// 		console.error('Error removing course:', err);

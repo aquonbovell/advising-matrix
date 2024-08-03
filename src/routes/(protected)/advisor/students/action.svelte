@@ -4,7 +4,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
 
-  export let code: string;
+	export let code: string;
 </script>
 
 <DropdownMenu.Root>
@@ -22,7 +22,9 @@
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item href={$page.url+"/"+code+"/"}>View Student</DropdownMenu.Item>
-		<DropdownMenu.Item href={$page.url+"/"+code+"/degree-tracker"}>View Student Degree</DropdownMenu.Item>
+		<DropdownMenu.Item href={$page.url + '/' + code + '/'}>View Student</DropdownMenu.Item>
+		<DropdownMenu.Item href={$page.url + '/' + code + '/degree-tracker'}
+			>View Student Degree</DropdownMenu.Item
+		>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

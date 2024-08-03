@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { gradePoints } from '$lib/types';
-	import type { CourseWithPrerequisites} from '$lib/types';
+	import type { CourseWithPrerequisites } from '$lib/types';
 	import { completedCourses, courseGrades } from '$lib/stores/degreeTracker';
 
 	export let course: CourseWithPrerequisites;
