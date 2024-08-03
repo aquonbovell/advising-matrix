@@ -1,14 +1,14 @@
-import { Kysely, PostgresDialect } from 'kysely';
-import pg from 'pg';
-const { Pool } = pg;
-import 'dotenv/config';
 import type { Course, DB } from '../src/lib/db/schema';
-import { Argon2id } from 'oslo/password';
+import 'dotenv/config';
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import pg from 'pg';
 import { randomUUID } from 'crypto';
+import { Kysely, PostgresDialect } from 'kysely';
+import { Argon2id } from 'oslo/password';
+import { fileURLToPath } from 'url';
 
+const { Pool } = pg;
 const argon2id = new Argon2id();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,163 +17,52 @@ const __dirname = path.dirname(__filename);
 export const db = new Kysely<DB>({
 	dialect: new PostgresDialect({
 		pool: new Pool({
-			connectionString: process.env.DATABASE_URL
+			connectionString: process.env.DATABASE_URL,
+			ssl: {
+				rejectUnauthorized: false
+			}
 		})
 	})
-});
+}).withSchema('prod');
 
-async function seed() {
+async function insertOrIgnore<TE extends keyof DB & string>(table: TE, data: any) {
+	try {
+		await db.insertInto(table).values(data).execute();
+		console.log(`Inserted data into: ${table}`);
+	} catch (error) {
+		if (error.code === '23505') {
+			// Unique violation error code
+			console.log(`Record already exists in ${table}, skipping`);
+		} else {
+			throw error;
+		}
+	}
+}
+
+const seed = async () => {
 	console.log('Seeding database...');
 	const hashedPassword = await argon2id.hash('password');
 
+	console.log('Reading data files...');
+	const departmentDataRaw = await fs.readFile(path.join(__dirname, 'departments.json'), 'utf-8');
+	const departmentData = JSON.parse(departmentDataRaw);
+	console.log('Departments read successfully');
 	const courseDataRaw = await fs.readFile(path.join(__dirname, 'courses.json'), 'utf-8');
 	const courseData = JSON.parse(courseDataRaw);
+	console.log('Courses read successfully');
+	const degreeDataRaw = await fs.readFile(path.join(__dirname, 'degrees.json'), 'utf-8');
+	const degreeData = JSON.parse(degreeDataRaw);
+	console.log('Degrees read successfully');
 
-	async function insertOrIgnore<TE extends keyof DB & string>(
-		table: TE,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		data: any
-	) {
-		try {
-			await db.insertInto(table).values(data).execute();
-			console.log(`Inserted into ${table}`);
-		} catch (error) {
-			if (error.code === '23505') {
-				// Unique violation error code
-				console.log(`Record already exists in ${table}, skipping`);
-			} else {
-				throw error;
-			}
-		}
-	}
+	await db.deleteFrom('CoursePrerequisite').execute();
+	await db.deleteFrom('Course').execute();
+	await db.deleteFrom('Degree').execute();
+	await db.deleteFrom('Department').execute();
 
-	// Insert Users
-	await insertOrIgnore('User', {
-		id: '1',
-		name: 'Admin',
-		email: 'admin@uwi.edu',
-		role: 'ADMIN',
-		password: hashedPassword,
-		created_at: new Date().toISOString(),
-		updated_at: new Date().toISOString()
-	});
-
-	db.updateTable('User').set('name', 'Admin').where('User.id', '=', '1').execute();
-
-	await insertOrIgnore('User', {
-		id: '2',
-		name: 'Advisor',
-		email: 'advisor@uwi.edu',
-		role: 'ADVISOR',
-		password: hashedPassword,
-		created_at: new Date().toISOString(),
-		updated_at: new Date().toISOString()
-	});
-
-	db.updateTable('User').set('name', 'Advisor').where('User.id', '=', '2').execute();
-
-	await insertOrIgnore('User', {
-		id: '3',
-		name: 'Student',
-		email: 'student@uwi.edu',
-		role: 'STUDENT',
-		password: hashedPassword,
-		created_at: new Date().toISOString(),
-		updated_at: new Date().toISOString()
-	});
-
-	db.updateTable('User').set('name', 'Student').where('User.id', '=', '3').execute();
-
-	// Insert Advisor
-	await insertOrIgnore('Advisor', {
-		id: '1',
-		user_id: '2'
-	});
-
-	// Insert Student
-	await insertOrIgnore('Student', {
-		id: '1',
-		user_id: '3',
-		advisor_id: '1',
-		invite_token: null,
-		program_id: 1,
-		invite_expires: null,
-		created_at: new Date().toISOString(),
-		updated_at: new Date().toISOString()
-	});
-
-	const deparments: { id: string; name: string }[] = [
-		{
-			id: '1',
-			name: 'Biochemistry'
-		},
-		{
-			id: '2',
-			name: 'Biology'
-		},
-		{
-			id: '3',
-			name: 'Ecology'
-		},
-		{
-			id: '4',
-			name: 'Microbiology'
-		},
-		{
-			id: '5',
-			name: 'Environmental Science'
-		},
-		{
-			id: '6',
-			name: 'Chemistry'
-		},
-		{
-			id: '7',
-			name: 'Computer Science'
-		},
-		{
-			id: '8',
-			name: 'Information Technology'
-		},
-		{
-			id: '9',
-			name: 'Software Engineering'
-		},
-		{
-			id: '10',
-			name: 'Mathematics'
-		},
-		{
-			id: '11',
-			name: 'Electronics'
-		},
-		{
-			id: '12',
-			name: 'Physics'
-		},
-		{
-			id: '13',
-			name: 'Meteorology'
-		}
-	];
-
-	for (const department of deparments) {
+	// Insert Departments records
+	for (const department of departmentData) {
 		await insertOrIgnore('Department', department);
 	}
-
-	// Insert Departments
-	await insertOrIgnore('Department', {
-		id: '1',
-		name: 'Computer Science'
-	});
-
-	// Insert Majors
-	// await insertOrIgnore('Major', {
-	// 	id: '1',
-	// 	name: 'Computer Science',
-	// 	department_id: '1'
-	// });
-
 	// Insert Courses
 	for (const course of courseData) {
 		await insertOrIgnore('Course', {
@@ -184,7 +73,10 @@ async function seed() {
 			credits: course.credits,
 			departmentId: course.department
 		} as Course);
+	}
 
+	// Insert Courses Prerequisites
+	for (const course of courseData) {
 		if (course.prerequisite) {
 			console.log(`Inserting prerequisites for ${course.code}`);
 			for (const prerequisiteId of course.prerequisite) {
@@ -215,54 +107,120 @@ async function seed() {
 		}
 	}
 
-	try {
-		// Insert Computer Science Program
-		const programId = randomUUID();
-		await insertOrIgnore('Program', {
-			id: programId,
-			name: 'Computer Science'
-		});
+	await db.deleteFrom('User').execute();
 
-		const requirementId = randomUUID();
-		const requirementDetails = {
-			courses: ['150', '9508', '197', '12804', '154']
-		};
+	// Insert Users - Admin
+	await insertOrIgnore('User', {
+		id: randomUUID(),
+		name: 'Admin',
+		email: 'admin@cavehill.uwi.edu',
+		role: 'ADMIN',
+		password: hashedPassword,
+		created_at: new Date().toISOString(),
+		updated_at: new Date().toISOString()
+	});
 
-		await insertOrIgnore('ProgramRequirement', {
-			id: requirementId,
-			programId: programId,
-			type: 'CREDITS',
-			credits: requirementDetails.courses.length * 3, // Assuming each course is 3 credits
-			details: JSON.stringify(requirementDetails)
-		});
+	// Insert Users - Advisor
+	const [advisor_id, student_id] = [randomUUID(), randomUUID()];
+	await insertOrIgnore('User', {
+		id: advisor_id,
+		name: 'Advisor 1',
+		email: 'advisor1@cavehill.uwi.edu',
+		role: 'ADVISOR',
+		password: hashedPassword,
+		created_at: new Date().toISOString(),
+		updated_at: new Date().toISOString()
+	});
 
-		// Insert electives using the POOL type
+	// Insert Users - Student
+	await insertOrIgnore('User', {
+		id: student_id,
+		name: 'Student 1',
+		email: 'student1@mycavehill.uwi.edu',
+		role: 'STUDENT',
+		password: hashedPassword,
+		created_at: new Date().toISOString(),
+		updated_at: new Date().toISOString()
+	});
 
+	// Insert Advisor data - Students
+	await insertOrIgnore('Advisor', {
+		id: advisor_id,
+		user_id: student_id
+	});
+
+	await db.deleteFrom('ProgramRequirement').execute();
+	await db.deleteFrom('Program').execute();
+
+	// Insert Programs and Requirements
+	for (const degree of degreeData) {
 		try {
-			const requirementId = randomUUID();
-			const requirementDetails = {
-				levelPool: ['I'],
-				facultyPool: 'any'
-			};
-
-			await insertOrIgnore('ProgramRequirement', {
-				id: requirementId,
-				programId: programId,
-				type: 'POOL',
-				credits: 3,
-				details: JSON.stringify(requirementDetails)
+			const programId = randomUUID();
+			// Insert Programs
+			await insertOrIgnore('Program', {
+				id: programId,
+				name: degree.name
 			});
-
-			console.log('Electives seeded successfully for:', programId);
+			console.log('Program added successfully:', degree.name);
+			// Insert Program Requirements
+			console.log('Inserting requirements for:', degree);
+			for (const element of degree.requirements) {
+				const requirementId = randomUUID();
+				if (element.type === 'CREDITS') {
+					const requirementDetails = element;
+					await insertOrIgnore('ProgramRequirement', {
+						id: requirementId,
+						programId: programId,
+						type: 'CREDITS',
+						credits: requirementDetails.courses.length * 3, // Assuming each course is 3 credits
+						details: JSON.stringify({ courses: requirementDetails.courses })
+					});
+					console.log('Inserted credits successfully for:', programId);
+				} else if (element.type === 'POOL') {
+					const requirementDetails = {
+						levelPool: element.levelPool,
+						facultyPool: element.facultyPool
+					};
+					await insertOrIgnore('ProgramRequirement', {
+						id: requirementId,
+						programId: programId,
+						type: 'POOL',
+						credits: element.credits,
+						details: JSON.stringify(requirementDetails)
+					});
+					console.log('Inserted pool successfully for:', programId);
+				}
+			}
+			console.log('Added requirements successfully for:', programId);
 		} catch (error) {
-			console.error('Error inserting program:', error);
+			console.error('Error inserting program or requirements:', error);
 		}
-
-		console.log('Computer Science program seeded successfully');
-	} catch (error) {
-		console.error('Error inserting program:', error);
 	}
-}
+
+	await db.deleteFrom('Student').execute();
+
+	const programId = await db
+		.selectFrom('Program')
+		.where('name', '=', 'Biochemistry')
+		.select('id')
+		.executeTakeFirst();
+
+	// Insert Student data - Advisor
+	if (programId && programId.hasOwnProperty('id')) {
+		await insertOrIgnore('Student', {
+			id: randomUUID(),
+			user_id: student_id,
+			advisor_id: advisor_id,
+			invite_token: null,
+			program_id: programId.id,
+			invite_expires: null,
+			created_at: new Date().toISOString(),
+			updated_at: new Date().toISOString()
+		});
+	}
+
+	db.destroy();
+};
 
 seed()
 	.then(() => {
