@@ -4,16 +4,26 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import TrashIcon from '../icons/TrashIcon.svelte';
 	import { enhance } from '$app/forms';
-	import { completedCourses, courseGrades } from '$lib/stores/degreeTracker';
+	import {
+		completedCourses,
+		courseGrades,
+		programCourses,
+		requirementCourses
+	} from '$lib/stores/degreeTracker';
 	import { writable, type Writable } from 'svelte/store';
+	import { getPoolCourses } from './context';
 
 	export let requirement: ProgramRequirement;
-	export let courses: Writable<CourseWithRequirement[]> = writable([]);
-	// export let completedCourses: any;
-	// export let courseGrades: any;
 	export let onAddCourse: (requirementId: string) => void;
 
-	$: currentCredits = $courses.reduce((sum, course) => sum + course.credits, 0);
+	let courses =
+		(getPoolCourses(requirement.id) as Writable<CourseWithRequirement[]>) || writable([]);
+
+	$: currentCredits = $courses
+		.filter(
+			(c) => c.id in $completedCourses && $requirementCourses.includes(c.id.concat(requirement.id))
+		)
+		.reduce((sum, course) => sum + course.credits, 0);
 
 	function handleGradeChange(courseId: string, event: Event) {
 		const target = event.target as HTMLSelectElement;
@@ -33,18 +43,24 @@
 	}
 </script>
 
+<!-- <pre>{JSON.stringify(requirement.id, null, 2)}</pre>
+<pre>{JSON.stringify($requirementCourses.includes('12980'.concat(requirement.id)), null, 2)}</pre>
+{'12980'.concat(requirement.id)} -->
 <li>
 	<div class="flex flex-col px-4 py-4 sm:px-6">
 		<div class="flex items-center justify-between">
 			<span class="font-medium text-gray-900">
-				Level {requirement.details?.levelPool[0]} Requirement ({currentCredits}/{requirement.credits}
+				{#if requirement.level !== null}Level {requirement.level}
+				{:else}
+					Degree
+				{/if} Requirement ({currentCredits}/{requirement.credits}
 				credits)
 			</span>
 			{#if currentCredits < requirement.credits}
 				<Button on:click={() => onAddCourse(requirement.id)}>Add Course</Button>
 			{/if}
 		</div>
-		{#each $courses as course (course.id)}
+		{#each $courses.filter((c) => c.id in $completedCourses && $requirementCourses.includes(c.id.concat(requirement.id))) as course (course.id)}
 			<div class="mt-2 flex items-center">
 				<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
 					<div>

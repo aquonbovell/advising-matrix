@@ -8,8 +8,9 @@ export const load = (async ({ locals }) => {
 
 	const data = await db
 		.selectFrom('Student')
-		.select(['Student.id', 'Student.user_id'])
+		.innerJoin('Program', 'Program.id', 'Student.program_id')
 		.where('Student.user_id', '=', userId)
+		.select(['Program.name as program'])
 		.executeTakeFirst();
 
 	if (!data) {
@@ -18,6 +19,6 @@ export const load = (async ({ locals }) => {
 		};
 	}
 	return {
-		student: data
+		student: { ...data, name: locals.user?.name }
 	};
 }) satisfies PageServerLoad;

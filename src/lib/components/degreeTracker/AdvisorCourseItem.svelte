@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { gradePoints } from '$lib/types';
-	import type { CourseWithPrerequisites } from '$lib/types';
+	import type { CourseWithPrerequisites, Grade } from '$lib/types';
 	import { completedCourses, courseGrades } from '$lib/stores/degreeTracker';
 
 	export let course: CourseWithPrerequisites;
@@ -53,7 +53,8 @@
 					name={`courses[${course.id}].grade`}
 					value={$courseGrades[course.id] ?? ''}
 					class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-					disabled
+					disabled={true}
+					aria-readonly="true"
 				>
 					<option value="">No Grade</option>
 					{#each Object.keys(gradePoints) as grade}

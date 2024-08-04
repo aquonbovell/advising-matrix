@@ -19,11 +19,11 @@ export function setPoolCourses(requirementId: string, courses: CourseWithRequire
 	}
 }
 
-export function updatePoolCourses(requirementId: string, course: CourseWithRequirement) {
+export function updatePoolCourses(requirementId: string) {
 	const store = getPoolCourses(requirementId);
-	store!.update((courses) => [...courses, course]);
+	store!.update((courses) => [...courses]);
 	// setPoolCourses(requirementId, get(store));
 	getPoolCourses(requirementId)?.subscribe((courses) => {
-		console.log('Courses:', courses);
+		// console.log('Courses:', courses);
 	});
 }

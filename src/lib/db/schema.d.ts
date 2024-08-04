@@ -56,6 +56,7 @@ export type ProgramRequirement = {
 	programId: string;
 	type: RequirementType;
 	credits: number;
+	level: number | null;
 	details: unknown;
 };
 export type Session = {

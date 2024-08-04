@@ -62,10 +62,15 @@ export type CourseWithRequirement = CourseWithPrerequisites & {
 };
 
 export type Program = DBProgram & {
-	requirements: ProgramRequirement[];
+	requirements: ProgramRequirement[] | ProgramRequirementCourses[];
+	requirementsWithCourses: ProgramRequirementCourses[];
 };
 
 export type StudentGrade = Omittable<StudentCourse, 'id' | 'studentId' | 'courseId'> & {
 	course: Omit<Course, 'departmentId'>;
 	grade: Grade;
+};
+
+export type ProgramRequirementCourses = ProgramRequirement & {
+	courses: CourseWithPrerequisites[];
 };

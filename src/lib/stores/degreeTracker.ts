@@ -1,12 +1,18 @@
-import { gradePoints, type CourseWithRequirement, type Grade } from '$lib/types';
+import {
+	gradePoints,
+	type CourseWithPrerequisites,
+	type CourseWithRequirement,
+	type Grade
+} from '$lib/types';
 import { arePrerequisitesMet } from '$lib/utils';
 import { writable, derived } from 'svelte/store';
 
 export const courseGrades = writable<Record<string, Grade | ''>>({});
 export const completedCourses = writable<Record<string, boolean>>({});
+export const requirementCourses = writable<string[]>([]);
 export const programCourses = writable<CourseWithRequirement[]>([]);
 
-export const poolCourses = writable<CourseWithRequirement[]>([]);
+export const poolCourses = writable<CourseWithPrerequisites[]>([]);
 
 export const totalCredits = derived(
 	programCourses,
@@ -16,10 +22,12 @@ export const totalCredits = derived(
 export const appliedCredits = derived(
 	[completedCourses, courseGrades, programCourses],
 	([$completed, $grades, $programCourses]) =>
-		$programCourses.reduce(
-			(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
-			0
-		) || 0
+		$programCourses
+			.filter((c) => c.code[4] == '2' || (c.code[4] == '3' && !c.code.startsWith('COOR')))
+			.reduce(
+				(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
+				0
+			) || 0
 );
 
 export const inProgress = derived(

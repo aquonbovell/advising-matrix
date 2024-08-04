@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import DonutChart from '$lib/components/DonutChart.svelte';
 	import PieChart from '$lib/components/PieChart.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	console.log(data);
 
 	// placeholders
 	let advisorName = 'Mr.TempName';
@@ -20,16 +18,25 @@
 	let studentId = 400000000;
 </script>
 
-<div class="mx-10 flex max-h-full flex-col">
-	<section id="welcome" class="my-5 flex justify-between align-middle">
+<div class=" flex flex-col p-4">
+	<section id="welcome" class=" flex flex-col items-baseline justify-between md:flex-row">
 		<div id="student" class="flex flex-col items-start">
-			<h1 class="text-5xl font-semibold">
+			<h1 class="text-3xl font-semibold">
 				<!-- {$page.data.user.role} Dashboard -->
-				Welcome {name}
+				{#if data.student}
+					Welcome {data.student.name}
+				{:else}
+					Anonomyous
+				{/if}
 			</h1>
-			<h4 class="mx-1 my-3 text-xl opacity-60">{studentId}</h4>
+			<!-- The is not needed -->
+			<!-- <h4 class="mx-1 my-3 text-xl opacity-60">{studentId}</h4> -->
 		</div>
-		<h2 class="mx-10 text-2xl">{major}</h2>
+		{#if data.student?.program}
+			<h2 class="text-2xl">Bsc {data.student?.program}</h2>
+		{:else}
+			<h2 class="text-2xl">No Program</h2>
+		{/if}
 	</section>
 	<section id="charts" class="my-10 flex flex-col justify-between">
 		<div class="h-full flex-1 justify-center">

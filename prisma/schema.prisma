@@ -114,6 +114,7 @@ model ProgramRequirement {
   program   Program         @relation(fields: [programId], references: [id])
   type      RequirementType
   credits   Int
+  level     Int?
   details   Json
 
   StudentCourse StudentCourse[]
