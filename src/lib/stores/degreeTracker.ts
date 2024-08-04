@@ -1,4 +1,9 @@
-import { gradePoints, type CourseWithRequirement, type Grade } from '$lib/types';
+import {
+	gradePoints,
+	type CourseWithPrerequisites,
+	type CourseWithRequirement,
+	type Grade
+} from '$lib/types';
 import { arePrerequisitesMet } from '$lib/utils';
 import { writable, derived } from 'svelte/store';
 
@@ -6,7 +11,7 @@ export const courseGrades = writable<Record<string, Grade | ''>>({});
 export const completedCourses = writable<Record<string, boolean>>({});
 export const programCourses = writable<CourseWithRequirement[]>([]);
 
-export const poolCourses = writable<CourseWithRequirement[]>([]);
+export const poolCourses = writable<CourseWithPrerequisites[]>([]);
 
 export const totalCredits = derived(
 	programCourses,

@@ -35,6 +35,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 			'ProgramRequirement.id as requirementId',
 			'ProgramRequirement.programId',
 			'ProgramRequirement.type',
+			'ProgramRequirement.level',
 			'ProgramRequirement.credits',
 			'ProgramRequirement.details'
 		])
@@ -47,6 +48,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 		id: req.requirementId!,
 		programId: req.programId!,
 		type: req.type as RequirementType,
+		level: req.level!,
 		credits: req.credits!,
 		details:
 			typeof req.details === 'string'
@@ -111,11 +113,11 @@ async function getElectiveCourses(
 					details.levelPool.map((level) => (level === 'I' ? 1 : level === 'II' ? 2 : 3))
 				);
 
-			if (details.facultyPool !== 'any') {
-				query = query
-					.innerJoin('Department', 'Department.id', 'Course.departmentId')
-					.where('Department.name', 'in', details.facultyPool);
-			}
+			// if (details.facultyPool !== 'any') {
+			// 	query = query
+			// 		.innerJoin('Department', 'Department.id', 'Course.departmentId')
+			// 		.where('Department.name', 'in', details.facultyPool);
+			// }
 
 			return query.execute().then((results) => results.map((r) => r.id));
 		})

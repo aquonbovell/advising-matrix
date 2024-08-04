@@ -36,8 +36,10 @@
 		totalCredits,
 		stillNeeded,
 		complete,
-		progressPercentage
+		progressPercentage,
+		poolCourses
 	} from '$lib/stores/degreeTracker';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 
 	export let data: PageData;
 
@@ -53,7 +55,7 @@
 		if (req.type === 'POOL' && req.credits > 0) {
 			setPoolCourses(
 				req.id,
-				$programCourses.filter((course) => course.requirementId === req.id)
+				electiveCourses.filter((course) => req.details.facultyPool.includes(course.id))
 			);
 		}
 	});
@@ -64,7 +66,7 @@
 			{ ...course, requirementId } as CourseWithRequirement
 		]);
 		console.log(requirementId);
-		updatePoolCourses(requirementId, { ...course, requirementId });
+		updatePoolCourses(requirementId);
 		courseGrades.update((grades) => ({ ...grades, [course.id]: '' }));
 		completedCourses.update((completed) => ({ ...completed, [course.id]: false }));
 		dialogOpen = false;
@@ -73,14 +75,29 @@
 	function handleAddCourse() {
 		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
 		const selectedCourseId = courseElement?.value;
+		const currentCredits = $poolCourses
+			.filter((c) => c.id in $completedCourses)
+			.reduce((sum, course) => sum + course.credits, 0);
 		if (selectedCourseId && currentRequirement) {
 			const selectedCourse = electiveCourses.find((c) => c.id === selectedCourseId);
+			const requirementCredits =
+				requirements?.find((req) => req.id === currentRequirement)?.credits ?? 0;
+			if (currentCredits + selectedCourse!.credits > requirementCredits) {
+				dialogOpen = false;
+				alertOpen = true;
+				return;
+			}
 			if (selectedCourse) addCourse(selectedCourse, currentRequirement);
 		}
 	}
 
 	function openAddCourseModal(requirementId: string) {
 		currentRequirement = requirementId;
+		console.log(requirementId);
+		getPoolCourses(requirementId)?.subscribe((courses) => {
+			poolCourses.set(courses);
+			console.log(courses);
+		});
 		dialogOpen = true;
 	}
 
@@ -127,6 +144,7 @@
 	// Form submission handling
 	let loading = false;
 	let success = false;
+	let alertOpen = false;
 </script>
 
 <!-- Header -->
@@ -194,12 +212,8 @@
 	<div class="my-3 rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
 			{#each requirements as req}
-				{#if req.type === 'POOL' && req.credits > 0}
-					<PoolRequirementItem
-						requirement={req}
-						courses={getPoolCourses(req.id)}
-						onAddCourse={openAddCourseModal}
-					/>
+				{#if req.type === 'POOL' && req.credits > 0 && req.level === 1}
+					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
 				{/if}
 			{/each}
 		</ul>
@@ -214,6 +228,51 @@
 		</ul>
 	</div>
 
+	<div class="my-3 rounded-lg bg-white shadow">
+		<ul class="divide-y divide-gray-200">
+			{#each requirements as req}
+				{#if req.type === 'POOL' && req.credits > 0 && req.level === 2}
+					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+				{/if}
+			{/each}
+		</ul>
+	</div>
+
+	<h2 class="mb-2 text-xl font-bold">Level 2 Core</h2>
+	<div class="rounded-lg bg-white shadow">
+		<ul class="divide-y divide-gray-200">
+			{#each degreeCourses.filter((course) => course.code[4] === '3') as course (course.id)}
+				<CourseItem {course} />
+			{/each}
+		</ul>
+	</div>
+
+	<div class="my-3 rounded-lg bg-white shadow">
+		<ul class="divide-y divide-gray-200">
+			{#each requirements as req}
+				{#if req.type === 'POOL' && req.credits > 0 && req.level === 3}
+					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+				{/if}
+			{/each}
+		</ul>
+	</div>
+	<AlertDialog.Root bind:open={alertOpen}>
+		<!-- <AlertDialog.Trigger>Open</AlertDialog.Trigger> -->
+		<AlertDialog.Content>
+			<AlertDialog.Header>
+				<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+				<AlertDialog.Description>
+					This action cannot be done. This will exceed your credits for this selection. Unless you
+					remove a course, you cannot add another.
+				</AlertDialog.Description>
+			</AlertDialog.Header>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+				<AlertDialog.Action>Continue</AlertDialog.Action>
+			</AlertDialog.Footer>
+		</AlertDialog.Content>
+	</AlertDialog.Root>
+
 	<Modal title="Add Elective Course" bind:open={dialogOpen}>
 		<select
 			name="course"
@@ -221,7 +280,7 @@
 			class="w-full rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 		>
 			<option value="">Select a course...</option>
-			{#each electiveCourses.filter((electiveCourse) => $programCourses.findIndex((poolCourse) => poolCourse.id == electiveCourse.id) === -1) as course}
+			{#each $poolCourses.filter((c) => !(c.id in $completedCourses)) as course}
 				<option value={course.id}>{course.code} - {course.name}</option>
 			{/each}
 		</select>
