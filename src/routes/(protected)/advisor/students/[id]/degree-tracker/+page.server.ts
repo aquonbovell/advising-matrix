@@ -5,6 +5,7 @@ import type {
 	CourseWithPrerequisites,
 	Program,
 	ProgramRequirement,
+	ProgramRequirementCourses,
 	RequirementDetails,
 	StudentGrade
 } from '$lib/types';
@@ -23,7 +24,7 @@ async function getStudentId(userId: string): Promise<string | null> {
 async function getProgram(userId: string): Promise<Program | null> {
 	const user = await db
 		.selectFrom('Student')
-		.where('user_id', '=', userId)
+		.where('id', '=', userId)
 		.select('Student.program_id')
 		.executeTakeFirst();
 	const program = await db
@@ -35,6 +36,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 			'ProgramRequirement.id as requirementId',
 			'ProgramRequirement.programId',
 			'ProgramRequirement.type',
+			'ProgramRequirement.level',
 			'ProgramRequirement.credits',
 			'ProgramRequirement.details'
 		])
@@ -47,6 +49,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 		id: req.requirementId!,
 		programId: req.programId!,
 		type: req.type as RequirementType,
+		level: req.level!,
 		credits: req.credits!,
 		details:
 			typeof req.details === 'string'
@@ -54,10 +57,116 @@ async function getProgram(userId: string): Promise<Program | null> {
 				: (req.details as RequirementDetails)
 	}));
 
+	const data: ProgramRequirementCourses[] = [];
+
+	for (const req of requirements) {
+		if (req.type === 'POOL') {
+			const details = req.details;
+			let query = await db
+				.selectFrom('Course')
+				.select('id')
+				.where(
+					'level',
+					'in',
+					details.levelPool.map((level: string) => (level === 'I' ? 1 : level === 'II' ? 2 : 3))
+				)
+				.execute();
+			if (typeof req.details.facultyPool === 'string' && req.details.facultyPool === 'any') {
+				const cos = requirements.filter(
+					(req) =>
+						(req.type === 'CREDITS' && 'courses' in req.details) ||
+						(req.type === 'POOL' &&
+							Array.isArray(req.details.facultyPool) &&
+							!Number.isNaN(+req.details.facultyPool.join('')))
+				);
+				const courseRequirementCodes = requirements.filter(
+					(req) =>
+						req.details.facultyPool !== 'any' &&
+						!(
+							Array.isArray(req.details.facultyPool) &&
+							!Number.isNaN(+req.details.facultyPool.join(''))
+						)
+				);
+				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
+
+				const courses = await getCourses(
+					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
+				);
+				const filtered = courses.filter(
+					(course) =>
+						!courseRequirementCodes
+							.flatMap((req) => req.details.facultyPool)
+							.includes(course.code.substring(0, 4))
+				);
+				data.push({
+					id: req.id!,
+					programId: req.programId!,
+					type: req.type as RequirementType,
+					level: req.level!,
+					credits: req.credits!,
+					details: req.details,
+					courses: filtered
+				});
+			} else if (
+				Array.isArray(req.details.facultyPool) &&
+				Number.isNaN(+req.details.facultyPool.join(''))
+			) {
+				const cos = requirements.filter(
+					(req) =>
+						(req.type === 'CREDITS' && 'courses' in req.details) ||
+						(req.type === 'POOL' &&
+							Array.isArray(req.details.facultyPool) &&
+							!Number.isNaN(+req.details.facultyPool.join('')))
+				);
+				const courseRequirementCodes = requirements.filter(
+					(req) =>
+						req.details.facultyPool !== 'any' &&
+						!(
+							Array.isArray(req.details.facultyPool) &&
+							!Number.isNaN(+req.details.facultyPool.join(''))
+						)
+				);
+				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
+
+				const courses = await getCourses(
+					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
+				);
+				const filtered = courses.filter((course) =>
+					courseRequirementCodes
+						.flatMap((req) => req.details.facultyPool)
+						.includes(course.code.substring(0, 4))
+				);
+				data.push({
+					id: req.id!,
+					programId: req.programId!,
+					type: req.type as RequirementType,
+					level: req.level!,
+					credits: req.credits!,
+					details: req.details,
+					courses: filtered
+				});
+			} else {
+				data.push({
+					id: req.id!,
+					programId: req.programId!,
+					type: req.type as RequirementType,
+					level: req.level!,
+					credits: req.credits!,
+					details: req.details,
+					courses: await getCourses(
+						query
+							.filter((course) => req.details.facultyPool.includes(course.id))
+							.flatMap((course) => course.id)
+					)
+				});
+			}
+		}
+	}
 	return {
 		id: program[0]!.id,
 		name: program[0]!.name,
-		requirements
+		requirements,
+		requirementsWithCourses: data
 	};
 }
 
@@ -111,16 +220,15 @@ async function getElectiveCourses(
 					details.levelPool.map((level) => (level === 'I' ? 1 : level === 'II' ? 2 : 3))
 				);
 
-			if (details.facultyPool !== 'any') {
-				query = query
-					.innerJoin('Department', 'Department.id', 'Course.departmentId')
-					.where('Department.name', 'in', details.facultyPool);
-			}
+			// if (details.facultyPool !== 'any') {
+			// 	query = query
+			// 		.innerJoin('Department', 'Department.id', 'Course.departmentId')
+			// 		.where('Department.name', 'in', details.facultyPool);
+			// }
 
 			return query.execute().then((results) => results.map((r) => r.id));
 		})
 	);
-
 	const flattenedCourseIds = courseIds.flat();
 	return flattenedCourseIds.length > 0 ? getCourses(flattenedCourseIds) : [];
 }
@@ -168,15 +276,11 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	const userId = locals.user?.id;
 	if (!userId) throw error(401, 'Unauthorized');
 
-	const studentId = params.id;
-	const studentIdFromUser = await getStudentId(params.id);
+	console.log('Params:', params);
 
-	if (!studentIdFromUser) throw error(404, 'Unauthorized');
+	console.log('User ID:', userId);
 
-	console.log('Student ID:', studentId, studentIdFromUser);
-	if (!studentId) throw error(404, 'Student not found');
-
-	const program = await getProgram(studentId);
+	const program = await getProgram(params.id);
 	if (!program) throw error(404, 'Program not found');
 
 	const [programCourses, electiveCourses, studentCourses] = await Promise.all([
@@ -186,9 +290,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			)
 		),
 		getElectiveCourses(program.requirements.filter((req) => req.type === 'POOL')),
-		getStudentCourses(studentIdFromUser)
+		getStudentCourses(params.id)
 	]);
 
+	// throw error(500, 'Not implemented');
 	// *Debugging
 	// console.log('Program:', program);
 	// console.log('Program Courses:', programCourses);

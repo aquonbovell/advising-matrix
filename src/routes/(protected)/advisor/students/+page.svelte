@@ -131,7 +131,7 @@
 												>
 													View Details
 												</a> -->
-												<Action code={student.user_id} />
+												<Action code={student.id} />
 											{/if}
 										</td>
 									</tr>
