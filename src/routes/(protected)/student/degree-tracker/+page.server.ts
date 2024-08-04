@@ -5,6 +5,7 @@ import type {
 	CourseWithPrerequisites,
 	Program,
 	ProgramRequirement,
+	ProgramRequirementCourses,
 	RequirementDetails,
 	StudentGrade
 } from '$lib/types';
@@ -56,7 +57,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 				: (req.details as RequirementDetails)
 	}));
 
-	let data = [];
+	const data: ProgramRequirementCourses[] = [];
 
 	for (const req of requirements) {
 		if (req.type === 'POOL') {
@@ -67,7 +68,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 				.where(
 					'level',
 					'in',
-					details.levelPool.map((level) => (level === 'I' ? 1 : level === 'II' ? 2 : 3))
+					details.levelPool.map((level: string) => (level === 'I' ? 1 : level === 'II' ? 2 : 3))
 				)
 				.execute();
 			if (typeof req.details.facultyPool === 'string' && req.details.facultyPool === 'any') {
@@ -104,7 +105,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 					level: req.level!,
 					credits: req.credits!,
 					details: req.details,
-					coursesIDs: filtered
+					courses: filtered
 				});
 			} else if (
 				Array.isArray(req.details.facultyPool) &&
@@ -126,7 +127,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 						)
 				);
 				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
-				console.log('Course IDs:', courseIds);
+
 				const courses = await getCourses(
 					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
 				);
@@ -142,9 +143,8 @@ async function getProgram(userId: string): Promise<Program | null> {
 					level: req.level!,
 					credits: req.credits!,
 					details: req.details,
-					coursesIDs: filtered
+					courses: filtered
 				});
-				// console.log(query.length);
 			} else {
 				data.push({
 					id: req.id!,
@@ -153,7 +153,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 					level: req.level!,
 					credits: req.credits!,
 					details: req.details,
-					coursesIDs: await getCourses(
+					courses: await getCourses(
 						query
 							.filter((course) => req.details.facultyPool.includes(course.id))
 							.flatMap((course) => course.id)
@@ -162,13 +162,11 @@ async function getProgram(userId: string): Promise<Program | null> {
 			}
 		}
 	}
-
-	// console.log('Data:', data);
 	return {
 		id: program[0]!.id,
 		name: program[0]!.name,
 		requirements,
-		data: data
+		requirementsWithCourses: data
 	};
 }
 
@@ -231,7 +229,6 @@ async function getElectiveCourses(
 			return query.execute().then((results) => results.map((r) => r.id));
 		})
 	);
-
 	const flattenedCourseIds = courseIds.flat();
 	return flattenedCourseIds.length > 0 ? getCourses(flattenedCourseIds) : [];
 }

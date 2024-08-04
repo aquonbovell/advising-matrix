@@ -9,9 +9,7 @@
 		type CourseWithRequirement,
 		type Grade
 	} from '$lib/types';
-	import { derived, get, writable } from 'svelte/store';
 	import type { PageData } from './$types';
-	import type { Course } from '$lib/db/schema';
 
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import CourseItem from '$lib/components/degreeTracker/CourseItem.svelte';
@@ -52,11 +50,11 @@
 	let currentRequirement: string | null = null;
 
 	// Pool courses
-	$: program.data.forEach((req) => {
+	$: program.requirementsWithCourses.forEach((req) => {
 		if (req.type === 'POOL' && req.credits > 0) {
 			setPoolCourses(
 				req.id,
-				req.coursesIDs.map((course: CourseWithPrerequisites) => ({
+				req?.courses.map((course: CourseWithPrerequisites) => ({
 					...course,
 					requirementId: req.id
 				}))
@@ -69,7 +67,6 @@
 			...courses,
 			{ ...course, requirementId } as CourseWithRequirement
 		]);
-		console.log(requirementId);
 		updatePoolCourses(requirementId);
 		courseGrades.update((grades) => ({ ...grades, [course.id]: '' }));
 		requirementCourses.update((courses) => [...courses, course.id.concat(requirementId)]);
@@ -80,13 +77,14 @@
 	function handleAddCourse() {
 		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
 		const selectedCourseId = courseElement?.value;
-		const currentCredits = $poolCourses
-			.filter(
-				(c) =>
-					c.id in $completedCourses && $requirementCourses.includes(c.id.concat(currentRequirement))
-			)
-			.reduce((sum, course) => sum + course.credits, 0);
 		if (selectedCourseId && currentRequirement) {
+			const currentCredits = $poolCourses
+				.filter(
+					(c) =>
+						c.id in $completedCourses &&
+						$requirementCourses.includes(c.id.concat(currentRequirement ?? ''))
+				)
+				.reduce((sum, course) => sum + course.credits, 0);
 			const selectedCourse = electiveCourses.find((c) => c.id === selectedCourseId);
 			const requirementCredits =
 				requirements?.find((req) => req.id === currentRequirement)?.credits ?? 0;
@@ -155,6 +153,7 @@
 </script>
 
 <!-- Header -->
+<!-- <pre>{JSON.stringify(degreeCourses, null, 2)}</pre> -->
 <Header degreeName={data.program.name} />
 
 <h2 class="my-2 text-xl font-semibold">Course Requirements</h2>
@@ -264,7 +263,17 @@
 	<div class="my-3 rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
 			{#each requirements as req}
-				{#if req.type === 'POOL' && req.credits > 0 && (req.level === 3 || req.level === null)}
+				{#if req.type === 'POOL' && req.credits > 0 && req.level === 3}
+					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+				{/if}
+			{/each}
+		</ul>
+	</div>
+
+	<div class="my-3 rounded-lg bg-white shadow">
+		<ul class="divide-y divide-gray-200">
+			{#each requirements as req}
+				{#if req.type === 'POOL' && req.credits > 0 && req.level === null}
 					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
 				{/if}
 			{/each}

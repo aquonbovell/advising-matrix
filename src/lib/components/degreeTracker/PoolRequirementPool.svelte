@@ -50,7 +50,10 @@
 	<div class="flex flex-col px-4 py-4 sm:px-6">
 		<div class="flex items-center justify-between">
 			<span class="font-medium text-gray-900">
-				Level {requirement.level} Requirement ({currentCredits}/{requirement.credits}
+				{#if requirement.level !== null}Level {requirement.level}
+				{:else}
+					Degree
+				{/if} Requirement ({currentCredits}/{requirement.credits}
 				credits)
 			</span>
 			{#if currentCredits < requirement.credits}

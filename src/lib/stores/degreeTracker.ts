@@ -22,10 +22,12 @@ export const totalCredits = derived(
 export const appliedCredits = derived(
 	[completedCourses, courseGrades, programCourses],
 	([$completed, $grades, $programCourses]) =>
-		$programCourses.reduce(
-			(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
-			0
-		) || 0
+		$programCourses
+			.filter((c) => c.code[4] == '2' || (c.code[4] == '3' && !c.code.startsWith('COOR')))
+			.reduce(
+				(sum, course) => sum + ($completed[course.id] && $grades[course.id] ? course.credits : 0),
+				0
+			) || 0
 );
 
 export const inProgress = derived(

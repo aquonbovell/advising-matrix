@@ -92,5 +92,7 @@ export function arePrerequisitesMet(
 	course: CourseWithPrerequisites | CourseWithRequirement
 ): boolean {
 	if (!course.prerequisites || course.prerequisites.length === 0) return true;
-	return course.prerequisites.every((prereq) => completedCourses[prereq.id]);
+	let courses: Record<string, boolean> = {};
+	completedCourses.subscribe((value) => (courses = value));
+	return course.prerequisites.every((prereq) => courses[prereq.id]);
 }
