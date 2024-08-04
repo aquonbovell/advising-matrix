@@ -56,10 +56,119 @@ async function getProgram(userId: string): Promise<Program | null> {
 				: (req.details as RequirementDetails)
 	}));
 
+	let data = [];
+
+	for (const req of requirements) {
+		if (req.type === 'POOL') {
+			const details = req.details;
+			let query = await db
+				.selectFrom('Course')
+				.select('id')
+				.where(
+					'level',
+					'in',
+					details.levelPool.map((level) => (level === 'I' ? 1 : level === 'II' ? 2 : 3))
+				)
+				.execute();
+			if (typeof req.details.facultyPool === 'string' && req.details.facultyPool === 'any') {
+				const cos = requirements.filter(
+					(req) =>
+						(req.type === 'CREDITS' && 'courses' in req.details) ||
+						(req.type === 'POOL' &&
+							Array.isArray(req.details.facultyPool) &&
+							!Number.isNaN(+req.details.facultyPool.join('')))
+				);
+				const courseRequirementCodes = requirements.filter(
+					(req) =>
+						req.details.facultyPool !== 'any' &&
+						!(
+							Array.isArray(req.details.facultyPool) &&
+							!Number.isNaN(+req.details.facultyPool.join(''))
+						)
+				);
+				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
+
+				const courses = await getCourses(
+					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
+				);
+				const filtered = courses.filter(
+					(course) =>
+						!courseRequirementCodes
+							.flatMap((req) => req.details.facultyPool)
+							.includes(course.code.substring(0, 4))
+				);
+				data.push({
+					id: req.id!,
+					programId: req.programId!,
+					type: req.type as RequirementType,
+					level: req.level!,
+					credits: req.credits!,
+					details: req.details,
+					coursesIDs: filtered
+				});
+			} else if (
+				Array.isArray(req.details.facultyPool) &&
+				Number.isNaN(+req.details.facultyPool.join(''))
+			) {
+				const cos = requirements.filter(
+					(req) =>
+						(req.type === 'CREDITS' && 'courses' in req.details) ||
+						(req.type === 'POOL' &&
+							Array.isArray(req.details.facultyPool) &&
+							!Number.isNaN(+req.details.facultyPool.join('')))
+				);
+				const courseRequirementCodes = requirements.filter(
+					(req) =>
+						req.details.facultyPool !== 'any' &&
+						!(
+							Array.isArray(req.details.facultyPool) &&
+							!Number.isNaN(+req.details.facultyPool.join(''))
+						)
+				);
+				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
+				console.log('Course IDs:', courseIds);
+				const courses = await getCourses(
+					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
+				);
+				const filtered = courses.filter((course) =>
+					courseRequirementCodes
+						.flatMap((req) => req.details.facultyPool)
+						.includes(course.code.substring(0, 4))
+				);
+				data.push({
+					id: req.id!,
+					programId: req.programId!,
+					type: req.type as RequirementType,
+					level: req.level!,
+					credits: req.credits!,
+					details: req.details,
+					coursesIDs: filtered
+				});
+				// console.log(query.length);
+			} else {
+				data.push({
+					id: req.id!,
+					programId: req.programId!,
+					type: req.type as RequirementType,
+					level: req.level!,
+					credits: req.credits!,
+					details: req.details,
+					coursesIDs: await getCourses(
+						query
+							.filter((course) => req.details.facultyPool.includes(course.id))
+							.flatMap((course) => course.id)
+					)
+				});
+			}
+		}
+	}
+
+	// console.log('Data:', data);
 	return {
 		id: program[0]!.id,
 		name: program[0]!.name,
-		requirements
+		requirements,
+		data: data
 	};
 }
 
@@ -186,9 +295,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	// *Debugging
 	// console.log('Program:', program);
-	console.log('Program Courses:', programCourses);
-	console.log('Elective Courses:', electiveCourses);
-	console.log('Student Courses:', studentCourses);
+	// console.log('Program Courses:', programCourses);
+	// console.log('Elective Courses:', electiveCourses);
+	// console.log('Student Courses:', studentCourses);
 
 	return {
 		program,

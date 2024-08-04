@@ -9,6 +9,7 @@ import { writable, derived } from 'svelte/store';
 
 export const courseGrades = writable<Record<string, Grade | ''>>({});
 export const completedCourses = writable<Record<string, boolean>>({});
+export const requirementCourses = writable<string[]>([]);
 export const programCourses = writable<CourseWithRequirement[]>([]);
 
 export const poolCourses = writable<CourseWithPrerequisites[]>([]);

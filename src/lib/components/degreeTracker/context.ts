@@ -1,7 +1,7 @@
 import { writable, get, type Writable } from 'svelte/store';
-import type { CourseWithPrerequisites } from '$lib/types';
+import type { CourseWithRequirement } from '$lib/types';
 
-const poolCourses = new Map<string, Writable<CourseWithPrerequisites[]>>();
+const poolCourses = new Map<string, Writable<CourseWithRequirement[]>>();
 
 export function getPoolCourses(requirementId: string) {
 	if (!poolCourses.has(requirementId)) {
@@ -10,7 +10,7 @@ export function getPoolCourses(requirementId: string) {
 	return poolCourses.get(requirementId);
 }
 
-export function setPoolCourses(requirementId: string, courses: CourseWithPrerequisites[]) {
+export function setPoolCourses(requirementId: string, courses: CourseWithRequirement[]) {
 	if (!poolCourses.has(requirementId)) {
 		poolCourses.set(requirementId, writable(courses));
 	} else {
@@ -24,6 +24,6 @@ export function updatePoolCourses(requirementId: string) {
 	store!.update((courses) => [...courses]);
 	// setPoolCourses(requirementId, get(store));
 	getPoolCourses(requirementId)?.subscribe((courses) => {
-		console.log('Courses:', courses);
+		// console.log('Courses:', courses);
 	});
 }

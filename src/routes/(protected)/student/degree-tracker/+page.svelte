@@ -37,7 +37,8 @@
 		stillNeeded,
 		complete,
 		progressPercentage,
-		poolCourses
+		poolCourses,
+		requirementCourses
 	} from '$lib/stores/degreeTracker';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 
@@ -51,11 +52,14 @@
 	let currentRequirement: string | null = null;
 
 	// Pool courses
-	$: requirements.forEach((req) => {
+	$: program.data.forEach((req) => {
 		if (req.type === 'POOL' && req.credits > 0) {
 			setPoolCourses(
 				req.id,
-				electiveCourses.filter((course) => req.details.facultyPool.includes(course.id))
+				req.coursesIDs.map((course: CourseWithPrerequisites) => ({
+					...course,
+					requirementId: req.id
+				}))
 			);
 		}
 	});
@@ -68,6 +72,7 @@
 		console.log(requirementId);
 		updatePoolCourses(requirementId);
 		courseGrades.update((grades) => ({ ...grades, [course.id]: '' }));
+		requirementCourses.update((courses) => [...courses, course.id.concat(requirementId)]);
 		completedCourses.update((completed) => ({ ...completed, [course.id]: false }));
 		dialogOpen = false;
 	}
@@ -76,7 +81,10 @@
 		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
 		const selectedCourseId = courseElement?.value;
 		const currentCredits = $poolCourses
-			.filter((c) => c.id in $completedCourses)
+			.filter(
+				(c) =>
+					c.id in $completedCourses && $requirementCourses.includes(c.id.concat(currentRequirement))
+			)
 			.reduce((sum, course) => sum + course.credits, 0);
 		if (selectedCourseId && currentRequirement) {
 			const selectedCourse = electiveCourses.find((c) => c.id === selectedCourseId);
@@ -96,7 +104,6 @@
 		console.log(requirementId);
 		getPoolCourses(requirementId)?.subscribe((courses) => {
 			poolCourses.set(courses);
-			console.log(courses);
 		});
 		dialogOpen = true;
 	}
@@ -148,11 +155,6 @@
 </script>
 
 <!-- Header -->
-<!-- {JSON.stringify(
-	degreeCourses.filter((course) => course.code[4] === '1'),
-	null,
-	2
-)} -->
 <Header degreeName={data.program.name} />
 
 <h2 class="my-2 text-xl font-semibold">Course Requirements</h2>
@@ -201,7 +203,11 @@
 >
 	<h1 class="my-3 text-2xl font-bold">Courses for {program.name}</h1>
 
-	<h2 class="mb-2 text-xl font-bold">Level 1 Core</h2>
+	<h2 class="mb-2 text-xl font-bold">
+		Level 1 Core {degreeCourses
+			.filter((course) => course.code[4] === '1')
+			.reduce((sum, course) => sum + course.credits, 0)} Credits
+	</h2>
 	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
 			{#each degreeCourses.filter((course) => course.code[4] === '1') as course (course.id)}
@@ -219,7 +225,11 @@
 		</ul>
 	</div>
 
-	<h2 class="mb-2 text-xl font-bold">Level 2 Core</h2>
+	<h2 class="mb-2 text-xl font-bold">
+		Level 2 Core {degreeCourses
+			.filter((course) => course.code[4] === '2')
+			.reduce((sum, course) => sum + course.credits, 0)} Credits
+	</h2>
 	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
 			{#each degreeCourses.filter((course) => course.code[4] === '2') as course (course.id)}
@@ -238,7 +248,11 @@
 		</ul>
 	</div>
 
-	<h2 class="mb-2 text-xl font-bold">Level 2 Core</h2>
+	<h2 class="mb-2 text-xl font-bold">
+		Level 3 Core {degreeCourses
+			.filter((course) => course.code[4] === '3')
+			.reduce((sum, course) => sum + course.credits, 0)} Credits
+	</h2>
 	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
 			{#each degreeCourses.filter((course) => course.code[4] === '3') as course (course.id)}
@@ -250,7 +264,7 @@
 	<div class="my-3 rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
 			{#each requirements as req}
-				{#if req.type === 'POOL' && req.credits > 0 && req.level === 3}
+				{#if req.type === 'POOL' && req.credits > 0 && (req.level === 3 || req.level === null)}
 					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
 				{/if}
 			{/each}
@@ -280,7 +294,7 @@
 			class="w-full rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 		>
 			<option value="">Select a course...</option>
-			{#each $poolCourses.filter((c) => !(c.id in $completedCourses)) as course}
+			{#each $poolCourses.filter((c) => !(c.id in $completedCourses && $requirementCourses.filter( (el) => el.startsWith(c.id) ))) as course}
 				<option value={course.id}>{course.code} - {course.name}</option>
 			{/each}
 		</select>
