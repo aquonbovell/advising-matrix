@@ -17,8 +17,6 @@
 		/[A-Z]/.test(password) &&
 		password === confirmPassword &&
 		password !== '';
-
-	// $: console.log({ password, confirmPassword, isPasswordValid });
 </script>
 
 {#if data.token}

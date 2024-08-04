@@ -6,13 +6,10 @@
 
 	export let data;
 
-	const { form, errors, constraints, enhance, submitting, delayed, timeout } = superForm(
-		data.loginForm,
-		{
-			delayMs: 500,
-			timeoutMs: 8000
-		}
-	);
+	const { form, errors, constraints, enhance, submitting } = superForm(data.loginForm, {
+		delayMs: 500,
+		timeoutMs: 8000
+	});
 </script>
 
 <div
