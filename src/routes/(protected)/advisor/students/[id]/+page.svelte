@@ -67,7 +67,7 @@
 							<Select.Trigger class="w-full">
 								<Select.Value placeholder={studentMajor?.name} />
 							</Select.Trigger>
-							<Select.Content>
+							<Select.Content class="max-h-72 overflow-y-auto">
 								{#each data.majors as major}
 									<Select.Item value={major.id}>{major.name}</Select.Item>
 								{/each}

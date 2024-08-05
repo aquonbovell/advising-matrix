@@ -1,6 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
+import type { Program } from '$lib/db/schema';
 
 export const load = (async ({ locals, params }) => {
 	const userId = locals.user?.id;
@@ -10,17 +11,17 @@ export const load = (async ({ locals, params }) => {
 	}
 
 	const studentData = await db
-		.selectFrom('User')
-		.innerJoin('Student', 'Student.user_id', 'User.id')
+		.selectFrom('Student')
+		.innerJoin('User', 'User.id', 'Student.user_id')
 		.select(['User.email', 'User.name', 'Student.program_id', 'User.role'])
-		.where('User.id', '=', params.id)
+		.where('Student.id', '=', params.id)
 		.executeTakeFirst();
 
 	if (!studentData) {
 		throw error(404, 'Student Not found');
 	}
 
-	const studentPrograms = await db.selectFrom('Program').selectAll().execute();
+	const studentPrograms: Program[] = await db.selectFrom('Program').selectAll().execute();
 
 	return { student: { ...studentData }, majors: studentPrograms };
 }) satisfies PageServerLoad;
