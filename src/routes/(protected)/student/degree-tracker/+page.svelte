@@ -109,6 +109,61 @@
 		dialogOpen = true;
 	}
 
+	$: level1requiredcredits = program.requirements
+		.filter((req) => req.level === 1)
+		.reduce((acc, req) => {
+			return acc + req.credits;
+		}, 0);
+
+	$: islevel1completed =
+		level1completedcredits
+			.filter((c) => c.id in $courseGrades && $courseGrades[c.id] !== '')
+			.reduce((acc, c) => {
+				return acc + c.credits;
+			}, 0) >= level1requiredcredits;
+
+	$: level1completedcredits = [
+		...degreeCourses
+			.filter((c) => c.code[4] === '1')
+			.map((c) => {
+				return { id: c.id, credits: c.credits };
+			}),
+		...program.requirementsWithCourses
+			.filter((req) => req.level === 1)
+			.flatMap((req) => {
+				return req.courses.map((course) => {
+					return { id: course.id, credits: course.credits };
+				});
+			})
+	];
+	$: level2requiredcredits = program.requirements
+		.filter((req) => req.level === 2)
+		.reduce((acc, req) => {
+			return acc + req.credits;
+		}, 0);
+
+	$: islevel2completed =
+		level2completedcredits
+			.filter((c) => c.id in $courseGrades && $courseGrades[c.id] !== '')
+			.reduce((acc, c) => {
+				return acc + c.credits;
+			}, 0) >= level2requiredcredits;
+
+	$: level2completedcredits = [
+		...degreeCourses
+			.filter((c) => c.code[4] === '2')
+			.map((c) => {
+				return { id: c.id, credits: c.credits };
+			}),
+		...program.requirementsWithCourses
+			.filter((req) => req.level === 2)
+			.flatMap((req) => {
+				return req.courses.map((course) => {
+					return { id: course.id, credits: course.credits };
+				});
+			})
+	];
+
 	// Reactive statements
 	$: if (programCourses) {
 		programCourses.set(degreeCourses.map((course) => ({ ...course, requirementId: null })));
@@ -156,7 +211,6 @@
 </script>
 
 <!-- Header -->
-<!-- <pre>{JSON.stringify(degreeCourses, null, 2)}</pre> -->
 <Header degreeName={data.program.name} />
 
 <h2 class="my-2 text-xl font-semibold">Course Requirements</h2>
@@ -208,7 +262,7 @@
 	<h2 class="mb-2 text-xl font-bold">
 		Level 1 Core {degreeCourses
 			.filter((course) => course.code[4] === '1')
-			.reduce((sum, course) => sum + course.credits, 0)} Credits
+			.reduce((sum, course) => sum + course.credits, 0)} Credits {level1requiredcredits}
 	</h2>
 	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
@@ -226,62 +280,63 @@
 			{/each}
 		</ul>
 	</div>
+	{#if islevel1completed}
+		<h2 class="mb-2 text-xl font-bold">
+			Level 2 Core {degreeCourses
+				.filter((course) => course.code[4] === '2')
+				.reduce((sum, course) => sum + course.credits, 0)} Credits
+		</h2>
+		<div class="rounded-lg bg-white shadow">
+			<ul class="divide-y divide-gray-200">
+				{#each degreeCourses.filter((course) => course.code[4] === '2') as course (course.id)}
+					<CourseItem {course} />
+				{/each}
+			</ul>
+		</div>
 
-	<h2 class="mb-2 text-xl font-bold">
-		Level 2 Core {degreeCourses
-			.filter((course) => course.code[4] === '2')
-			.reduce((sum, course) => sum + course.credits, 0)} Credits
-	</h2>
-	<div class="rounded-lg bg-white shadow">
-		<ul class="divide-y divide-gray-200">
-			{#each degreeCourses.filter((course) => course.code[4] === '2') as course (course.id)}
-				<CourseItem {course} />
-			{/each}
-		</ul>
-	</div>
+		<div class="my-3 rounded-lg bg-white shadow">
+			<ul class="divide-y divide-gray-200">
+				{#each requirements as req}
+					{#if req.type === 'POOL' && req.credits > 0 && req.level === 2}
+						<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+					{/if}
+				{/each}
+			</ul>
+		</div>
 
-	<div class="my-3 rounded-lg bg-white shadow">
-		<ul class="divide-y divide-gray-200">
-			{#each requirements as req}
-				{#if req.type === 'POOL' && req.credits > 0 && req.level === 2}
-					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
-				{/if}
-			{/each}
-		</ul>
-	</div>
+		<h2 class="mb-2 text-xl font-bold">
+			Level 3 Core {degreeCourses
+				.filter((course) => course.code[4] === '3')
+				.reduce((sum, course) => sum + course.credits, 0)} Credits
+		</h2>
+		<div class="rounded-lg bg-white shadow">
+			<ul class="divide-y divide-gray-200">
+				{#each degreeCourses.filter((course) => course.code[4] === '3') as course (course.id)}
+					<CourseItem {course} />
+				{/each}
+			</ul>
+		</div>
 
-	<h2 class="mb-2 text-xl font-bold">
-		Level 3 Core {degreeCourses
-			.filter((course) => course.code[4] === '3')
-			.reduce((sum, course) => sum + course.credits, 0)} Credits
-	</h2>
-	<div class="rounded-lg bg-white shadow">
-		<ul class="divide-y divide-gray-200">
-			{#each degreeCourses.filter((course) => course.code[4] === '3') as course (course.id)}
-				<CourseItem {course} />
-			{/each}
-		</ul>
-	</div>
+		<div class="my-3 rounded-lg bg-white shadow">
+			<ul class="divide-y divide-gray-200">
+				{#each requirements as req}
+					{#if req.type === 'POOL' && req.credits > 0 && req.level === 3}
+						<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+					{/if}
+				{/each}
+			</ul>
+		</div>
 
-	<div class="my-3 rounded-lg bg-white shadow">
-		<ul class="divide-y divide-gray-200">
-			{#each requirements as req}
-				{#if req.type === 'POOL' && req.credits > 0 && req.level === 3}
-					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
-				{/if}
-			{/each}
-		</ul>
-	</div>
-
-	<div class="my-3 rounded-lg bg-white shadow">
-		<ul class="divide-y divide-gray-200">
-			{#each requirements as req}
-				{#if req.type === 'POOL' && req.credits > 0 && req.level === null}
-					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
-				{/if}
-			{/each}
-		</ul>
-	</div>
+		<div class="my-3 rounded-lg bg-white shadow">
+			<ul class="divide-y divide-gray-200">
+				{#each requirements as req}
+					{#if req.type === 'POOL' && req.credits > 0 && req.level === null}
+						<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+					{/if}
+				{/each}
+			</ul>
+		</div>
+	{/if}
 	<AlertDialog.Root bind:open={alertOpen}>
 		<!-- <AlertDialog.Trigger>Open</AlertDialog.Trigger> -->
 		<AlertDialog.Content>
