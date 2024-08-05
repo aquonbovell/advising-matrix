@@ -39,6 +39,7 @@
 		requirementCourses
 	} from '$lib/stores/degreeTracker';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 
@@ -48,6 +49,8 @@
 	// Local state
 	let dialogOpen = false;
 	let currentRequirement: string | null = null;
+
+	onMount(() => totalCredits.set(program.degreeCredits));
 
 	// Pool courses
 	$: program.requirementsWithCourses.forEach((req) => {

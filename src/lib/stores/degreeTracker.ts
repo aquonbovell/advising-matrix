@@ -5,7 +5,7 @@ import {
 	type Grade
 } from '$lib/types';
 import { arePrerequisitesMet } from '$lib/utils';
-import { writable, derived } from 'svelte/store';
+import { writable, derived, readonly } from 'svelte/store';
 
 export const courseGrades = writable<Record<string, Grade | ''>>({});
 export const completedCourses = writable<Record<string, boolean>>({});
@@ -14,10 +14,7 @@ export const programCourses = writable<CourseWithRequirement[]>([]);
 
 export const poolCourses = writable<CourseWithPrerequisites[]>([]);
 
-export const totalCredits = derived(
-	programCourses,
-	($programCourses) => $programCourses.reduce((sum, course) => sum + course.credits, 0) || 0
-);
+export const totalCredits = writable(0);
 
 export const appliedCredits = derived(
 	[completedCourses, courseGrades, programCourses],
