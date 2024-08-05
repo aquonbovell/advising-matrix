@@ -16,8 +16,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 			.select(['id'])
 			.executeTakeFirst();
 
-		console.log(advisor);
-
 		if (!advisor) {
 			throw error(404, 'Advisor not found');
 		}
