@@ -162,11 +162,15 @@ async function getProgram(userId: string): Promise<Program | null> {
 			}
 		}
 	}
+
+	console.log('Data:', requirements);
+
 	return {
 		id: program[0]!.id,
 		name: program[0]!.name,
 		requirements,
-		requirementsWithCourses: data
+		requirementsWithCourses: data,
+		degreeCredits: program.reduce((acc, req) => acc + req.credits, 0)
 	};
 }
 

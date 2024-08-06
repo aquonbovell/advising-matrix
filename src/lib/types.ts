@@ -64,6 +64,8 @@ export type CourseWithRequirement = CourseWithPrerequisites & {
 export type Program = DBProgram & {
 	requirements: ProgramRequirement[] | ProgramRequirementCourses[];
 	requirementsWithCourses: ProgramRequirementCourses[];
+
+	degreeCredits: number;
 };
 
 export type StudentGrade = Omittable<StudentCourse, 'id' | 'studentId' | 'courseId'> & {
