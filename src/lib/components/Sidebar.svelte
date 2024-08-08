@@ -26,7 +26,8 @@
 		],
 		ADVISOR: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
-			{ icon: HomeIcon, label: 'Students', href: '/advisor/students' },
+			{ icon: HomeIcon, label: 'My Students', href: '/advisor/students' },
+			{ icon: HomeIcon, label: 'All Students', href: '/advisor/allstudents' },
 			{ icon: HomeIcon, label: 'Advisor Courses', href: '/advisor/courses' },
 			{ icon: HomeIcon, label: 'Courses', href: '/courses' }
 			// Add more menu items here
