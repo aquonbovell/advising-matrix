@@ -17,11 +17,17 @@
 	function formatDate(date: Date) {
 		return new Date(date).toLocaleDateString();
 	}
+	async function handleClick() {
+		const response = await fetch('/api/student/2details');
+		const data = await response.json();
+		console.log(data);
+		return;
+	}
 </script>
 
 <div class="mb-6 flex items-center justify-between">
 	<h1 class="text-2xl font-bold text-stone-800">My Students</h1>
-
+	<button on:click={handleClick}>Click Me</button>
 	<Button href="/advisor/students/invite">Invite A Student</Button>
 </div>
 

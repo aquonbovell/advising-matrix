@@ -28,6 +28,7 @@
 	} from '$lib/stores/degreeTracker';
 	import AdvisorCourseItem from '$lib/components/degreeTracker/AdvisorCourseItem.svelte';
 	import AdvisorPoolRequirementPool from '$lib/components/degreeTracker/AdvisorPoolRequirementPool.svelte';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 
@@ -86,6 +87,16 @@
 		courseGrades.set(grades);
 		completedCourses.set(completed);
 	}
+
+	// async function handleClick(student_id: string) {
+	// 	const response = await fetch(`/api/student/${student_id}/details`);
+	// 	const data = await response.json();
+	// 	console.log(data);
+	// 	return;
+	// }
+	// onMount(() => {
+	// 	handleClick(data.student_id);
+	// });
 </script>
 
 <Header degreeName={data.program.name} />

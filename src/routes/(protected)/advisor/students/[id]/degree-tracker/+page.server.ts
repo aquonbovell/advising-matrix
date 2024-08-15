@@ -297,6 +297,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	// console.log('Student Courses:', studentCourses);
 
 	return {
+		student_id: params.id,
 		program,
 		degreeCourses: programCourses,
 		electiveCourses,
