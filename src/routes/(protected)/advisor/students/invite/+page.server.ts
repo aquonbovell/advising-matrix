@@ -47,13 +47,17 @@ export const actions: Actions = {
 
 		const { email, name, programId } = form.data;
 
+		console.log('Inviting student:', { email, name, programId });
+
+		console.log('Locals:', locals);
+
 		try {
 			const advisor = await db
 				.selectFrom('Advisor')
-				.where('user_id', '=', locals.user.id)
+				.where('id', '=', locals.user.id)
 				.select(['id'])
 				.executeTakeFirst();
-
+			console.log('Advisor:', advisor);
 			if (!advisor) {
 				return fail(404, { form, error: 'Advisor not found' });
 			}

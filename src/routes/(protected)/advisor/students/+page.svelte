@@ -1,10 +1,15 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
+	import { goto, preloadData, pushState } from '$app/navigation';
 	import Card from '$lib/components/Card.svelte';
+
+	import * as Dialog from '$lib/components/ui/dialog';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import type { PageData } from './$types';
 	import Action from './action.svelte';
+	import StudentChart from './[id]/overview/+page.svelte';
 
 	export let data: PageData;
 
@@ -17,17 +22,28 @@
 	function formatDate(date: Date) {
 		return new Date(date).toLocaleDateString();
 	}
-	async function handleClick() {
-		const response = await fetch('/api/student/2details');
-		const data = await response.json();
-		console.log(data);
-		return;
+
+	async function showModal(e: MouseEvent) {
+		if (e.metaKey || e.ctrlKey) return;
+		const { href } = e.currentTarget as HTMLAnchorElement;
+		const result = await preloadData(href);
+		if (result.type === 'loaded' && result.status === 200) {
+			pushState(href, { student: result.data.student });
+			studentChartDialog = true;
+		} else {
+			goto(href);
+		}
+	}
+	let studentChartDialog = false;
+	$: if ($page.state.student) {
+		studentChartDialog = true;
+	} else {
+		studentChartDialog = false;
 	}
 </script>
 
 <div class="mb-6 flex items-center justify-between">
 	<h1 class="text-2xl font-bold text-stone-800">My Students</h1>
-	<button on:click={handleClick}>Click Me</button>
 	<Button href="/advisor/students/invite">Invite A Student</Button>
 </div>
 
@@ -137,7 +153,7 @@
 												>
 													View Details
 												</a> -->
-												<Action code={student.id} />
+												<Action code={student.id} modalHandler={showModal} />
 											{/if}
 										</td>
 									</tr>
@@ -150,3 +166,17 @@
 		</div>
 	</div>
 </Card>
+<Dialog.Root
+	open={studentChartDialog}
+	onOpenChange={(open) => {
+		if (!open) {
+			history.back();
+		}
+	}}
+>
+	<Dialog.Content>
+		{#if $page.state.student}
+			<StudentChart data={{ user: data.user, student: $page.state.student, props: { id: '' } }} />
+		{/if}
+	</Dialog.Content>
+</Dialog.Root>

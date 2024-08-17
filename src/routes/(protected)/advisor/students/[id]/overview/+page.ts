@@ -1,6 +1,6 @@
 import type { PageLoad } from './$types';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, fetch }) => {
 	const { id } = params;
 	if (!id) {
 		return {
@@ -8,5 +8,7 @@ export const load = (async ({ params }) => {
 			redirect: '/error'
 		};
 	}
-	return { props: { id } };
+	const response = await fetch(`/api/student/${id}/details`);
+	const data = await response.json();
+	return { props: { id }, student: data };
 }) satisfies PageLoad;
