@@ -3,7 +3,6 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
 
 	export let code: string;
 	export let modalHandler: (e: MouseEvent) => void;
@@ -25,9 +24,11 @@
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item href={$page.url + '/' + code + '/'}>View Student</DropdownMenu.Item>
-		<a href={$page.url + '/' + code + '/overview'} on:click|preventDefault={modalHandler}
-			>View Student Overview
-		</a>
+		<DropdownMenu.Item
+			><a href={$page.url + '/' + code + '/overview'} on:click|preventDefault={modalHandler}
+				>View Student Overview
+			</a></DropdownMenu.Item
+		>
 		<DropdownMenu.Item href={$page.url + '/' + code + '/degree-tracker'}
 			>View Student Degree</DropdownMenu.Item
 		>

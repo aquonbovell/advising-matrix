@@ -27,9 +27,9 @@
 		if (e.metaKey || e.ctrlKey) return;
 		const { href } = e.currentTarget as HTMLAnchorElement;
 		const result = await preloadData(href);
+		console.log(result);
 		if (result.type === 'loaded' && result.status === 200) {
 			pushState(href, { student: result.data.student });
-			studentChartDialog = true;
 		} else {
 			goto(href);
 		}
