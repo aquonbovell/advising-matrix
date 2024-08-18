@@ -174,7 +174,8 @@
 		}
 	}}
 >
-	<Dialog.Content>
+	<Dialog.Overlay class="z-[100]" />
+	<Dialog.Content class=" z-[100]">
 		{#if $page.state.student}
 			<StudentChart data={{ user: data.user, student: $page.state.student, props: { id: '' } }} />
 		{/if}
