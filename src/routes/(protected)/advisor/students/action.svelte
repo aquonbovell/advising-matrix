@@ -15,7 +15,7 @@
 			<Ellipsis class="h-4 w-4" />
 		</Button>
 	</DropdownMenu.Trigger>
-	<DropdownMenu.Content>
+	<DropdownMenu.Content overlap={false}>
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Actions</DropdownMenu.Label>
 			<DropdownMenu.Item on:click={() => navigator.clipboard.writeText(code)}>
