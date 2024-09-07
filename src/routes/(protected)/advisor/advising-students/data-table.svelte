@@ -20,7 +20,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 
-	import DataTableTag from './data-table-tag.svelte'
+	import DataTableTag from './data-table-tag.svelte';
 
 	export let showModal: (e: MouseEvent) => void;
 
@@ -30,11 +30,12 @@
 		name: string | null;
 		email: string;
 		token: {
-		value: string | null;
-    expires: Date | null;}
-    created_at: Date;
-    updated_at: Date;
-    program_name: string | null;
+			value: string | null;
+			expires: Date | null;
+		};
+		created_at: Date;
+		updated_at: Date;
+		program_name: string | null;
 	};
 
 	const students: IStudent[] = [...data.students];
@@ -128,10 +129,16 @@
 		}),
 
 		table.column({
-			accessor: ({ id ,token }) => { return {id, token}},
+			accessor: ({ id, token }) => {
+				return { id, token };
+			},
 			header: 'Actions',
 			cell: ({ value }) => {
-				return createRender(DataTableActions, { code: value.id, modalHandler: showModal , token: value.token});
+				return createRender(DataTableActions, {
+					code: value.id,
+					modalHandler: showModal,
+					token: value.token
+				});
 			},
 			plugins: {
 				sort: {

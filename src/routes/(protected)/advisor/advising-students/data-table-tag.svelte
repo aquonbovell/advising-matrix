@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { formatDate } from '$lib/utils';
+	import { formatDate } from '$lib/utils';
 
-  export let invite_token: string | null;
-  export let invite_expires: Date | null;
+	export let invite_token: string | null;
+	export let invite_expires: Date | null;
 </script>
 
 {#if invite_token}

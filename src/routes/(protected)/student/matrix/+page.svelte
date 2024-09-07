@@ -384,5 +384,4 @@
 			<span class="ml-2 text-sm text-green-500">Changes saved successfully</span>
 		{/if}
 	</div>
-
 </form>

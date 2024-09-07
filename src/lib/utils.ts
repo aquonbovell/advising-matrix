@@ -97,7 +97,6 @@ export function arePrerequisitesMet(
 	return course.prerequisites.every((prereq) => courses[prereq.id]);
 }
 
-
 export function formatDate(date: Date) {
 	return new Date(date).toLocaleDateString();
 }

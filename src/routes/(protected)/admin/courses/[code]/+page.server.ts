@@ -11,7 +11,7 @@ export const load = (async ({ params }) => {
 	const prerequisites = await db
 		.selectFrom('CoursePrerequisite')
 		.innerJoin('Course', 'CoursePrerequisite.prerequisiteId', 'Course.id')
-		.where('CoursePrerequisite.courseId', '=', course?.id?? '')
+		.where('CoursePrerequisite.courseId', '=', course?.id ?? '')
 		.selectAll()
 		.execute();
 

@@ -23,15 +23,15 @@
 				Copy student code
 			</DropdownMenu.Item>
 			{#if token.value}
-			<DropdownMenu.Item
-				on:click={() => {
-					if (token.value === null) return '';
-					if (typeof window === 'undefined') return '';
-					navigator.clipboard.writeText(
-						`${window.location.origin}/register?token=${token.value}`
-					);
-				}}>Copy student token</DropdownMenu.Item
-			>
+				<DropdownMenu.Item
+					on:click={() => {
+						if (token.value === null) return '';
+						if (typeof window === 'undefined') return '';
+						navigator.clipboard.writeText(
+							`${window.location.origin}/register?token=${token.value}`
+						);
+					}}>Copy student token</DropdownMenu.Item
+				>
 			{/if}
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />

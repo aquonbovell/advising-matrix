@@ -25,7 +25,7 @@
 		name: string | null;
 		email: string;
 		program: string;
-		advisor: string;	
+		advisor: string;
 	};
 
 	const students: IStudent[] = [...data.students];
@@ -97,8 +97,11 @@
 				return { id, advisor };
 			},
 			header: 'Actions',
-			cell: ({ value}) => {
-				return createRender(DataTableActions, { code: value.id, existing: value.advisor.split(',').includes(data.user?.name?? '') });
+			cell: ({ value }) => {
+				return createRender(DataTableActions, {
+					code: value.id,
+					existing: value.advisor.split(',').includes(data.user?.name ?? '')
+				});
 			},
 			plugins: {
 				sort: {

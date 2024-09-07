@@ -9,17 +9,15 @@
 		classification: 'Level I'
 	};
 
-	export let islevel1completed:boolean;
-	export let islevel2completed:boolean;
+	export let islevel1completed: boolean;
+	export let islevel2completed: boolean;
 
 	$: {
 		if (islevel1completed) {
 			degree.classification = 'Level II';
-		}
-		else if (islevel2completed) {
+		} else if (islevel2completed) {
 			degree.classification = 'Level III';
-		}
-		else {
+		} else {
 			degree.classification = 'Level I';
 		}
 	}

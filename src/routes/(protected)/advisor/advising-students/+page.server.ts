@@ -48,7 +48,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 				program_name: student.program_name,
 				created_at: student.created_at,
 				updated_at: student.updated_at,
-			
+
 				token: { value: student.invite_token, expires: student.invite_expires }
 			}))
 		};

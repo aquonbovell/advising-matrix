@@ -3,7 +3,7 @@
 
 	export let data: PageData;
 
-	import DataTable from '../advising-students/data-table.svelte'
+	import DataTable from '../advising-students/data-table.svelte';
 	import { preloadData, pushState, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import * as Dialog from '$lib/components/ui/dialog';

@@ -10,7 +10,7 @@ export const load = (async ({ params }) => {
 		.where('email', '=', params.email)
 		.selectAll()
 		.executeTakeFirst();
-	return { person:user };
+	return { person: user };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

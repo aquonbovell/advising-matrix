@@ -6,7 +6,6 @@
 	export let code: string;
 
 	export let existing: boolean;
-
 </script>
 
 <DropdownMenu.Root>

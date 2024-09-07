@@ -23,11 +23,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 				'Student.updated_at',
 				'Student.invite_token',
 				'Student.invite_expires',
-				'Program.name as program',
-				
+				'Program.name as program'
 			])
 			.execute();
-			
 
 		let studentData = [];
 
@@ -38,18 +36,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 				.where('Advisor.student_id', '=', student.id)
 				.select(['User.name'])
 				.execute();
-				
-	
+
 			studentData.push({
 				id: student.id,
-					user_id: student.user_id,
-					name: student.name,
-					email: student.email,
-					program_name: student.program,
-					created_at: student.created_at,
-					updated_at: student.updated_at,
-				
-					token: { value: student.invite_token, expires: student.invite_expires }
+				user_id: student.user_id,
+				name: student.name,
+				email: student.email,
+				program_name: student.program,
+				created_at: student.created_at,
+				updated_at: student.updated_at,
+
+				token: { value: student.invite_token, expires: student.invite_expires }
 				// advisor: advisor.flatMap( a => a.name).join(', ') || 'No advisor'
 			});
 		}

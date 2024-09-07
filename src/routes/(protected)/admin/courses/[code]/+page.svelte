@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 
-  import { page } from '$app/stores';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 
@@ -22,7 +22,10 @@
 					<div class="mb-2 grid grid-cols-[25px_1fr] items-start pb-2 last:mb-0 last:pb-0">
 						<span class="flex h-2 w-2 translate-y-2 rounded-full bg-sky-500" />
 						<div class="space-y-1">
-							<a class="text-sm font-medium leading-none" href={`${$page.url.toString().split('/').slice(0, -1).join('/')}/${prerequisite.code}`}>
+							<a
+								class="text-sm font-medium leading-none"
+								href={`${$page.url.toString().split('/').slice(0, -1).join('/')}/${prerequisite.code}`}
+							>
 								{prerequisite.name}
 							</a>
 							<p class="text-sm text-muted-foreground">
