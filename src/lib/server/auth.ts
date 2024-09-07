@@ -47,7 +47,7 @@ export function requiredRole(role: UserRole) {
 }
 
 export function generateTokenWithExpiration(
-	expiresIn: TimeSpan = new TimeSpan(8, 'h'),
+	expiresIn: TimeSpan = new TimeSpan(24, 'h'),
 	tokenLength = 6,
 	tokenChars = alphabet('0-9')
 ) {

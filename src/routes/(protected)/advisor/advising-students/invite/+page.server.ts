@@ -7,16 +7,19 @@ import Vine from '@vinejs/vine';
 import { message, superValidate } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from '../$types';
+import { Argon2id } from 'oslo/password';
+import { DEFAULT_PASSWORD } from '$env/static/private';
 
-const defaults = { email: '', name: '', programId: '' };
+const defaults = { official_email: '', alternate_email: '', name: '', programId: '' };
 
 const schema = Vine.object({
-	email: Vine.string()
+	official_email: Vine.string()
 		.trim()
 		.email()
 		.regex(/@mycavehill\.uwi\.edu$/),
+	alternate_email: Vine.string().trim().email(),
 	name: Vine.string().trim().minLength(3).maxLength(50),
-	programId: Vine.string().trim()
+	programId: Vine.string().trim().uuid()
 });
 
 export const load: PageServerLoad = async () => {
@@ -35,29 +38,42 @@ export const actions: Actions = {
 
 		const form = await superValidate(request, vine(schema, { defaults }));
 
-		if (form.errors.email) {
-			form.errors.email = [
+		console.log('Form:', form);
+
+		if (form.errors.official_email) {
+			form.errors.official_email = [
 				'Please enter a valid email address with the domain @mycavehill.uwi.edu'
 			];
+		}
+
+		if (form.errors.alternate_email) {
+			form.errors.alternate_email = ['Please enter a valid email address'];
+		}
+
+		if (form.errors.name) {
+			form.errors.name = ['Please enter a valid name'];
+		}
+
+		if (form.errors.programId) {
+			form.errors.programId = ['Please select a valid program'];
 		}
 
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
-		const { email, name, programId } = form.data;
+		const { official_email, alternate_email, name, programId } = form.data;
 
-		console.log('Inviting student:', { email, name, programId });
-
-		console.log('Locals:', locals);
+		console.log('Inviting student:', { official_email, alternate_email, name, programId });
 
 		try {
 			const advisor = await db
 				.selectFrom('Advisor')
-				.where('id', '=', locals.user.id)
-				.select(['id'])
+				.where('advisor_id', '=', locals.user.id)
+				.select(['advisor_id'])
 				.executeTakeFirst();
 			console.log('Advisor:', advisor);
+
 			if (!advisor) {
 				return fail(404, { form, error: 'Advisor not found' });
 			}
@@ -66,15 +82,20 @@ export const actions: Actions = {
 
 			await db.transaction().execute(async (trx) => {
 				const userId = generateId(16);
+				const student_id = generateId(16);
+				const argon2id = new Argon2id();
+
+				const hashedPassword = await argon2id.hash(DEFAULT_PASSWORD);
 
 				await trx
 					.insertInto('User')
 					.values({
 						id: userId,
 						name,
-						email,
+						email: official_email,
+						alternate_email,
 						role: 'STUDENT',
-						password: '',
+						password: hashedPassword,
 						created_at: new Date(),
 						updated_at: new Date()
 					})
@@ -83,14 +104,21 @@ export const actions: Actions = {
 				await trx
 					.insertInto('Student')
 					.values({
-						id: generateId(16),
+						id: student_id,
 						user_id: userId,
-						advisor_id: advisor.id,
 						program_id: programId,
 						invite_token: token,
 						invite_expires: new Date(expiresAt),
 						created_at: new Date(),
 						updated_at: new Date()
+					})
+					.execute();
+
+				await trx
+					.insertInto('Advisor')
+					.values({
+						advisor_id: advisor.advisor_id,
+						student_id: student_id
 					})
 					.execute();
 			});

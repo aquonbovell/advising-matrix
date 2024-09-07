@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatDate } from '$lib/utils';
+	import { formatTime } from '$lib/utils';
 
 	export let invite_token: string | null;
 	export let invite_expires: Date | null;
@@ -8,9 +8,9 @@
 {#if invite_token}
 	{#if invite_expires && new Date(invite_expires) > new Date()}
 		<span
-			class="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800"
+			class="inline-flex min-w-max rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800"
 		>
-			Invited (expires {formatDate(invite_expires)})
+			Invitation expires in <br />{formatTime(invite_expires)}
 		</span>
 	{:else}
 		<span

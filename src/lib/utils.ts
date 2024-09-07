@@ -100,6 +100,22 @@ export function arePrerequisitesMet(
 export function formatDate(date: Date) {
 	return new Date(date).toLocaleDateString();
 }
+
+export function formatTime(date: Date) {
+	const diffInMs = date.getTime() - Date.now(); // Difference in milliseconds
+	const diffInSeconds = Math.floor(diffInMs / 1000);
+
+	const days = Math.floor(diffInSeconds / (3600 * 24));
+	const hours = Math.floor((diffInSeconds % (3600 * 24)) / 3600);
+	const minutes = Math.floor((diffInSeconds % 3600) / 60);
+
+	const dayStr = days > 0 ? `${days} day${days > 1 ? 's' : ''}` : '';
+	const hourStr = hours > 0 ? `${hours} hr${hours > 1 ? 's' : ''}` : '';
+	const minuteStr = minutes > 0 ? `${minutes} min${minutes > 1 ? 's' : ''}` : '';
+
+	return [dayStr, hourStr, minuteStr].filter(Boolean).join(', ');
+}
+
 export function getInviteLink(inviteToken: string | null) {
 	if (inviteToken === null) return '';
 	if (typeof window === 'undefined') return '';

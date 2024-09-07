@@ -31,33 +31,49 @@
 			<h1 class="mb-2 text-center text-2xl font-semibold text-gray-800">Complete Registration</h1>
 			<p class="mb-8 text-center text-sm text-gray-600">Set your account password</p>
 
-			{#if form?.error}
+			{#if form?.invalid}
 				<div
 					class="mb-4 mt-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700"
 					role="alert"
 				>
-					<p>{form.error}</p>
+					<p>{form?.invalid}</p>
+				</div>
+			{/if}
+			{#if form?.invalid_token}
+				<div
+					class="mb-4 mt-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700"
+					role="alert"
+				>
+					<p>This token has expired.</p>
 				</div>
 			{/if}
 
-			<form method="POST" action="?/register" use:enhance class="space-y-4">
+			<form method="POST" action="?/resetPassword" use:enhance class="space-y-4">
 				<input type="hidden" name="token" value={data.token} />
+				<Input
+					type="password"
+					id="old_password"
+					name="old_password"
+					label="Current Password"
+					placeholder="Enter your current password"
+					error={form?.errors?.old_password}
+				/>
 				<Input
 					type="password"
 					id="password"
 					name="password"
 					label="Password"
 					placeholder="Enter your password"
-					required
+					error={form?.errors?.password}
 					bind:value={password}
 				/>
 				<Input
 					type="password"
-					id="confirm-password"
-					name="confirm-password"
+					id="confirm_password"
+					name="confirm_password"
 					label="Confirm Password"
 					placeholder="Confirm your password"
-					required
+					error={form?.errors?.confirm_password}
 					bind:value={confirmPassword}
 				/>
 				<PasswordRequirements {password} {confirmPassword} />

@@ -3,7 +3,8 @@
 	"version": "0.0.1",
 	"private": true,
 	"prisma": {
-		"seed": "npx vite-node prisma/seed.ts"
+		"seed": "npx vite-node prisma/seed.ts",
+		"rest": "npx vite-node prisma/seed copy.ts"
 	},
 	"scripts": {
 		"dev": "vite dev",
@@ -28,9 +29,12 @@
 		"dotenv": "^16.4.5",
 		"kysely": "^0.27.3",
 		"lucide-svelte": "^0.424.0",
+		"node-mailjet": "^6.0.6",
 		"oslo": "^1.2.1",
 		"pg": "^8.12.0",
-		"tailwind-variants": "^0.2.1"
+		"tailwind-variants": "^0.2.1",
+		"zod": "^3.23.8",
+		"zod-form-data": "^2.0.2"
 	},
 	"devDependencies": {
 		"@lucia-auth/adapter-postgresql": "^3.1.2",

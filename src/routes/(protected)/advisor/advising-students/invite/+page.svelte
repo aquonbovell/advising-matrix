@@ -30,15 +30,27 @@
 
 		<Input
 			type="email"
-			id="email"
-			name="email"
-			label="Student Email"
-			placeholder="Enter student's email"
+			id="official_email"
+			name="official_email"
+			label="Student Official Email"
+			placeholder="Enter student's official email"
 			required
 			pattern="[a-zA-Z0-9._%+-]+@mycavehill\\.uwi\\.edu"
-			error={$errors.email?.[0]}
-			bind:value={$form.email}
-			{...$constraints.email}
+			error={$errors.official_email?.[0]}
+			bind:value={$form.official_email}
+			{...$constraints.official_email}
+		/>
+
+		<Input
+			type="email"
+			id="alternate_email"
+			name="alternate_email"
+			label="Student Alternate Email"
+			placeholder="Enter student's alternate email"
+			required
+			error={$errors.alternate_email?.[0]}
+			bind:value={$form.alternate_email}
+			{...$constraints.alternate_email}
 		/>
 
 		<Select
@@ -48,6 +60,7 @@
 			placeholder="Select a program"
 			error={$errors.programId?.[0]}
 			bind:value={$form.programId}
+			{...$constraints.programId}
 		>
 			{#each data.programs as program}
 				<Option value={program.id}>{program.name}</Option>

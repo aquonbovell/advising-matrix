@@ -240,8 +240,8 @@
 											<div class="text-right font-medium">
 												<Render of={cell.render()} />
 											</div>
-										{:else if cell.id === 'program'}
-											<div class="capitalize">
+										{:else if cell.id === 'program_name' || cell.id === 'name'}
+											<div class="min-w-max capitalize">
 												<Render of={cell.render()} />
 											</div>
 										{:else}

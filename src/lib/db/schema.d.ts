@@ -85,6 +85,7 @@ export type User = {
 	id: string;
 	name: string | null;
 	email: string;
+	alternate_email: string | null;
 	password: string;
 	role: UserRole;
 	created_at: Generated<Timestamp>;

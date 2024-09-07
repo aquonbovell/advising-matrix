@@ -3,6 +3,8 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
+	import { invalidate, invalidateAll } from '$app/navigation';
+	import { get } from 'svelte/store';
 
 	export let code: string;
 	export let modalHandler: (e: MouseEvent) => void;
@@ -31,6 +33,23 @@
 							`${window.location.origin}/register?token=${token.value}`
 						);
 					}}>Copy student token</DropdownMenu.Item
+				>
+			{/if}
+			{#if token.expires && new Date(token.expires) < new Date()}
+				<DropdownMenu.Item
+					on:click={async () => {
+						const response = await fetch(`/api/student/${code}/reset-token`, {
+							method: 'POST'
+						});
+
+						const data = await response.json();
+
+						console.log(data);
+
+						if (data.success) {
+							window.location.reload();
+						}
+					}}>Copy Reset Token</DropdownMenu.Item
 				>
 			{/if}
 		</DropdownMenu.Group>
