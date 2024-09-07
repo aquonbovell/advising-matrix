@@ -6,6 +6,7 @@
 
 	export let code: string;
 	export let modalHandler: (e: MouseEvent) => void;
+	export let token: { value: string | null; expires: Date | null };
 </script>
 
 <DropdownMenu.Root>
@@ -21,6 +22,17 @@
 			<DropdownMenu.Item on:click={() => navigator.clipboard.writeText(code)}>
 				Copy student code
 			</DropdownMenu.Item>
+			{#if token.value}
+			<DropdownMenu.Item
+				on:click={() => {
+					if (token.value === null) return '';
+					if (typeof window === 'undefined') return '';
+					navigator.clipboard.writeText(
+						`${window.location.origin}/register?token=${token.value}`
+					);
+				}}>Copy student token</DropdownMenu.Item
+			>
+			{/if}
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item href={$page.url + '/' + code + '/'}>View Student</DropdownMenu.Item>

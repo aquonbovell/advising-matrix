@@ -4,6 +4,7 @@
 	export let data: PageData;
 
 	import DataTable from './data-table.svelte';
+
 </script>
 
 <DataTable {data} />

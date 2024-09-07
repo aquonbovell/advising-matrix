@@ -1,4 +1,4 @@
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/db';
 
@@ -10,35 +10,52 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	try {
-		const advisor = await db
-			.selectFrom('Advisor')
-			.where('user_id', '<>', userId)
-			.select(['id'])
-			.executeTakeFirst();
-
-		if (!advisor) {
-			throw error(404, 'Advisor not found');
-		}
-
 		const students = await db
 			.selectFrom('Student')
-			.where('advisor_id', '=', advisor.id)
+			.innerJoin('Program', 'Program.id', 'Student.program_id')
 			.innerJoin('User', 'User.id', 'Student.user_id')
-			.leftJoin('Program', 'Program.id', 'Student.program_id')
 			.select([
 				'Student.id',
 				'Student.user_id',
+				'User.name',
 				'User.email',
 				'Student.created_at',
 				'Student.updated_at',
 				'Student.invite_token',
 				'Student.invite_expires',
-				'Program.name as program_name'
+				'Program.name as program',
+				
 			])
 			.execute();
+			
+
+		let studentData = [];
+
+		for (const student of students) {
+			const advisor = await db
+				.selectFrom('Advisor')
+				.innerJoin('User', 'User.id', 'Advisor.advisor_id')
+				.where('Advisor.student_id', '=', student.id)
+				.select(['User.name'])
+				.execute();
+				
+	
+			studentData.push({
+				id: student.id,
+					user_id: student.user_id,
+					name: student.name,
+					email: student.email,
+					program_name: student.program,
+					created_at: student.created_at,
+					updated_at: student.updated_at,
+				
+					token: { value: student.invite_token, expires: student.invite_expires }
+				// advisor: advisor.flatMap( a => a.name).join(', ') || 'No advisor'
+			});
+		}
 
 		return {
-			students
+			students: studentData
 		};
 	} catch (err) {
 		console.error(err);
@@ -47,39 +64,27 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	removeInvite: async ({ request, locals }) => {
+	default: async ({ request, locals }) => {
 		if (locals.user?.role !== 'ADVISOR') {
 			return fail(403, { error: 'Unauthorized' });
 		}
-
 		const formData = await request.formData();
-		const studentId = formData.get('studentID') as string;
+		const studentCode = formData.get('student_code') as string;
 
-		if (!studentId) {
-			return fail(400, { error: 'Invalid student ID' });
-		}
+		console.log('default', studentCode);
 
 		try {
-			const student = await db
-				.selectFrom('Student')
-				.where('id', '=', studentId)
-				.select(['id', 'user_id'])
-				.executeTakeFirst();
-
-			if (!student) {
-				return fail(404, { error: 'Student not found' });
-			}
-
-			// Use a transaction to delete both Student and User records
-			await db.transaction().execute(async (trx) => {
-				await trx.deleteFrom('Student').where('id', '=', student.id).executeTakeFirst();
-				await trx.deleteFrom('User').where('id', '=', student.user_id).executeTakeFirst();
-			});
-
-			return { success: true };
+			const result = await db
+				.insertInto('Advisor')
+				.values({
+					advisor_id: locals.user.id,
+					student_id: studentCode
+				})
+				.execute();
 		} catch (err) {
 			console.error(err);
-			return fail(500, { error: 'An error occurred while removing the student' });
+			return fail(500, { error: 'An error occurred while adding the student' });
 		}
+		throw redirect(303, '/advisor/students');
 	}
 };

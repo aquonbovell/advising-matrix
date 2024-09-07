@@ -20,16 +20,15 @@
 	const specificMenuItems = {
 		STUDENT: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
-			{ icon: HomeIcon, label: 'Tracker', href: '/student/degree-tracker' },
+			{ icon: HomeIcon, label: 'Matrix', href: '/student/matrix' },
 			{ icon: HomeIcon, label: 'Test', href: '/student/test' }
 			// Add more menu items here
 		],
 		ADVISOR: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
-			{ icon: HomeIcon, label: 'My Students', href: '/advisor/students' },
-			{ icon: HomeIcon, label: 'All Students', href: '/advisor/allstudents' },
+			{ icon: HomeIcon, label: 'My Students', href: '/advisor/advising-students' },
+			{ icon: HomeIcon, label: 'All Students', href: '/advisor/students' },
 			{ icon: HomeIcon, label: 'Advisor Courses', href: '/advisor/courses' },
-			{ icon: HomeIcon, label: 'Courses', href: '/courses' }
 			// Add more menu items here
 		],
 		ADMIN: [

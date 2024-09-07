@@ -96,3 +96,13 @@ export function arePrerequisitesMet(
 	completedCourses.subscribe((value) => (courses = value));
 	return course.prerequisites.every((prereq) => courses[prereq.id]);
 }
+
+
+export function formatDate(date: Date) {
+	return new Date(date).toLocaleDateString();
+}
+export function getInviteLink(inviteToken: string | null) {
+	if (inviteToken === null) return '';
+	if (typeof window === 'undefined') return '';
+	navigator.clipboard.writeText(`${window.location.origin}/register?token=${inviteToken}`);
+}

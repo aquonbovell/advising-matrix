@@ -2,13 +2,11 @@
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
-	import { page } from '$app/stores';
 
 	export let code: string;
 
-	const handleClick = () => {
-		console.log('Add to my list');
-	};
+	export let existing: boolean;
+
 </script>
 
 <DropdownMenu.Root>
@@ -21,7 +19,7 @@
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Actions</DropdownMenu.Label>
-			<DropdownMenu.Item>
+			<DropdownMenu.Item disabled={existing}>
 				<form action="" method="post">
 					<label for="student_code" aria-hidden="true" hidden>Student Code</label>
 					<input type="hidden" name="student_code" value={code} />

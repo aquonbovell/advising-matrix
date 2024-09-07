@@ -11,4 +11,3 @@
 	<Button href="/advisor/students">My Students</Button>
 	<Button href="/advisor/courses">Program Courses</Button>
 </div>
-<a href="/advisor/students"> My Students</a>

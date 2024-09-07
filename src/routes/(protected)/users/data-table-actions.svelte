@@ -2,6 +2,7 @@
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
+	import { page } from '$app/stores';
 
 	export let email: string;
 </script>
@@ -21,7 +22,7 @@
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item>View user</DropdownMenu.Item>
+		<DropdownMenu.Item href={$page.url.toString() + '/' + email}>View user</DropdownMenu.Item>
 		<DropdownMenu.Item>View user details</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

@@ -211,7 +211,7 @@
 </script>
 
 <!-- Header -->
-<Header degreeName={data.program.name} />
+<Header degreeName={data.program.name} {islevel1completed} {islevel2completed} />
 
 <h2 class="my-2 text-xl font-semibold">Course Requirements</h2>
 
@@ -384,4 +384,5 @@
 			<span class="ml-2 text-sm text-green-500">Changes saved successfully</span>
 		{/if}
 	</div>
+
 </form>

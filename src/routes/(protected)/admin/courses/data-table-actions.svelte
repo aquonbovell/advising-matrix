@@ -2,6 +2,7 @@
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
+	import { page } from '$app/stores';
 
 	export let code: string;
 </script>
@@ -21,7 +22,7 @@
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item>View course</DropdownMenu.Item>
-		<DropdownMenu.Item>View course prerequisites</DropdownMenu.Item>
+		<DropdownMenu.Item href={`${$page.url.toString()}/${code}`}>View course</DropdownMenu.Item>
+		<!-- <DropdownMenu.Item>View course prerequisites</DropdownMenu.Item> -->
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

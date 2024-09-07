@@ -1,27 +1,26 @@
-datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
-
 generator kysely {
   provider = "prisma-kysely"
   output   = "../src/lib/db"
   fileName = "schema.d.ts"
 }
 
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
 model User {
-  id         String   @id
+  id         String    @id
   name       String?
-  email      String   @unique
+  email      String    @unique
   password   String
   role       UserRole
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  sessions Session[]
-  advisor  Advisor?
-  student  Student?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  advisor    Advisor[]
+  sessions   Session[]
+  student    Student?
 }
 
 model Session {
@@ -32,29 +31,28 @@ model Session {
 }
 
 model Advisor {
-  id       String    @id
-  user_id  String    @unique
-  user     User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  students Student[]
+  advisor_id       String
+  student_id  String 
+  user     User      @relation(fields: [advisor_id], references: [id], onDelete: Cascade)
+  students Student @relation(fields: [student_id], references: [id])
+
+  @@id([advisor_id, student_id])
 }
 
 model Student {
-  id             String    @id
-  user_id        String    @unique
-  advisor_id     String
+  id             String          @id
+  user_id        String          @unique
   invite_token   String?
   invite_expires DateTime?
   majorId        String?
   program_id     String?
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  user          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  advisor       Advisor         @relation(fields: [advisor_id], references: [id])
-  program       Program?        @relation(fields: [program_id], references: [id])
-  Degree        Degree[]
-  StudentCourse StudentCourse[]
+  created_at     DateTime        @default(now())
+  updated_at     DateTime        @updatedAt
+  Degree         Degree[]
+  advisor        Advisor[]
+  program        Program?        @relation(fields: [program_id], references: [id])
+  user           User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  StudentCourse  StudentCourse[]
 }
 
 model Department {
@@ -64,13 +62,12 @@ model Department {
 }
 
 model Course {
-  id           String @id
-  code         String @unique
-  name         String
-  level        Int
-  credits      Int
-  departmentId String
-
+  id              String               @id
+  code            String               @unique
+  name            String
+  level           Int
+  credits         Int
+  departmentId    String
   department      Department           @relation(fields: [departmentId], references: [id])
   prerequisites   CoursePrerequisite[] @relation("CourseToPrerequisite")
   prerequisiteFor CoursePrerequisite[] @relation("PrerequisiteToCourse")
@@ -81,9 +78,8 @@ model CoursePrerequisite {
   id             String @id @default(uuid())
   courseId       String
   prerequisiteId String
-
-  course       Course @relation("CourseToPrerequisite", fields: [courseId], references: [id])
-  prerequisite Course @relation("PrerequisiteToCourse", fields: [prerequisiteId], references: [id])
+  course         Course @relation("CourseToPrerequisite", fields: [courseId], references: [id])
+  prerequisite   Course @relation("PrerequisiteToCourse", fields: [prerequisiteId], references: [id])
 
   @@unique([courseId, prerequisiteId])
 }
@@ -109,27 +105,25 @@ model Program {
 }
 
 model ProgramRequirement {
-  id        String          @id
-  programId String
-  program   Program         @relation(fields: [programId], references: [id])
-  type      RequirementType
-  credits   Int
-  level     Int?
-  details   Json
-
+  id            String          @id
+  programId     String
+  type          RequirementType
+  credits       Int
+  details       Json
+  level         Int?
+  program       Program         @relation(fields: [programId], references: [id])
   StudentCourse StudentCourse[]
 }
 
 model StudentCourse {
-  id            String  @id
+  id            String              @id
   studentId     String
   courseId      String
   grade         String
   requirementId String?
-
-  student     Student             @relation(fields: [studentId], references: [id])
-  course      Course              @relation(fields: [courseId], references: [id])
-  requirement ProgramRequirement? @relation(fields: [requirementId], references: [id])
+  course        Course              @relation(fields: [courseId], references: [id])
+  requirement   ProgramRequirement? @relation(fields: [requirementId], references: [id])
+  student       Student             @relation(fields: [studentId], references: [id])
 }
 
 enum UserRole {

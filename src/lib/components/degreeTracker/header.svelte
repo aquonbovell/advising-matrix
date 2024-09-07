@@ -6,8 +6,23 @@
 
 	let degree = {
 		...createMajorMinor(degreeName),
-		classification: 'Level III'
+		classification: 'Level I'
 	};
+
+	export let islevel1completed:boolean;
+	export let islevel2completed:boolean;
+
+	$: {
+		if (islevel1completed) {
+			degree.classification = 'Level II';
+		}
+		else if (islevel2completed) {
+			degree.classification = 'Level III';
+		}
+		else {
+			degree.classification = 'Level I';
+		}
+	}
 </script>
 
 <header class="flex flex-wrap justify-between gap-x-12 gap-y-6 text-base">

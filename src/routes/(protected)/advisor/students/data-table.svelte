@@ -20,17 +20,17 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 
-	type ICourse = {
+	type IStudent = {
 		id: string;
-		code: string;
-		name: string;
-		credits: number;
-		level: number;
+		name: string | null;
+		email: string;
+		program: string;
+		advisor: string;	
 	};
 
-	const courses: ICourse[] = [...data.courses];
+	const students: IStudent[] = [...data.students];
 
-	const table = createTable(readable(courses), {
+	const table = createTable(readable(students), {
 		page: addPagination({ initialPageSize: 10 }),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -67,16 +67,16 @@
 			}
 		}),
 		table.column({
-			accessor: 'code',
-			header: 'Code'
-		}),
-		table.column({
 			accessor: 'name',
 			header: 'Name'
 		}),
 		table.column({
-			accessor: 'level',
-			header: 'Level',
+			accessor: 'email',
+			header: 'Email'
+		}),
+		table.column({
+			accessor: 'program',
+			header: 'Program',
 			plugins: {
 				filter: {
 					exclude: false
@@ -84,22 +84,21 @@
 			}
 		}),
 		table.column({
-			accessor: 'credits',
-			header: 'Credits',
+			accessor: 'advisor',
+			header: 'Advisor',
 			plugins: {
-				sort: {
-					disable: true
-				},
 				filter: {
-					exclude: true
+					exclude: false
 				}
 			}
 		}),
 		table.column({
-			accessor: ({ code }) => code,
+			accessor: ({ id, advisor }) => {
+				return { id, advisor };
+			},
 			header: 'Actions',
-			cell: ({ value }) => {
-				return createRender(DataTableActions, { code: value });
+			cell: ({ value}) => {
+				return createRender(DataTableActions, { code: value.id, existing: value.advisor.split(',').includes(data.user?.name?? '') });
 			},
 			plugins: {
 				sort: {
@@ -130,7 +129,7 @@
 		.filter(([, hide]) => !hide)
 		.map(([id]) => id);
 
-	const hidableCols = ['credits', 'level'];
+	const hidableCols = ['credits', 'program'];
 </script>
 
 <div>
@@ -175,7 +174,7 @@
 											<div class="text-right">
 												<Render of={cell.render()} />
 											</div>
-										{:else if cell.id === 'code' || cell.id === 'level'}
+										{:else if cell.id === 'program' || cell.id === 'email' || cell.id === 'name' || cell.id === 'advisor'}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
 												<ArrowUpDown class={'ml-2 h-4 w-4'} />
@@ -201,7 +200,7 @@
 											<div class="text-right font-medium">
 												<Render of={cell.render()} />
 											</div>
-										{:else if cell.id === 'status'}
+										{:else if cell.id === 'program'}
 											<div class="capitalize">
 												<Render of={cell.render()} />
 											</div>

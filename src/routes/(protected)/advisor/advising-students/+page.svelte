@@ -1,15 +1,15 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
-	export let data: PageData;
-
-	import DataTable from '../advising-students/data-table.svelte'
-	import { preloadData, pushState, goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import * as Dialog from '$lib/components/ui/dialog';
+	import { goto, preloadData, pushState } from '$app/navigation';
 
+	import DataTable from './data-table.svelte';
+
+	import * as Dialog from '$lib/components/ui/dialog';
+	import Button from '$lib/components/ui/Button.svelte';
+	import type { PageData } from './$types';
 	import StudentChart from './[id]/overview/+page.svelte';
 
+	export let data: PageData;
 	async function showModal(e: MouseEvent) {
 		if (e.metaKey || e.ctrlKey) return;
 		const { href } = e.currentTarget as HTMLAnchorElement;
@@ -29,8 +29,10 @@
 	}
 </script>
 
-<h1 class="text-2xl font-bold text-stone-800">All Students</h1>
-<!-- <pre>{JSON.stringify(data, null, 2)}</pre> -->
+<div class="mb-6 flex items-center justify-between">
+	<h1 class="text-2xl font-bold text-stone-800">My Students</h1>
+	<Button href={`${$page.url.toString()}/invite`}>Invite A Student</Button>
+</div>
 
 <DataTable {data} {showModal} />
 

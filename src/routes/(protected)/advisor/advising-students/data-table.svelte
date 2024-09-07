@@ -20,11 +20,21 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 
+	import DataTableTag from './data-table-tag.svelte'
+
+	export let showModal: (e: MouseEvent) => void;
+
 	type IStudent = {
 		id: string;
+		user_id: string;
 		name: string | null;
 		email: string;
-		program: string;
+		token: {
+		value: string | null;
+    expires: Date | null;}
+    created_at: Date;
+    updated_at: Date;
+    program_name: string | null;
 	};
 
 	const students: IStudent[] = [...data.students];
@@ -74,8 +84,15 @@
 			header: 'Email'
 		}),
 		table.column({
-			accessor: 'program',
-			header: 'Program',
+			accessor: 'program_name',
+			header: 'Program'
+		}),
+		table.column({
+			accessor: 'created_at',
+			header: 'Joined',
+			cell: ({ value }) => {
+				return new Date(value).toLocaleDateString();
+			},
 			plugins: {
 				filter: {
 					exclude: false
@@ -83,10 +100,38 @@
 			}
 		}),
 		table.column({
-			accessor: ({ id }) => id,
+			accessor: 'updated_at',
+			header: 'Last Updated',
+			cell: ({ value }) => {
+				return new Date(value).toLocaleDateString();
+			},
+			plugins: {
+				filter: {
+					exclude: false
+				}
+			}
+		}),
+		table.column({
+			accessor: 'token',
+			header: 'Status',
+			cell: ({ value }) => {
+				return createRender(DataTableTag, {
+					invite_token: value.value,
+					invite_expires: value.expires
+				});
+			},
+			plugins: {
+				filter: {
+					exclude: false
+				}
+			}
+		}),
+
+		table.column({
+			accessor: ({ id ,token }) => { return {id, token}},
 			header: 'Actions',
 			cell: ({ value }) => {
-				return createRender(DataTableActions, { code: value });
+				return createRender(DataTableActions, { code: value.id, modalHandler: showModal , token: value.token});
 			},
 			plugins: {
 				sort: {
@@ -117,7 +162,7 @@
 		.filter(([, hide]) => !hide)
 		.map(([id]) => id);
 
-	const hidableCols = ['credits', 'program'];
+	const hidableCols = ['created_at', 'updated_at', 'token'];
 </script>
 
 <div>
@@ -162,7 +207,7 @@
 											<div class="text-right">
 												<Render of={cell.render()} />
 											</div>
-										{:else if cell.id === 'program' || cell.id === 'email' || cell.id === 'name'}
+										{:else if cell.id === 'program_name' || cell.id === 'email'}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
 												<ArrowUpDown class={'ml-2 h-4 w-4'} />
