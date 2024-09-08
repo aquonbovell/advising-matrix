@@ -3,6 +3,7 @@ import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import type {
 	CourseWithPrerequisites,
+	Grade,
 	Program,
 	ProgramRequirement,
 	ProgramRequirementCourses,
@@ -163,7 +164,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 		}
 	}
 
-	console.log('Data:', requirements);
+	// console.log('Data:', requirements);
 
 	return {
 		id: program[0]!.id,
@@ -242,6 +243,7 @@ async function getStudentCourses(studentId: string): Promise<Record<string, Stud
 		.selectFrom('StudentCourse')
 		.innerJoin('Course', 'StudentCourse.courseId', 'Course.id')
 		.select([
+			'StudentCourse.id',
 			'StudentCourse.courseId',
 			'StudentCourse.grade',
 			'StudentCourse.requirementId',
@@ -256,17 +258,21 @@ async function getStudentCourses(studentId: string): Promise<Record<string, Stud
 		.then((courses) =>
 			courses.reduce(
 				(acc, sc) => {
-					acc[sc.courseId] = {
-						grade: sc.grade as StudentGrade['grade'],
-						requirementId: sc.requirementId,
-						course: {
-							id: sc.courseId,
-							code: sc.code,
-							name: sc.name,
-							level: sc.level,
-							credits: sc.credits
-						}
-					};
+					if (Object.keys(acc).includes(sc.courseId)) {
+						acc[sc.courseId].grades.push({ grade: sc.grade as Grade, id: sc.id });
+					} else {
+						acc[sc.courseId] = {
+							grades: [{ grade: sc.grade as Grade, id: sc.id }],
+							requirementId: sc.requirementId,
+							course: {
+								id: sc.courseId,
+								code: sc.code,
+								name: sc.name,
+								level: sc.level,
+								credits: sc.credits
+							}
+						};
+					}
 					return acc;
 				},
 				{} as Record<string, StudentGrade>
@@ -319,45 +325,52 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 
-		console.log('Form Data:', formData);
-		const courseEntries = Array.from(formData.entries())
-			.filter(([key, value]) => key.startsWith('courses[') && key.endsWith('].grade'))
-			.map(([key, value]) => {
-				const courseId = key.slice(8, -7);
-				return {
-					courseId,
-					grade: value as string,
-					requirementId: formData.get(`courses[${courseId}].requirementId`) as string | null
-				};
-			});
+		const courseEntries = formData.entries();
 
-		console.log('Course Entries:', courseEntries);
 		try {
 			await db.transaction().execute(async (trx) => {
 				await trx.deleteFrom('StudentCourse').where('studentId', '=', studentId).execute();
 
-				for (const { courseId, grade, requirementId } of courseEntries) {
-					if (grade) {
-						await trx
-							.insertInto('StudentCourse')
-							.values({
-								id: generateId(16),
-								studentId,
-								courseId,
-								grade,
-								...(requirementId ? { requirementId } : {})
-							})
-							.execute();
+				for (const [key, value] of courseEntries) {
+					const [courseId, id] = key.split(',');
+
+					if (value) {
+						const grade = await trx
+							.selectFrom('StudentCourse')
+							.where('id', '=', id!)
+							.where('studentId', '=', studentId)
+							.where('courseId', '=', courseId!)
+							.select('grade')
+							.executeTakeFirst();
+
+						if (grade) {
+							await trx
+								.updateTable('StudentCourse')
+								.set({ grade: value.toString() })
+								.where('id', '=', id!)
+								.where('studentId', '=', studentId)
+								.where('courseId', '=', courseId!)
+								.execute();
+						} else {
+							await trx
+								.insertInto('StudentCourse')
+								.values({
+									id: crypto.randomUUID(),
+									studentId,
+									courseId: courseId!,
+									grade: value.toString()
+								})
+								.execute();
+						}
 					}
 				}
 			});
-
-			return { success: true };
 		} catch (err) {
 			console.error('Error saving changes:', err);
 			return fail(500, { message: 'Failed to save changes' });
 		}
 	},
+
 	removeCourse: async ({ request, locals }) => {
 		const userId = locals.user?.id;
 		if (!userId) return fail(401, { message: 'Unauthorized' });
@@ -367,24 +380,63 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		const courseId = formData.get('courseId') as string;
+		const gradeId = formData.get('gradeId') as string;
 		const requirementId = formData.get('requirementId') as string;
 
-		console.log('Removing course:', courseId, requirementId);
+		console.log('Removing course:', courseId, requirementId, gradeId, studentId);
 
 		console.log('Form Data:', formData);
 
-		if (!courseId || !requirementId) {
-			return fail(400, { message: 'Missing course or requirement ID' });
+		if (!courseId || !gradeId) {
+			return fail(400, { message: 'Missing course or requirement ID or gradeId' });
 		}
 
 		try {
 			await db.transaction().execute(async (trx) => {
-				await trx
+				const data = await trx
 					.deleteFrom('StudentCourse')
 					.where('studentId', '=', studentId)
 					.where('courseId', '=', courseId)
-					.where('requirementId', '=', requirementId)
+					.where('id', '=', gradeId)
 					.execute();
+				console.log('Data:', data);
+			});
+
+			return { success: true };
+		} catch (err) {
+			console.error('Error removing course:', err);
+			return fail(500, { message: 'Failed to remove course' });
+		}
+	},
+	deleteCourse: async ({ request, locals }) => {
+		const userId = locals.user?.id;
+		if (!userId) return fail(401, { message: 'Unauthorized' });
+
+		const studentId = await getStudentId(userId);
+		if (!studentId) return fail(404, { message: 'Student not found' });
+
+		const formData = await request.formData();
+		const courseId = formData.get('courseId') as string;
+		const gradeId = formData.get('gradeId') as string;
+		const requirementId = formData.get('requirementId') as string;
+
+		console.log('Removing course:', courseId, requirementId, gradeId, studentId);
+
+		console.log('Form Data:', formData);
+
+		if (!courseId) {
+			return fail(400, { message: 'Missing course or requirement ID or gradeId' });
+		}
+
+		try {
+			await db.transaction().execute(async (trx) => {
+				const data = await trx
+					.deleteFrom('StudentCourse')
+					.where('studentId', '=', studentId)
+					.where('courseId', '=', courseId)
+					// .where('id', '=', gradeId)
+					.execute();
+				console.log('Data:', data);
 			});
 
 			return { success: true };

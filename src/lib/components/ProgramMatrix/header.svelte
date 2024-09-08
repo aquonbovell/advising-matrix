@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { gpa, completedCourses } from '$lib/stores/degreeTracker';
+	import { gpa, completedCourses } from '$lib/stores/ProgramMatrix';
 	import { createMajorMinor } from '$lib/utils';
 
 	export let degreeName;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { gradePoints } from '$lib/types';
 	import type { CourseWithRequirement, ProgramRequirement } from '$lib/types';
-	import { completedCourses, courseGrades, requirementCourses } from '$lib/stores/degreeTracker';
+	import { completedCourses, courseGrades, requirementCourses } from '$lib/stores/ProgramMatrix';
 	import { writable, type Writable } from 'svelte/store';
 	import { getPoolCourses } from './context';
 

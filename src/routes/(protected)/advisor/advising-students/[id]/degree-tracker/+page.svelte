@@ -8,8 +8,8 @@
 		type Grade
 	} from '$lib/types';
 	import type { PageData } from './$types';
-	import { setPoolCourses } from '$lib/components/degreeTracker/context';
-	import Header from '$lib/components/degreeTracker/header.svelte';
+	import { setPoolCourses } from '$lib/components/ProgramMatrix/context';
+	import Header from '$lib/components/ProgramMatrix/header.svelte';
 	import DangerIcon from '$lib/components/icons/DangerIcon.svelte';
 	import TickIcon from '$lib/components/icons/TickIcon.svelte';
 	import LoadingIcon from '$lib/components/icons/LoadingIcon.svelte';
@@ -25,9 +25,9 @@
 		stillNeeded,
 		complete,
 		progressPercentage
-	} from '$lib/stores/degreeTracker';
-	import AdvisorCourseItem from '$lib/components/degreeTracker/AdvisorCourseItem.svelte';
-	import AdvisorPoolRequirementPool from '$lib/components/degreeTracker/AdvisorPoolRequirementPool.svelte';
+	} from '$lib/stores/ProgramMatrix';
+	import AdvisorCourseItem from '$lib/components/ProgramMatrix/AdvisorCourseItem.svelte';
+	import AdvisorPoolRequirementPool from '$lib/components/ProgramMatrix/AdvisorPoolRequirementPool.svelte';
 	import { onMount } from 'svelte';
 
 	export let data: PageData;

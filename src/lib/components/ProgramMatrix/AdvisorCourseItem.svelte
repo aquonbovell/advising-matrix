@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { gradePoints } from '$lib/types';
 	import type { CourseWithPrerequisites, Grade } from '$lib/types';
-	import { completedCourses, courseGrades } from '$lib/stores/degreeTracker';
+	import { completedCourses, courseGrades } from '$lib/stores/ProgramMatrix';
 
 	export let course: CourseWithPrerequisites;
 </script>

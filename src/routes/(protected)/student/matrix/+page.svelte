@@ -12,14 +12,14 @@
 	import type { PageData } from './$types';
 
 	import Modal from '$lib/components/ui/Modal.svelte';
-	import CourseItem from '$lib/components/degreeTracker/CourseItem.svelte';
-	import PoolRequirementItem from '$lib/components/degreeTracker/PoolRequirementPool.svelte';
+	import CourseItem from '$lib/components/ProgramMatrix/CourseItem.svelte';
+	import PoolRequirementItem from '$lib/components/ProgramMatrix/PoolRequirementPool.svelte';
 	import {
 		getPoolCourses,
 		setPoolCourses,
 		updatePoolCourses
-	} from '$lib/components/degreeTracker/context';
-	import Header from '$lib/components/degreeTracker/header.svelte';
+	} from '$lib/components/ProgramMatrix/context';
+	import Header from '$lib/components/ProgramMatrix/header.svelte';
 	import DangerIcon from '$lib/components/icons/DangerIcon.svelte';
 	import TickIcon from '$lib/components/icons/TickIcon.svelte';
 	import LoadingIcon from '$lib/components/icons/LoadingIcon.svelte';
@@ -37,7 +37,7 @@
 		progressPercentage,
 		poolCourses,
 		requirementCourses
-	} from '$lib/stores/degreeTracker';
+	} from '$lib/stores/ProgramMatrix';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { onMount } from 'svelte';
 
@@ -62,6 +62,11 @@
 					requirementId: req.id
 				}))
 			);
+			req.courses.forEach((course) => {
+				if (studentCourses[course.id]) {
+					requirementCourses.update((courses) => [...courses, course.id.concat(',' + req.id)]);
+				}
+			});
 		}
 	});
 
@@ -71,9 +76,9 @@
 			{ ...course, requirementId } as CourseWithRequirement
 		]);
 		updatePoolCourses(requirementId);
-		courseGrades.update((grades) => ({ ...grades, [course.id]: '' }));
-		requirementCourses.update((courses) => [...courses, course.id.concat(requirementId)]);
-		completedCourses.update((completed) => ({ ...completed, [course.id]: false }));
+		courseGrades.update((grades) => ({ ...grades, [course.id]: [] }));
+		requirementCourses.update((courses) => [...courses, course.id.concat(',' + requirementId)]);
+		// completedCourses.update((completed) => ({ ...completed, [course.id]: false }));
 		dialogOpen = false;
 	}
 
@@ -96,13 +101,14 @@
 				alertOpen = true;
 				return;
 			}
+			console.log(selectedCourse);
+
 			if (selectedCourse) addCourse(selectedCourse, currentRequirement);
 		}
 	}
 
 	function openAddCourseModal(requirementId: string) {
 		currentRequirement = requirementId;
-		console.log(requirementId);
 		getPoolCourses(requirementId)?.subscribe((courses) => {
 			poolCourses.set(courses);
 		});
@@ -117,7 +123,11 @@
 
 	$: islevel1completed =
 		level1completedcredits
-			.filter((c) => c.id in $courseGrades && $courseGrades[c.id] !== '')
+			.filter(
+				(c) =>
+					c.id in $courseGrades &&
+					$courseGrades[c.id]?.flatMap((g) => g.grade).filter((grade) => !grade?.startsWith('F'))
+			)
 			.reduce((acc, c) => {
 				return acc + c.credits;
 			}, 0) >= level1requiredcredits;
@@ -144,7 +154,11 @@
 
 	$: islevel2completed =
 		level2completedcredits
-			.filter((c) => c.id in $courseGrades && $courseGrades[c.id] !== '')
+			.filter(
+				(c) =>
+					c.id in $courseGrades &&
+					$courseGrades[c.id]?.flatMap((g) => g.grade).filter((grade) => !grade?.startsWith('F'))
+			)
 			.reduce((acc, c) => {
 				return acc + c.credits;
 			}, 0) >= level2requiredcredits;
@@ -190,19 +204,43 @@
 
 		programCourses.set(allCourses);
 
-		const grades: Record<string, Grade | ''> = {};
+		const grades: Record<string, { id: string; grade: Grade | '' }[]> = {};
 		const completed: Record<string, boolean> = {};
 
 		allCourses.forEach((course) => {
 			const studentCourse = studentCourses[course.id];
-			const grade = studentCourse?.grade;
-			grades[course.id] = (grade && grade in gradePoints ? grade : '') as Grade | '';
-			completed[course.id] = !!grade && arePrerequisitesMet(course);
+			const studentGrades = studentCourse?.grades;
+
+			if (studentGrades) {
+				grades[course.id] = studentGrades.map((grade) => ({
+					id: grade.id,
+					grade: grade.grade
+				}));
+				completed[course.id] = studentGrades.some(
+					(grade) => !!grade && arePrerequisitesMet(course)
+				);
+			} else {
+				grades[course.id] = [];
+				completed[course.id] = false;
+			}
+		});
+		const codes = Object.keys(studentCourses);
+
+		console.log(codes);
+
+		codes.forEach((code) => {
+			if (code in grades) {
+				console.log(grades[code]);
+			} else {
+				console.log(studentCourses[code]?.grades);
+				grades[code] = studentCourses[code]?.grades;
+			}
 		});
 
 		courseGrades.set(grades);
-		completedCourses.set(completed);
+		// completedCourses.set(completed);
 	}
+	$: console.log(requirements);
 
 	// Form submission handling
 	let loading = false;
@@ -257,12 +295,14 @@
 		};
 	}}
 >
-	<h1 class="my-3 text-2xl font-bold">Courses for {program.name}</h1>
+	<h1 class="my-3 text-2xl font-bold">Courses</h1>
 
 	<h2 class="mb-2 text-xl font-bold">
-		Level 1 Core {degreeCourses
-			.filter((course) => course.code[4] === '1')
-			.reduce((sum, course) => sum + course.credits, 0)} Credits {level1requiredcredits}
+		<small
+			>Level 1 Core / Credits {level1requiredcredits} / {degreeCourses
+				.filter((course) => course.code[4] === '1')
+				.reduce((sum, course) => sum + course.credits, 0)} Courses</small
+		>
 	</h2>
 	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
@@ -337,8 +377,8 @@
 			</ul>
 		</div>
 	{/if}
-	<AlertDialog.Root bind:open={alertOpen}>
-		<!-- <AlertDialog.Trigger>Open</AlertDialog.Trigger> -->
+	<!-- <AlertDialog.Root bind:open={alertOpen}>
+		<AlertDialog.Trigger>Open</AlertDialog.Trigger>
 		<AlertDialog.Content>
 			<AlertDialog.Header>
 				<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
@@ -352,7 +392,7 @@
 				<AlertDialog.Action>Continue</AlertDialog.Action>
 			</AlertDialog.Footer>
 		</AlertDialog.Content>
-	</AlertDialog.Root>
+	</AlertDialog.Root> -->
 
 	<Modal title="Add Elective Course" bind:open={dialogOpen}>
 		<select

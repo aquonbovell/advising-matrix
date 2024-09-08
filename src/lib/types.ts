@@ -68,9 +68,9 @@ export type Program = DBProgram & {
 	degreeCredits: number;
 };
 
-export type StudentGrade = Omittable<StudentCourse, 'id' | 'studentId' | 'courseId'> & {
+export type StudentGrade = Omittable<StudentCourse, 'id' | 'studentId' | 'courseId' | 'grade'> & {
 	course: Omit<Course, 'departmentId'>;
-	grade: Grade;
+	grades: { id: string; grade: Grade }[];
 };
 
 export type ProgramRequirementCourses = ProgramRequirement & {
