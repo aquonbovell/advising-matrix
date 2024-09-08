@@ -21,7 +21,8 @@
 		STUDENT: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
 			{ icon: HomeIcon, label: 'Matrix', href: '/student/matrix' },
-			{ icon: HomeIcon, label: 'Test', href: '/student/test' }
+			{ icon: HomeIcon, label: 'Test', href: '/student/test' },
+			{ icon: HomeIcon, label: 'Courses', href: '/student/courses' }
 			// Add more menu items here
 		],
 		ADVISOR: [

@@ -171,7 +171,9 @@ async function getProgram(userId: string): Promise<Program | null> {
 		name: program[0]!.name,
 		requirements,
 		requirementsWithCourses: data,
-		degreeCredits: program.reduce((acc, req) => acc + req.credits, 0)
+		degreeCredits: program.reduce((acc, req) => acc + req.credits, 0),
+
+		degreeCourses: program.reduce((acc, req) => acc + req.credits / 3, 0)
 	};
 }
 
