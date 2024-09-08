@@ -36,7 +36,8 @@
 		complete,
 		progressPercentage,
 		poolCourses,
-		requirementCourses
+		requirementCourses,
+		totalCourses
 	} from '$lib/stores/ProgramMatrix';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { onMount } from 'svelte';
@@ -50,7 +51,10 @@
 	let dialogOpen = false;
 	let currentRequirement: string | null = null;
 
-	onMount(() => totalCredits.set(program.degreeCredits));
+	onMount(() => {
+		totalCredits.set(program.degreeCredits);
+		totalCourses.set(program.degreeCourses);
+	});
 
 	// Pool courses
 	$: program.requirementsWithCourses.forEach((req) => {
@@ -248,6 +252,8 @@
 	let alertOpen = false;
 </script>
 
+<!-- <pre>{JSON.stringify($totalCourses, null, 2)}</pre> -->
+
 <!-- Header -->
 <Header degreeName={data.program.name} {islevel1completed} {islevel2completed} />
 
@@ -256,14 +262,14 @@
 <div class="grid items-center justify-between gap-y-4 md:grid-cols-12">
 	<div class="flex flex-wrap items-center gap-3 md:col-span-8">
 		<UIButton class="bg-blue-700 hover:bg-blue-500">All Courses</UIButton>
-		<UIButton class="bg-red-500  hover:bg-red-400">
+		<!--<UIButton class="bg-red-500  hover:bg-red-400">
 			<DangerIcon />
-			Still Needed ({$stillNeeded})
+			Needed ({$stillNeeded})
 		</UIButton>
 		<UIButton class="bg-amber-500 hover:bg-amber-300">
 			<LoadingIcon />
 			In Progress ({$inProgress})
-		</UIButton>
+		</UIButton> -->
 		<UIButton class="bg-green-600 hover:bg-green-400">
 			<TickIcon />
 			Complete ({$complete})

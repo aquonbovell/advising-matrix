@@ -2,7 +2,7 @@
 	import { gradePoints } from '$lib/types';
 	import type { CourseWithPrerequisites, Grade } from '$lib/types';
 	import { derived, type Writable } from 'svelte/store';
-	import { completedCourses, courseGrades } from '$lib/stores/ProgramMatrix';
+	import { completedCourses, courseGrades, requirementCourses } from '$lib/stores/ProgramMatrix';
 
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
@@ -14,6 +14,7 @@
 	import TrashIcon from '../icons/TrashIcon.svelte';
 
 	export let course: CourseWithPrerequisites;
+	export let isPool: boolean = false;
 	// export let completedCourses: Writable<Record<string, boolean>>;
 	// export let courseGrades: any;
 
@@ -80,7 +81,22 @@
 </script>
 
 <li>
-	<div class="flex items-center px-4 py-4 sm:px-6">
+	<div class={`flex items-center px-4 py-4 sm:px-6 ${isPool ? 'gap-3' : ''}`}>
+		{#if isPool}
+			<button
+				class="text-red-500 hover:text-red-700"
+				on:click={() => {
+					courseGrades.update((grades) => {
+						// Delete the courseId from the grades object
+						const { [course.id]: _, ...updatedGrades } = grades;
+
+						// Return the updated object without the courseId
+						return updatedGrades;
+					});
+					requirementCourses.update((courses) => courses.filter((c) => !c.startsWith(course.id)));
+				}}><TrashIcon /></button
+			>
+		{/if}
 		<div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
 			<div>
 				<div class="flex items-center">

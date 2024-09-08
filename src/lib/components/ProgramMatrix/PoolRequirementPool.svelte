@@ -52,8 +52,8 @@
 </script>
 
 <li>
-	<div class="flex flex-col px-4 py-4 sm:px-6">
-		<div class="flex items-center justify-between">
+	<div class="flex flex-col">
+		<div class="flex items-center justify-between px-4 pb-2 pt-4 sm:px-6">
 			<span class="font-medium text-gray-900">
 				{#if requirement.level !== null}Level {requirement.level}
 				{:else}
@@ -65,10 +65,11 @@
 				<Button on:click={() => onAddCourse(requirement.id)}>Add Course</Button>
 			{/if}
 		</div>
-		{#each $courses.filter((c) => c.id in $completedCourses && $requirementCourses.includes(c.id.concat(',' + requirement.id))) as course (course.id)}
-			<!-- <pre>{JSON.stringify(course, null, 2)}</pre> -->
-			<div class="">
-				<button
+		<ul class="divide-y divide-gray-200">
+			{#each $courses.filter((c) => c.id in $completedCourses && $requirementCourses.includes(c.id.concat(',' + requirement.id))) as course (course.id)}
+				<!-- <pre>{JSON.stringify(course, null, 2)}</pre> -->
+				<!-- <li class=""> -->
+				<!-- <button
 					class="text-red-500 hover:text-red-700"
 					on:click={() => {
 						courseGrades.update((grades) => {
@@ -80,7 +81,7 @@
 						});
 						requirementCourses.update((courses) => courses.filter((c) => !c.startsWith(course.id)));
 					}}><TrashIcon /></button
-				>
+				> -->
 				<!-- <form method="post" class="inline-block" use:enhance={submit}> -->
 				<!-- <input type="hidden" name="courseId" id="courseId" value={course.id} /> -->
 				<!-- <input type="hidden" name="requirementId" id="requirementId" value={requirement.id} /> -->
@@ -89,8 +90,9 @@
 					>
 				</form> -->
 
-				<CourseItem {course} />
-			</div>
-		{/each}
+				<CourseItem {course} isPool={true} />
+				<!-- </li> -->
+			{/each}
+		</ul>
 	</div>
 </li>

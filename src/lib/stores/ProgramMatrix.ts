@@ -15,6 +15,7 @@ export const programCourses = writable<CourseWithRequirement[]>([]);
 export const poolCourses = writable<CourseWithPrerequisites[]>([]);
 
 export const totalCredits = writable(0);
+export const totalCourses = writable(0);
 
 export const completedCourses = derived([courseGrades], ([$courseGrades]) =>
 	// Object.keys($courseGrades).reduce((acc, courseId) => {
@@ -80,21 +81,26 @@ export const inProgress = derived(
 	}
 );
 
-export const stillNeeded = derived(
-	[completedCourses, programCourses],
-	([completedCourses, programCourses]) =>
-		programCourses.filter((course) => !completedCourses[course.id]).length || 0
-);
-
 export const complete = derived(
-	[completedCourses, programCourses],
-	([completedCourses, programCourses]) =>
-		programCourses.filter((course) => completedCourses[course.id]).length || 0
+	[completedCourses, programCourses, requirementCourses],
+	([completedCourses, programCourses, requirementCourses]) => {
+		const codes = [...new Set(requirementCourses.map((course) => course.split(',')[0]))];
+		const count = codes.reduce((totalCredits, code) => {
+			const completed = completedCourses[code!];
+			return totalCredits + (completed ? 1 : 0);
+		}, 0);
+		return count + programCourses.filter((course) => completedCourses[course.id]).length || 0;
+	}
 );
 
 export const progressPercentage = derived(
 	[appliedCredits, totalCredits],
 	([appliedCredits, totalCredits]) => (appliedCredits / totalCredits) * 100
+);
+
+export const stillNeeded = derived(
+	[complete, totalCourses],
+	([complete, totalCourses]) => totalCourses - complete
 );
 
 export const gpa = derived(
