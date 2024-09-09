@@ -45,8 +45,6 @@ export const actions: Actions = {
 
 		const result = registerSchema.safeParse(formData);
 
-		console.log(result);
-
 		if (!result.success) {
 			const data = {
 				data: Object.fromEntries(formData),

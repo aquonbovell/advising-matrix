@@ -27,8 +27,10 @@
 			>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item href={'/advisor/students/' + code + '/'}>View student</DropdownMenu.Item>
-		<DropdownMenu.Item href={'/advisor/students/' + code + '/degree-tracker'}
+		<DropdownMenu.Item href={'/advisor/advising-students/' + code + '/'}
+			>View student</DropdownMenu.Item
+		>
+		<DropdownMenu.Item href={'/advisor/advising-students/' + code + '/matrix'}
 			>View student degree</DropdownMenu.Item
 		>
 	</DropdownMenu.Content>

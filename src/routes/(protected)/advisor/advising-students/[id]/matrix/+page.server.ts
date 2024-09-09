@@ -7,6 +7,7 @@ import type {
 	ProgramRequirement,
 	ProgramRequirementCourses,
 	RequirementDetails,
+	Student,
 	StudentGrade
 } from '$lib/types';
 import type { Course, RequirementType } from '$lib/db/schema';
@@ -20,13 +21,16 @@ async function getStudentId(userId: string): Promise<string | null> {
 		.executeTakeFirst()
 		.then((result) => result?.id ?? null);
 }
-
-async function getProgram(userId: string): Promise<Program | null> {
-	const user = await db
+async function getStudent(userId: string): Promise<Student> {
+	const student = await db
 		.selectFrom('Student')
 		.where('id', '=', userId)
-		.select('Student.program_id')
+		.select(['id', 'user_id', 'program_id'])
 		.executeTakeFirst();
+	return student;
+}
+
+async function getProgram(programId: string): Promise<Program | null> {
 	const program = await db
 		.selectFrom('Program')
 		.leftJoin('ProgramRequirement', 'Program.id', 'ProgramRequirement.programId')
@@ -40,7 +44,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 			'ProgramRequirement.credits',
 			'ProgramRequirement.details'
 		])
-		.where('Program.id', '=', user!.program_id)
+		.where('Program.id', '=', programId)
 		.execute();
 
 	if (!program.length) return null;
@@ -87,10 +91,12 @@ async function getProgram(userId: string): Promise<Program | null> {
 							!Number.isNaN(+req.details.facultyPool.join(''))
 						)
 				);
-				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
+				const courseIds: string[] = cos.flatMap(
+					(req) => req.details.courses || req.details.facultyPool
+				);
 
 				const courses = await getCourses(
-					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
+					query.flatMap((course) => String(course.id)).filter((id) => !courseIds.includes(id))
 				);
 				const filtered = courses.filter(
 					(course) =>
@@ -129,7 +135,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
 
 				const courses = await getCourses(
-					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
+					query.flatMap((course) => String(course.id)).filter((id) => !courseIds.includes(id))
 				);
 				const filtered = courses.filter((course) =>
 					courseRequirementCodes
@@ -155,18 +161,24 @@ async function getProgram(userId: string): Promise<Program | null> {
 					details: req.details,
 					courses: await getCourses(
 						query
-							.filter((course) => req.details.facultyPool.includes(course.id))
-							.flatMap((course) => course.id)
+							.filter((course) => req.details.facultyPool.includes(String(course.id)))
+							.flatMap((course) => String(course.id))
 					)
 				});
 			}
 		}
 	}
+
+	// console.log('Data:', requirements);
+
 	return {
 		id: program[0]!.id,
 		name: program[0]!.name,
 		requirements,
-		requirementsWithCourses: data
+		requirementsWithCourses: data,
+		degreeCredits: program.reduce((acc, req) => acc + req.credits, 0),
+
+		degreeCourses: program.reduce((acc, req) => acc + req.credits / 3, 0)
 	};
 }
 
@@ -174,12 +186,15 @@ async function getCourses(courseIds: string[]): Promise<CourseWithPrerequisites[
 	if (courseIds.length === 0) {
 		return [];
 	}
+
+	const cIds = courseIds.map((id) => parseInt(id));
+
 	const [courses, prerequisites] = await Promise.all([
-		db.selectFrom('Course').where('id', 'in', courseIds).selectAll().execute(),
+		db.selectFrom('Course').where('id', 'in', cIds).selectAll().execute(),
 		db
 			.selectFrom('CoursePrerequisite as CP')
 			.innerJoin('Course as C', 'CP.prerequisiteId', 'C.id')
-			.where('CP.courseId', 'in', courseIds)
+			.where('CP.courseId', 'in', cIds)
 			.select([
 				'CP.courseId',
 				'CP.prerequisiteId',
@@ -230,7 +245,8 @@ async function getElectiveCourses(
 		})
 	);
 	const flattenedCourseIds = courseIds.flat();
-	return flattenedCourseIds.length > 0 ? getCourses(flattenedCourseIds) : [];
+	const flattenedCourseIdsString = flattenedCourseIds.map((id) => id.toString());
+	return flattenedCourseIds.length > 0 ? getCourses(flattenedCourseIdsString) : [];
 }
 
 async function getStudentCourses(studentId: string): Promise<Record<string, StudentGrade>> {
@@ -238,6 +254,7 @@ async function getStudentCourses(studentId: string): Promise<Record<string, Stud
 		.selectFrom('StudentCourse')
 		.innerJoin('Course', 'StudentCourse.courseId', 'Course.id')
 		.select([
+			'StudentCourse.id',
 			'StudentCourse.courseId',
 			'StudentCourse.grade',
 			'StudentCourse.requirementId',
@@ -252,44 +269,56 @@ async function getStudentCourses(studentId: string): Promise<Record<string, Stud
 		.then((courses) =>
 			courses.reduce(
 				(acc, sc) => {
-					acc[sc.courseId] = {
-						grade: sc.grade as StudentGrade['grade'],
-						requirementId: sc.requirementId,
-						course: {
-							id: sc.courseId,
-							code: sc.code,
-							name: sc.name,
-							level: sc.level,
-							credits: sc.credits
-						}
-					};
+					if (Object.keys(acc).includes(sc.courseId?.toString()!)) {
+						acc[sc.courseId?.toString()!]?.grades.push({ grade: sc.grade as Grade, id: sc.id });
+					} else {
+						acc[sc.courseId?.toString()!] = {
+							grades: [{ grade: sc.grade as Grade, id: sc.id }],
+							requirementId: sc.requirementId,
+							course: {
+								id: sc.courseId!,
+								code: sc.code,
+								name: sc.name,
+								level: sc.level,
+								credits: sc.credits
+							}
+						};
+					}
 					return acc;
 				},
 				{} as Record<string, StudentGrade>
 			)
 		);
 }
-
 export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!params.id) throw error(400, 'Missing student ID');
 
 	const userId = locals.user?.id;
 	if (!userId) throw error(401, 'Unauthorized');
 
-	const program = await getProgram(params.id);
-	if (!program) throw error(404, 'Program not found');
+	const student = await getStudent(params.id);
+
+	if (!student) throw error(404, 'Student not found or not assigned to advisor');
+
+	const program = await getProgram(student.program_id!);
+
+	console.log('Program:', program);
+
+	if (!program) error(404, 'Program not found');
 
 	const [programCourses, electiveCourses, studentCourses] = await Promise.all([
 		getCourses(
-			program.requirements.flatMap((req) =>
-				req.type === 'CREDITS' && 'courses' in req.details ? req.details.courses : []
-			)
+			program.requirements.flatMap((req) => {
+				if (req.type === 'CREDITS') {
+					return req.details.courses;
+				}
+				return [];
+			})
 		),
 		getElectiveCourses(program.requirements.filter((req) => req.type === 'POOL')),
-		getStudentCourses(params.id)
+		getStudentCourses(student.id)
 	]);
 
-	// throw error(500, 'Not implemented');
 	// *Debugging
 	// console.log('Program:', program);
 	// console.log('Program Courses:', programCourses);
@@ -297,7 +326,6 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	// console.log('Student Courses:', studentCourses);
 
 	return {
-		student_id: params.id,
 		program,
 		degreeCourses: programCourses,
 		electiveCourses,

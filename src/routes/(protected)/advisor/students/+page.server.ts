@@ -46,8 +46,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 				created_at: student.created_at,
 				updated_at: student.updated_at,
 
-				token: { value: student.invite_token, expires: student.invite_expires }
-				// advisor: advisor.flatMap( a => a.name).join(', ') || 'No advisor'
+				token: { value: student.invite_token, expires: student.invite_expires },
+				advisor: advisor.flatMap((a) => a.name).join(', ') || 'No advisor'
 			});
 		}
 

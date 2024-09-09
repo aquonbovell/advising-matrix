@@ -9,6 +9,7 @@
 	export let code: string;
 	export let modalHandler: (e: MouseEvent) => void;
 	export let token: { value: string | null; expires: Date | null };
+	export let exists: boolean;
 </script>
 
 <DropdownMenu.Root>
@@ -44,23 +45,34 @@
 
 						const data = await response.json();
 
-						console.log(data);
-
 						if (data.success) {
 							window.location.reload();
 						}
 					}}>Copy Reset Token</DropdownMenu.Item
 				>
 			{/if}
+			{#if !$page.route.id?.includes('advising-students')}
+				<DropdownMenu.Item disabled={exists}>
+					<form action="" method="post">
+						<label for="student_code" aria-hidden="true" hidden>Student Code</label>
+						<input type="hidden" name="student_code" value={code} />
+						<button type="submit">Add to my list</button>
+					</form></DropdownMenu.Item
+				>
+			{/if}
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item href={$page.url + '/' + code + '/'}>View Student</DropdownMenu.Item>
+		<DropdownMenu.Item href={'/advisor/advising-students' + '/' + code + '/'}
+			>View Student</DropdownMenu.Item
+		>
 		<DropdownMenu.Item
-			><a href={$page.url + '/' + code + '/overview'} on:click|preventDefault={modalHandler}
+			><a
+				href={'/advisor/advising-students' + '/' + code + '/overview'}
+				on:click|preventDefault={modalHandler}
 				>View Student Overview
 			</a></DropdownMenu.Item
 		>
-		<DropdownMenu.Item href={$page.url + '/' + code + '/degree-tracker'}
+		<DropdownMenu.Item href={'/advisor/advising-students' + '/' + code + '/matrix'}
 			>View Student Degree</DropdownMenu.Item
 		>
 	</DropdownMenu.Content>

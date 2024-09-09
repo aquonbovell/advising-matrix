@@ -81,8 +81,8 @@ export const actions: Actions = {
 			const { expiresAt, token } = generateTokenWithExpiration();
 
 			await db.transaction().execute(async (trx) => {
-				const userId = generateId(16);
-				const student_id = generateId(16);
+				const userId = crypto.randomUUID();
+				const student_id = crypto.randomUUID();
 				const argon2id = new Argon2id();
 
 				const hashedPassword = await argon2id.hash(DEFAULT_PASSWORD);
@@ -118,7 +118,7 @@ export const actions: Actions = {
 					.insertInto('Advisor')
 					.values({
 						advisor_id: advisor.advisor_id,
-						student_id: student_id
+						student_id: userId
 					})
 					.execute();
 			});

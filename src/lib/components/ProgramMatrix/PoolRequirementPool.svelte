@@ -16,8 +16,10 @@
 	import { buttonVariants } from '../ui/button';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import CourseItem from './CourseItem.svelte';
+	import type { User } from 'lucia';
 
 	export let requirement: ProgramRequirement;
+	export let user: User | null;
 	export let onAddCourse: (requirementId: string) => void;
 
 	let courses =
@@ -26,7 +28,8 @@
 	$: currentCredits = $courses
 		.filter(
 			(c) =>
-				c.id in $completedCourses && $requirementCourses.includes(c.id.concat(',' + requirement.id))
+				c.id in $completedCourses &&
+				$requirementCourses.includes(c.id.toString().concat(',' + requirement.id))
 		)
 		.reduce((sum, course) => sum + course.credits, 0);
 
@@ -66,7 +69,9 @@
 			{/if}
 		</div>
 		<ul class="divide-y divide-gray-200">
-			{#each $courses.filter((c) => c.id in $completedCourses && $requirementCourses.includes(c.id.concat(',' + requirement.id))) as course (course.id)}
+			{#each $courses.filter((c) => c.id in $completedCourses && $requirementCourses.includes(c.id
+							.toString()
+							.concat(',' + requirement.id))) as course (course.id)}
 				<!-- <pre>{JSON.stringify(course, null, 2)}</pre> -->
 				<!-- <li class=""> -->
 				<!-- <button
@@ -90,7 +95,7 @@
 					>
 				</form> -->
 
-				<CourseItem {course} isPool={true} />
+				<CourseItem {course} isPool={true} {user} />
 				<!-- </li> -->
 			{/each}
 		</ul>

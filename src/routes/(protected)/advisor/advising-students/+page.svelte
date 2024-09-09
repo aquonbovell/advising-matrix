@@ -29,6 +29,8 @@
 	}
 </script>
 
+<pre>{JSON.stringify($page.route.id?.includes('advising-students'), null, 2)}</pre>
+
 <div class="mb-6 flex items-center justify-between">
 	<h1 class="text-2xl font-bold text-stone-800">My Students</h1>
 	<Button href={`${$page.url.toString()}/invite`}>Invite A Student</Button>

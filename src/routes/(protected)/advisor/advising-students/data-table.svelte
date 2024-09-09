@@ -36,6 +36,7 @@
 		created_at: Date;
 		updated_at: Date;
 		program_name: string | null;
+		advisor: string;
 	};
 
 	const students: IStudent[] = [...data.students];
@@ -89,6 +90,10 @@
 			header: 'Program'
 		}),
 		table.column({
+			accessor: 'advisor',
+			header: 'Advisor'
+		}),
+		table.column({
 			accessor: 'created_at',
 			header: 'Joined',
 			cell: ({ value }) => {
@@ -129,15 +134,16 @@
 		}),
 
 		table.column({
-			accessor: ({ id, token }) => {
-				return { id, token };
+			accessor: ({ id, token, advisor }) => {
+				return { id, token, exists: advisor.includes(data.user?.name ?? '') };
 			},
 			header: 'Actions',
 			cell: ({ value }) => {
 				return createRender(DataTableActions, {
 					code: value.id,
 					modalHandler: showModal,
-					token: value.token
+					token: value.token,
+					exists: value.exists
 				});
 			},
 			plugins: {
@@ -169,7 +175,7 @@
 		.filter(([, hide]) => !hide)
 		.map(([id]) => id);
 
-	const hidableCols = ['created_at', 'updated_at', 'token'];
+	const hidableCols = ['created_at', 'updated_at', 'token', 'advisor', 'email'];
 </script>
 
 <div>
@@ -240,7 +246,7 @@
 											<div class="text-right font-medium">
 												<Render of={cell.render()} />
 											</div>
-										{:else if cell.id === 'program_name' || cell.id === 'name'}
+										{:else if cell.id === 'program_name' || cell.id === 'name' || cell.id === 'advisor'}
 											<div class="min-w-max capitalize">
 												<Render of={cell.render()} />
 											</div>

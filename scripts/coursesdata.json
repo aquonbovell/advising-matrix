@@ -1,0 +1,5934 @@
+[
+	{
+		"id": 6933,
+		"code": "BIOL0051",
+		"name": "Biology I",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 5725,
+		"code": "BIOL0052",
+		"name": "Biology II",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 9290,
+		"code": "BIOL1020",
+		"name": "Diversity of Life I",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 7719,
+		"code": "BIOL1025",
+		"name": "Diversity of Life II",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 12966,
+		"code": "BIOC1015",
+		"name": "Introduction to Biochemistry",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": []
+	},
+	{
+		"id": 7720,
+		"code": "BIOL1030",
+		"name": "Introduction to Genetics",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 12967,
+		"code": "BIOC2365",
+		"name": "Primary Metabolism",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12967,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			}
+		]
+	},
+	{
+		"id": 12980,
+		"code": "BIOC2366",
+		"name": "Protein Biochemistry",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12980,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			}
+		]
+	},
+	{
+		"id": 12981,
+		"code": "BIOC2370",
+		"name": "Cell Signals",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12981,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			}
+		]
+	},
+	{
+		"id": 12982,
+		"code": "BIOC2371",
+		"name": "Molecular Techniques",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12982,
+				"prerequisiteId": 7720,
+				"code": "BIOL1030",
+				"name": "Introduction to Genetics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 311,
+		"code": "BIOC2900",
+		"name": "Biochemistry Exchange Elective",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": []
+	},
+	{
+		"id": 12985,
+		"code": "BIOL2166",
+		"name": "Advanced Genetics I",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": [
+			{
+				"courseId": 12985,
+				"prerequisiteId": 7720,
+				"code": "BIOL1030",
+				"name": "Introduction to Genetics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 14478,
+		"code": "BIOL2054",
+		"name": "Bioenergy & Biofuels",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 12986,
+		"code": "BIOL2370",
+		"name": "Flowering Plant Physiology",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": [
+			{
+				"courseId": 12986,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 12986,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12987,
+		"code": "BIOL2371",
+		"name": "Ecophysiology of Animals",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": [
+			{
+				"courseId": 12987,
+				"prerequisiteId": 7719,
+				"code": "BIOL1025",
+				"name": "Diversity of Life II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12988,
+		"code": "BIOL2372",
+		"name": "Plants for Caribbean Landscapes",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": [
+			{
+				"courseId": 12988,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 10710,
+		"code": "BIOL2373",
+		"name": "Skills for Biologists",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 8461,
+		"code": "BIOL2463",
+		"name": "Sustainable Land Use",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 8463,
+		"code": "BIOL2465",
+		"name": "Tropical Horticulture",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": [
+			{
+				"courseId": 8463,
+				"prerequisiteId": 7719,
+				"code": "BIOL1025",
+				"name": "Diversity of Life II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			},
+			{
+				"courseId": 8463,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 8462,
+		"code": "BIOL2466",
+		"name": "Tropical Energy and Bioprocessing",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 148,
+		"code": "BIOL2900",
+		"name": "Biology Exchange Elective",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 380,
+		"code": "ECOL2460",
+		"name": "Essentials of Ecology",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 380,
+				"prerequisiteId": 7719,
+				"code": "BIOL1025",
+				"name": "Diversity of Life II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			},
+			{
+				"courseId": 380,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 54,
+		"code": "ECOL2461",
+		"name": "Caribbean Island Biodiversity",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 54,
+				"prerequisiteId": 7719,
+				"code": "BIOL1025",
+				"name": "Diversity of Life II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			},
+			{
+				"courseId": 54,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 466,
+		"code": "ECOL2462",
+		"name": "Marine Biota",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 466,
+				"prerequisiteId": 380,
+				"code": "ECOL2460",
+				"name": "Essentials of Ecology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "3"
+			}
+		]
+	},
+	{
+		"id": 719,
+		"code": "ECOL2900",
+		"name": "Ecology Exchange Elective",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": []
+	},
+	{
+		"id": 53,
+		"code": "MICR2260",
+		"name": "Essential Microbiology",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "4",
+		"prerequisites": [
+			{
+				"courseId": 53,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 53,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 267,
+		"code": "MICR2261",
+		"name": "Eukaryotic Microbes",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "4",
+		"prerequisites": [
+			{
+				"courseId": 267,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 267,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 13797,
+		"code": "MICR2262",
+		"name": "Methods in Microbiology",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "4",
+		"prerequisites": [
+			{
+				"courseId": 13797,
+				"prerequisiteId": 53,
+				"code": "MICR2260",
+				"name": "Essential Microbiology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "4"
+			}
+		]
+	},
+	{
+		"id": 265,
+		"code": "MICR2900",
+		"name": "Microbiology Exchange Elective",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "4",
+		"prerequisites": []
+	},
+	{
+		"id": 12983,
+		"code": "BIOC3260",
+		"name": "Principles of Biotechnology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12983,
+				"prerequisiteId": 12982,
+				"code": "BIOC2371",
+				"name": "Molecular Techniques",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "1"
+			}
+		]
+	},
+	{
+		"id": 12835,
+		"code": "BIOC3261",
+		"name": "Mitochondrial Bioenergetics",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12835,
+				"prerequisiteId": 12982,
+				"code": "BIOC2371",
+				"name": "Molecular Techniques",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 12835,
+				"prerequisiteId": 12967,
+				"code": "BIOC2365",
+				"name": "Primary Metabolism",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "1"
+			}
+		]
+	},
+	{
+		"id": 12834,
+		"code": "BIOC3265",
+		"name": "Principles of Bioinformatics",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12834,
+				"prerequisiteId": 12982,
+				"code": "BIOC2371",
+				"name": "Molecular Techniques",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "1"
+			}
+		]
+	},
+	{
+		"id": 13011,
+		"code": "BIOC3290",
+		"name": "Biochemistry Project (Minors)",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 13011,
+				"prerequisiteId": 10710,
+				"code": "BIOL2373",
+				"name": "Skills for Biologists",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12833,
+		"code": "BIOC3370",
+		"name": "Basis of Human Disease",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12833,
+				"prerequisiteId": 12982,
+				"code": "BIOC2371",
+				"name": "Molecular Techniques",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 12833,
+				"prerequisiteId": 12981,
+				"code": "BIOC2370",
+				"name": "Cell Signals",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "1"
+			}
+		]
+	},
+	{
+		"id": 12984,
+		"code": "BIOC3990",
+		"name": "Biochemistry Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "1",
+		"prerequisites": [
+			{
+				"courseId": 12984,
+				"prerequisiteId": 10710,
+				"code": "BIOL2373",
+				"name": "Skills for Biologists",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12990,
+		"code": "BIOL3501",
+		"name": "Professional Placement for Biologists",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": [
+			{
+				"courseId": 12990,
+				"prerequisiteId": 10710,
+				"code": "BIOL2373",
+				"name": "Skills for Biologists",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12989,
+		"code": "BIOL3025",
+		"name": "Molecular Plant Pathology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "2",
+		"prerequisites": [
+			{
+				"courseId": 12989,
+				"prerequisiteId": 12967,
+				"code": "BIOC2365",
+				"name": "Primary Metabolism",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 12989,
+				"prerequisiteId": 380,
+				"code": "ECOL2460",
+				"name": "Essentials of Ecology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "3"
+			}
+		]
+	},
+	{
+		"id": 3,
+		"code": "BIOL3901",
+		"name": "Multidisciplinary Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "2",
+		"prerequisites": []
+	},
+	{
+		"id": 12991,
+		"code": "BIOL3990",
+		"name": "Biology Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "2",
+		"prerequisites": [
+			{
+				"courseId": 12991,
+				"prerequisiteId": 10710,
+				"code": "BIOL2373",
+				"name": "Skills for Biologists",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12836,
+		"code": "ECOL3100",
+		"name": "Statistics for Ecologists",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 12836,
+				"prerequisiteId": 380,
+				"code": "ECOL2460",
+				"name": "Essentials of Ecology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "3"
+			},
+			{
+				"courseId": 12836,
+				"prerequisiteId": 10710,
+				"code": "BIOL2373",
+				"name": "Skills for Biologists",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 506,
+		"code": "ECOL3460",
+		"name": "Biology and Ecology of Coral Reefs",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 506,
+				"prerequisiteId": 466,
+				"code": "ECOL2462",
+				"name": "Marine Biota",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "3"
+			}
+		]
+	},
+	{
+		"id": 12838,
+		"code": "ECOL3461",
+		"name": "Ecology of a Changing Planet",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 12838,
+				"prerequisiteId": 380,
+				"code": "ECOL2460",
+				"name": "Essentials of Ecology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "3"
+			}
+		]
+	},
+	{
+		"id": 715,
+		"code": "ECOL3462",
+		"name": "Behaviour: An Evolutionary Approach",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 715,
+				"prerequisiteId": 380,
+				"code": "ECOL2460",
+				"name": "Essentials of Ecology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "3"
+			}
+		]
+	},
+	{
+		"id": 8460,
+		"code": "ECOL3463",
+		"name": "Tropical Crop Ecology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 8460,
+				"prerequisiteId": 380,
+				"code": "ECOL2460",
+				"name": "Essentials of Ecology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "3"
+			},
+			{
+				"courseId": 8460,
+				"prerequisiteId": 7720,
+				"code": "BIOL1030",
+				"name": "Introduction to Genetics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 10107,
+		"code": "ECOL3990",
+		"name": "Ecology Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 10107,
+				"prerequisiteId": 10710,
+				"code": "BIOL2373",
+				"name": "Skills for Biologists",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12821,
+		"code": "MICR3265",
+		"name": "Microbiology of Food",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "4",
+		"prerequisites": [
+			{
+				"courseId": 12821,
+				"prerequisiteId": 53,
+				"code": "MICR2260",
+				"name": "Essential Microbiology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "4"
+			},
+			{
+				"courseId": 12821,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 12821,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12820,
+		"code": "MICR3266",
+		"name": "Ecology of Microorganisms",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "4",
+		"prerequisites": [
+			{
+				"courseId": 12820,
+				"prerequisiteId": 53,
+				"code": "MICR2260",
+				"name": "Essential Microbiology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "4"
+			},
+			{
+				"courseId": 12820,
+				"prerequisiteId": 267,
+				"code": "MICR2261",
+				"name": "Eukaryotic Microbes",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "4"
+			}
+		]
+	},
+	{
+		"id": 12819,
+		"code": "MICR3267",
+		"name": "Essential Virology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "4",
+		"prerequisites": [
+			{
+				"courseId": 12819,
+				"prerequisiteId": 53,
+				"code": "MICR2260",
+				"name": "Essential Microbiology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "4"
+			},
+			{
+				"courseId": 12819,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 12819,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			},
+			{
+				"courseId": 12819,
+				"prerequisiteId": 7719,
+				"code": "BIOL1025",
+				"name": "Diversity of Life II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12818,
+		"code": "MICR3268",
+		"name": "Microbial Pathogenesis",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "4",
+		"prerequisites": [
+			{
+				"courseId": 12818,
+				"prerequisiteId": 53,
+				"code": "MICR2260",
+				"name": "Essential Microbiology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "4"
+			},
+			{
+				"courseId": 12818,
+				"prerequisiteId": 12966,
+				"code": "BIOC1015",
+				"name": "Introduction to Biochemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "1"
+			},
+			{
+				"courseId": 12818,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			},
+			{
+				"courseId": 12818,
+				"prerequisiteId": 7719,
+				"code": "BIOL1025",
+				"name": "Diversity of Life II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 264,
+		"code": "MICR3990",
+		"name": "Microbiology Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "4",
+		"prerequisites": [
+			{
+				"courseId": 264,
+				"prerequisiteId": 53,
+				"code": "MICR2260",
+				"name": "Essential Microbiology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "4"
+			},
+			{
+				"courseId": 264,
+				"prerequisiteId": 10710,
+				"code": "BIOL2373",
+				"name": "Skills for Biologists",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "2"
+			},
+			{
+				"courseId": 264,
+				"prerequisiteId": 13797,
+				"code": "MICR2262",
+				"name": "Methods in Microbiology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "4"
+			}
+		]
+	},
+	{
+		"id": 9497,
+		"code": "CHEM0615",
+		"name": "Preliminary Chemistry I",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "6",
+		"prerequisites": []
+	},
+	{
+		"id": 6074,
+		"code": "CHEM0625",
+		"name": "Preliminary Chemistry II",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "6",
+		"prerequisites": []
+	},
+	{
+		"id": 12994,
+		"code": "CHEM1110",
+		"name": "Introduction to Organic Chemistry",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": []
+	},
+	{
+		"id": 378,
+		"code": "CHEM1120",
+		"name": "Introduction to Physical Chemistry",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": []
+	},
+	{
+		"id": 12993,
+		"code": "CHEM1125",
+		"name": "Introduction to Experimental Chemistry",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": []
+	},
+	{
+		"id": 12992,
+		"code": "CHEM1130",
+		"name": "Introduction to Inorganic Chemistry",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": []
+	},
+	{
+		"id": 12831,
+		"code": "CHEM2513",
+		"name": "Fundamentals of Teaching Chemistry",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12831,
+				"prerequisiteId": 12994,
+				"code": "CHEM1110",
+				"name": "Introduction to Organic Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 12831,
+				"prerequisiteId": 378,
+				"code": "CHEM1120",
+				"name": "Introduction to Physical Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 12831,
+				"prerequisiteId": 12993,
+				"code": "CHEM1125",
+				"name": "Introduction to Experimental Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 12831,
+				"prerequisiteId": 12992,
+				"code": "CHEM1130",
+				"name": "Introduction to Inorganic Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 12995,
+		"code": "CHEM2700",
+		"name": "Intermediate Inorganic Chemistry",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12995,
+				"prerequisiteId": 12993,
+				"code": "CHEM1125",
+				"name": "Introduction to Experimental Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 12995,
+				"prerequisiteId": 12992,
+				"code": "CHEM1130",
+				"name": "Introduction to Inorganic Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 12996,
+		"code": "CHEM2705",
+		"name": "Intermediate Organic Chemistry",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12996,
+				"prerequisiteId": 12994,
+				"code": "CHEM1110",
+				"name": "Introduction to Organic Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 12996,
+				"prerequisiteId": 12993,
+				"code": "CHEM1125",
+				"name": "Introduction to Experimental Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 12997,
+		"code": "CHEM2710",
+		"name": "Intermediate Physical Chemistry",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12997,
+				"prerequisiteId": 378,
+				"code": "CHEM1120",
+				"name": "Introduction to Physical Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 12997,
+				"prerequisiteId": 12993,
+				"code": "CHEM1125",
+				"name": "Introduction to Experimental Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 11919,
+		"code": "CHEM2715",
+		"name": "Laboratory Methods in Chemistry I",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 11919,
+				"prerequisiteId": 12994,
+				"code": "CHEM1110",
+				"name": "Introduction to Organic Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 11919,
+				"prerequisiteId": 12993,
+				"code": "CHEM1125",
+				"name": "Introduction to Experimental Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 11919,
+				"prerequisiteId": 12992,
+				"code": "CHEM1130",
+				"name": "Introduction to Inorganic Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 12999,
+		"code": "CHEM2720",
+		"name": "Laboratory Methods in Chemistry II",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12999,
+				"prerequisiteId": 12993,
+				"code": "CHEM1125",
+				"name": "Introduction to Experimental Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 12502,
+		"code": "CHEM2725",
+		"name": "Chemistry of the Environment",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12502,
+				"prerequisiteId": 12993,
+				"code": "CHEM1125",
+				"name": "Introduction to Experimental Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 13000,
+		"code": "CHEM2730",
+		"name": "Quantitative Chemical Analysis",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 13000,
+				"prerequisiteId": 378,
+				"code": "CHEM1120",
+				"name": "Introduction to Physical Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13000,
+				"prerequisiteId": 12993,
+				"code": "CHEM1125",
+				"name": "Introduction to Experimental Chemistry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 5779,
+		"code": "CHEM2950",
+		"name": "Chemistry Elective",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": []
+	},
+	{
+		"id": 12830,
+		"code": "CHEM3167",
+		"name": "Advanced Inorganic Chemistry",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12830,
+				"prerequisiteId": 12995,
+				"code": "CHEM2700",
+				"name": "Intermediate Inorganic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 12829,
+		"code": "CHEM3175",
+		"name": "Advanced Organic Chemistry",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12829,
+				"prerequisiteId": 12996,
+				"code": "CHEM2705",
+				"name": "Intermediate Organic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 13012,
+		"code": "CHEM3218",
+		"name": "Environmental Chemistry and Toxicology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 13012,
+				"prerequisiteId": 12502,
+				"code": "CHEM2725",
+				"name": "Chemistry of the Environment",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 14191,
+		"code": "CHEM3620",
+		"name": "Advanced Physical Chemistry",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 14191,
+				"prerequisiteId": 12997,
+				"code": "CHEM2710",
+				"name": "Intermediate Physical Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 12823,
+		"code": "CHEM3625",
+		"name": "Laboratory Methods in Chemistry III",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12823,
+				"prerequisiteId": 12999,
+				"code": "CHEM2720",
+				"name": "Laboratory Methods in Chemistry II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 12823,
+				"prerequisiteId": 11919,
+				"code": "CHEM2715",
+				"name": "Laboratory Methods in Chemistry I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 545,
+		"code": "CHEM3630",
+		"name": "Methods in Instrumental Analysis",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 545,
+				"prerequisiteId": 13000,
+				"code": "CHEM2730",
+				"name": "Quantitative Chemical Analysis",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 12822,
+		"code": "CHEM3635",
+		"name": "Biological Inorganic Chemistry",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 12822,
+				"prerequisiteId": 12995,
+				"code": "CHEM2700",
+				"name": "Intermediate Inorganic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 13024,
+		"code": "CHEM3800",
+		"name": "Nanostructures and Supramolecular Chemistry",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 13024,
+				"prerequisiteId": 12995,
+				"code": "CHEM2700",
+				"name": "Intermediate Inorganic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13024,
+				"prerequisiteId": 12996,
+				"code": "CHEM2705",
+				"name": "Intermediate Organic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 13025,
+		"code": "CHEM3950",
+		"name": "Basic Project in Chemistry",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 13025,
+				"prerequisiteId": 12995,
+				"code": "CHEM2700",
+				"name": "Intermediate Inorganic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13025,
+				"prerequisiteId": 12996,
+				"code": "CHEM2705",
+				"name": "Intermediate Organic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13025,
+				"prerequisiteId": 12997,
+				"code": "CHEM2710",
+				"name": "Intermediate Physical Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13025,
+				"prerequisiteId": 11919,
+				"code": "CHEM2715",
+				"name": "Laboratory Methods in Chemistry I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13025,
+				"prerequisiteId": 12999,
+				"code": "CHEM2720",
+				"name": "Laboratory Methods in Chemistry II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13025,
+				"prerequisiteId": 13000,
+				"code": "CHEM2730",
+				"name": "Quantitative Chemical Analysis",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 13026,
+		"code": "CHEM3955",
+		"name": "Research Project in Chemistry",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 13026,
+				"prerequisiteId": 12995,
+				"code": "CHEM2700",
+				"name": "Intermediate Inorganic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13026,
+				"prerequisiteId": 12996,
+				"code": "CHEM2705",
+				"name": "Intermediate Organic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13026,
+				"prerequisiteId": 12997,
+				"code": "CHEM2710",
+				"name": "Intermediate Physical Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13026,
+				"prerequisiteId": 11919,
+				"code": "CHEM2715",
+				"name": "Laboratory Methods in Chemistry I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13026,
+				"prerequisiteId": 12999,
+				"code": "CHEM2720",
+				"name": "Laboratory Methods in Chemistry II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13026,
+				"prerequisiteId": 13000,
+				"code": "CHEM2730",
+				"name": "Quantitative Chemical Analysis",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 13027,
+		"code": "CHEM3990",
+		"name": "Professional Placement for Chemists",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 13027,
+				"prerequisiteId": 12995,
+				"code": "CHEM2700",
+				"name": "Intermediate Inorganic Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13027,
+				"prerequisiteId": 12997,
+				"code": "CHEM2710",
+				"name": "Intermediate Physical Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13027,
+				"prerequisiteId": 11919,
+				"code": "CHEM2715",
+				"name": "Laboratory Methods in Chemistry I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13027,
+				"prerequisiteId": 12999,
+				"code": "CHEM2720",
+				"name": "Laboratory Methods in Chemistry II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			},
+			{
+				"courseId": 13027,
+				"prerequisiteId": 13000,
+				"code": "CHEM2730",
+				"name": "Quantitative Chemical Analysis",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 7792,
+		"code": "CHEM3992",
+		"name": "Special Topics in Physical Chemistry",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "6",
+		"prerequisites": [
+			{
+				"courseId": 7792,
+				"prerequisiteId": 12997,
+				"code": "CHEM2710",
+				"name": "Intermediate Physical Chemistry",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "6"
+			}
+		]
+	},
+	{
+		"id": 7222,
+		"code": "COMP0002",
+		"name": "Preliminary Computer Science II",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 6943,
+		"code": "COMP0001",
+		"name": "Preliminary Computer Science I",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 150,
+		"code": "COMP1170",
+		"name": "Entrepreneurship for Computer Scientists",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 9508,
+		"code": "COMP1180",
+		"name": "Mathematics for Computer Science I",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 197,
+		"code": "COMP1205",
+		"name": "Computing I",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 12804,
+		"code": "COMP1210",
+		"name": "Computing II",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12804,
+				"prerequisiteId": 197,
+				"code": "COMP1205",
+				"name": "Computing I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 154,
+		"code": "COMP1215",
+		"name": "UNIX",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 13653,
+		"code": "COMP2210",
+		"name": "Mathematics for Computer Science II",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 13653,
+				"prerequisiteId": 9508,
+				"code": "COMP1180",
+				"name": "Mathematics for Computer Science I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 11926,
+		"code": "COMP2220",
+		"name": "Computer System Architecture",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 11926,
+				"prerequisiteId": 9508,
+				"code": "COMP1180",
+				"name": "Mathematics for Computer Science I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 11926,
+				"prerequisiteId": 12804,
+				"code": "COMP1210",
+				"name": "Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 11926,
+				"prerequisiteId": 9591,
+				"code": "ELET1210",
+				"name": "Digital Electronics I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 657,
+		"code": "COMP2225",
+		"name": "Software Engineering",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 657,
+				"prerequisiteId": 12804,
+				"code": "COMP1210",
+				"name": "Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 703,
+		"code": "COMP2232",
+		"name": "Object-Oriented Programming Concepts",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 703,
+				"prerequisiteId": 12804,
+				"code": "COMP1210",
+				"name": "Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 13507,
+		"code": "COMP2235",
+		"name": "Networks I",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 13507,
+				"prerequisiteId": 12804,
+				"code": "COMP1210",
+				"name": "Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 13507,
+				"prerequisiteId": 154,
+				"code": "COMP1215",
+				"name": "UNIX",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 705,
+		"code": "COMP2245",
+		"name": "Web Development Concepts, Tools and Practices",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 705,
+				"prerequisiteId": 150,
+				"code": "COMP1170",
+				"name": "Entrepreneurship for Computer Scientists",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 705,
+				"prerequisiteId": 204,
+				"code": "SWEN1005",
+				"name": "Mobile Web Programming",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 449,
+		"code": "COMP2410",
+		"name": "Computing in the Digital Age",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 449,
+				"prerequisiteId": 12804,
+				"code": "COMP1210",
+				"name": "Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 488,
+		"code": "COMP2415",
+		"name": "Information Technology Engineering",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 488,
+				"prerequisiteId": 12804,
+				"code": "COMP1210",
+				"name": "Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 8431,
+		"code": "COMP2611",
+		"name": "Data Structures",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 8431,
+				"prerequisiteId": 12804,
+				"code": "COMP1210",
+				"name": "Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 8431,
+				"prerequisiteId": 154,
+				"code": "COMP1215",
+				"name": "UNIX",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 5780,
+		"code": "COMP2950",
+		"name": "Computer Science Elective",
+		"level": 2,
+		"credits": 4,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 12803,
+		"code": "COMP3310",
+		"name": "Algorithms",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12803,
+				"prerequisiteId": 13653,
+				"code": "COMP2210",
+				"name": "Mathematics for Computer Science II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 12803,
+				"prerequisiteId": 8431,
+				"code": "COMP2611",
+				"name": "Data Structures",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12802,
+		"code": "COMP3320",
+		"name": "Design Principles of Operating Systems",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12802,
+				"prerequisiteId": 11926,
+				"code": "COMP2220",
+				"name": "Computer System Architecture",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 12802,
+				"prerequisiteId": 8431,
+				"code": "COMP2611",
+				"name": "Data Structures",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12801,
+		"code": "COMP3330",
+		"name": "Database Management Systems I",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12801,
+				"prerequisiteId": 8431,
+				"code": "COMP2611",
+				"name": "Data Structures",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12800,
+		"code": "COMP3360",
+		"name": "Networks II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12800,
+				"prerequisiteId": 13507,
+				"code": "COMP2235",
+				"name": "Networks I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12799,
+		"code": "COMP3365",
+		"name": "Networks III",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12799,
+				"prerequisiteId": 12800,
+				"code": "COMP3360",
+				"name": "Networks II",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12798,
+		"code": "COMP3370",
+		"name": "Software Engineering on a Large Scale",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12798,
+				"prerequisiteId": 657,
+				"code": "COMP2225",
+				"name": "Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12797,
+		"code": "COMP3375",
+		"name": "Software Testing & Quality",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12797,
+				"prerequisiteId": 657,
+				"code": "COMP2225",
+				"name": "Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12796,
+		"code": "COMP3385",
+		"name": "Framework Design for Advanced Web Development",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12796,
+				"prerequisiteId": 705,
+				"code": "COMP2245",
+				"name": "Web Development Concepts, Tools and Practices",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12795,
+		"code": "COMP3412",
+		"name": "Scalable Enterprise Web Applications",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12795,
+				"prerequisiteId": 12801,
+				"code": "COMP3330",
+				"name": "Database Management Systems I",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 12795,
+				"prerequisiteId": 705,
+				"code": "COMP2245",
+				"name": "Web Development Concepts, Tools and Practices",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12794,
+		"code": "COMP3415",
+		"name": "Database Management Systems II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12794,
+				"prerequisiteId": 12801,
+				"code": "COMP3330",
+				"name": "Database Management Systems I",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12793,
+		"code": "COMP3420",
+		"name": "Computer Graphics",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12793,
+				"prerequisiteId": 8431,
+				"code": "COMP2611",
+				"name": "Data Structures",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 453,
+		"code": "COMP3425",
+		"name": "Mobile Applications for iOS Development",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 453,
+				"prerequisiteId": 8431,
+				"code": "COMP2611",
+				"name": "Data Structures",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 453,
+				"prerequisiteId": 657,
+				"code": "COMP2225",
+				"name": "Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12792,
+		"code": "COMP3435",
+		"name": "User Interface Design",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12792,
+				"prerequisiteId": 8431,
+				"code": "COMP2611",
+				"name": "Data Structures",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 12792,
+				"prerequisiteId": 657,
+				"code": "COMP2225",
+				"name": "Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12791,
+		"code": "COMP3440",
+		"name": "E-Commerce",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12791,
+				"prerequisiteId": 705,
+				"code": "COMP2245",
+				"name": "Web Development Concepts, Tools and Practices",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12790,
+		"code": "COMP3445",
+		"name": "Computer Information Systems",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12790,
+				"prerequisiteId": 657,
+				"code": "COMP2225",
+				"name": "Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 12790,
+				"prerequisiteId": 705,
+				"code": "COMP2245",
+				"name": "Web Development Concepts, Tools and Practices",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12789,
+		"code": "COMP3450",
+		"name": "Fundamentals of Artificial Intelligence",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": [
+			{
+				"courseId": 12789,
+				"prerequisiteId": 13653,
+				"code": "COMP2210",
+				"name": "Mathematics for Computer Science II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 12789,
+				"prerequisiteId": 8431,
+				"code": "COMP2611",
+				"name": "Data Structures",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 541,
+		"code": "COMP3490",
+		"name": "Research Project in Computer Science",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 542,
+		"code": "COMP3495",
+		"name": "Major Research Project in Computer Science",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 543,
+		"code": "COMP3499",
+		"name": "Group Research Project in Computer Science",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 10106,
+		"code": "COMP3955",
+		"name": "Computer Science Internship",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "7",
+		"prerequisites": []
+	},
+	{
+		"id": 12788,
+		"code": "ELET1200",
+		"name": "Basic Circuit Analysis",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12788,
+				"prerequisiteId": 12965,
+				"code": "ELET1220",
+				"name": "Introduction to Electronics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 12787,
+		"code": "ELET1205",
+		"name": "Computer Aided Design",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": []
+	},
+	{
+		"id": 9591,
+		"code": "ELET1210",
+		"name": "Digital Electronics I",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": []
+	},
+	{
+		"id": 157,
+		"code": "ELET1215",
+		"name": "Digital Electronics II",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 157,
+				"prerequisiteId": 9591,
+				"code": "ELET1210",
+				"name": "Digital Electronics I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 12965,
+		"code": "ELET1220",
+		"name": "Introduction to Electronics",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": []
+	},
+	{
+		"id": 512,
+		"code": "ELET2215",
+		"name": "Microprocessor Systems",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 512,
+				"prerequisiteId": 157,
+				"code": "ELET1215",
+				"name": "Digital Electronics II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 514,
+		"code": "ELET2220",
+		"name": "Circuit Simulation and Applications",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 514,
+				"prerequisiteId": 12788,
+				"code": "ELET1200",
+				"name": "Basic Circuit Analysis",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 660,
+		"code": "ELET2225",
+		"name": "Discrete Component Electronics",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 660,
+				"prerequisiteId": 12788,
+				"code": "ELET1200",
+				"name": "Basic Circuit Analysis",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 8050,
+		"code": "ELET2230",
+		"name": "Digital Communication Systems I",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 8050,
+				"prerequisiteId": 157,
+				"code": "ELET1215",
+				"name": "Digital Electronics II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			},
+			{
+				"courseId": 8050,
+				"prerequisiteId": 9508,
+				"code": "COMP1180",
+				"name": "Mathematics for Computer Science I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 8050,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 8050,
+				"prerequisiteId": 13507,
+				"code": "COMP2235",
+				"name": "Networks I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 587,
+		"code": "ELET2235",
+		"name": "Automation Technology and Applications",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 587,
+				"prerequisiteId": 157,
+				"code": "ELET1215",
+				"name": "Digital Electronics II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 13072,
+		"code": "ELET2240",
+		"name": "Sensor and Actuation Devices",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 13072,
+				"prerequisiteId": 12965,
+				"code": "ELET1220",
+				"name": "Introduction to Electronics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 682,
+		"code": "ELET2951",
+		"name": "Electronics Exchange Elective",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": []
+	},
+	{
+		"id": 12786,
+		"code": "ELET3215",
+		"name": "Microcontroller Technology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12786,
+				"prerequisiteId": 512,
+				"code": "ELET2215",
+				"name": "Microprocessor Systems",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 12785,
+		"code": "ELET3220",
+		"name": "Control Systems",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12785,
+				"prerequisiteId": 660,
+				"code": "ELET2225",
+				"name": "Discrete Component Electronics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 12784,
+		"code": "ELET3230",
+		"name": "Essentials of Digital Signal Processing",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12784,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12784,
+				"prerequisiteId": 9508,
+				"code": "COMP1180",
+				"name": "Mathematics for Computer Science I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 12784,
+				"prerequisiteId": 13507,
+				"code": "COMP2235",
+				"name": "Networks I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "7"
+			}
+		]
+	},
+	{
+		"id": 12783,
+		"code": "ELET3235",
+		"name": "Digital Communication Systems II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12783,
+				"prerequisiteId": 8050,
+				"code": "ELET2230",
+				"name": "Digital Communication Systems I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 12782,
+		"code": "ELET3240",
+		"name": "Digital Communication Systems III",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12782,
+				"prerequisiteId": 12783,
+				"code": "ELET3235",
+				"name": "Digital Communication Systems II",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 12781,
+		"code": "ELET3250",
+		"name": "Biomedical Instrumentation",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12781,
+				"prerequisiteId": 587,
+				"code": "ELET2235",
+				"name": "Automation Technology and Applications",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 12780,
+		"code": "ELET3255",
+		"name": "Wireless Communications",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12780,
+				"prerequisiteId": 8050,
+				"code": "ELET2230",
+				"name": "Digital Communication Systems I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "11"
+			},
+			{
+				"courseId": 12780,
+				"prerequisiteId": 660,
+				"code": "ELET2225",
+				"name": "Discrete Component Electronics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 12779,
+		"code": "ELET3260",
+		"name": "Advanced Microprocessors & Systems",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": [
+			{
+				"courseId": 12779,
+				"prerequisiteId": 512,
+				"code": "ELET2215",
+				"name": "Microprocessor Systems",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "11"
+			}
+		]
+	},
+	{
+		"id": 475,
+		"code": "ELET3290",
+		"name": "Semester Electronics Research Project",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": []
+	},
+	{
+		"id": 474,
+		"code": "ELET3295",
+		"name": "Major Electronics Research Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "11",
+		"prerequisites": []
+	},
+	{
+		"id": 547,
+		"code": "ELET3298",
+		"name": "Group Electronics Research Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "11",
+		"prerequisites": []
+	},
+	{
+		"id": 13213,
+		"code": "ELET3955",
+		"name": "Electronics Internship",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "11",
+		"prerequisites": []
+	},
+	{
+		"id": 52,
+		"code": "ENSC1000",
+		"name": "Earth and its Environment",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 155,
+		"code": "ENSC1001",
+		"name": "An Introduction to Physical Geology: Dynamic Earth",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 11771,
+		"code": "ENSC1005",
+		"name": "Landform Dynamics",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 327,
+		"code": "ENSC2000",
+		"name": "Essentials of Oceanography",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": [
+			{
+				"courseId": 327,
+				"prerequisiteId": 52,
+				"code": "ENSC1000",
+				"name": "Earth and its Environment",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 327,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 9398,
+		"code": "ENSC2002",
+		"name": "Earth's Climate",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": [
+			{
+				"courseId": 9398,
+				"prerequisiteId": 52,
+				"code": "ENSC1000",
+				"name": "Earth and its Environment",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 9398,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 491,
+		"code": "ENSC2003",
+		"name": "Sustainable Energy Systems",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 11792,
+		"code": "ENSC2005",
+		"name": "Earth-Life Cycles",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": [
+			{
+				"courseId": 11792,
+				"prerequisiteId": 52,
+				"code": "ENSC1000",
+				"name": "Earth and its Environment",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 11792,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 11792,
+				"prerequisiteId": 155,
+				"code": "ENSC1001",
+				"name": "An Introduction to Physical Geology: Dynamic Earth",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 11792,
+				"prerequisiteId": 11771,
+				"code": "ENSC1005",
+				"name": "Landform Dynamics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "5"
+			}
+		]
+	},
+	{
+		"id": 11794,
+		"code": "ENSC2900",
+		"name": "Environmental Science Exchange",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 13049,
+		"code": "ENSC3000",
+		"name": "Climate Variation and Change",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": [
+			{
+				"courseId": 13049,
+				"prerequisiteId": 9398,
+				"code": "ENSC2002",
+				"name": "Earth's Climate",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "5"
+			}
+		]
+	},
+	{
+		"id": 13635,
+		"code": "ENSC3001",
+		"name": "Natural Hazards and Disasters",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": [
+			{
+				"courseId": 13635,
+				"prerequisiteId": 155,
+				"code": "ENSC1001",
+				"name": "An Introduction to Physical Geology: Dynamic Earth",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 13635,
+				"prerequisiteId": 11771,
+				"code": "ENSC1005",
+				"name": "Landform Dynamics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 13635,
+				"prerequisiteId": 327,
+				"code": "ENSC2000",
+				"name": "Essentials of Oceanography",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 13635,
+				"prerequisiteId": 9398,
+				"code": "ENSC2002",
+				"name": "Earth's Climate",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "5"
+			}
+		]
+	},
+	{
+		"id": 11731,
+		"code": "ENSC3005",
+		"name": "Urban Geomorphology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": [
+			{
+				"courseId": 11731,
+				"prerequisiteId": 11792,
+				"code": "ENSC2005",
+				"name": "Earth-Life Cycles",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "5"
+			}
+		]
+	},
+	{
+		"id": 495,
+		"code": "ENSC3020",
+		"name": "Case Study in Environmental Sciences",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 11795,
+		"code": "ENSC3090",
+		"name": "Professional Placement for Environmental Science",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 470,
+		"code": "ENSC3900",
+		"name": "Research Project in Environmental Science",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 13857,
+		"code": "ENSC3100",
+		"name": "Principles of Sustainability",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 13858,
+		"code": "ENSC3101",
+		"name": "Climate and Weather in the Caribbean",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 13859,
+		"code": "ENSC3102",
+		"name": "Biodiversity in the Caribbean",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 13877,
+		"code": "ENSC3901",
+		"name": "Barbados Research Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "5",
+		"prerequisites": []
+	},
+	{
+		"id": 9190,
+		"code": "MATH0100",
+		"name": "Pre-Calculus",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 13151,
+		"code": "MATH0101",
+		"name": "Preliminary Mathematics I",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 10026,
+		"code": "MATH0102",
+		"name": "Preliminary Mathematics II",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 9270,
+		"code": "MATH0110",
+		"name": "Calculus and Analytical Geometry",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 146,
+		"code": "MATH1141",
+		"name": "Introductory Linear Algebra and Analytical Geometry",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 315,
+		"code": "MATH1152",
+		"name": "Sets and Number Systems",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 315,
+				"prerequisiteId": 146,
+				"code": "MATH1141",
+				"name": "Introductory Linear Algebra and Analytical Geometry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 383,
+		"code": "MATH1190",
+		"name": "Calculus A",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 319,
+		"code": "MATH1195",
+		"name": "Calculus B",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 319,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 10188,
+		"code": "MATH1230",
+		"name": "Introductory Applied Statistics I",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 382,
+		"code": "MATH1235",
+		"name": "Python Programming and Mathematical Software",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 694,
+		"code": "MATH2304",
+		"name": "Multivariable Calculus",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 694,
+				"prerequisiteId": 146,
+				"code": "MATH1141",
+				"name": "Introductory Linear Algebra and Analytical Geometry",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 694,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 694,
+				"prerequisiteId": 382,
+				"code": "MATH1235",
+				"name": "Python Programming and Mathematical Software",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 693,
+		"code": "MATH2305",
+		"name": "Differential Equations",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 693,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 693,
+				"prerequisiteId": 382,
+				"code": "MATH1235",
+				"name": "Python Programming and Mathematical Software",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 674,
+		"code": "MATH2310",
+		"name": "Abstract Algebra 1",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 674,
+				"prerequisiteId": 674,
+				"code": "MATH2310",
+				"name": "Abstract Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 8432,
+		"code": "MATH2315",
+		"name": "Linear Algebra 1",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 8432,
+				"prerequisiteId": 382,
+				"code": "MATH1235",
+				"name": "Python Programming and Mathematical Software",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 8432,
+				"prerequisiteId": 315,
+				"code": "MATH1152",
+				"name": "Sets and Number Systems",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 13638,
+		"code": "MATH2321",
+		"name": "Real Analysis 1",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 13638,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 13638,
+				"prerequisiteId": 315,
+				"code": "MATH1152",
+				"name": "Sets and Number Systems",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 527,
+		"code": "MATH2325",
+		"name": "Elementary Number Theory",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 527,
+				"prerequisiteId": 382,
+				"code": "MATH1235",
+				"name": "Python Programming and Mathematical Software",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 527,
+				"prerequisiteId": 315,
+				"code": "MATH1152",
+				"name": "Sets and Number Systems",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 696,
+		"code": "MATH2330",
+		"name": "Probability Theory 1",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 696,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 476,
+		"code": "MATH2335",
+		"name": "Statistics 1",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 476,
+				"prerequisiteId": 382,
+				"code": "MATH1235",
+				"name": "Python Programming and Mathematical Software",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 476,
+				"prerequisiteId": 696,
+				"code": "MATH2330",
+				"name": "Probability Theory 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12778,
+		"code": "MATH3543",
+		"name": "Abstract Algebra 2",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12778,
+				"prerequisiteId": 674,
+				"code": "MATH2310",
+				"name": "Abstract Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12778,
+				"prerequisiteId": 8432,
+				"code": "MATH2315",
+				"name": "Linear Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12777,
+		"code": "MATH3545",
+		"name": "Linear Algebra 2",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12777,
+				"prerequisiteId": 674,
+				"code": "MATH2310",
+				"name": "Abstract Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12777,
+				"prerequisiteId": 8432,
+				"code": "MATH2315",
+				"name": "Linear Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12777,
+				"prerequisiteId": 693,
+				"code": "MATH2305",
+				"name": "Differential Equations",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12771,
+		"code": "MATH3550",
+		"name": "Real Analysis 2",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12771,
+				"prerequisiteId": 13638,
+				"code": "MATH2321",
+				"name": "Real Analysis 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12772,
+		"code": "MATH3555",
+		"name": "Complex Analysis",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12772,
+				"prerequisiteId": 12771,
+				"code": "MATH3550",
+				"name": "Real Analysis 2",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12776,
+		"code": "MATH3560",
+		"name": "Metric Spaces",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12776,
+				"prerequisiteId": 12771,
+				"code": "MATH3550",
+				"name": "Real Analysis 2",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12775,
+		"code": "MATH3565",
+		"name": "Probability Theory 2",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12775,
+				"prerequisiteId": 696,
+				"code": "MATH2330",
+				"name": "Probability Theory 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12775,
+				"prerequisiteId": 476,
+				"code": "MATH2335",
+				"name": "Statistics 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12775,
+				"prerequisiteId": 694,
+				"code": "MATH2304",
+				"name": "Multivariable Calculus",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12775,
+				"prerequisiteId": 13638,
+				"code": "MATH2321",
+				"name": "Real Analysis 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12774,
+		"code": "MATH3570",
+		"name": "Statistics II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12774,
+				"prerequisiteId": 476,
+				"code": "MATH2335",
+				"name": "Statistics 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12774,
+				"prerequisiteId": 12775,
+				"code": "MATH3565",
+				"name": "Probability Theory 2",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12773,
+		"code": "MATH3575",
+		"name": "Topics in Numerical Analysis",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12773,
+				"prerequisiteId": 693,
+				"code": "MATH2305",
+				"name": "Differential Equations",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12773,
+				"prerequisiteId": 8432,
+				"code": "MATH2315",
+				"name": "Linear Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12773,
+				"prerequisiteId": 12771,
+				"code": "MATH3550",
+				"name": "Real Analysis 2",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 8216,
+		"code": "MATH3580",
+		"name": "Fourier Analysis with Partial Differential Equations",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 8216,
+				"prerequisiteId": 693,
+				"code": "MATH2305",
+				"name": "Differential Equations",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 8216,
+				"prerequisiteId": 8432,
+				"code": "MATH2315",
+				"name": "Linear Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 8216,
+				"prerequisiteId": 12771,
+				"code": "MATH3550",
+				"name": "Real Analysis 2",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 575,
+		"code": "MATH3600",
+		"name": "Topics in Discrete and Computational Geometry",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 575,
+				"prerequisiteId": 315,
+				"code": "MATH1152",
+				"name": "Sets and Number Systems",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 575,
+				"prerequisiteId": 382,
+				"code": "MATH1235",
+				"name": "Python Programming and Mathematical Software",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 576,
+		"code": "MATH3605",
+		"name": "Topics in Graph Theory",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 576,
+				"prerequisiteId": 315,
+				"code": "MATH1152",
+				"name": "Sets and Number Systems",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 576,
+				"prerequisiteId": 382,
+				"code": "MATH1235",
+				"name": "Python Programming and Mathematical Software",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12770,
+		"code": "MATH3620",
+		"name": "Financial Mathematics I",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12770,
+				"prerequisiteId": 694,
+				"code": "MATH2304",
+				"name": "Multivariable Calculus",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12770,
+				"prerequisiteId": 696,
+				"code": "MATH2330",
+				"name": "Probability Theory 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12770,
+				"prerequisiteId": 8432,
+				"code": "MATH2315",
+				"name": "Linear Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12770,
+				"prerequisiteId": 476,
+				"code": "MATH2335",
+				"name": "Statistics 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 12769,
+		"code": "MATH3621",
+		"name": "Financial Mathematics II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12769,
+				"prerequisiteId": 12770,
+				"code": "MATH3620",
+				"name": "Financial Mathematics I",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12769,
+				"prerequisiteId": 12775,
+				"code": "MATH3565",
+				"name": "Probability Theory 2",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 13230,
+		"code": "MATH3955",
+		"name": "Mathematics Internship",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": []
+	},
+	{
+		"id": 325,
+		"code": "METE1110",
+		"name": "Introduction to Oceans and Climate",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": []
+	},
+	{
+		"id": 11350,
+		"code": "METE1130",
+		"name": "Introduction to Physical Meteorology",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": []
+	},
+	{
+		"id": 13633,
+		"code": "METE1125",
+		"name": "Meteorological Observations, Instruments and Basic Analysis",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": []
+	},
+	{
+		"id": 13632,
+		"code": "METE1135",
+		"name": "Introduction to Dynamic Meteorology",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": []
+	},
+	{
+		"id": 573,
+		"code": "METE1305",
+		"name": "Introduction to Climate Change and Society",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": []
+	},
+	{
+		"id": 12817,
+		"code": "METE2110",
+		"name": "Atmospheric Thermodynamics",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12817,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12817,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12817,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12817,
+				"prerequisiteId": 11350,
+				"code": "METE1130",
+				"name": "Introduction to Physical Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12817,
+				"prerequisiteId": 13633,
+				"code": "METE1125",
+				"name": "Meteorological Observations, Instruments and Basic Analysis",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12817,
+				"prerequisiteId": 13632,
+				"code": "METE1135",
+				"name": "Introduction to Dynamic Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 12816,
+		"code": "METE2120",
+		"name": "Physical Meteorology",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12816,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12816,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12816,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12816,
+				"prerequisiteId": 11350,
+				"code": "METE1130",
+				"name": "Introduction to Physical Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12816,
+				"prerequisiteId": 13633,
+				"code": "METE1125",
+				"name": "Meteorological Observations, Instruments and Basic Analysis",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12816,
+				"prerequisiteId": 13632,
+				"code": "METE1135",
+				"name": "Introduction to Dynamic Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 12815,
+		"code": "METE2125",
+		"name": "Dynamic Meteorology",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12815,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12815,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12815,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12815,
+				"prerequisiteId": 11350,
+				"code": "METE1130",
+				"name": "Introduction to Physical Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12815,
+				"prerequisiteId": 13633,
+				"code": "METE1125",
+				"name": "Meteorological Observations, Instruments and Basic Analysis",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12815,
+				"prerequisiteId": 13632,
+				"code": "METE1135",
+				"name": "Introduction to Dynamic Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 12814,
+		"code": "METE2210",
+		"name": "Synoptic Meteorology",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12814,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12814,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12814,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12814,
+				"prerequisiteId": 11350,
+				"code": "METE1130",
+				"name": "Introduction to Physical Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12814,
+				"prerequisiteId": 13633,
+				"code": "METE1125",
+				"name": "Meteorological Observations, Instruments and Basic Analysis",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12814,
+				"prerequisiteId": 13632,
+				"code": "METE1135",
+				"name": "Introduction to Dynamic Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12814,
+				"prerequisiteId": 724,
+				"code": "PHYS2400",
+				"name": "Mathematical Methods in Physics I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12813,
+		"code": "METE2215",
+		"name": "Synoptic Meteorology Lab I",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12813,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12813,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12813,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12813,
+				"prerequisiteId": 11350,
+				"code": "METE1130",
+				"name": "Introduction to Physical Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12813,
+				"prerequisiteId": 13633,
+				"code": "METE1125",
+				"name": "Meteorological Observations, Instruments and Basic Analysis",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12813,
+				"prerequisiteId": 13632,
+				"code": "METE1135",
+				"name": "Introduction to Dynamic Meteorology",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12813,
+				"prerequisiteId": 724,
+				"code": "PHYS2400",
+				"name": "Mathematical Methods in Physics I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12812,
+		"code": "METE2305",
+		"name": "Fundamentals of Hydrometeorology",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12812,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12812,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 5783,
+		"code": "METE2950",
+		"name": "Meteorology Elective",
+		"level": 2,
+		"credits": 4,
+		"departmentId": "13",
+		"prerequisites": []
+	},
+	{
+		"id": 12811,
+		"code": "METE3110",
+		"name": "Advanced Dynamic Meteorology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12811,
+				"prerequisiteId": 12815,
+				"code": "METE2125",
+				"name": "Dynamic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12811,
+				"prerequisiteId": 12814,
+				"code": "METE2210",
+				"name": "Synoptic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12811,
+				"prerequisiteId": 12813,
+				"code": "METE2215",
+				"name": "Synoptic Meteorology Lab I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 12810,
+		"code": "METE3210",
+		"name": "Advanced Synoptic Meteorology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12810,
+				"prerequisiteId": 12815,
+				"code": "METE2125",
+				"name": "Dynamic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12810,
+				"prerequisiteId": 12814,
+				"code": "METE2210",
+				"name": "Synoptic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 12809,
+		"code": "METE3215",
+		"name": "Synoptic Meteorology Lab II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12809,
+				"prerequisiteId": 12815,
+				"code": "METE2125",
+				"name": "Dynamic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12809,
+				"prerequisiteId": 12814,
+				"code": "METE2210",
+				"name": "Synoptic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12809,
+				"prerequisiteId": 12813,
+				"code": "METE2215",
+				"name": "Synoptic Meteorology Lab I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 12808,
+		"code": "METE3310",
+		"name": "The Tropics and Tropical Weather Systems",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12808,
+				"prerequisiteId": 12815,
+				"code": "METE2125",
+				"name": "Dynamic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12808,
+				"prerequisiteId": 12814,
+				"code": "METE2210",
+				"name": "Synoptic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12808,
+				"prerequisiteId": 12813,
+				"code": "METE2215",
+				"name": "Synoptic Meteorology Lab I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 12807,
+		"code": "METE3420",
+		"name": "Radar Meteorology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12807,
+				"prerequisiteId": 12817,
+				"code": "METE2110",
+				"name": "Atmospheric Thermodynamics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12807,
+				"prerequisiteId": 12816,
+				"code": "METE2120",
+				"name": "Physical Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12807,
+				"prerequisiteId": 12814,
+				"code": "METE2210",
+				"name": "Synoptic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12807,
+				"prerequisiteId": 12813,
+				"code": "METE2215",
+				"name": "Synoptic Meteorology Lab I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 12806,
+		"code": "METE3425",
+		"name": "Satellite Meteorology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12806,
+				"prerequisiteId": 12817,
+				"code": "METE2110",
+				"name": "Atmospheric Thermodynamics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12806,
+				"prerequisiteId": 12816,
+				"code": "METE2120",
+				"name": "Physical Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12806,
+				"prerequisiteId": 12814,
+				"code": "METE2210",
+				"name": "Synoptic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12806,
+				"prerequisiteId": 12813,
+				"code": "METE2215",
+				"name": "Synoptic Meteorology Lab I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 10547,
+		"code": "METE3505",
+		"name": "Climate, Biospherse and Ecosystems",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 10547,
+				"prerequisiteId": 325,
+				"code": "METE1110",
+				"name": "Introduction to Oceans and Climate",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 10547,
+				"prerequisiteId": 9290,
+				"code": "BIOL1020",
+				"name": "Diversity of Life I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "2"
+			}
+		]
+	},
+	{
+		"id": 12805,
+		"code": "METE3600",
+		"name": "Numerical Weather Prediction and Computational Methods",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "13",
+		"prerequisites": [
+			{
+				"courseId": 12805,
+				"prerequisiteId": 12804,
+				"code": "COMP1210",
+				"name": "Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "7"
+			},
+			{
+				"courseId": 12805,
+				"prerequisiteId": 12811,
+				"code": "METE3110",
+				"name": "Advanced Dynamic Meteorology",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "13"
+			},
+			{
+				"courseId": 12805,
+				"prerequisiteId": 12814,
+				"code": "METE2210",
+				"name": "Synoptic Meteorology",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "13"
+			}
+		]
+	},
+	{
+		"id": 10730,
+		"code": "PHYS0070",
+		"name": "Preliminary Physics I",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 13654,
+		"code": "PHYS0071",
+		"name": "Preliminary Physics II",
+		"level": 0,
+		"credits": 6,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 161,
+		"code": "PHYS1200",
+		"name": "Physics I: Mechanics of Translational Motion",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 213,
+		"code": "PHYS1205",
+		"name": "Physics II: Rotation, Waves and Thermodynamics",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 214,
+		"code": "PHYS1210",
+		"name": "Physics III: Electric Fields, Currents and Circuits",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 215,
+		"code": "PHYS1220",
+		"name": "Physics IV: Magnetism, Electromagnetic Waves and Optics",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 724,
+		"code": "PHYS2400",
+		"name": "Mathematical Methods in Physics I",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 724,
+				"prerequisiteId": 319,
+				"code": "MATH1195",
+				"name": "Calculus B",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 724,
+				"prerequisiteId": 383,
+				"code": "MATH1190",
+				"name": "Calculus A",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	},
+	{
+		"id": 726,
+		"code": "PHYS2405",
+		"name": "Mathematical Methods in Physics II",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 726,
+				"prerequisiteId": 724,
+				"code": "PHYS2400",
+				"name": "Mathematical Methods in Physics I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 727,
+		"code": "PHYS2410",
+		"name": "Modern Physics",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 727,
+				"prerequisiteId": 161,
+				"code": "PHYS1200",
+				"name": "Physics I: Mechanics of Translational Motion",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 727,
+				"prerequisiteId": 213,
+				"code": "PHYS1205",
+				"name": "Physics II: Rotation, Waves and Thermodynamics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 727,
+				"prerequisiteId": 214,
+				"code": "PHYS1210",
+				"name": "Physics III: Electric Fields, Currents and Circuits",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 727,
+				"prerequisiteId": 215,
+				"code": "PHYS1220",
+				"name": "Physics IV: Magnetism, Electromagnetic Waves and Optics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 729,
+		"code": "PHYS2415",
+		"name": "Theory of Classical Mechanics",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 729,
+				"prerequisiteId": 161,
+				"code": "PHYS1200",
+				"name": "Physics I: Mechanics of Translational Motion",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 729,
+				"prerequisiteId": 213,
+				"code": "PHYS1205",
+				"name": "Physics II: Rotation, Waves and Thermodynamics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 729,
+				"prerequisiteId": 214,
+				"code": "PHYS1210",
+				"name": "Physics III: Electric Fields, Currents and Circuits",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 729,
+				"prerequisiteId": 215,
+				"code": "PHYS1220",
+				"name": "Physics IV: Magnetism, Electromagnetic Waves and Optics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 478,
+		"code": "PHYS2420",
+		"name": "Advanced Physics Laboratory I",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 478,
+				"prerequisiteId": 161,
+				"code": "PHYS1200",
+				"name": "Physics I: Mechanics of Translational Motion",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 478,
+				"prerequisiteId": 213,
+				"code": "PHYS1205",
+				"name": "Physics II: Rotation, Waves and Thermodynamics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 478,
+				"prerequisiteId": 214,
+				"code": "PHYS1210",
+				"name": "Physics III: Electric Fields, Currents and Circuits",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 478,
+				"prerequisiteId": 215,
+				"code": "PHYS1220",
+				"name": "Physics IV: Magnetism, Electromagnetic Waves and Optics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 480,
+		"code": "PHYS2425",
+		"name": "Computational Methods in Physics",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 480,
+				"prerequisiteId": 161,
+				"code": "PHYS1200",
+				"name": "Physics I: Mechanics of Translational Motion",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 480,
+				"prerequisiteId": 213,
+				"code": "PHYS1205",
+				"name": "Physics II: Rotation, Waves and Thermodynamics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 480,
+				"prerequisiteId": 214,
+				"code": "PHYS1210",
+				"name": "Physics III: Electric Fields, Currents and Circuits",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 480,
+				"prerequisiteId": 215,
+				"code": "PHYS1220",
+				"name": "Physics IV: Magnetism, Electromagnetic Waves and Optics",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 5784,
+		"code": "PHYS2950",
+		"name": "Physics Elective",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 12767,
+		"code": "PHYS3420",
+		"name": "Electromagnetic Theory I",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12767,
+				"prerequisiteId": 726,
+				"code": "PHYS2405",
+				"name": "Mathematical Methods in Physics II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12766,
+		"code": "PHYS3445",
+		"name": "Fundamentals of General Relativity and Cosmology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12766,
+				"prerequisiteId": 727,
+				"code": "PHYS2410",
+				"name": "Modern Physics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 12766,
+				"prerequisiteId": 726,
+				"code": "PHYS2405",
+				"name": "Mathematical Methods in Physics II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 578,
+		"code": "PHYS3450",
+		"name": "Fluid Mechanics",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 578,
+				"prerequisiteId": 729,
+				"code": "PHYS2415",
+				"name": "Theory of Classical Mechanics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12765,
+		"code": "PHYS3455",
+		"name": "Lasers and Optical Systems",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12765,
+				"prerequisiteId": 724,
+				"code": "PHYS2400",
+				"name": "Mathematical Methods in Physics I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12764,
+		"code": "PHYS3460",
+		"name": "Physics of Sustainable Energy Systems",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12764,
+				"prerequisiteId": 729,
+				"code": "PHYS2415",
+				"name": "Theory of Classical Mechanics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12763,
+		"code": "PHYS3465",
+		"name": "Electromagnetic Theory II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12763,
+				"prerequisiteId": 12767,
+				"code": "PHYS3420",
+				"name": "Electromagnetic Theory I",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12762,
+		"code": "PHYS3470",
+		"name": "Biological Physics",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12762,
+				"prerequisiteId": 12759,
+				"code": "PHYS3485",
+				"name": "Theory of Statistical Mechanics",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12761,
+		"code": "PHYS3475",
+		"name": "Fundamentals of Solid State Physics",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12761,
+				"prerequisiteId": 727,
+				"code": "PHYS2410",
+				"name": "Modern Physics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12760,
+		"code": "PHYS3480",
+		"name": "Theory of Quantum Mechanics",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12760,
+				"prerequisiteId": 727,
+				"code": "PHYS2410",
+				"name": "Modern Physics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 12760,
+				"prerequisiteId": 726,
+				"code": "PHYS2405",
+				"name": "Mathematical Methods in Physics II",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 12759,
+		"code": "PHYS3485",
+		"name": "Theory of Statistical Mechanics",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": [
+			{
+				"courseId": 12759,
+				"prerequisiteId": 727,
+				"code": "PHYS2410",
+				"name": "Modern Physics",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			},
+			{
+				"courseId": 12759,
+				"prerequisiteId": 724,
+				"code": "PHYS2400",
+				"name": "Mathematical Methods in Physics I",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "12"
+			}
+		]
+	},
+	{
+		"id": 582,
+		"code": "PHYS3490",
+		"name": "Physics One-Semester Research Project",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 583,
+		"code": "PHYS3495",
+		"name": "Physics Two-Semester Research Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 13214,
+		"code": "PHYS3955",
+		"name": "Physics Internship",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "12",
+		"prerequisites": []
+	},
+	{
+		"id": 145,
+		"code": "SWEN1000",
+		"name": "An Introduction to Computing I",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 385,
+		"code": "SWEN1001",
+		"name": "An Introduction to Object Oriented Programming",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 385,
+				"prerequisiteId": 145,
+				"code": "SWEN1000",
+				"name": "An Introduction to Computing I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 385,
+				"prerequisiteId": 317,
+				"code": "SWEN1009",
+				"name": "An Introduction to Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 149,
+		"code": "SWEN1002",
+		"name": "Computing in Society",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 202,
+		"code": "SWEN1003",
+		"name": "Current and Future Trends in Computing for Software Engineers",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 203,
+		"code": "SWEN1004",
+		"name": "Mathematics for Software Engineers",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 204,
+		"code": "SWEN1005",
+		"name": "Mobile Web Programming",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 205,
+		"code": "SWEN1006",
+		"name": "Research Methods for Software Engineers",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 206,
+		"code": "SWEN1007",
+		"name": "Software Engineering Essentials",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 207,
+		"code": "SWEN1008",
+		"name": "Technical Writing for Software Engineers",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 207,
+				"prerequisiteId": 205,
+				"code": "SWEN1006",
+				"name": "Research Methods for Software Engineers",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 317,
+		"code": "SWEN1009",
+		"name": "An Introduction to Computing II",
+		"level": 1,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 317,
+				"prerequisiteId": 145,
+				"code": "SWEN1000",
+				"name": "An Introduction to Computing I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12741,
+		"code": "SWEN2000",
+		"name": "An Introduction to Requirements Engineering",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12741,
+				"prerequisiteId": 206,
+				"code": "SWEN1007",
+				"name": "Software Engineering Essentials",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12741,
+				"prerequisiteId": 160,
+				"code": "SWEN2001",
+				"name": "An Introduction to Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 160,
+		"code": "SWEN2001",
+		"name": "An Introduction to Software Engineering",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 160,
+				"prerequisiteId": 385,
+				"code": "SWEN1001",
+				"name": "An Introduction to Object Oriented Programming",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12742,
+		"code": "SWEN2002",
+		"name": "An Introduction to the Analysis of Algorithms",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12742,
+				"prerequisiteId": 145,
+				"code": "SWEN1000",
+				"name": "An Introduction to Computing I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12742,
+				"prerequisiteId": 385,
+				"code": "SWEN1001",
+				"name": "An Introduction to Object Oriented Programming",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12742,
+				"prerequisiteId": 203,
+				"code": "SWEN1004",
+				"name": "Mathematics for Software Engineers",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12742,
+				"prerequisiteId": 317,
+				"code": "SWEN1009",
+				"name": "An Introduction to Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 163,
+		"code": "SWEN2003",
+		"name": "Computer Networking and Security",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 12743,
+		"code": "SWEN2004",
+		"name": "Computer Organisation",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12743,
+				"prerequisiteId": 145,
+				"code": "SWEN1000",
+				"name": "An Introduction to Computing I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12743,
+				"prerequisiteId": 385,
+				"code": "SWEN1001",
+				"name": "An Introduction to Object Oriented Programming",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12743,
+				"prerequisiteId": 203,
+				"code": "SWEN1004",
+				"name": "Mathematics for Software Engineers",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12743,
+				"prerequisiteId": 317,
+				"code": "SWEN1009",
+				"name": "An Introduction to Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12744,
+		"code": "SWEN2005",
+		"name": "Database Systems",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12744,
+				"prerequisiteId": 145,
+				"code": "SWEN1000",
+				"name": "An Introduction to Computing I",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12744,
+				"prerequisiteId": 317,
+				"code": "SWEN1009",
+				"name": "An Introduction to Computing II",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12744,
+				"prerequisiteId": 163,
+				"code": "SWEN2003",
+				"name": "Computer Networking and Security",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 321,
+		"code": "SWEN2006",
+		"name": "Discrete Mathematics for Software Engineers",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 321,
+				"prerequisiteId": 203,
+				"code": "SWEN1004",
+				"name": "Mathematics for Software Engineers",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 322,
+		"code": "SWEN2007",
+		"name": "Object Oriented Design and Implementation",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 322,
+				"prerequisiteId": 160,
+				"code": "SWEN2001",
+				"name": "An Introduction to Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12745,
+		"code": "SWEN2013",
+		"name": "Elementary Chinese Culture and Language",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 12750,
+		"code": "SWEN2014",
+		"name": "Intermediate Chinese Culture and Language",
+		"level": 2,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 670,
+		"code": "SWEN3000",
+		"name": "Application Development for IOS Devices",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 670,
+				"prerequisiteId": 322,
+				"code": "SWEN2007",
+				"name": "Object Oriented Design and Implementation",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12751,
+		"code": "SWEN3001",
+		"name": "Android Application Development I",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12751,
+				"prerequisiteId": 322,
+				"code": "SWEN2007",
+				"name": "Object Oriented Design and Implementation",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12751,
+				"prerequisiteId": 12744,
+				"code": "SWEN2005",
+				"name": "Database Systems",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 672,
+		"code": "SWEN3002",
+		"name": "Android Application Development II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 672,
+				"prerequisiteId": 12751,
+				"code": "SWEN3001",
+				"name": "Android Application Development I",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12752,
+		"code": "SWEN3003",
+		"name": "Web & Mobile Application Development I",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12752,
+				"prerequisiteId": 204,
+				"code": "SWEN1005",
+				"name": "Mobile Web Programming",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12752,
+				"prerequisiteId": 206,
+				"code": "SWEN1007",
+				"name": "Software Engineering Essentials",
+				"level": 1,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12753,
+		"code": "SWEN3004",
+		"name": "Web & Mobile Application Development II",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12753,
+				"prerequisiteId": 12752,
+				"code": "SWEN3003",
+				"name": "Web & Mobile Application Development I",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 11402,
+		"code": "SWEN3010",
+		"name": "Web and Mobile Application Development I",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 12754,
+		"code": "SWEN3120",
+		"name": "Software Architecture",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12754,
+				"prerequisiteId": 12741,
+				"code": "SWEN2000",
+				"name": "An Introduction to Requirements Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12754,
+				"prerequisiteId": 160,
+				"code": "SWEN2001",
+				"name": "An Introduction to Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12754,
+				"prerequisiteId": 322,
+				"code": "SWEN2007",
+				"name": "Object Oriented Design and Implementation",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12755,
+		"code": "SWEN3130",
+		"name": "Software Project Management",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12755,
+				"prerequisiteId": 12755,
+				"code": "SWEN3130",
+				"name": "Software Project Management",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12757,
+		"code": "SWEN3165",
+		"name": "Software Testing",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12757,
+				"prerequisiteId": 322,
+				"code": "SWEN2007",
+				"name": "Object Oriented Design and Implementation",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12757,
+				"prerequisiteId": 160,
+				"code": "SWEN2001",
+				"name": "An Introduction to Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 10227,
+		"code": "SWEN3912",
+		"name": "Internship in Computing II",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 12758,
+		"code": "SWEN3920",
+		"name": "Capstone Project",
+		"level": 3,
+		"credits": 6,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12758,
+				"prerequisiteId": 321,
+				"code": "SWEN2006",
+				"name": "Discrete Mathematics for Software Engineers",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12758,
+				"prerequisiteId": 12755,
+				"code": "SWEN3130",
+				"name": "Software Project Management",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12758,
+				"prerequisiteId": 12756,
+				"code": "SWEN3145",
+				"name": "Software Modelling",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 8413,
+		"code": "SWEN4001",
+		"name": "Advanced Database Systems",
+		"level": 4,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 8413,
+				"prerequisiteId": 12744,
+				"code": "SWEN2005",
+				"name": "Database Systems",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 12756,
+		"code": "SWEN3145",
+		"name": "Software Modelling",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 12756,
+				"prerequisiteId": 322,
+				"code": "SWEN2007",
+				"name": "Object Oriented Design and Implementation",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 12756,
+				"prerequisiteId": 160,
+				"code": "SWEN2001",
+				"name": "An Introduction to Software Engineering",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 8417,
+		"code": "SWEN4008",
+		"name": "IT Certification I",
+		"level": 4,
+		"credits": 3,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 8419,
+		"code": "SWEN4050",
+		"name": "Software Engineering Capstone Project I",
+		"level": 4,
+		"credits": 6,
+		"departmentId": "9",
+		"prerequisites": [
+			{
+				"courseId": 8419,
+				"prerequisiteId": 12757,
+				"code": "SWEN3165",
+				"name": "Software Testing",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 8419,
+				"prerequisiteId": 12756,
+				"code": "SWEN3145",
+				"name": "Software Modelling",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 8419,
+				"prerequisiteId": 672,
+				"code": "SWEN3002",
+				"name": "Android Application Development II",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 8419,
+				"prerequisiteId": 670,
+				"code": "SWEN3000",
+				"name": "Application Development for IOS Devices",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			},
+			{
+				"courseId": 8419,
+				"prerequisiteId": 12753,
+				"code": "SWEN3004",
+				"name": "Web & Mobile Application Development II",
+				"level": 3,
+				"credits": 3,
+				"departmentId": "9"
+			}
+		]
+	},
+	{
+		"id": 8420,
+		"code": "SWEN4055",
+		"name": "Software Engineering Capstone Project II",
+		"level": 4,
+		"credits": 6,
+		"departmentId": "9",
+		"prerequisites": []
+	},
+	{
+		"id": 56452,
+		"code": "ECOL3454",
+		"name": "Fisheries Biology",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "3",
+		"prerequisites": [
+			{
+				"courseId": 56452,
+				"prerequisiteId": 466,
+				"code": "ECOL2462",
+				"name": "Marine Biota",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "3"
+			}
+		]
+	},
+	{
+		"id": 154368,
+		"code": "ENSC3103",
+		"name": "Landscapes and Landforms of the Lesser Antilles",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "5",
+		"prerequisites": [
+			{
+				"courseId": 154368,
+				"prerequisiteId": 327,
+				"code": "ENSC2000",
+				"name": "Essentials of Oceanography",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 154368,
+				"prerequisiteId": 9398,
+				"code": "ENSC2002",
+				"name": "Earth's Climate",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "5"
+			},
+			{
+				"courseId": 154368,
+				"prerequisiteId": 11792,
+				"code": "ENSC2005",
+				"name": "Earth-Life Cycles",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "5"
+			}
+		]
+	},
+	{
+		"id": 12768,
+		"code": "MATH3590",
+		"name": "Mathematics Research Project",
+		"level": 3,
+		"credits": 3,
+		"departmentId": "10",
+		"prerequisites": [
+			{
+				"courseId": 12768,
+				"prerequisiteId": 674,
+				"code": "MATH2310",
+				"name": "Abstract Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12768,
+				"prerequisiteId": 8432,
+				"code": "MATH2315",
+				"name": "Linear Algebra 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12768,
+				"prerequisiteId": 693,
+				"code": "MATH2305",
+				"name": "Differential Equations",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12768,
+				"prerequisiteId": 13638,
+				"code": "MATH2321",
+				"name": "Real Analysis 1",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			},
+			{
+				"courseId": 12768,
+				"prerequisiteId": 694,
+				"code": "MATH2304",
+				"name": "Multivariable Calculus",
+				"level": 2,
+				"credits": 3,
+				"departmentId": "10"
+			}
+		]
+	}
+]

@@ -1,19 +1,22 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Input from '$lib/components/ui/Input.svelte';
-	import RequestAccess from '$lib/components/RequestAccess.svelte';
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
-	import type { ActionData, PageData } from './$types';
+	import type { ActionData } from './$types';
 	import PasswordRequirements from '$lib/components/PasswordRequirements.svelte';
 	import * as Alert from '$lib/components/ui/alert';
+	import { Button } from 'bits-ui';
 
-	export let data: PageData;
 	export let form: ActionData;
 
 	let password = '';
 	let confirmPassword = '';
 
-	$: isPasswordValid = true;
+	$: isPasswordValid =
+		password.length >= 8 &&
+		/[A-Z]/.test(password) &&
+		password === confirmPassword &&
+		password !== '';
 </script>
 
 <div
@@ -27,7 +30,6 @@
 		<h1 class="mb-2 text-center text-2xl font-semibold text-gray-800">Forgot Password</h1>
 		<p class="mb-8 text-center text-sm text-gray-600">Reset your account password</p>
 
-		<pre>{JSON.stringify(form, null, 2)}</pre>
 		{#if form?.errors?.user}
 			<Alert.Root class="text-red-600">
 				<!-- <Terminal class="h-4 w-4" /> -->
@@ -74,11 +76,20 @@
 			<PasswordRequirements {password} {confirmPassword} />
 			<button
 				type="submit"
-				class="w-full rounded-md bg-indigo-600 px-4 py-3 text-sm font-medium text-white shadow-sm transition-colors duration-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+				class="w-full rounded-md border bg-indigo-600 px-4 py-3 text-sm font-medium text-white shadow-sm transition-colors duration-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 				disabled={!isPasswordValid}
 			>
 				Submit
 			</button>
 		</form>
+		<div class="grid gap-3 py-2">
+			<Button.Root
+				class="inline-flex h-12 w-full items-center justify-center rounded-lg border bg-slate-50 px-[21px] text-[15px] font-semibold shadow-sm hover:bg-slate-100/95 active:scale-90 active:transition-all"
+				type="button"
+				href="/auth/sign-in"
+			>
+				Sign In
+			</Button.Root>
+		</div>
 	</div>
 </div>

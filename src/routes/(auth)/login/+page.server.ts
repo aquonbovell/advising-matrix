@@ -36,8 +36,6 @@ export const actions: Actions = {
 			.selectAll()
 			.executeTakeFirst();
 
-		console.log(user);
-
 		if (!user) {
 			form.errors._errors = ['Invalid email or password'];
 			return fail(400, { form });

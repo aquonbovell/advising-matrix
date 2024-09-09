@@ -68,7 +68,10 @@
 			);
 			req.courses.forEach((course) => {
 				if (studentCourses[course.id]) {
-					requirementCourses.update((courses) => [...courses, course.id.concat(',' + req.id)]);
+					requirementCourses.update((courses) => [
+						...courses,
+						course.id.toString().concat(',' + req.id)
+					]);
 				}
 			});
 		}
@@ -81,7 +84,10 @@
 		]);
 		updatePoolCourses(requirementId);
 		courseGrades.update((grades) => ({ ...grades, [course.id]: [] }));
-		requirementCourses.update((courses) => [...courses, course.id.concat(',' + requirementId)]);
+		requirementCourses.update((courses) => [
+			...courses,
+			course.id.toString().concat(',' + requirementId)
+		]);
 		// completedCourses.update((completed) => ({ ...completed, [course.id]: false }));
 		dialogOpen = false;
 	}
@@ -89,15 +95,17 @@
 	function handleAddCourse() {
 		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
 		const selectedCourseId = courseElement?.value;
+		console.log(selectedCourseId);
+
 		if (selectedCourseId && currentRequirement) {
 			const currentCredits = $poolCourses
 				.filter(
 					(c) =>
 						c.id in $completedCourses &&
-						$requirementCourses.includes(c.id.concat(currentRequirement ?? ''))
+						$requirementCourses.includes(c.id.toString().concat(currentRequirement ?? ''))
 				)
 				.reduce((sum, course) => sum + course.credits, 0);
-			const selectedCourse = electiveCourses.find((c) => c.id === selectedCourseId);
+			const selectedCourse = electiveCourses.find((c) => c.id.toString() === selectedCourseId);
 			const requirementCredits =
 				requirements?.find((req) => req.id === currentRequirement)?.credits ?? 0;
 			if (currentCredits + selectedCourse!.credits > requirementCredits) {
@@ -194,8 +202,8 @@
 		}));
 
 		Object.entries(studentCourses).forEach(([courseId, courseData]) => {
-			if (courseData.requirementId && !allCourses.some((c) => c.id === courseId)) {
-				const course = electiveCourses.find((c) => c.id === courseId);
+			if (courseData.requirementId && !allCourses.some((c) => c.id.toString() === courseId)) {
+				const course = electiveCourses.find((c) => c.id.toString() === courseId);
 				if (course) {
 					allCourses.push({
 						...course,
@@ -230,13 +238,9 @@
 		});
 		const codes = Object.keys(studentCourses);
 
-		console.log(codes);
-
 		codes.forEach((code) => {
 			if (code in grades) {
-				console.log(grades[code]);
 			} else {
-				console.log(studentCourses[code]?.grades);
 				grades[code] = studentCourses[code]?.grades;
 			}
 		});
@@ -244,7 +248,6 @@
 		courseGrades.set(grades);
 		// completedCourses.set(completed);
 	}
-	$: console.log(requirements);
 
 	// Form submission handling
 	let loading = false;
@@ -252,7 +255,7 @@
 	let alertOpen = false;
 </script>
 
-<!-- <pre>{JSON.stringify($totalCourses, null, 2)}</pre> -->
+<!-- <pre>{JSON.stringify(DataTransfer, null, 2)}</pre> -->
 
 <!-- Header -->
 <Header degreeName={data.program.name} {islevel1completed} {islevel2completed} />
@@ -313,7 +316,7 @@
 	<div class="rounded-lg bg-white shadow">
 		<ul class="divide-y divide-gray-200">
 			{#each degreeCourses.filter((course) => course.code[4] === '1') as course (course.id)}
-				<CourseItem {course} />
+				<CourseItem {course} user={data.user} />
 			{/each}
 		</ul>
 	</div>
@@ -321,7 +324,11 @@
 		<ul class="divide-y divide-gray-200">
 			{#each requirements as req}
 				{#if req.type === 'POOL' && req.credits > 0 && req.level === 1}
-					<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+					<PoolRequirementItem
+						requirement={req}
+						onAddCourse={openAddCourseModal}
+						user={data.user}
+					/>
 				{/if}
 			{/each}
 		</ul>
@@ -335,7 +342,7 @@
 		<div class="rounded-lg bg-white shadow">
 			<ul class="divide-y divide-gray-200">
 				{#each degreeCourses.filter((course) => course.code[4] === '2') as course (course.id)}
-					<CourseItem {course} />
+					<CourseItem {course} user={data.user} />
 				{/each}
 			</ul>
 		</div>
@@ -344,7 +351,11 @@
 			<ul class="divide-y divide-gray-200">
 				{#each requirements as req}
 					{#if req.type === 'POOL' && req.credits > 0 && req.level === 2}
-						<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+						<PoolRequirementItem
+							requirement={req}
+							onAddCourse={openAddCourseModal}
+							user={data.user}
+						/>
 					{/if}
 				{/each}
 			</ul>
@@ -358,7 +369,7 @@
 		<div class="rounded-lg bg-white shadow">
 			<ul class="divide-y divide-gray-200">
 				{#each degreeCourses.filter((course) => course.code[4] === '3') as course (course.id)}
-					<CourseItem {course} />
+					<CourseItem {course} user={data.user} />
 				{/each}
 			</ul>
 		</div>
@@ -367,7 +378,11 @@
 			<ul class="divide-y divide-gray-200">
 				{#each requirements as req}
 					{#if req.type === 'POOL' && req.credits > 0 && req.level === 3}
-						<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+						<PoolRequirementItem
+							requirement={req}
+							onAddCourse={openAddCourseModal}
+							user={data.user}
+						/>
 					{/if}
 				{/each}
 			</ul>
@@ -377,7 +392,11 @@
 			<ul class="divide-y divide-gray-200">
 				{#each requirements as req}
 					{#if req.type === 'POOL' && req.credits > 0 && req.level === null}
-						<PoolRequirementItem requirement={req} onAddCourse={openAddCourseModal} />
+						<PoolRequirementItem
+							requirement={req}
+							onAddCourse={openAddCourseModal}
+							user={data.user}
+						/>
 					{/if}
 				{/each}
 			</ul>
@@ -407,7 +426,7 @@
 			class="w-full rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
 		>
 			<option value="">Select a course...</option>
-			{#each $poolCourses.filter((c) => !(c.id in $completedCourses && $requirementCourses.filter( (el) => el.startsWith(c.id) ))) as course}
+			{#each $poolCourses.filter((c) => !(c.id in $completedCourses && $requirementCourses.filter( (el) => el.startsWith(c.id.toString()) ))) as course}
 				<option value={course.id}>{course.code} - {course.name}</option>
 			{/each}
 		</select>

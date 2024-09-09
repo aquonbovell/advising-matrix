@@ -77,3 +77,10 @@ export type StudentGrade = Omittable<StudentCourse, 'id' | 'studentId' | 'course
 export type ProgramRequirementCourses = ProgramRequirement & {
 	courses: CourseWithPrerequisites[];
 };
+export type Student =
+	| {
+			id: string;
+			user_id: string;
+			program_id: string | null;
+	  }
+	| undefined;

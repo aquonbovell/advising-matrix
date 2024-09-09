@@ -21,7 +21,7 @@ export type Advisor = {
 	student_id: string;
 };
 export type Course = {
-	id: string;
+	id: number;
 	code: string;
 	name: string;
 	level: number;
@@ -30,22 +30,12 @@ export type Course = {
 };
 export type CoursePrerequisite = {
 	id: string;
-	courseId: string;
-	prerequisiteId: string;
-};
-export type Degree = {
-	id: string;
-	name: string;
-	student_id: string;
+	courseId: number;
+	prerequisiteId: number;
 };
 export type Department = {
-	id: string;
+	id: Generated<string>;
 	name: string;
-};
-export type Prerequisite = {
-	id: string;
-	course_id: string;
-	prerequisite_id: string;
 };
 export type Program = {
 	id: string;
@@ -69,35 +59,32 @@ export type Student = {
 	user_id: string;
 	invite_token: string | null;
 	invite_expires: Timestamp | null;
-	majorId: string | null;
 	program_id: string | null;
 	created_at: Generated<Timestamp>;
 	updated_at: Timestamp;
 };
 export type StudentCourse = {
 	id: string;
-	studentId: string;
-	courseId: string;
 	grade: string;
 	requirementId: string | null;
+	studentId: string | null;
+	courseId: number | null;
 };
 export type User = {
 	id: string;
 	name: string | null;
 	email: string;
-	alternate_email: string | null;
 	password: string;
 	role: UserRole;
 	created_at: Generated<Timestamp>;
 	updated_at: Timestamp;
+	alternate_email: string | null;
 };
 export type DB = {
 	Advisor: Advisor;
 	Course: Course;
 	CoursePrerequisite: CoursePrerequisite;
-	Degree: Degree;
 	Department: Department;
-	Prerequisite: Prerequisite;
 	Program: Program;
 	ProgramRequirement: ProgramRequirement;
 	Session: Session;

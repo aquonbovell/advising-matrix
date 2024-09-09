@@ -12,8 +12,10 @@
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import TrashIcon from '../icons/TrashIcon.svelte';
+	import type { User } from 'lucia';
 
 	export let course: CourseWithPrerequisites;
+	export let user: User | null;
 	export let isPool: boolean = false;
 	// export let completedCourses: Writable<Record<string, boolean>>;
 	// export let courseGrades: any;
@@ -26,7 +28,9 @@
 	function addGrade(courseId: string, event: Event) {
 		const target = event.target as HTMLSelectElement;
 
-		alert(`Course ID: ${courseId}, Grade: ${target.value}: Select: ${selectedGrade}`);
+		// alert(`Course ID: ${courseId}, Grade: ${target.value}: Select: ${selectedGrade}`);
+
+		if (!selectedGrade) return;
 
 		courseGrades.update((grades) => {
 			const courseGrades = grades[courseId] ?? [];
@@ -82,7 +86,7 @@
 
 <li>
 	<div class={`flex items-center px-4 py-4 sm:px-6 ${isPool ? 'gap-3' : ''}`}>
-		{#if isPool}
+		{#if isPool && user?.role === 'STUDENT'}
 			<button
 				class="text-red-500 hover:text-red-700"
 				on:click={() => {
@@ -93,7 +97,9 @@
 						// Return the updated object without the courseId
 						return updatedGrades;
 					});
-					requirementCourses.update((courses) => courses.filter((c) => !c.startsWith(course.id)));
+					requirementCourses.update((courses) =>
+						courses.filter((c) => !c.startsWith(course.id.toString()))
+					);
 				}}><TrashIcon /></button
 			>
 		{/if}
@@ -111,7 +117,6 @@
 					<label for={`course-${course.id}`} class="ml-3 block">
 						<span class="font-medium text-gray-900">{course.code}</span>
 						<span class="ml-1 text-gray-500">{course.name}</span>
-						<span class="ml-1 text-gray-500">{course.id}</span>
 					</label>
 				</div>
 				<div class="mt-1 flex items-center text-sm text-gray-500">
@@ -144,24 +149,27 @@
 						<select
 							name={`${course.id},${courseGrade.id}`}
 							value={courseGrade.grade ?? ''}
-							on:change={(event) => handleGradeChange(course.id, courseGrade.id, event)}
+							on:change={(event) => handleGradeChange(course.id.toString(), courseGrade.id, event)}
 							class="rounded-md border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-							disabled={!$arePrerequisitesMetStore}
+							disabled={!$arePrerequisitesMetStore || user?.role === 'ADVISOR'}
 						>
 							<option value="" disabled>Grade</option>
 							{#each Object.keys(gradePoints) as grade}
 								<option value={grade}>{grade}</option>
 							{/each}
 						</select>
-						<form method="post" class="inline-block" use:enhance={submit}>
-							<input type="hidden" name="courseId" id="courseId" value={course.id} />
-							<input type="hidden" name="gradeId" id="gradeId" value={courseGrade.id} />
-							<button formaction="?/removeCourse" class="text-red-500 hover:text-red-700"
-								><TrashIcon /></button
-							>
-						</form>
+						{#if user?.role === 'STUDENT'}
+							<form method="post" class="inline-block" use:enhance={submit}>
+								<input type="hidden" name="courseId" id="courseId" value={course.id} />
+								<input type="hidden" name="gradeId" id="gradeId" value={courseGrade.id} />
+								<button formaction="?/removeCourse" class="text-red-500 hover:text-red-700"
+									><TrashIcon /></button
+								>
+							</form>
+						{/if}
 					</div>
 				{/each}
+
 				{#if $courseGrades[course.id]?.length === 0 || $courseGrades[course.id]
 						?.flatMap((g) => g.grade)
 						.every( (g) => g?.startsWith('F') ) || (course.prerequisites && course.prerequisites.length > 0)}
@@ -181,7 +189,8 @@
 						>
 							<Dialog.Trigger
 								class={buttonVariants({ variant: 'outline' })}
-								on:click={() => (dialog = true)}>Enter Grade</Dialog.Trigger
+								on:click={() => (dialog = true)}
+								disabled={user?.role !== 'STUDENT'}>Enter Grade</Dialog.Trigger
 							>
 							<Dialog.Content class="sm:max-w-[425px]">
 								<Dialog.Header>
@@ -203,7 +212,7 @@
 										type="button"
 										on:click={(event) => {
 											// TODO: Implement addGrade
-											addGrade(course.id, event);
+											addGrade(course.id.toString(), event);
 											// dialog = false;
 										}}>Add Grade</Button
 									>

@@ -12,8 +12,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 	try {
 		const advisor = await db
 			.selectFrom('Advisor')
+			.innerJoin('User', 'User.id', 'Advisor.advisor_id')
 			.where('advisor_id', '=', userId)
-			.select(['advisor_id'])
+			.select(['advisor_id', 'User.name'])
 			.executeTakeFirst();
 
 		if (!advisor) {
@@ -30,7 +31,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 				'Student.id',
 				'Student.user_id',
 				'User.email',
-				'User.name',
+				'User.name as name',
 				'Student.created_at',
 				'Student.updated_at',
 				'Student.invite_token',
@@ -38,6 +39,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 				'Program.name as program_name'
 			])
 			.execute();
+
+		console.log(students);
 
 		return {
 			students: students.map((student) => ({
@@ -48,8 +51,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 				program_name: student.program_name,
 				created_at: student.created_at,
 				updated_at: student.updated_at,
-
-				token: { value: student.invite_token, expires: student.invite_expires }
+				token: { value: student.invite_token, expires: student.invite_expires },
+				advisor: advisor.name || 'No advisor'
 			}))
 		};
 	} catch (err) {

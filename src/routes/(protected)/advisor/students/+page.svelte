@@ -8,7 +8,7 @@
 	import { page } from '$app/stores';
 	import * as Dialog from '$lib/components/ui/dialog';
 
-	import StudentChart from './[id]/overview/+page.svelte';
+	import StudentChart from '../advising-students/[id]/overview/+page.svelte';
 
 	async function showModal(e: MouseEvent) {
 		if (e.metaKey || e.ctrlKey) return;

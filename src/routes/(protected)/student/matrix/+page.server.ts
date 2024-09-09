@@ -88,10 +88,12 @@ async function getProgram(userId: string): Promise<Program | null> {
 							!Number.isNaN(+req.details.facultyPool.join(''))
 						)
 				);
-				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
+				const courseIds: string[] = cos.flatMap(
+					(req) => req.details.courses || req.details.facultyPool
+				);
 
 				const courses = await getCourses(
-					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
+					query.flatMap((course) => String(course.id)).filter((id) => !courseIds.includes(id))
 				);
 				const filtered = courses.filter(
 					(course) =>
@@ -130,7 +132,7 @@ async function getProgram(userId: string): Promise<Program | null> {
 				const courseIds = cos.flatMap((req) => req.details.courses || req.details.facultyPool);
 
 				const courses = await getCourses(
-					query.flatMap((course) => course.id).filter((id) => !courseIds.includes(id))
+					query.flatMap((course) => String(course.id)).filter((id) => !courseIds.includes(id))
 				);
 				const filtered = courses.filter((course) =>
 					courseRequirementCodes
@@ -156,8 +158,8 @@ async function getProgram(userId: string): Promise<Program | null> {
 					details: req.details,
 					courses: await getCourses(
 						query
-							.filter((course) => req.details.facultyPool.includes(course.id))
-							.flatMap((course) => course.id)
+							.filter((course) => req.details.facultyPool.includes(String(course.id)))
+							.flatMap((course) => String(course.id))
 					)
 				});
 			}
@@ -181,12 +183,15 @@ async function getCourses(courseIds: string[]): Promise<CourseWithPrerequisites[
 	if (courseIds.length === 0) {
 		return [];
 	}
+
+	const cIds = courseIds.map((id) => parseInt(id));
+
 	const [courses, prerequisites] = await Promise.all([
-		db.selectFrom('Course').where('id', 'in', courseIds).selectAll().execute(),
+		db.selectFrom('Course').where('id', 'in', cIds).selectAll().execute(),
 		db
 			.selectFrom('CoursePrerequisite as CP')
 			.innerJoin('Course as C', 'CP.prerequisiteId', 'C.id')
-			.where('CP.courseId', 'in', courseIds)
+			.where('CP.courseId', 'in', cIds)
 			.select([
 				'CP.courseId',
 				'CP.prerequisiteId',
@@ -237,7 +242,8 @@ async function getElectiveCourses(
 		})
 	);
 	const flattenedCourseIds = courseIds.flat();
-	return flattenedCourseIds.length > 0 ? getCourses(flattenedCourseIds) : [];
+	const flattenedCourseIdsString = flattenedCourseIds.map((id) => id.toString());
+	return flattenedCourseIds.length > 0 ? getCourses(flattenedCourseIdsString) : [];
 }
 
 async function getStudentCourses(studentId: string): Promise<Record<string, StudentGrade>> {
@@ -260,14 +266,14 @@ async function getStudentCourses(studentId: string): Promise<Record<string, Stud
 		.then((courses) =>
 			courses.reduce(
 				(acc, sc) => {
-					if (Object.keys(acc).includes(sc.courseId)) {
-						acc[sc.courseId].grades.push({ grade: sc.grade as Grade, id: sc.id });
+					if (Object.keys(acc).includes(sc.courseId?.toString()!)) {
+						acc[sc.courseId?.toString()!]?.grades.push({ grade: sc.grade as Grade, id: sc.id });
 					} else {
-						acc[sc.courseId] = {
+						acc[sc.courseId?.toString()!] = {
 							grades: [{ grade: sc.grade as Grade, id: sc.id }],
 							requirementId: sc.requirementId,
 							course: {
-								id: sc.courseId,
+								id: sc.courseId!,
 								code: sc.code,
 								name: sc.name,
 								level: sc.level,
@@ -294,9 +300,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const [programCourses, electiveCourses, studentCourses] = await Promise.all([
 		getCourses(
-			program.requirements.flatMap((req) =>
-				req.type === 'CREDITS' && 'courses' in req.details ? req.details.courses : []
-			)
+			program.requirements.flatMap((req) => {
+				if (req.type === 'CREDITS') {
+					return req.details.courses;
+				}
+				return [];
+			})
 		),
 		getElectiveCourses(program.requirements.filter((req) => req.type === 'POOL')),
 		getStudentCourses(studentId)
@@ -341,7 +350,7 @@ export const actions: Actions = {
 							.selectFrom('StudentCourse')
 							.where('id', '=', id!)
 							.where('studentId', '=', studentId)
-							.where('courseId', '=', courseId!)
+							.where('courseId', '=', parseInt(courseId!))
 							.select('grade')
 							.executeTakeFirst();
 
@@ -351,7 +360,7 @@ export const actions: Actions = {
 								.set({ grade: value.toString() })
 								.where('id', '=', id!)
 								.where('studentId', '=', studentId)
-								.where('courseId', '=', courseId!)
+								.where('courseId', '=', parseInt(courseId!))
 								.execute();
 						} else {
 							await trx
@@ -359,7 +368,7 @@ export const actions: Actions = {
 								.values({
 									id: crypto.randomUUID(),
 									studentId,
-									courseId: courseId!,
+									courseId: parseInt(courseId!),
 									grade: value.toString()
 								})
 								.execute();
@@ -385,10 +394,6 @@ export const actions: Actions = {
 		const gradeId = formData.get('gradeId') as string;
 		const requirementId = formData.get('requirementId') as string;
 
-		console.log('Removing course:', courseId, requirementId, gradeId, studentId);
-
-		console.log('Form Data:', formData);
-
 		if (!courseId || !gradeId) {
 			return fail(400, { message: 'Missing course or requirement ID or gradeId' });
 		}
@@ -398,10 +403,9 @@ export const actions: Actions = {
 				const data = await trx
 					.deleteFrom('StudentCourse')
 					.where('studentId', '=', studentId)
-					.where('courseId', '=', courseId)
+					.where('courseId', '=', parseInt(courseId))
 					.where('id', '=', gradeId)
 					.execute();
-				console.log('Data:', data);
 			});
 
 			return { success: true };
@@ -422,10 +426,6 @@ export const actions: Actions = {
 		const gradeId = formData.get('gradeId') as string;
 		const requirementId = formData.get('requirementId') as string;
 
-		console.log('Removing course:', courseId, requirementId, gradeId, studentId);
-
-		console.log('Form Data:', formData);
-
 		if (!courseId) {
 			return fail(400, { message: 'Missing course or requirement ID or gradeId' });
 		}
@@ -435,10 +435,9 @@ export const actions: Actions = {
 				const data = await trx
 					.deleteFrom('StudentCourse')
 					.where('studentId', '=', studentId)
-					.where('courseId', '=', courseId)
+					.where('courseId', '=', parseInt(courseId))
 					// .where('id', '=', gradeId)
 					.execute();
-				console.log('Data:', data);
 			});
 
 			return { success: true };
