@@ -11,120 +11,103 @@ datasource db {
 }
 
 model User {
-  id         String    @id
-  name       String?
-  email      String    @unique
+  id              String    @id @unique @db.Uuid
+  name            String?
+  email           String    @unique
+  password        String
+  role            UserRole
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
   alternate_email String?
-  password   String
-  role       UserRole
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  advisor    Advisor[]
-  sessions   Session[]
-  student    Student?
+  advisor         Advisor[]
+  sessions        Session[]
+  student         Student?
 }
 
 model Session {
   id         String   @id
   expires_at DateTime
-  user_id    String
-  user       User     @relation(fields: [user_id], references: [id])
+  user_id    String   @db.Uuid
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Advisor {
-  advisor_id       String
-  student_id  String 
-  user     User      @relation(fields: [advisor_id], references: [id], onDelete: Cascade)
-  students Student @relation(fields: [student_id], references: [id])
+  advisor_id String  @db.Uuid
+  student_id String  @db.Uuid
+  user       User    @relation(fields: [advisor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Student    Student @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([advisor_id, student_id])
 }
 
 model Student {
-  id             String          @id
-  user_id        String          @unique
+  id             String          @id @db.Uuid
+  user_id        String          @unique @db.Uuid
   invite_token   String?
   invite_expires DateTime?
-  majorId        String?
-  program_id     String?
+  program_id     String?         @db.Uuid
   created_at     DateTime        @default(now())
   updated_at     DateTime        @updatedAt
-  Degree         Degree[]
-  advisor        Advisor[]
-  program        Program?        @relation(fields: [program_id], references: [id])
-  user           User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Advisor        Advisor[]
+  program        Program?        @relation(fields: [program_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  user           User            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   StudentCourse  StudentCourse[]
 }
 
 model Department {
-  id     String   @id
+  id     BigInt   @id @default(autoincrement())
   name   String   @unique
   Course Course[]
 }
 
 model Course {
-  id              String               @id
-  code            String               @unique
-  name            String
-  level           Int
-  credits         Int
-  departmentId    String
-  department      Department           @relation(fields: [departmentId], references: [id])
-  prerequisites   CoursePrerequisite[] @relation("CourseToPrerequisite")
-  prerequisiteFor CoursePrerequisite[] @relation("PrerequisiteToCourse")
-  StudentCourse   StudentCourse[]
+  id                                                           Int                  @id @unique
+  code                                                         String               @unique
+  name                                                         String
+  level                                                        Int
+  credits                                                      Int
+  departmentId                                                 BigInt
+  department                                                   Department           @relation(fields: [departmentId], references: [id], onUpdate: NoAction)
+  CoursePrerequisite_CoursePrerequisite_courseIdToCourse       CoursePrerequisite[] @relation("CoursePrerequisite_courseIdToCourse")
+  CoursePrerequisite_CoursePrerequisite_prerequisiteIdToCourse CoursePrerequisite[] @relation("CoursePrerequisite_prerequisiteIdToCourse")
+  StudentCourse                                                StudentCourse[]
 }
 
 model CoursePrerequisite {
-  id             String @id @default(uuid())
-  courseId       String
-  prerequisiteId String
-  course         Course @relation("CourseToPrerequisite", fields: [courseId], references: [id])
-  prerequisite   Course @relation("PrerequisiteToCourse", fields: [prerequisiteId], references: [id])
-
-  @@unique([courseId, prerequisiteId])
-}
-
-model Prerequisite {
-  id              String @id @default(uuid())
-  course_id       String
-  prerequisite_id String
-}
-
-model Degree {
-  id         String  @id
-  name       String
-  student_id String
-  student    Student @relation(fields: [student_id], references: [id])
+  id                                               String @id @unique @default(uuid()) @db.Uuid
+  courseId                                         Int
+  prerequisiteId                                   Int
+  Course_CoursePrerequisite_courseIdToCourse       Course @relation("CoursePrerequisite_courseIdToCourse", fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Course_CoursePrerequisite_prerequisiteIdToCourse Course @relation("CoursePrerequisite_prerequisiteIdToCourse", fields: [prerequisiteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Program {
-  id           String               @id
+  id           String               @id @unique @db.Uuid
   name         String               @unique
   requirements ProgramRequirement[]
   students     Student[]
 }
 
 model ProgramRequirement {
-  id            String          @id
-  programId     String
+  id            String          @id @db.Uuid
+  programId     String          @db.Uuid
   type          RequirementType
   credits       Int
   details       Json
   level         Int?
-  program       Program         @relation(fields: [programId], references: [id])
+  program       Program         @relation(fields: [programId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   StudentCourse StudentCourse[]
 }
 
 model StudentCourse {
-  id            String              @id
-  studentId     String
-  courseId      String
+  id            String              @id @db.Uuid
   grade         String
-  requirementId String?
-  course        Course              @relation(fields: [courseId], references: [id])
-  requirement   ProgramRequirement? @relation(fields: [requirementId], references: [id])
-  student       Student             @relation(fields: [studentId], references: [id])
+  requirementId String?             @db.Uuid
+  studentId     String?             @db.Uuid
+  courseId      Int?
+  Course        Course?             @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  requirement   ProgramRequirement? @relation(fields: [requirementId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student       Student?            @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 enum UserRole {
