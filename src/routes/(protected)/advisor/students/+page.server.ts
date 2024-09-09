@@ -68,7 +68,6 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const studentCode = formData.get('student_code') as string;
 
-		
 		try {
 			const result = await db
 				.insertInto('Advisor')

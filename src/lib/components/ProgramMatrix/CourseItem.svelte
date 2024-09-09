@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { gradePoints } from '$lib/types';
 	import type { CourseWithPrerequisites, Grade } from '$lib/types';
-	import { derived, } from 'svelte/store';
+	import { derived } from 'svelte/store';
 	import { completedCourses, courseGrades, requirementCourses } from '$lib/stores/ProgramMatrix';
 
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';

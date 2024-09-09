@@ -22,6 +22,5 @@ export function setPoolCourses(requirementId: string, courses: CourseWithRequire
 export function updatePoolCourses(requirementId: string) {
 	const store = getPoolCourses(requirementId);
 	store!.update((courses) => [...courses]);
-	getPoolCourses(requirementId)?.subscribe((courses) => {
-	});
+	getPoolCourses(requirementId)?.subscribe((courses) => {});
 }

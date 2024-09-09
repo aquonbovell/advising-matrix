@@ -7,7 +7,6 @@ import { Argon2id } from 'oslo/password';
 import { lucia } from '$lib/server/auth';
 
 export const load = (async ({ locals }) => {
-
 	const user = await db
 		.selectFrom('User')
 		.where('id', '=', locals?.user?.id!)
@@ -31,7 +30,6 @@ export const load = (async ({ locals }) => {
 
 export const actions: Actions = {
 	save: async ({ locals, request }) => {
-
 		const formData = await request.formData();
 
 		const userSchema = zfd.formData({
@@ -68,7 +66,7 @@ export const actions: Actions = {
 		});
 
 		const result = registerSchema.safeParse(formData);
-	
+
 		if (!result.success) {
 			const data = {
 				data: Object.fromEntries(formData),
@@ -125,4 +123,3 @@ export const actions: Actions = {
 		return redirect(302, '/login');
 	}
 };
-

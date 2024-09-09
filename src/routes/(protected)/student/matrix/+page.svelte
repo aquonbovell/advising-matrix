@@ -253,7 +253,6 @@
 	let alertOpen = false;
 </script>
 
-
 <!-- Header -->
 <Header degreeName={data.program.name} {islevel1completed} {islevel2completed} />
 
