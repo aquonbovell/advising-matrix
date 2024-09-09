@@ -1,6 +1,6 @@
 {
 	"name": "advising-matrix",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"private": true,
 	"prisma": {
 		"seed": "npx vite-node prisma/seed.ts",
