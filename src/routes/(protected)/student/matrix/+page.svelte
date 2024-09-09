@@ -95,7 +95,6 @@
 	function handleAddCourse() {
 		const courseElement = document.getElementById('course') as HTMLSelectElement | null;
 		const selectedCourseId = courseElement?.value;
-		console.log(selectedCourseId);
 
 		if (selectedCourseId && currentRequirement) {
 			const currentCredits = $poolCourses
@@ -113,7 +112,6 @@
 				alertOpen = true;
 				return;
 			}
-			console.log(selectedCourse);
 
 			if (selectedCourse) addCourse(selectedCourse, currentRequirement);
 		}
@@ -255,7 +253,6 @@
 	let alertOpen = false;
 </script>
 
-<!-- <pre>{JSON.stringify(DataTransfer, null, 2)}</pre> -->
 
 <!-- Header -->
 <Header degreeName={data.program.name} {islevel1completed} {islevel2completed} />

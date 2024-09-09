@@ -38,8 +38,6 @@ export const actions: Actions = {
 
 		const form = await superValidate(request, vine(schema, { defaults }));
 
-		console.log('Form:', form);
-
 		if (form.errors.official_email) {
 			form.errors.official_email = [
 				'Please enter a valid email address with the domain @mycavehill.uwi.edu'
@@ -64,15 +62,12 @@ export const actions: Actions = {
 
 		const { official_email, alternate_email, name, programId } = form.data;
 
-		console.log('Inviting student:', { official_email, alternate_email, name, programId });
-
 		try {
 			const advisor = await db
 				.selectFrom('Advisor')
 				.where('advisor_id', '=', locals.user.id)
 				.select(['advisor_id'])
 				.executeTakeFirst();
-			console.log('Advisor:', advisor);
 
 			if (!advisor) {
 				return fail(404, { form, error: 'Advisor not found' });

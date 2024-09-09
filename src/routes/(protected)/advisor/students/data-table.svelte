@@ -24,7 +24,7 @@
 		id: string;
 		name: string | null;
 		email: string;
-		program: string;
+		program_name: string;
 		advisor: string;
 	};
 
@@ -75,7 +75,7 @@
 			header: 'Email'
 		}),
 		table.column({
-			accessor: 'program',
+			accessor: 'program_name',
 			header: 'Program',
 			plugins: {
 				filter: {
@@ -177,7 +177,7 @@
 											<div class="text-right">
 												<Render of={cell.render()} />
 											</div>
-										{:else if cell.id === 'program' || cell.id === 'email' || cell.id === 'name' || cell.id === 'advisor'}
+										{:else if cell.id === 'program_name' || cell.id === 'email' || cell.id === 'name' || cell.id === 'advisor'}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
 												<ArrowUpDown class={'ml-2 h-4 w-4'} />
@@ -203,7 +203,7 @@
 											<div class="text-right font-medium">
 												<Render of={cell.render()} />
 											</div>
-										{:else if cell.id === 'program'}
+										{:else if cell.id === 'program_name'}
 											<div class="capitalize">
 												<Render of={cell.render()} />
 											</div>

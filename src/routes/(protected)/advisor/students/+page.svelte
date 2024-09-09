@@ -14,7 +14,6 @@
 		if (e.metaKey || e.ctrlKey) return;
 		const { href } = e.currentTarget as HTMLAnchorElement;
 		const result = await preloadData(href);
-		console.log(result);
 		if (result.type === 'loaded' && result.status === 200) {
 			pushState(href, { student: result.data.student });
 		} else {
@@ -30,7 +29,6 @@
 </script>
 
 <h1 class="text-2xl font-bold text-stone-800">All Students</h1>
-<!-- <pre>{JSON.stringify(data, null, 2)}</pre> -->
 
 <DataTable {data} {showModal} />
 

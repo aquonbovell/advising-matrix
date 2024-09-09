@@ -1,14 +1,11 @@
 <script lang="ts">
 	import { gradePoints } from '$lib/types';
 	import type { CourseWithPrerequisites, Grade } from '$lib/types';
-	import { derived, type Writable } from 'svelte/store';
+	import { derived, } from 'svelte/store';
 	import { completedCourses, courseGrades, requirementCourses } from '$lib/stores/ProgramMatrix';
 
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { Action } from '../ui/alert-dialog';
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import TrashIcon from '../icons/TrashIcon.svelte';
@@ -66,7 +63,6 @@
 	const submit: SubmitFunction = async (event) => {
 		const gradeId = event.formData.get('gradeId');
 		const courseId = event.formData.get('courseId');
-		console.log(gradeId);
 
 		return async ({ update }) => {
 			await update();

@@ -1,20 +1,9 @@
 <script lang="ts">
-	import { gradePoints } from '$lib/types';
-	import type { CourseWithRequirement, Grade, ProgramRequirement } from '$lib/types';
+	import type { CourseWithRequirement, ProgramRequirement } from '$lib/types';
 	import Button from '$lib/components/ui/Button.svelte';
-	import TrashIcon from '../icons/TrashIcon.svelte';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { enhance } from '$app/forms';
-	import {
-		completedCourses,
-		courseGrades,
-		programCourses,
-		requirementCourses
-	} from '$lib/stores/ProgramMatrix';
-	import { derived, writable, type Writable } from 'svelte/store';
+	import { completedCourses, requirementCourses } from '$lib/stores/ProgramMatrix';
+	import { writable, type Writable } from 'svelte/store';
 	import { getPoolCourses } from './context';
-	import { buttonVariants } from '../ui/button';
-	import type { SubmitFunction } from '@sveltejs/kit';
 	import CourseItem from './CourseItem.svelte';
 	import type { User } from 'lucia';
 
@@ -32,26 +21,6 @@
 				$requirementCourses.includes(c.id.toString().concat(',' + requirement.id))
 		)
 		.reduce((sum, course) => sum + course.credits, 0);
-
-	const submit: SubmitFunction = async (event) => {
-		// const requirementId = String(event.formData.get('requirementId'))
-		const courseId = String(event.formData.get('courseId'));
-
-		return async ({ update }) => {
-			await update();
-			courseGrades.update((grades) => {
-				// Delete the courseId from the grades object
-				const { [courseId]: _, ...updatedGrades } = grades;
-
-				// Return the updated object without the courseId
-				return updatedGrades;
-			});
-
-			requirementCourses.update((courses) =>
-				courses.filter((c) => c !== courseId.concat(',' + requirement.id))
-			);
-		};
-	};
 </script>
 
 <li>
@@ -72,31 +41,7 @@
 			{#each $courses.filter((c) => c.id in $completedCourses && $requirementCourses.includes(c.id
 							.toString()
 							.concat(',' + requirement.id))) as course (course.id)}
-				<!-- <pre>{JSON.stringify(course, null, 2)}</pre> -->
-				<!-- <li class=""> -->
-				<!-- <button
-					class="text-red-500 hover:text-red-700"
-					on:click={() => {
-						courseGrades.update((grades) => {
-							// Delete the courseId from the grades object
-							const { [course.id]: _, ...updatedGrades } = grades;
-
-							// Return the updated object without the courseId
-							return updatedGrades;
-						});
-						requirementCourses.update((courses) => courses.filter((c) => !c.startsWith(course.id)));
-					}}><TrashIcon /></button
-				> -->
-				<!-- <form method="post" class="inline-block" use:enhance={submit}> -->
-				<!-- <input type="hidden" name="courseId" id="courseId" value={course.id} /> -->
-				<!-- <input type="hidden" name="requirementId" id="requirementId" value={requirement.id} /> -->
-				<!-- <button formaction="?/deleteCourse" class="text-red-500 hover:text-red-700"
-						><TrashIcon /></button
-					>
-				</form> -->
-
 				<CourseItem {course} isPool={true} {user} />
-				<!-- </li> -->
 			{/each}
 		</ul>
 	</div>

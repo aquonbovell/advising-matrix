@@ -169,8 +169,6 @@ async function getProgram(programId: string): Promise<Program | null> {
 		}
 	}
 
-	// console.log('Data:', requirements);
-
 	return {
 		id: program[0]!.id,
 		name: program[0]!.name,
@@ -301,8 +299,6 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!student) throw error(404, 'Student not found or not assigned to advisor');
 
 	const program = await getProgram(student.program_id!);
-
-	console.log('Program:', program);
 
 	if (!program) error(404, 'Program not found');
 

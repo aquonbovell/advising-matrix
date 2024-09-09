@@ -14,7 +14,6 @@
 		if (e.metaKey || e.ctrlKey) return;
 		const { href } = e.currentTarget as HTMLAnchorElement;
 		const result = await preloadData(href);
-		console.log(result);
 		if (result.type === 'loaded' && result.status === 200) {
 			pushState(href, { student: result.data.student });
 		} else {
@@ -28,8 +27,6 @@
 		studentChartDialog = false;
 	}
 </script>
-
-<pre>{JSON.stringify($page.route.id?.includes('advising-students'), null, 2)}</pre>
 
 <div class="mb-6 flex items-center justify-between">
 	<h1 class="text-2xl font-bold text-stone-800">My Students</h1>

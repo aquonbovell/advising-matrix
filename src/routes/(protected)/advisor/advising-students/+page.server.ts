@@ -40,8 +40,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 			])
 			.execute();
 
-		console.log(students);
-
 		return {
 			students: students.map((student) => ({
 				id: student.id,

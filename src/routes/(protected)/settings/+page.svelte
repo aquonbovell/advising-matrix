@@ -6,8 +6,6 @@
 	import Input from '$lib/components/ui/Input.svelte';
 	import * as Select from '$lib/components/ui/select';
 	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog';
-	import { message, superForm } from 'sveltekit-superforms';
 	import * as Alert from '$lib/components/ui/alert';
 	import PasswordRequirements from '$lib/components/PasswordRequirements.svelte';
 	import { enhance } from '$app/forms';
@@ -27,16 +25,14 @@
 	let password = '';
 	let confirmPassword = '';
 
-	// $: isPasswordValid =
-	// 	password.length >= 8 &&
-	// 	/[A-Z]/.test(password) &&
-	// 	password === confirmPassword &&
-	// 	password !== '';
-	$: isPasswordValid = true;
+	$: isPasswordValid =
+		password.length >= 8 &&
+		/[A-Z]/.test(password) &&
+		password === confirmPassword &&
+		password !== '';
 </script>
 
 <h1>Profile Settings</h1>
-<pre>{JSON.stringify(form, null, 2)}</pre>
 
 <div class="">
 	{#if form?.success}

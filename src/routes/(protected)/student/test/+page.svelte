@@ -3,8 +3,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
-	import type { RequirementGroup } from '$lib/types';
-
+	
 	export let data: PageData;
 </script>
 

@@ -7,7 +7,6 @@ import { Argon2id } from 'oslo/password';
 import { lucia } from '$lib/server/auth';
 
 export const load = (async ({ locals }) => {
-	// console.log('PageServerLoad', locals);
 
 	const user = await db
 		.selectFrom('User')
@@ -32,10 +31,8 @@ export const load = (async ({ locals }) => {
 
 export const actions: Actions = {
 	save: async ({ locals, request }) => {
-		// console.log('Save', locals,);
 
 		const formData = await request.formData();
-		console.log('formData', formData);
 
 		const userSchema = zfd.formData({
 			name: zfd.text(z.string().min(3).max(255))
@@ -58,8 +55,7 @@ export const actions: Actions = {
 		return { success: true, message: 'Saved' };
 	},
 	resetPassword: async ({ request, locals }) => {
-		const userSession = await locals.session;
-		console.log('Session', userSession);
+		const userSession = locals.session;
 		if (!userSession) return redirect(302, '/login');
 
 		const formData = await request.formData();
@@ -72,8 +68,7 @@ export const actions: Actions = {
 		});
 
 		const result = registerSchema.safeParse(formData);
-
-		console.log(result);
+	
 		if (!result.success) {
 			const data = {
 				data: Object.fromEntries(formData),
@@ -90,15 +85,11 @@ export const actions: Actions = {
 
 		const argon2id = new Argon2id();
 
-		console.log(locals);
-
 		const user = await db
 			.selectFrom('User')
 			.where('id', '=', locals.user?.id!)
 			.select(['password', 'id'])
 			.executeTakeFirst();
-
-		console.log('User', user);
 
 		if (!user) {
 			return fail(400, { data_invalid: 'Invalid User' });
@@ -134,3 +125,4 @@ export const actions: Actions = {
 		return redirect(302, '/login');
 	}
 };
+

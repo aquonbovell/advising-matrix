@@ -4,7 +4,8 @@
 	"private": true,
 	"prisma": {
 		"seed": "npx vite-node prisma/seed.ts",
-		"rest": "npx vite-node prisma/seed copy.ts"
+		"upCourses": "npx vite-node prisma/courses.ts",
+		"upUser": "npx vite-node prisma/seedUser.ts"
 	},
 	"scripts": {
 		"dev": "vite dev",
