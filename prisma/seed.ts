@@ -88,7 +88,7 @@ const seed = async () => {
 		// Get Student ID from db
 		const student = await db
 			.selectFrom('Student')
-			.where('Student.user_id', '==', student_id)
+			.where('Student.user_id', '=', student_id)
 			.select('id')
 			.executeTakeFirst();
 
