@@ -49,12 +49,14 @@ for (const course of courseData) {
 	const prerequisites = course.prerequisites;
 
 	for (const prerequisite of prerequisites) {
+		console.log(prerequisite);
+		
 		await db
 			.insertInto('CoursePrerequisite')
 			.values({
 				id: crypto.randomUUID(),
 				courseId: course.id,
-				prerequisiteId: prerequisite.courseId
+				prerequisiteId: prerequisite.prerequisiteId
 			})
 			.execute();
 	}
