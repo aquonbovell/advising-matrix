@@ -12,8 +12,8 @@
 	onMount(async () => {
 		const res = await fetch(`/api/student/${studentId}/overview`);
 		data = await res.json();
-    console.log(data);
-    if (!data) return;
+		console.log(data);
+		if (!data) return;
 
 		levelOneCreditsChart = document.querySelector('canvas#levelOneCredits');
 		if (levelOneCreditsChart) {
@@ -143,9 +143,9 @@
 </script>
 
 <div class="grid grid-cols-2">
-  {#if Object.entries(data).length === 0}
-    <p>Loading...</p>
-  {/if}
+	{#if Object.entries(data).length === 0}
+		<p>Loading...</p>
+	{/if}
 	<!-- <pre>{JSON.stringify(data, null, 2)}</pre> -->
 
 	<canvas class=" aspect-square max-h-48 max-w-48" id="levelFourCredits"></canvas>

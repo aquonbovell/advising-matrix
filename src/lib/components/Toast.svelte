@@ -2,7 +2,7 @@
 	import { flip } from 'svelte/animate';
 	import { fly } from 'svelte/transition';
 	import moment from 'moment';
-	import { notifications } from '$lib/stores/notifications'
+	import { notifications } from '$lib/stores/notifications';
 	import Button from './ui/button/button.svelte';
 </script>
 

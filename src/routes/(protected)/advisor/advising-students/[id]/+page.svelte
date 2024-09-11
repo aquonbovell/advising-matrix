@@ -36,7 +36,6 @@
 
 <div class="">
 	<div class="px-4">
-
 		<form action="?/save" method="post">
 			<input type="text" name="id" hidden value={$form.id} />
 			<header class="py-4">

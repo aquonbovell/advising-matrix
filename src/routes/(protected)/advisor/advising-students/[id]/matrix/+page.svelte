@@ -4,4 +4,4 @@
 	import StudentPage from '../../../../student/+page.svelte';
 </script>
 
-<StudentPage data={data} />
+<StudentPage {data} />

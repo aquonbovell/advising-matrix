@@ -42,7 +42,7 @@
 >
 	<Dialog.Content>
 		{#if $selectedStudent !== null}
-			<StudentChart studentId={$selectedStudent}/>
+			<StudentChart studentId={$selectedStudent} />
 		{/if}
 	</Dialog.Content>
 </Dialog.Root>

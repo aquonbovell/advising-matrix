@@ -34,16 +34,20 @@
 	let styles = '';
 
 	$: {
-		if ($courseGrades[course.id]?.grade.length! > 0 && required && isCompleted($courseGrades[course.id]?.grade) ||(!required && isCompleted($courseGrades[course.id]?.grade))) {
+		if (
+			($courseGrades[course.id]?.grade.length! > 0 &&
+				required &&
+				isCompleted($courseGrades[course.id]?.grade)) ||
+			(!required && isCompleted($courseGrades[course.id]?.grade))
+		) {
 			styles = 'bg-green-500';
-		}else
-		if ((!$courseGrades[course.id]&& required )|| ($courseGrades[course.id]&& !required)) {
+		} else if ((!$courseGrades[course.id] && required) || ($courseGrades[course.id] && !required)) {
 			styles = 'bg-amber-500';
 		}
 	}
 </script>
 
-<div class="flex justify-between py-2 flex-col gap-4 lg:flex-row">
+<div class="flex flex-col justify-between gap-4 py-2 lg:flex-row">
 	<div>
 		<div class="flex items-center gap-3">
 			<span class={`h-5 w-5 rounded-md border ${styles} `}></span>
@@ -68,9 +72,9 @@
 			>
 		</div>
 	</div>
-	<div class="flex items-center gap-4 flex-row-reverse lg:flex-row justify-end">
+	<div class="flex flex-row-reverse items-center justify-end gap-4 lg:flex-row">
 		{#if $courseGrades[course.id]}
-			<div class="flex items-center lg:justify-end gap-3">
+			<div class="flex items-center gap-3 lg:justify-end">
 				{#each processedGrades as grade}
 					<Select.Root
 						required={true}

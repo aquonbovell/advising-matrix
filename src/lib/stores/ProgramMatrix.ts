@@ -127,5 +127,3 @@ export const gpa = derived(
 		return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
 	}
 );
-
-

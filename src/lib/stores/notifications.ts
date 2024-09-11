@@ -57,7 +57,7 @@ function createNotificationStore(timeout: number = TIMEOUT) {
 		danger: (msg: string, timeout: number) => send(msg, 'danger', timeout),
 		warning: (msg: string, timeout: number) => send(msg, 'warning', timeout),
 		info: (msg: string, timeout: number) => send(msg, 'info', timeout),
-		success: (msg: string, timeout: number) => send(msg, 'success', timeout),
+		success: (msg: string, timeout: number) => send(msg, 'success', timeout)
 	};
 }
 

@@ -4,7 +4,7 @@ import { db } from '$lib/db';
 import { generateTokenWithExpiration } from '$lib/server/auth';
 import { generateId } from 'lucia';
 import Vine from '@vinejs/vine';
-import { message, superValidate,setError } from 'sveltekit-superforms';
+import { message, superValidate, setError } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from '../$types';
 import { Argon2id } from 'oslo/password';

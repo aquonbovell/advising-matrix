@@ -122,7 +122,6 @@ export function getInviteLink(inviteToken: string | null) {
 	navigator.clipboard.writeText(`${window.location.origin}/register?token=${inviteToken}`);
 }
 
-
 export function isCompleted(grades: Grade[] | undefined): boolean {
 	if (!grades) return false;
 	let foundValidGrade = false;

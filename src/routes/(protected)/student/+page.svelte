@@ -63,10 +63,7 @@
 
 	export let data: PageData;
 
-	async function getDegree(
-		majorId: string,
-		minorId: string
-	): Promise<Degree> {
+	async function getDegree(majorId: string, minorId: string): Promise<Degree> {
 		const res = await fetch(`/api/degree/${majorId}x${minorId}`);
 		let content: Degree = await res.json();
 		const sortedRequirements = content.requirements.sort((a, b) => {

@@ -67,9 +67,11 @@
 		<DropdownMenu.Item href={'/advisor/advising-students' + '/' + code + '/'}
 			>View Student</DropdownMenu.Item
 		>
-		<DropdownMenu.Item on:click={() => {
-			selectedStudent.set(code);
-		}}>View Student Overview</DropdownMenu.Item>
+		<DropdownMenu.Item
+			on:click={() => {
+				selectedStudent.set(code);
+			}}>View Student Overview</DropdownMenu.Item
+		>
 		<DropdownMenu.Item href={'/advisor/advising-students' + '/' + code + '/matrix'}
 			>View Student Degree</DropdownMenu.Item
 		>
