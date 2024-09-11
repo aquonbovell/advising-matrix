@@ -50,7 +50,7 @@ for (const course of courseData) {
 
 	for (const prerequisite of prerequisites) {
 		console.log(prerequisite);
-		
+
 		await db
 			.insertInto('CoursePrerequisite')
 			.values({
