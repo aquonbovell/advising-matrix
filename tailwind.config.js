@@ -1,5 +1,4 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
-import flowbitePlugin from 'flowbite/plugin';
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -63,7 +62,7 @@ const config = {
 			}
 		}
 	},
-	plugins: [require('@tailwindcss/typography'), flowbitePlugin]
+	plugins: [require('@tailwindcss/typography')]
 };
 
 export default config;

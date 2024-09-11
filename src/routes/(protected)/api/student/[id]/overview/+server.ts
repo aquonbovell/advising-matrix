@@ -7,13 +7,11 @@ import { isCompleted } from '$lib/utils';
 export const GET: RequestHandler = async ({ params, fetch }) => {
 	const { id } = params;
 	const student = await db
-		.selectFrom('StudentT')
+		.selectFrom('Student')
 		.where('id', '=', id)
 		.select(['major_id', 'minor_id'])
 		.executeTakeFirst();
 	if (!student) return json({ error: 'Student not found' }, { status: 404 });
-	console.log(student);
-
 	const degreeResponse = await fetch(`/api/degree/${student.major_id}x${student.minor_id}`);
 
 	const degree: Degree = await degreeResponse.json();
@@ -54,13 +52,10 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			}
 		});
 
-		console.log(levelOneCourseIds);
-
 		const studentCoursesOne = levelOneCourseIds.reduce((acc, course) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
-				console.log(course);
 
 				return acc + course.credits;
 			}
@@ -92,13 +87,11 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			}
 		});
 
-		console.log(levelTwoCourseIds);
 
 		const studentCoursesTwo = levelTwoCourseIds.reduce((acc, course) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
-				console.log(course);
 
 				return acc + course.credits;
 			}
@@ -130,13 +123,11 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			}
 		});
 
-		console.log(levelThreeCourseIds);
 
 		const studentCoursesThree = levelThreeCourseIds.reduce((acc, course) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
-				console.log(course);
 
 				return acc + course.credits;
 			}
@@ -168,13 +159,11 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			}
 		});
 
-		console.log(levelFourCourseIds);
 
 		const studentCoursesFour = levelFourCourseIds.reduce((acc, course) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
-				console.log(course);
 
 				return acc + course.credits;
 			}

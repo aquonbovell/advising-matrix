@@ -14,20 +14,20 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	try {
 		const students = await db
-			.selectFrom('StudentT')
-			.innerJoin('Majors', 'Majors.id', 'StudentT.major_id')
-			.innerJoin('Minors', 'Minors.id', 'StudentT.minor_id')
-			.innerJoin('User', 'User.id', 'StudentT.user_id')
-			.innerJoin('Advisor', 'Advisor.student_id', 'StudentT.id')
+			.selectFrom('Student')
+			.innerJoin('Majors', 'Majors.id', 'Student.major_id')
+			.innerJoin('Minors', 'Minors.id', 'Student.minor_id')
+			.innerJoin('User', 'User.id', 'Student.user_id')
+			.innerJoin('Advisor', 'Advisor.student_id', 'Student.id')
 			.select([
-				'StudentT.id',
-				'StudentT.user_id',
+				'Student.id',
+				'Student.user_id',
 				'User.name',
 				'User.email',
-				'StudentT.created_at',
-				'StudentT.updated_at',
-				'StudentT.invite_token',
-				'StudentT.invite_expires',
+				'Student.created_at',
+				'Student.updated_at',
+				'Student.invite_token',
+				'Student.invite_expires',
 				'Majors.name as major',
 				'Minors.name as minor'
 			])

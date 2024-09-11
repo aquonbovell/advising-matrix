@@ -1,4 +1,4 @@
-import type { Course, DB, StudentCourse } from '../src/lib/db/schema';
+import type { Course, DB, StudentCourses } from '../src/lib/db/schema';
 import 'dotenv/config';
 import pg from 'pg';
 import { Kysely, PostgresDialect } from 'kysely';
@@ -9,7 +9,7 @@ const { Pool } = pg;
 type Omittable<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 export type Grade = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'F1' | 'F2' | 'F3' | null;
-export type StudentGrade = Omittable<StudentCourse, 'id' | 'studentId' | 'courseId' | 'grade'> & {
+export type StudentGrade = Omittable<StudentCourses, 'id' | 'studentId' | 'courseId' | 'grade'> & {
 	course: Omit<Course, 'departmentId'>;
 	// grade: Grade;
 	grades: { id: string; grade: Grade }[];

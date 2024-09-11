@@ -3,7 +3,9 @@ import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { completedCourses } from './stores/student';
-import type { CourseWithPrerequisites, CourseWithRequirement, Grade } from './types';
+import type { CourseWithPrerequisites, Grade } from './types';
+import { hash, verify } from "@node-rs/argon2";
+
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -91,7 +93,7 @@ export function createMajorMinor(name: string): {
 
 // TODO: Implement the function `arePrerequisitesMet` that takes a course object and returns a boolean value
 export function arePrerequisitesMet(
-	course: CourseWithPrerequisites | CourseWithRequirement
+	course: CourseWithPrerequisites
 ): boolean {
 	if (!course.prerequisites || course.prerequisites.length === 0) return true;
 	let courses: Record<string, boolean> = {};

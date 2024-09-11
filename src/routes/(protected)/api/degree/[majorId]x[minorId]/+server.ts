@@ -1,41 +1,8 @@
 import { db } from '$lib/db';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import type { RequirementType } from '$lib/db/schema';
-
-type CourseWithPrerequisites = {
-	id: number;
-	code: string;
-	name: string;
-	level: number;
-	credits: number;
-	departmentId: string;
-	prequisites: Course[];
-};
-
-type Requirement = {
-	dgId: string;
-	id: string;
-	type: RequirementType;
-	credits: number;
-	details: CourseWithPrerequisites[];
-	level: number | null;
-};
-
-type Course = {
-	id: number;
-	code: string;
-	name: string;
-	level: number;
-	credits: number;
-	departmentId: string;
-};
-
-type Degree = {
-	name: string;
-	dgId: string[];
-	requirements: Requirement[];
-};
+import type { Course, RequirementType } from '$lib/db/schema';
+import type { CourseWithPrerequisites, Degree } from '$lib/types';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { majorId, minorId } = params;
@@ -124,16 +91,21 @@ export const GET: RequestHandler = async ({ params }) => {
 	) {
 		const req = degree.filter((req) => req.level === 1 && req.type === 'CREDITS');
 
-		const memo = [];
+		const memo: {
+			dgId: string;
+			id: string;
+			type: RequirementType;
+			credits: number;
+			details: unknown;
+			level: number;
+		}[] = [];
 		req.forEach((req) => {
 			if (!memo.find((r) => r.id === req.id)) {
 				memo.push(req);
 			}
 		});
 
-		console.log('memo', memo);
-
-		const newCourses = [];
+		const newCourses: string[] = [];
 		memo.forEach((req) => {
 			const details = req.details as { courses?: string[]; area?: string[] };
 			if (details.courses) {
@@ -142,18 +114,14 @@ export const GET: RequestHandler = async ({ params }) => {
 				}
 			}
 		});
-		console.log('newCourses', newCourses);
 
-		const uniCourses = [];
+		const uniCourses: string[]  = [];
 
 		newCourses.forEach((course) => {
 			if (!uniCourses.includes(course)) {
 				uniCourses.push(course);
 			}
 		});
-
-		console.log('uniCourses', uniCourses);
-
 		const newRequirement = {
 			dgId: req[0]?.dgId!,
 			id: req[0]!.id,
@@ -174,8 +142,6 @@ export const GET: RequestHandler = async ({ params }) => {
 		degree = degree.filter((req) => !ids.includes(req.id));
 		degree.push(newRequirement);
 	}
-	console.log(isMinor);
-
 	// This removes the level elective pool requirement if the program has 2 majors / 1 minor
 
 	const removeElectivePool =
@@ -222,16 +188,16 @@ export const GET: RequestHandler = async ({ params }) => {
 				return { id: req.id, dgId: req.dgId, credits: req.credits };
 			});
 
-		console.log('jjj', reqs);
 
-		const reqCreds = [];
+		const reqCreds:{
+			id: string;
+			credits: number;
+		}[] = [];
 		reqs.forEach((req) => {
 			if (!reqCreds.find((r) => r.id === req.id)) {
 				reqCreds.push({ id: req.id, credits: req.credits });
 			}
 		});
-
-		console.log(reqCreds.reduce((acc, req) => acc + req.credits, 0));
 
 		const newRequirement = {
 			dgId: req[0]?.dgId!,

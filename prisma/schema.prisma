@@ -11,47 +11,48 @@ datasource db {
 }
 
 model User {
-  id              String     @id @unique @db.Uuid
-  name            String?
-  email           String     @unique
+  id              String    @id @unique @db.Uuid
+  name            String
+  email           String    @unique
   password        String
   role            UserRole
-  created_at      DateTime   @default(now())
-  updated_at      DateTime   @updatedAt
-  alternate_email String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  alternate_email String
   advisor         Advisor[]
   sessions        Session[]
-  student         Student?
-  StudentT        StudentT[]
+  StudentT        Student[]
 }
 
 model Session {
-  id         String   @id
+  id         String   @id @default(uuid())
   expires_at DateTime
   user_id    String   @db.Uuid
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Advisor {
-  advisor_id String   @db.Uuid
-  student_id String   @db.Uuid
-  user       User     @relation(fields: [advisor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Student    StudentT @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  advisor_id String  @db.Uuid
+  student_id String  @db.Uuid
+  user       User    @relation(fields: [advisor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Student    Student @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([advisor_id, student_id])
 }
 
 model Student {
   id             String           @id @db.Uuid
-  user_id        String           @unique @db.Uuid
+  user_id        String           @db.Uuid
+  major_id       String           @db.Uuid
+  minor_id       String           @unique @db.Uuid
   invite_token   String?
   invite_expires DateTime?
-  program_id     String?          @db.Uuid
   created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  program        Program?         @relation(fields: [program_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  updated_at     DateTime
+  Advisor        Advisor[]
+  Minors         Minors?          @relation(fields: [minor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Majors         Majors?          @relation(fields: [major_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   user           User             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  StudentCourse  StudentCourse[]
   StudentCourses StudentCourses[]
 }
 
@@ -71,7 +72,6 @@ model Course {
   department                                                   Department           @relation(fields: [departmentId], references: [id], onUpdate: NoAction)
   CoursePrerequisite_CoursePrerequisite_courseIdToCourse       CoursePrerequisite[] @relation("CoursePrerequisite_courseIdToCourse")
   CoursePrerequisite_CoursePrerequisite_prerequisiteIdToCourse CoursePrerequisite[] @relation("CoursePrerequisite_prerequisiteIdToCourse")
-  StudentCourse                                                StudentCourse[]
   StudentCourses                                               StudentCourses[]
 }
 
@@ -83,110 +83,53 @@ model CoursePrerequisite {
   Course_CoursePrerequisite_prerequisiteIdToCourse Course @relation("CoursePrerequisite_prerequisiteIdToCourse", fields: [prerequisiteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model Program {
-  id           String               @id @unique @db.Uuid
-  name         String               @unique
-  requirements ProgramRequirement[]
-  students     Student[]
-}
-
-model ProgramRequirement {
-  id            String          @id @db.Uuid
-  programId     String          @db.Uuid
-  type          RequirementType
-  credits       Int
-  details       Json
-  level         Int?
-  program       Program         @relation(fields: [programId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  StudentCourse StudentCourse[]
-}
-
-model StudentCourse {
-  id            String              @id @db.Uuid
-  grade         String
-  requirementId String?             @db.Uuid
-  studentId     String?             @db.Uuid
-  courseId      Int?
-  Course        Course?             @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  requirement   ProgramRequirement? @relation(fields: [requirementId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  student       Student?            @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model MajorRequirements {
-  id             String           @id(map: "ProgramMajors_pkey") @db.Uuid
-  majorId        String           @db.Uuid
-  type           RequirementType
-  credits        Int
-  details        Json
-  level          Int?
-  Majors         Majors           @relation(fields: [majorId], references: [id], onUpdate: NoAction)
-  StudentCourses StudentCourses[]
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Majors {
   id                String              @id @unique @db.Uuid
   name              String              @unique(map: "Majors_name_idx")
   MajorRequirements MajorRequirements[]
-  StudentT          StudentT[]
+  Student           Student[]
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model ProgramMinors {
-  id      String          @id @db.Uuid
-  minorId String          @db.Uuid
-  type    RequirementType
-  credits Int
-  details Json
-  level   Int?
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model StudentCourses {
-  id                String             @id @db.Uuid
-  grade             String
-  requirementId     String?            @db.Uuid
-  studentId         String?            @db.Uuid
-  courseId          Int?
-  Course            Course?            @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  MajorRequirements MajorRequirements? @relation(fields: [requirementId], references: [id], onDelete: Restrict, onUpdate: NoAction)
-  Student           Student?           @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model StudentT {
-  id             String    @id @db.Uuid
-  user_id        String    @db.Uuid
-  invite_token   String?
-  invite_expires DateTime?
-  major_id       String   @db.Uuid
-  created_at     DateTime  @default(now())
-  updated_at     DateTime
-  minor_id       String   @db.Uuid @default(dbgenerated("NULL"))
-  Advisor        Advisor[]
-  Minors         Minors?   @relation(fields: [minor_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
-  Majors         Majors?   @relation(fields: [major_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "StudentT_program_id_fkey")
-  user           User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model MinorRequirements {
-  id      String          @id @db.Uuid
-  minorId String          @db.Uuid
-  type    RequirementType
-  credits Int
-  details Json
-  level   Int?
-  Minors  Minors          @relation(fields: [minorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Minors {
   id                String              @id @unique @db.Uuid
   name              String              @unique(map: "Minors_name_idx")
   MinorRequirements MinorRequirements[]
-  StudentT          StudentT[]
+  Student           Student?
+}
+
+model MajorRequirements {
+  id             String           @id @db.Uuid
+  majorId        String           @db.Uuid
+  type           RequirementType
+  credits        Int
+  details        Json
+  level          Int
+  Majors         Majors           @relation(fields: [majorId], references: [id], onUpdate: NoAction)
+  StudentCourses StudentCourses[]
+}
+
+model MinorRequirements {
+  id             String           @id @db.Uuid
+  minorId        String           @db.Uuid
+  type           RequirementType
+  credits        Int
+  details        Json
+  level          Int
+  Minors         Minors           @relation(fields: [minorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  StudentCourses StudentCourses[]
+}
+
+model StudentCourses {
+  id                String             @id @db.Uuid
+  grade             String
+  requirementId     String             @db.Uuid
+  studentId         String             @db.Uuid
+  courseId          Int
+  Course            Course?            @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  MajorRequirements MajorRequirements? @relation(fields: [requirementId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "StudentCourses_majorRequirementId_fkey")
+  MinorRequirements MinorRequirements? @relation(fields: [requirementId], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "StudentCourses_minorRequirementId_fkey")
+  
+  Student           Student?           @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 enum UserRole {

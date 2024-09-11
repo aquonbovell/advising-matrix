@@ -2,7 +2,8 @@ import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { zfd } from 'zod-form-data';
 import { z } from 'zod';
 import { db } from '$lib/db';
-import { Argon2id } from 'oslo/password';
+import { hash } from "@node-rs/argon2";
+
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -50,9 +51,7 @@ export const actions: Actions = {
 			return fail(400, { errors: { user: 'Invalid Credentials' } });
 		}
 
-		const argon2id = new Argon2id();
-
-		const hashedPassword = await argon2id.hash(result.data.password);
+		const hashedPassword = await hash(result.data.password);
 
 		try {
 			await db.transaction().execute(async (trx) => {

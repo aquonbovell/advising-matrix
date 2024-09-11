@@ -120,7 +120,7 @@ export const actions: Actions = {
 					.execute();
 
 				await trx
-					.insertInto('StudentT')
+					.insertInto('Student')
 					.values({
 						id: student_id,
 						user_id: userId,

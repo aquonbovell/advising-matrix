@@ -40,18 +40,18 @@ export const load = (async ({ locals, params }) => {
 	}
 
 	const studentData = await db
-		.selectFrom('StudentT')
-		.innerJoin('User', 'User.id', 'StudentT.user_id')
+		.selectFrom('Student')
+		.innerJoin('User', 'User.id', 'Student.user_id')
 		.select([
 			'User.email',
 			'User.name',
-			'StudentT.major_id',
+			'Student.major_id',
 			'User.role',
 			'User.id',
 			'User.alternate_email',
-			'StudentT.minor_id'
+			'Student.minor_id'
 		])
-		.where('StudentT.id', '=', params.id)
+		.where('Student.id', '=', params.id)
 		.executeTakeFirst();
 
 	if (!studentData) {
@@ -132,7 +132,7 @@ export const actions: Actions = {
 					.execute();
 
 				await trx
-					.updateTable('StudentT')
+					.updateTable('Student')
 					.set({ major_id: majorId, minor_id: minorId, updated_at: new Date() })
 					.where('id', '=', id)
 					.execute();

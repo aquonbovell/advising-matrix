@@ -16,7 +16,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		.executeTakeFirst();
 
 	const courses = await db
-		.selectFrom('StudentCourse')
+		.selectFrom('StudentCourses')
 		.where('studentId', '=', student?.id!)
 		.selectAll()
 		.execute();

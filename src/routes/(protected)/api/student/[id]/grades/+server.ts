@@ -9,7 +9,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		return json({ status: 400, message: 'Student ID required' });
 	}
 	const student = await db
-		.selectFrom('StudentT')
+		.selectFrom('Student')
 		.where('user_id', '=', id)
 		.select('id')
 		.executeTakeFirst();
@@ -74,7 +74,7 @@ export const GET: RequestHandler = async ({ params, request }) => {
 		return json({ status: 400, message: 'Student ID required' });
 	}
 	const student = await db
-		.selectFrom('StudentT')
+		.selectFrom('Student')
 		.where('id', '=', id)
 		.select('id')
 		.executeTakeFirst();

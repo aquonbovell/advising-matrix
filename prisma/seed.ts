@@ -1,22 +1,9 @@
-import type { DB } from '../src/lib/db/schema';
-import 'dotenv/config';
-import pg from 'pg';
-import { Kysely, PostgresDialect } from 'kysely';
+import { db } from './db';
 import { Argon2id } from 'oslo/password';
-
-const { Pool } = pg;
-const argon2id = new Argon2id();
-
-export const db = new Kysely<DB>({
-	dialect: new PostgresDialect({
-		pool: new Pool({
-			connectionString: process.env.DATABASE_URL,
-			ssl: {
-				rejectUnauthorized: false
-			}
-		})
-	})
-}).withSchema('dev');
+import 'dotenv/config';
+const encoder = new TextEncoder();
+const secret = encoder.encode(process.env.SECRET!);
+const argon2id = new Argon2id({ secret });
 
 const seed = async () => {
 	console.log('Seeding database...');
@@ -33,9 +20,10 @@ const seed = async () => {
 			.insertInto('User')
 			.values({
 				id: crypto.randomUUID(),
-				name: 'Admin',
+				name: 'Administrator',
 				email: 'admin@cavehill.uwi.edu',
 				role: 'ADMIN',
+				alternate_email: 'administrator@outlook.com',
 				password: hashedPassword,
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString()
@@ -50,8 +38,9 @@ const seed = async () => {
 			.values({
 				id: advisor_id,
 				name: 'Advisor',
-				email: 'advisor1@cavehill.uwi.edu',
+				email: 'advisor@cavehill.uwi.edu',
 				role: 'ADVISOR',
+				alternate_email: 'advisor@outlook.com',
 				password: hashedPassword,
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString()
@@ -63,9 +52,10 @@ const seed = async () => {
 			.insertInto('User')
 			.values({
 				id: student_id,
-				name: 'Student 1',
-				email: 'student1@mycavehill.uwi.edu',
+				name: 'Student',
+				email: 'student@mycavehill.uwi.edu',
 				role: 'STUDENT',
+				alternate_email: 'student@outlook.com',
 				password: hashedPassword,
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString()
@@ -77,8 +67,9 @@ const seed = async () => {
 			.values({
 				id: crypto.randomUUID(),
 				user_id: student_id,
+				major_id: '6e1689c8-0a7a-4b42-afcb-9ae562d8ebc4',
+				minor_id: 'fb8cd353-fd2d-43c7-aa5f-856d8e087f16',
 				invite_token: null,
-				program_id: '090e8c5e-e71b-432f-ba01-f8ba47f1cad0',
 				invite_expires: null,
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString()
@@ -92,12 +83,16 @@ const seed = async () => {
 			.select('id')
 			.executeTakeFirst();
 
+			if (!student) {
+				throw new Error('Student not found');
+			}
+
 		// Insert Advisor data - Students
 		await db
 			.insertInto('Advisor')
 			.values({
 				advisor_id: advisor_id,
-				student_id: student?.id!
+				student_id: student.id,
 			})
 			.execute();
 	});

@@ -1,22 +1,8 @@
-import type { DB, RequirementType } from '../src/lib/db/schema';
+import type {RequirementType } from '../src/lib/db/schema';
 import 'dotenv/config';
-import pg from 'pg';
-import { Kysely, PostgresDialect } from 'kysely';
 import path from 'path';
 import fs from 'fs/promises';
-
-const { Pool } = pg;
-
-export const db = new Kysely<DB>({
-	dialect: new PostgresDialect({
-		pool: new Pool({
-			connectionString: process.env.DATABASE_URL,
-			ssl: {
-				rejectUnauthorized: false
-			}
-		})
-	})
-}).withSchema('dev');
+import { db } from './db';
 
 const __dirname = path.dirname(__filename);
 

@@ -1,22 +1,7 @@
-import type { Course, DB, StudentCourse } from '../src/lib/db/schema';
 import 'dotenv/config';
-import pg from 'pg';
-import { Kysely, PostgresDialect } from 'kysely';
 import path from 'path';
 import fs from 'fs/promises';
-
-const { Pool } = pg;
-
-export const db = new Kysely<DB>({
-	dialect: new PostgresDialect({
-		pool: new Pool({
-			connectionString: process.env.DATABASE_URL,
-			ssl: {
-				rejectUnauthorized: false
-			}
-		})
-	})
-}).withSchema('dev');
+import { db } from './db';
 
 type CourseData = {
 	id: number;
@@ -42,7 +27,23 @@ const data = await fs.readFile(path.join(__dirname, 'coursesdata.json'), 'utf-8'
 
 const courseData: CourseData[] = JSON.parse(data);
 
+await db.deleteFrom('Course').execute()
+
 await db.deleteFrom('CoursePrerequisite').execute();
+
+for (const course of courseData) {
+	await db
+		.insertInto('Course')
+		.values({
+			id: course.id,
+			code: course.code,
+			name: course.name,
+			level: course.level,
+			credits: course.credits,
+			departmentId: course.departmentId
+		})
+		.execute();
+}
 
 for (const course of courseData) {
 	const prerequisites = course.prerequisites;

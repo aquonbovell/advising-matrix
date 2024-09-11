@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const student = await db
 		.selectFrom('User')
-		.innerJoin('StudentT', 'User.id', 'StudentT.user_id')
+		.innerJoin('Student', 'User.id', 'Student.user_id')
 		.where('User.id', '=', userId)
 		.select(['major_id', 'minor_id'])
 		.executeTakeFirst();

@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ params }) => {
 	console.log('Expires at:', expiresAt);
 
 	const result = await db
-		.updateTable('StudentT')
+		.updateTable('Student')
 		.set({ invite_token: token, invite_expires: new Date(expiresAt) })
 		.where('id', '=', id)
 		.execute();

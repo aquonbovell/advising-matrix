@@ -20,10 +20,8 @@ const postgresql = new Pool({
 	ssl: {
 		rejectUnauthorized: true
 	},
-	connectionTimeoutMillis: 2000
+	connectionTimeoutMillis: 2000000
 });
-
-export{ postgresql };
 
 export const db = new Kysely<DB>({
 	dialect: new PostgresDialect({

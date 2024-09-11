@@ -1,9 +1,10 @@
 import { fail, redirect, error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
-import { Argon2id } from 'oslo/password';
 import { zfd } from 'zod-form-data';
 import { DEFAULT_PASSWORD } from '$env/static/private';
+import { hash, verify } from "@node-rs/argon2";
+
 
 export const load: PageServerLoad = async ({ url, locals }) => {
 	const token = url.searchParams.get('token');
@@ -55,11 +56,9 @@ export const actions: Actions = {
 
 		const { old_password, password, confirm_password } = result.data;
 
-		const argon2id = new Argon2id();
+		const old_password_hash = await hash(DEFAULT_PASSWORD);
 
-		const old_password_hash = await argon2id.hash(DEFAULT_PASSWORD);
-
-		const userPassword = await argon2id.verify(old_password_hash, old_password);
+		const userPassword = await verify(old_password_hash, old_password);
 
 		if (!userPassword) {
 			return fail(400, { invalid: 'Invalid Current or New Password' });
@@ -69,7 +68,7 @@ export const actions: Actions = {
 			return fail(400, { invalid: 'New Passwords do not match' });
 		}
 
-		const hashedPassword = await argon2id.hash(password);
+		const hashedPassword = await hash(password);
 
 		const user = await db
 			.selectFrom('Student')
