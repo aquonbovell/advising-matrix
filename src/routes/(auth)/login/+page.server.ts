@@ -5,7 +5,7 @@ import { db } from '$lib/db';
 import { superValidate } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
 import { loginSchema } from './schema';
-import { verifyPassword } from '$lib/utils';
+import { Argon2id} from 'oslo/password'
 
 const defaults = { email: '', password: '' };
 
@@ -46,7 +46,11 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const validPassword = await verifyPassword(user.password, password);
+		const encoder = new TextEncoder();
+		const secret = encoder.encode(process.env.SECRET!);
+		const argon2id = new Argon2id({secret});
+
+		const validPassword = await argon2id.verify(user.password, password);
 		if (!validPassword) {
 			form.errors._errors = ['Invalid email or password'];
 			return fail(400, { form });

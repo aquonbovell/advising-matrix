@@ -12,7 +12,6 @@
 			notifications.info($page.error?.message ?? 'Something went wrong', 5000);
 		}
 	}
-	console.log($page);
 </script>
 
 {#if $page.status === 500}

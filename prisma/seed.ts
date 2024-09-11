@@ -7,6 +7,10 @@ const argon2id = new Argon2id({ secret });
 
 const seed = async () => {
 	console.log('Seeding database...');
+	const encoder = new TextEncoder();
+	const secret = encoder.encode(process.env.SECRET!);
+	const argon2id = new Argon2id({secret});
+
 	const hashedPassword = await argon2id.hash(process.env.DEFAULT_PASSWORD!);
 
 	await db.transaction().execute(async (db) => {
