@@ -245,7 +245,7 @@ export const GET: RequestHandler = async ({ params }) => {
 				const CoursePrerequisites: Course[] = CoursePrerequisitesDB.filter(
 					(c) => c.courseId === course!.id
 				);
-				courses.push({ ...course!, prequisites: CoursePrerequisites });
+				courses.push({ ...course!, prerequisites: CoursePrerequisites });
 			}
 			data.requirements.push({ ...requirement, details: courses });
 		}
@@ -258,7 +258,7 @@ export const GET: RequestHandler = async ({ params }) => {
 						c.code.startsWith(area)
 				);
 				for (const course of areaCourses) {
-					courses.push({ ...course, prequisites: [] as Course[] });
+					courses.push({ ...course, prerequisites: [] as Course[] });
 				}
 			}
 
@@ -266,7 +266,7 @@ export const GET: RequestHandler = async ({ params }) => {
 				const CoursePrerequisites: Course[] = CoursePrerequisitesDB.filter(
 					(c) => c.courseId === course.id
 				);
-				course.prequisites = CoursePrerequisites;
+				course.prerequisites = CoursePrerequisites;
 			}
 			data.requirements.push({ ...requirement, details: courses });
 		}
@@ -277,14 +277,14 @@ export const GET: RequestHandler = async ({ params }) => {
 			);
 
 			for (const course of anyCourses) {
-				courses.push({ ...course, prequisites: [] as Course[] });
+				courses.push({ ...course, prerequisites: [] as Course[] });
 			}
 
 			for (const course of courses) {
 				const CoursePrerequisites: Course[] = CoursePrerequisitesDB.filter(
 					(c) => c.courseId === course.id
 				);
-				course.prequisites = CoursePrerequisites;
+				course.prerequisites = CoursePrerequisites;
 			}
 			data.requirements.push({ ...requirement, details: courses });
 		}

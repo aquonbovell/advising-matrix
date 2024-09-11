@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
-import { completedCourses } from './stores/student';
+import { completedCourse, completedCourses } from './stores/student';
 import type { CourseWithPrerequisites, Grade } from './types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -92,9 +92,16 @@ export function createMajorMinor(name: string): {
 // TODO: Implement the function `arePrerequisitesMet` that takes a course object and returns a boolean value
 export function arePrerequisitesMet(course: CourseWithPrerequisites): boolean {
 	if (!course.prerequisites || course.prerequisites.length === 0) return true;
-	let courses: Record<string, boolean> = {};
-	// completedCourses.subscribe((value) => (courses = value));
-	return course.prerequisites.every((prereq) => courses[prereq.id]);
+	let courses: number[] = [];
+	completedCourse.subscribe((value) => (courses = value));
+	return course.prerequisites.every((prerequisite) => courses.includes(prerequisite.id))
+}
+
+export function requiredCourses(course: CourseWithPrerequisites): string[] {
+	if (!course.prerequisites || course.prerequisites.length === 0) return [];
+	let courses: number[] = [];
+	completedCourse.subscribe((value) => (courses = value));
+	return course.prerequisites.filter((prerequisite) => !courses.includes(prerequisite.id)).map((prerequisite) => prerequisite.code);
 }
 
 export function formatDate(date: Date) {

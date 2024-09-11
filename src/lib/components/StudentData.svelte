@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	import { gradePoints, type Grade } from '$lib/types';
+	import { gradePoints, type Degree, type Grade } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Course from '$lib/components/Course.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -14,7 +14,9 @@
 		completedCredits,
 		courseGrades,
 		courses,
+		degreeGPA,
 		dialogRequirementID,
+		gpa,
 		outstandingCourses,
 		pendingCourses,
 		requiredCourses,
@@ -27,47 +29,7 @@
 	import { notifications } from '$lib/stores/notifications';
 	import type { User } from 'lucia';
 
-	type CourseWithPrerequisites = {
-		id: number;
-		code: string;
-		name: string;
-		level: number;
-		credits: number;
-		departmentId: string;
-		prequisites: Course[];
-	};
-
-	type Requirement = {
-		majorId: string;
-		id: string;
-		type: 'CREDITS' | 'POOL';
-		credits: number;
-		details: CourseWithPrerequisites[];
-		level: number | null;
-	};
-
-	type Course = {
-		id: number;
-		code: string;
-		name: string;
-		level: number;
-		credits: number;
-		departmentId: string;
-	};
-
-	type Degree = {
-		name: string;
-		majorId: string[];
-		requirements: Requirement[];
-	};
-
-	export let data: {
-		user: User | null;
-		program: {
-			major_id: string;
-			minor_id: string;
-		};
-	};
+	export let data: { user: User; program: { major_id: string; minor_id: string } };
 
 	async function getDegree(majorId: string, minorId: string): Promise<Degree> {
 		const res = await fetch(`/api/degree/${majorId}x${minorId}`);
@@ -104,7 +66,7 @@
 		const coursesDB = degree.requirements
 			.flatMap((req) => req.details)
 			.map((course) => {
-				return { id: course.id, credits: course.credits };
+				return { id: course.id, credits: course.credits, code:course.code };
 			});
 
 		courses.set(coursesDB);
@@ -188,12 +150,21 @@
 {#await getDegree(major_id, minor_id)}
 	<p>loading...</p>
 {:then degree}
-	<!-- <pre>{JSON.stringify(degree, null, 2)}</pre> -->
 
 	<div class="flex flex-col gap-6">
 		<Card.Root>
 			<Card.Header class="flex flex-row items-baseline justify-between">
 				<Card.Title>{`${degree.name}`}</Card.Title>
+				<Button
+					variant="outline"
+					type="button"
+					>Degree GPA: {$degreeGPA?? 0}</Button
+				>
+				<Button
+					variant="outline"
+					type="button"
+					>Overall GPA: {$gpa ?? 0}</Button
+				>
 				<Button
 					variant="outline"
 					disabled={loading}
@@ -357,7 +328,7 @@
 								addGradeDialog = false;
 							}}
 							class="active:scale-98 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-							>Add Course</Dialog.Close
+							>Add Grade</Dialog.Close
 						>
 					</div>
 				</Dialog.Description>

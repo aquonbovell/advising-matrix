@@ -24,16 +24,6 @@ export type Student =
 	  }
 	| undefined;
 
-export type CourseWithPrerequisite = {
-	id: number;
-	code: string;
-	name: string;
-	level: number;
-	credits: number;
-	departmentId: string;
-	prequisites: Course[];
-};
-
 export type CourseWithPrerequisites = {
 	id: number;
 	code: string;
@@ -41,7 +31,7 @@ export type CourseWithPrerequisites = {
 	level: number;
 	credits: number;
 	departmentId: string;
-	prequisites: Course[];
+	prerequisites: Course[];
 };
 
 export type Requirement = {
