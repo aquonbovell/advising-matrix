@@ -51,9 +51,9 @@ export const actions: Actions = {
 
 		const encoder = new TextEncoder();
 		const secret = encoder.encode(process.env.SECRET!);
-		const argon2id = new Argon2id({secret});
+		const argon2id = new Argon2id({ secret });
 
-		const hashedPassword =  await argon2id.hash(result.data.password);
+		const hashedPassword = await argon2id.hash(result.data.password);
 
 		try {
 			await db.transaction().execute(async (trx) => {

@@ -5,7 +5,6 @@ import type { TransitionConfig } from 'svelte/transition';
 import { completedCourses } from './stores/student';
 import type { CourseWithPrerequisites, Grade } from './types';
 
-
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }

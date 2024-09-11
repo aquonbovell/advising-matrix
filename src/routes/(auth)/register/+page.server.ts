@@ -57,7 +57,7 @@ export const actions: Actions = {
 
 		const encoder = new TextEncoder();
 		const secret = encoder.encode(process.env.SECRET!);
-		const argon2id = new Argon2id({secret});
+		const argon2id = new Argon2id({ secret });
 
 		const old_password_hash = await argon2id.hash(DEFAULT_PASSWORD);
 
