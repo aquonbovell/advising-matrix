@@ -7,8 +7,8 @@
 	import { preloadData, pushState, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import * as Dialog from '$lib/components/ui/dialog';
-
-	import StudentChart from '../advising-students/[id]/overview/+page.svelte';
+	import StudentChart from '$lib/components/StudentChart.svelte';
+	import { selectedStudent } from '$lib/stores/advisor';
 
 	async function showModal(e: MouseEvent) {
 		if (e.metaKey || e.ctrlKey) return;
@@ -30,20 +30,19 @@
 
 <h1 class="text-2xl font-bold text-stone-800">All Students</h1>
 
-<DataTable {data} {showModal} />
+<DataTable {data} />
 
 <Dialog.Root
-	open={studentChartDialog}
+	open={$selectedStudent !== null}
 	onOpenChange={(open) => {
 		if (!open) {
-			history.back();
+			$selectedStudent = null;
 		}
 	}}
 >
-	<Dialog.Overlay class="z-[100] bg-background/20 backdrop-blur-sm" />
-	<Dialog.Content class=" z-[100]">
-		{#if $page.state.student}
-			<StudentChart data={{ user: data.user, student: $page.state.student, props: { id: '' } }} />
+	<Dialog.Content>
+		{#if $selectedStudent !== null}
+			<StudentChart studentId={$selectedStudent}/>
 		{/if}
 	</Dialog.Content>
 </Dialog.Root>

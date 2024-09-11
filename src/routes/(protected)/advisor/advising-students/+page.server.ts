@@ -6,56 +6,64 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const userId = locals.user?.id;
 
 	if (!userId) {
-		throw error(401, 'Unauthorized');
+		error(403, 'Unauthorized');
+	}
+	if (locals.user?.role === 'STUDENT') {
+		error(403, 'Unauthorized');
 	}
 
 	try {
-		const advisor = await db
-			.selectFrom('Advisor')
-			.innerJoin('User', 'User.id', 'Advisor.advisor_id')
-			.where('advisor_id', '=', userId)
-			.select(['advisor_id', 'User.name'])
-			.executeTakeFirst();
-
-		if (!advisor) {
-			throw error(404, 'Advisor not found');
-		}
-
 		const students = await db
-			.selectFrom('Advisor')
-			.where('advisor_id', '=', advisor.advisor_id)
-			.innerJoin('Student', 'Student.id', 'Advisor.student_id')
-			.innerJoin('User', 'User.id', 'Student.user_id')
-			.leftJoin('Program', 'Program.id', 'Student.program_id')
+			.selectFrom('StudentT')
+			.innerJoin('Majors', 'Majors.id', 'StudentT.major_id')
+			.innerJoin('Minors', 'Minors.id', 'StudentT.minor_id')
+			.innerJoin('User', 'User.id', 'StudentT.user_id')
+			.innerJoin('Advisor', 'Advisor.student_id', 'StudentT.id')
 			.select([
-				'Student.id',
-				'Student.user_id',
+				'StudentT.id',
+				'StudentT.user_id',
+				'User.name',
 				'User.email',
-				'User.name as name',
-				'Student.created_at',
-				'Student.updated_at',
-				'Student.invite_token',
-				'Student.invite_expires',
-				'Program.name as program_name'
+				'StudentT.created_at',
+				'StudentT.updated_at',
+				'StudentT.invite_token',
+				'StudentT.invite_expires',
+				'Majors.name as major',
+				'Minors.name as minor'
 			])
 			.execute();
 
-		return {
-			students: students.map((student) => ({
+		let studentData = [];
+
+		const AdvisorsDB = await db
+			.selectFrom('Advisor')
+			.innerJoin('User', 'User.id', 'Advisor.advisor_id')
+			.select(['User.name', 'Advisor.student_id'])
+			.execute();
+
+		for (const student of students) {
+			const advisor = AdvisorsDB.filter((a) => a.student_id === student.id);
+
+			studentData.push({
 				id: student.id,
 				user_id: student.user_id,
 				name: student.name,
 				email: student.email,
-				program_name: student.program_name,
+				program_name:
+					student.minor === 'No Minor' ? student.major : student.major + ' with ' + student.minor,
 				created_at: student.created_at,
 				updated_at: student.updated_at,
 				token: { value: student.invite_token, expires: student.invite_expires },
-				advisor: advisor.name || 'No advisor'
-			}))
+				advisor: advisor.flatMap((a) => a.name).join(', ') || 'No advisor'
+			});
+		}
+
+		return {
+			students: studentData
 		};
 	} catch (err) {
 		console.error(err);
-		throw error(500, 'An error occurred while fetching the advisor');
+		error(500, 'An error occurred while fetching data');
 	}
 };
 

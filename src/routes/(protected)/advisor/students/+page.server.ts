@@ -6,46 +6,52 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const userId = locals.user?.id;
 
 	if (!userId) {
-		throw error(401, 'Unauthorized');
+		error(403, 'Unauthorized');
+	}
+	if (locals.user?.role === 'STUDENT') {
+		error(403, 'Unauthorized');
 	}
 
 	try {
 		const students = await db
-			.selectFrom('Student')
-			.innerJoin('Program', 'Program.id', 'Student.program_id')
-			.innerJoin('User', 'User.id', 'Student.user_id')
+			.selectFrom('StudentT')
+			.innerJoin('Majors', 'Majors.id', 'StudentT.major_id')
+			.innerJoin('Minors', 'Minors.id', 'StudentT.minor_id')
+			.innerJoin('User', 'User.id', 'StudentT.user_id')
 			.select([
-				'Student.id',
-				'Student.user_id',
+				'StudentT.id',
+				'StudentT.user_id',
 				'User.name',
 				'User.email',
-				'Student.created_at',
-				'Student.updated_at',
-				'Student.invite_token',
-				'Student.invite_expires',
-				'Program.name as program'
+				'StudentT.created_at',
+				'StudentT.updated_at',
+				'StudentT.invite_token',
+				'StudentT.invite_expires',
+				'Majors.name as major',
+				'Minors.name as minor'
 			])
 			.execute();
 
 		let studentData = [];
 
+		const AdvisorsDB = await db
+			.selectFrom('Advisor')
+			.innerJoin('User', 'User.id', 'Advisor.advisor_id')
+			.select(['User.name', 'Advisor.student_id'])
+			.execute();
+
 		for (const student of students) {
-			const advisor = await db
-				.selectFrom('Advisor')
-				.innerJoin('User', 'User.id', 'Advisor.advisor_id')
-				.where('Advisor.student_id', '=', student.id)
-				.select(['User.name'])
-				.execute();
+			const advisor = AdvisorsDB.filter((a) => a.student_id === student.id);
 
 			studentData.push({
 				id: student.id,
 				user_id: student.user_id,
 				name: student.name,
 				email: student.email,
-				program_name: student.program,
+				program_name:
+					student.minor === 'No Minor' ? student.major : student.major + ' with ' + student.minor,
 				created_at: student.created_at,
 				updated_at: student.updated_at,
-
 				token: { value: student.invite_token, expires: student.invite_expires },
 				advisor: advisor.flatMap((a) => a.name).join(', ') || 'No advisor'
 			});
@@ -56,7 +62,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		};
 	} catch (err) {
 		console.error(err);
-		throw error(500, 'An error occurred while fetching the advisor');
+		error(500, 'An error occurred while fetching data');
 	}
 };
 

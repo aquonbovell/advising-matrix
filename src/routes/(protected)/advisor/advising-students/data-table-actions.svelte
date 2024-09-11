@@ -3,11 +3,10 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
-	import { invalidate, invalidateAll } from '$app/navigation';
-	import { get } from 'svelte/store';
+	import { notifications } from '$lib/stores/notifications';
+	import { selectedStudent } from '$lib/stores/advisor';
 
 	export let code: string;
-	export let modalHandler: (e: MouseEvent) => void;
 	export let token: { value: string | null; expires: Date | null };
 	export let exists: boolean;
 </script>
@@ -23,7 +22,7 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Actions</DropdownMenu.Label>
 			<DropdownMenu.Item on:click={() => navigator.clipboard.writeText(code)}>
-				Copy student code
+				Copy Student Code
 			</DropdownMenu.Item>
 			{#if token.value}
 				<DropdownMenu.Item
@@ -33,7 +32,7 @@
 						navigator.clipboard.writeText(
 							`${window.location.origin}/register?token=${token.value}`
 						);
-					}}>Copy student token</DropdownMenu.Item
+					}}>Copy Student Token</DropdownMenu.Item
 				>
 			{/if}
 			{#if token.expires && new Date(token.expires) < new Date()}
@@ -47,8 +46,11 @@
 
 						if (data.success) {
 							window.location.reload();
+							notifications.info('Token reset', 5000);
+						} else {
+							notifications.info('Failed to reset token', 5000);
 						}
-					}}>Copy Reset Token</DropdownMenu.Item
+					}}>Reset Token</DropdownMenu.Item
 				>
 			{/if}
 			{#if !$page.route.id?.includes('advising-students')}
@@ -65,13 +67,9 @@
 		<DropdownMenu.Item href={'/advisor/advising-students' + '/' + code + '/'}
 			>View Student</DropdownMenu.Item
 		>
-		<DropdownMenu.Item
-			><a
-				href={'/advisor/advising-students' + '/' + code + '/overview'}
-				on:click|preventDefault={modalHandler}
-				>View Student Overview
-			</a></DropdownMenu.Item
-		>
+		<DropdownMenu.Item on:click={() => {
+			selectedStudent.set(code);
+		}}>View Student Overview</DropdownMenu.Item>
 		<DropdownMenu.Item href={'/advisor/advising-students' + '/' + code + '/matrix'}
 			>View Student Degree</DropdownMenu.Item
 		>

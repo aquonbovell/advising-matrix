@@ -1,13 +1,19 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
-import type { Program } from '$lib/db/schema';
-import { generateId } from 'lucia';
 import Vine from '@vinejs/vine';
 import { message, superValidate } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
 
-const defaults = { id: '', email: '', name: '', programId: '' };
+const defaults = {
+	id: '',
+	email: '',
+	name: '',
+	majorId: '',
+	minorId: 'fb8cd353-fd2d-43c7-aa5f-856d8e087f16',
+	alternate_email: '',
+	alternate_email1: ''
+};
 
 const schema = Vine.object({
 	id: Vine.string().trim(),
@@ -15,54 +21,61 @@ const schema = Vine.object({
 		.trim()
 		.email()
 		.regex(/@mycavehill\.uwi\.edu$/),
+	alternate_email: Vine.string().trim().email(),
+	alternate_email1: Vine.string().trim().email(),
 	name: Vine.string().trim().minLength(3).maxLength(50),
-	programId: Vine.string().trim()
+	majorId: Vine.string().trim().uuid(),
+	minorId: Vine.string().optional()
 });
 
 export const load = (async ({ locals, params }) => {
 	const userId = locals.user?.id;
 
 	if (!userId) {
-		throw error(401, 'Unauthorized');
+		error(403, 'Unauthorized');
+	}
+
+	if (locals.user?.role === 'STUDENT') {
+		error(403, 'Unauthorized');
 	}
 
 	const studentData = await db
-		.selectFrom('Student')
-		.innerJoin('User', 'User.id', 'Student.user_id')
-		.select(['User.email', 'User.name', 'Student.program_id', 'User.role', 'User.id'])
-		.where('Student.id', '=', params.id)
+		.selectFrom('StudentT')
+		.innerJoin('User', 'User.id', 'StudentT.user_id')
+		.select([
+			'User.email',
+			'User.name',
+			'StudentT.major_id',
+			'User.role',
+			'User.id',
+			'User.alternate_email',
+			'StudentT.minor_id'
+		])
+		.where('StudentT.id', '=', params.id)
 		.executeTakeFirst();
 
 	if (!studentData) {
 		throw error(404, 'Student Not found');
 	}
 
-	const studentPrograms: Program[] = await db.selectFrom('Program').selectAll().execute();
+	const majors = await db.selectFrom('Majors').selectAll().execute();
+	const minors = await db.selectFrom('Minors').selectAll().execute();
 
 	const form = await superValidate(vine(schema, { defaults }));
 	form.data = {
+		alternate_email: studentData.alternate_email || '',
+		alternate_email1: '',
 		id: studentData.id,
-		programId: studentData.program_id ?? '',
+		majorId: studentData.major_id,
+		minorId: studentData.minor_id,
 		email: studentData.email,
-		name: studentData.name ?? ''
+		name: studentData.name || ''
 	};
 
-	return { student: { ...studentData }, majors: studentPrograms, form };
+	return { student: { ...studentData }, majors, minors, form };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	delete: async ({ request }) => {
-		const data = await request.formData();
-		const email = data.get('floating_email');
-		if (!email) {
-			throw error(400, 'Bad Request');
-		}
-		const result = await db.deleteFrom('User').where('email', '=', email.toString()).execute();
-
-		console.log(result);
-
-		redirect(304, '/advisor/students');
-	},
 	save: async ({ request }) => {
 		const form = await superValidate(request, vine(schema, { defaults }));
 
@@ -76,11 +89,37 @@ export const actions: Actions = {
 			form.errors.name = ['Please enter a valid name'];
 		}
 
+		if (form.errors.majorId) {
+			form.errors.majorId = ['Please select a valid major'];
+		}
+
+		if (form.errors.minorId) {
+			form.errors.minorId = ['Please select a valid minor'];
+		}
+
+		if (form.errors.alternate_email) {
+			form.errors.alternate_email = ['Please enter a valid email address'];
+		}
+
+		if (form.errors.alternate_email1) {
+			form.errors.alternate_email1 = ['Please enter a valid email address'];
+		}
+
+		if (form.data.alternate_email !== form.data.alternate_email1) {
+			form.errors.alternate_email1 = ['Alternate emails must match'];
+			// the emails need to be the same
+			form.errors.alternate_email = ['Alternate emails must match'];
+
+			return fail(400, { form });
+		}
+
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
-		const { email, name, programId, id } = form.data;
+		const { email, name, majorId, minorId, id } = form.data;
+
+		console.log(form.data);
 
 		try {
 			await db.transaction().execute(async (trx) => {
@@ -95,13 +134,15 @@ export const actions: Actions = {
 					.execute();
 
 				await trx
-					.updateTable('Student')
-					.set({ program_id: programId })
-					.where('user_id', '=', id)
+					.updateTable('StudentT')
+					.set({ major_id: majorId, minor_id: minorId, updated_at: new Date() })
+					.where('id', '=', id)
 					.execute();
 			});
 			return message(form, 'Student updated successfully');
-		} catch (error) {}
-		return fail(500, { error: 'Failed to update student' });
+		} catch (err) {
+			console.error(err);
+			error(500, { message: 'Failed to update student' });
+		}
 	}
 };

@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { completedCourses } from './stores/ProgramMatrix';
-import type { CourseWithPrerequisites, CourseWithRequirement } from './types';
+import type { CourseWithPrerequisites, CourseWithRequirement, Grade } from './types';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -120,4 +120,18 @@ export function getInviteLink(inviteToken: string | null) {
 	if (inviteToken === null) return '';
 	if (typeof window === 'undefined') return '';
 	navigator.clipboard.writeText(`${window.location.origin}/register?token=${inviteToken}`);
+}
+
+
+export function isCompleted(grades: Grade[] | undefined): boolean {
+	if (!grades) return false;
+	let foundValidGrade = false;
+
+	for (let g of grades) {
+		if (g?.startsWith('F')) {
+		} else {
+			foundValidGrade = true; // Set the flag to stop further processing after this grade
+		}
+	}
+	return foundValidGrade ? true : false;
 }

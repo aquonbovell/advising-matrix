@@ -7,7 +7,8 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import Button from '$lib/components/ui/Button.svelte';
 	import type { PageData } from './$types';
-	import StudentChart from './[id]/overview/+page.svelte';
+	import { selectedStudent } from '$lib/stores/advisor';
+	import StudentChart from '$lib/components/StudentChart.svelte';
 
 	export let data: PageData;
 	async function showModal(e: MouseEvent) {
@@ -28,25 +29,26 @@
 	}
 </script>
 
+<pre>{JSON.stringify($selectedStudent, null, 2)}</pre>
+
 <div class="mb-6 flex items-center justify-between">
 	<h1 class="text-2xl font-bold text-stone-800">My Students</h1>
 	<Button href={`${$page.url.toString()}/invite`}>Invite A Student</Button>
 </div>
 
-<DataTable {data} {showModal} />
+<DataTable {data} />
 
 <Dialog.Root
-	open={studentChartDialog}
+	open={$selectedStudent !== null}
 	onOpenChange={(open) => {
 		if (!open) {
-			history.back();
+			$selectedStudent = null;
 		}
 	}}
 >
-	<Dialog.Overlay class="z-[100] bg-background/20 backdrop-blur-sm" />
-	<Dialog.Content class=" z-[100]">
-		{#if $page.state.student}
-			<StudentChart data={{ user: data.user, student: $page.state.student, props: { id: '' } }} />
+	<Dialog.Content>
+		{#if $selectedStudent !== null}
+			<StudentChart studentId={$selectedStudent}/>
 		{/if}
 	</Dialog.Content>
 </Dialog.Root>

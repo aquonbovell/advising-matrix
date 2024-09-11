@@ -84,3 +84,27 @@ export type Student =
 			program_id: string | null;
 	  }
 	| undefined;
+
+export type CourseWithPrerequisite = {
+	id: number;
+	code: string;
+	name: string;
+	level: number;
+	credits: number;
+	departmentId: string;
+	prequisites: Course[];
+};
+
+export type Requirement = {
+	majorId: string;
+	id: string;
+	type: 'CREDITS' | 'POOL';
+	credits: number;
+	details: CourseWithPrerequisite[];
+	level: number | null;
+};
+export type Degree = {
+	name: string;
+	majorId: string[];
+	requirements: Requirement[];
+};

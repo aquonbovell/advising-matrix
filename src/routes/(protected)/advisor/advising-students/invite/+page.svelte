@@ -4,12 +4,27 @@
 	import Input from '$lib/components/ui/Input.svelte';
 	import Option from '$lib/components/ui/dropdown/Option.svelte';
 	import { superForm } from 'sveltekit-superforms';
+	import { notifications } from '$lib/stores/notifications';
 
 	export let data;
 
 	const { form, constraints, errors, enhance, delayed, message } = superForm(data.form, {
 		delayMs: 500
 	});
+
+	if ($message) {
+		notifications.info($message, 5000);
+	}
+
+	$: {
+		if ($errors._errors) {
+			const messages = Object.values($errors._errors);
+
+			for (let message of messages) {
+				notifications.info(message, 5000);
+			}
+		}
+	}
 </script>
 
 <h1 class="mb-4 text-2xl font-bold">Invite Student</h1>
@@ -28,53 +43,69 @@
 			{...$constraints.name}
 		/>
 
-		<Input
-			type="email"
-			id="official_email"
-			name="official_email"
-			label="Student Official Email"
-			placeholder="Enter student's official email"
-			required
-			pattern="[a-zA-Z0-9._%+-]+@mycavehill\\.uwi\\.edu"
-			error={$errors.official_email?.[0]}
-			bind:value={$form.official_email}
-			{...$constraints.official_email}
-		/>
-
-		<Input
-			type="email"
-			id="alternate_email"
-			name="alternate_email"
-			label="Student Alternate Email"
-			placeholder="Enter student's alternate email"
-			required
-			error={$errors.alternate_email?.[0]}
-			bind:value={$form.alternate_email}
-			{...$constraints.alternate_email}
-		/>
-
-		<Select
-			id="programId"
-			name="programId"
-			label="Program"
-			placeholder="Select a program"
-			error={$errors.programId?.[0]}
-			bind:value={$form.programId}
-			{...$constraints.programId}
-		>
-			{#each data.programs as program}
-				<Option value={program.id}>{program.name}</Option>
-			{/each}
-		</Select>
+		<div class="flex flex-col py-4 md:flex-row md:gap-3">
+			<div class="w-full">
+				<Input
+					type="email"
+					id="official_email"
+					name="official_email"
+					label="Student Official Email"
+					placeholder="Enter student's official email"
+					required
+					pattern="[a-zA-Z0-9._%+-]+@mycavehill\.uwi\.edu"
+					error={$errors.official_email?.[0]}
+					bind:value={$form.official_email}
+					{...$constraints.official_email}
+				/>
+			</div>
+			<div class="w-full">
+				<Input
+					type="email"
+					id="alternate_email"
+					name="alternate_email"
+					label="Student Alternate Email"
+					placeholder="Enter student's alternate email"
+					required
+					error={$errors.alternate_email?.[0]}
+					bind:value={$form.alternate_email}
+					{...$constraints.alternate_email}
+				/>
+			</div>
+		</div>
+		<div class="flex gap-4">
+			<div class="w-full">
+				<Select
+					id="majorId"
+					name="majorId"
+					label="Major"
+					placeholder="Select a Major"
+					required={true}
+					error={$errors.majorId?.[0]}
+					bind:value={$form.majorId}
+					{...$constraints.majorId}
+				>
+					{#each data.majors as program}
+						<Option value={program.id}>{program.name}</Option>
+					{/each}
+				</Select>
+			</div>
+			<div class="w-full">
+				<Select
+					id="minorId"
+					name="minorId"
+					label="Minor"
+					placeholder="Select a Minor"
+					error={$errors.minorId?.[0]}
+					bind:value={$form.minorId}
+					{...$constraints.minorId}
+				>
+					{#each data.minors as program}
+						<Option value={program.id}>{program.name}</Option>
+					{/each}
+				</Select>
+			</div>
+		</div>
 	</div>
 
 	<Button type="submit" loading={$delayed}>Send Invitation</Button>
 </form>
-
-{#if $message}
-	<p class="mt-4 text-sm text-green-600">{$message}</p>
-{/if}
-
-{#if $errors._errors}
-	<p class="mt-4 text-sm text-red-600">{$errors._errors[0]}</p>
-{/if}

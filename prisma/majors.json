@@ -1,0 +1,385 @@
+[
+	{
+		"name": "Biochemistry",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 24,
+				"data": { "courses": ["9290", "7719", "12966", "7720", "12994", "378", "12993", "12992"] }
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 12,
+				"data": { "courses": ["12967", "12980", "12982", "10710"] }
+			},
+			{
+				"type": "POOL",
+				"level": 2,
+				"credits": 3,
+				"data": { "courses": ["12985", "12981"] }
+			},
+			{
+				"type": "CREDITS",
+				"level": 3,
+				"credits": 3,
+				"data": { "courses": ["12834"] }
+			},
+			{
+				"type": "POOL",
+				"level": 3,
+				"credits": 12,
+				"data": { "courses": ["311", "12833", "12983", "12835", "12984", "12989", "12822"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 30,
+				"data": {}
+			}
+		]
+	},
+	{
+		"name": "Biology",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 12,
+				"data": { "courses": ["9290", "7719", "12966", "7720"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 12,
+				"data": {}
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 6,
+				"data": { "courses": ["12982", "10710"] }
+			},
+			{
+				"type": "POOL",
+				"level": 2,
+				"credits": 6,
+				"data": { "courses": ["12967", "380", "53"] }
+			},
+			{
+				"type": "POOL",
+				"level": 2,
+				"credits": 6,
+				"data": { "courses": ["12985", "12986", "12987"] }
+			},
+			{
+				"type": "POOL",
+				"level": 3,
+				"credits": 6,
+				"data": { "area": ["BIOC", "BIOL", "ECOL", "MICR"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 6,
+				"data": { "area": ["BIOC", "BIOL", "ECOL", "MICR"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 30,
+				"data": {}
+			}
+		]
+	},
+	{
+		"name": "Double Major In Biological Sciences",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 12,
+				"data": { "courses": ["9290", "7719", "12966", "7720"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 12,
+				"data": {}
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 15,
+				"data": { "courses": ["12967", "12982", "10710", "380", "53"] }
+			},
+			{
+				"type": "POOL",
+				"level": 2,
+				"credits": 6,
+				"data": { "courses": ["12985", "12986", "12987"] }
+			},
+			{
+				"type": "POOL",
+				"level": 2,
+				"credits": 9,
+				"data": { "area": ["BIOC", "BIOL", "ECOL", "MICR"] }
+			},
+			{
+				"type": "POOL",
+				"level": 3,
+				"credits": 30,
+				"data": { "area": ["BIOC", "BIOL", "ECOL", "MICR"] }
+			}
+		]
+	},
+	{
+		"name": "Ecology",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 12,
+				"data": { "courses": ["9290", "7719", "12966", "7720"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 12,
+				"data": {}
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 12,
+				"data": { "courses": ["10710", "380", "54", "466"] }
+			},
+			{
+				"type": "CREDITS",
+				"level": 3,
+				"credits": 6,
+				"data": { "courses": ["12836", "12838"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 12,
+				"data": { "courses": ["506", "8460", "715", "10107", "327", "12820", "12982", "12988"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 30,
+				"data": {}
+			}
+		]
+	},
+	{
+		"name": "Microbiology",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 12,
+				"data": { "courses": ["9290", "7719", "12966", "7720"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 12,
+				"data": {}
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 18,
+				"data": { "courses": ["12967", "12982", "13797", "13797", "12820", "264"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 12,
+				"data": {
+					"courses": [
+						"12981",
+						"12985",
+						"265",
+						"12983",
+						"12989",
+						"12821",
+						"12820",
+						"12819",
+						"12818",
+						"264"
+					]
+				}
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 30,
+				"data": {}
+			}
+		]
+	},
+	{
+		"name": "Chemistry",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 12,
+				"data": { "courses": ["12994", "378", "12993", "12992"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 12,
+				"data": {}
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 18,
+				"data": { "courses": ["12995", "12996", "12997", "11919", "12999", "13000"] }
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 3,
+				"data": { "courses": ["12823"] }
+			},
+			{
+				"type": "POOL",
+				"level": 3,
+				"credits": 6,
+				"data": { "courses": ["12830", "12829", "14191"] }
+			},
+			{
+				"type": "POOL",
+				"level": 3,
+				"credits": 3,
+				"data": { "courses": ["545", "13012"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 30,
+				"data": {}
+			}
+		]
+	},
+	{
+		"name": "Chemistry (Double)",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 12,
+				"data": { "courses": ["12994", "378", "12993", "12992"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 12,
+				"data": {}
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 18,
+				"data": { "courses": ["12995", "12996", "12997", "11919", "12999", "13000"] }
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 12,
+				"data": { "courses": ["12823", "12830", "12829", "14191"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 30,
+				"data": {
+					"courses": [
+						"12831",
+						"12502",
+						"13012",
+						"545",
+						"12822",
+						"13024",
+						"13026",
+						"13027",
+						"7792",
+						"12967",
+						"327",
+						"491"
+					]
+				}
+			}
+		]
+	},
+	{
+		"name": "Environmental Science",
+		"details": [
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 3,
+				"data": { "courses": ["327", "327"] }
+			},
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 3,
+				"data": { "courses": ["11771"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 6,
+				"data": { "faculty": ["FST"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 12,
+				"data": {}
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 9,
+				"data": { "courses": ["327", "9398", "11792"] }
+			},
+			{
+				"type": "POOL",
+				"level": 1,
+				"credits": 3,
+				"data": {
+					"courses": [
+						"12502",
+						"491",
+						"380",
+						"54",
+						"11794",
+						"13012",
+						"13049",
+						"13635",
+						"11731",
+						"495",
+						"11795",
+						"470"
+					]
+				}
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 30,
+				"data": {}
+			}
+		]
+	}
+]

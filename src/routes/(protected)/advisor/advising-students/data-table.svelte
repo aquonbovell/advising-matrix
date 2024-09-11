@@ -22,8 +22,6 @@
 
 	import DataTableTag from './data-table-tag.svelte';
 
-	export let showModal: (e: MouseEvent) => void;
-
 	type IStudent = {
 		id: string;
 		user_id: string;
@@ -107,7 +105,7 @@
 		}),
 		table.column({
 			accessor: 'updated_at',
-			header: 'Last Updated',
+			header: 'Updated',
 			cell: ({ value }) => {
 				return new Date(value).toLocaleDateString();
 			},
@@ -141,7 +139,6 @@
 			cell: ({ value }) => {
 				return createRender(DataTableActions, {
 					code: value.id,
-					modalHandler: showModal,
 					token: value.token,
 					exists: value.exists
 				});
@@ -179,6 +176,8 @@
 </script>
 
 <div>
+
+	
 	<div class="flex-1 text-right text-sm text-muted-foreground">
 		Page {$pageIndex + 1} of{' '}
 		{Math.floor($rows.length / $pageSize) + 1}

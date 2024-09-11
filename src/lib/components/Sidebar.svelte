@@ -27,9 +27,10 @@
 		],
 		ADVISOR: [
 			{ icon: HomeIcon, label: 'Home', href: '/' },
+			{ icon: HomeIcon, label: 'Invite Student', href: 'advisor/advising-students/invite' },
 			{ icon: HomeIcon, label: 'My Students', href: '/advisor/advising-students' },
 			{ icon: HomeIcon, label: 'All Students', href: '/advisor/students' },
-			{ icon: HomeIcon, label: 'Advisor Courses', href: '/advisor/courses' }
+			{ icon: HomeIcon, label: 'Courses', href: '/advisor/courses' }
 			// Add more menu items here
 		],
 		ADMIN: [

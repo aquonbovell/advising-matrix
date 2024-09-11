@@ -11,17 +11,18 @@ datasource db {
 }
 
 model User {
-  id              String    @id @unique @db.Uuid
+  id              String     @id @unique @db.Uuid
   name            String?
-  email           String    @unique
+  email           String     @unique
   password        String
   role            UserRole
-  created_at      DateTime  @default(now())
-  updated_at      DateTime  @updatedAt
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
   alternate_email String?
   advisor         Advisor[]
   sessions        Session[]
   student         Student?
+  StudentT        StudentT[]
 }
 
 model Session {
@@ -32,26 +33,26 @@ model Session {
 }
 
 model Advisor {
-  advisor_id String  @db.Uuid
-  student_id String  @db.Uuid
-  user       User    @relation(fields: [advisor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Student    Student @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  advisor_id String   @db.Uuid
+  student_id String   @db.Uuid
+  user       User     @relation(fields: [advisor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Student    StudentT @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([advisor_id, student_id])
 }
 
 model Student {
-  id             String          @id @db.Uuid
-  user_id        String          @unique @db.Uuid
+  id             String           @id @db.Uuid
+  user_id        String           @unique @db.Uuid
   invite_token   String?
   invite_expires DateTime?
-  program_id     String?         @db.Uuid
-  created_at     DateTime        @default(now())
-  updated_at     DateTime        @updatedAt
-  Advisor        Advisor[]
-  program        Program?        @relation(fields: [program_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
-  user           User            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  program_id     String?          @db.Uuid
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  program        Program?         @relation(fields: [program_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  user           User             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   StudentCourse  StudentCourse[]
+  StudentCourses StudentCourses[]
 }
 
 model Department {
@@ -71,6 +72,7 @@ model Course {
   CoursePrerequisite_CoursePrerequisite_courseIdToCourse       CoursePrerequisite[] @relation("CoursePrerequisite_courseIdToCourse")
   CoursePrerequisite_CoursePrerequisite_prerequisiteIdToCourse CoursePrerequisite[] @relation("CoursePrerequisite_prerequisiteIdToCourse")
   StudentCourse                                                StudentCourse[]
+  StudentCourses                                               StudentCourses[]
 }
 
 model CoursePrerequisite {
@@ -108,6 +110,83 @@ model StudentCourse {
   Course        Course?             @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   requirement   ProgramRequirement? @relation(fields: [requirementId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   student       Student?            @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model MajorRequirements {
+  id             String           @id(map: "ProgramMajors_pkey") @db.Uuid
+  majorId        String           @db.Uuid
+  type           RequirementType
+  credits        Int
+  details        Json
+  level          Int?
+  Majors         Majors           @relation(fields: [majorId], references: [id], onUpdate: NoAction)
+  StudentCourses StudentCourses[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model Majors {
+  id                String              @id @unique @db.Uuid
+  name              String              @unique(map: "Majors_name_idx")
+  MajorRequirements MajorRequirements[]
+  StudentT          StudentT[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ProgramMinors {
+  id      String          @id @db.Uuid
+  minorId String          @db.Uuid
+  type    RequirementType
+  credits Int
+  details Json
+  level   Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model StudentCourses {
+  id                String             @id @db.Uuid
+  grade             String
+  requirementId     String?            @db.Uuid
+  studentId         String?            @db.Uuid
+  courseId          Int?
+  Course            Course?            @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  MajorRequirements MajorRequirements? @relation(fields: [requirementId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  Student           Student?           @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model StudentT {
+  id             String    @id @db.Uuid
+  user_id        String    @db.Uuid
+  invite_token   String?
+  invite_expires DateTime?
+  major_id       String   @db.Uuid
+  created_at     DateTime  @default(now())
+  updated_at     DateTime
+  minor_id       String   @db.Uuid @default(dbgenerated("NULL"))
+  Advisor        Advisor[]
+  Minors         Minors?   @relation(fields: [minor_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  Majors         Majors?   @relation(fields: [major_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "StudentT_program_id_fkey")
+  user           User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model MinorRequirements {
+  id      String          @id @db.Uuid
+  minorId String          @db.Uuid
+  type    RequirementType
+  credits Int
+  details Json
+  level   Int?
+  Minors  Minors          @relation(fields: [minorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model Minors {
+  id                String              @id @unique @db.Uuid
+  name              String              @unique(map: "Minors_name_idx")
+  MinorRequirements MinorRequirements[]
+  StudentT          StudentT[]
 }
 
 enum UserRole {

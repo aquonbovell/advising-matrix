@@ -6,19 +6,16 @@ export const load = (async ({ locals }) => {
 	const userId = locals.user?.id;
 	if (!userId) throw error(401, 'Unauthorized');
 
-	const data = await db
-		.selectFrom('Student')
-		.innerJoin('Program', 'Program.id', 'Student.program_id')
-		.where('Student.user_id', '=', userId)
-		.select(['Program.name as program'])
+	const student = await db
+		.selectFrom('User')
+		.innerJoin('StudentT', 'User.id', 'StudentT.user_id')
+		.where('User.id', '=', userId)
+		.select(['major_id', 'minor_id'])
 		.executeTakeFirst();
 
-	if (!data) {
-		return {
-			student: null
-		};
-	}
+	if (!student) error(404, 'Student not found');
+
 	return {
-		student: { ...data, name: locals.user?.name }
+		program: student
 	};
 }) satisfies PageServerLoad;
