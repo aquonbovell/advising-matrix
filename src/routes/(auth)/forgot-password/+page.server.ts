@@ -2,8 +2,7 @@ import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { zfd } from 'zod-form-data';
 import { z } from 'zod';
 import { db } from '$lib/db';
-import { hash } from "@node-rs/argon2";
-
+import { hash } from '@node-rs/argon2';
 
 export const actions: Actions = {
 	default: async ({ request }) => {

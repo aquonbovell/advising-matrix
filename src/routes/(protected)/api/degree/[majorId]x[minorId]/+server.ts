@@ -115,7 +115,7 @@ export const GET: RequestHandler = async ({ params }) => {
 			}
 		});
 
-		const uniCourses: string[]  = [];
+		const uniCourses: string[] = [];
 
 		newCourses.forEach((course) => {
 			if (!uniCourses.includes(course)) {
@@ -188,8 +188,7 @@ export const GET: RequestHandler = async ({ params }) => {
 				return { id: req.id, dgId: req.dgId, credits: req.credits };
 			});
 
-
-		const reqCreds:{
+		const reqCreds: {
 			id: string;
 			credits: number;
 		}[] = [];

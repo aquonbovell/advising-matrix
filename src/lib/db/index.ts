@@ -23,7 +23,7 @@ const postgresql = new Pool({
 	connectionTimeoutMillis: 2000
 });
 
-export{ postgresql };
+export { postgresql };
 
 export const db = new Kysely<DB>({
 	dialect: new PostgresDialect({

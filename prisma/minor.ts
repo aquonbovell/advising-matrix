@@ -1,4 +1,4 @@
-import type {RequirementType } from '../src/lib/db/schema';
+import type { RequirementType } from '../src/lib/db/schema';
 import 'dotenv/config';
 import path from 'path';
 import fs from 'fs/promises';

@@ -27,7 +27,7 @@ const data = await fs.readFile(path.join(__dirname, 'coursesdata.json'), 'utf-8'
 
 const courseData: CourseData[] = JSON.parse(data);
 
-await db.deleteFrom('Course').execute()
+await db.deleteFrom('Course').execute();
 
 await db.deleteFrom('CoursePrerequisite').execute();
 

@@ -5,8 +5,7 @@ import { db } from '$lib/db';
 import { superValidate } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
 import { loginSchema } from './schema';
-import { hash,verify } from "@node-rs/argon2";
-
+import { hash, verify } from '@node-rs/argon2';
 
 const defaults = { email: '', password: '' };
 

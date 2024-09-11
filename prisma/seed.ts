@@ -83,16 +83,16 @@ const seed = async () => {
 			.select('id')
 			.executeTakeFirst();
 
-			if (!student) {
-				throw new Error('Student not found');
-			}
+		if (!student) {
+			throw new Error('Student not found');
+		}
 
 		// Insert Advisor data - Students
 		await db
 			.insertInto('Advisor')
 			.values({
 				advisor_id: advisor_id,
-				student_id: student.id,
+				student_id: student.id
 			})
 			.execute();
 	});

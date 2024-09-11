@@ -3,8 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
 import { zfd } from 'zod-form-data';
 import { DEFAULT_PASSWORD } from '$env/static/private';
-import { hash, verify } from "@node-rs/argon2";
-
+import { hash, verify } from '@node-rs/argon2';
 
 export const load: PageServerLoad = async ({ url, locals }) => {
 	const token = url.searchParams.get('token');

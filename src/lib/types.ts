@@ -1,8 +1,4 @@
-import type {
-	Course,
-	RequirementType,
-	StudentCourses
-} from './db/schema';
+import type { Course, RequirementType, StudentCourses } from './db/schema';
 
 export type Grade = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'F1' | 'F2' | 'F3' | null;
 
@@ -37,7 +33,6 @@ export type CourseWithPrerequisite = {
 	departmentId: string;
 	prequisites: Course[];
 };
-
 
 export type CourseWithPrerequisites = {
 	id: number;

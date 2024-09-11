@@ -56,7 +56,6 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
-
 				return acc + course.credits;
 			}
 			return acc;
@@ -87,12 +86,10 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			}
 		});
 
-
 		const studentCoursesTwo = levelTwoCourseIds.reduce((acc, course) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
-
 				return acc + course.credits;
 			}
 			return acc;
@@ -123,12 +120,10 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			}
 		});
 
-
 		const studentCoursesThree = levelThreeCourseIds.reduce((acc, course) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
-
 				return acc + course.credits;
 			}
 			return acc;
@@ -159,12 +154,10 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			}
 		});
 
-
 		const studentCoursesFour = levelFourCourseIds.reduce((acc, course) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
-
 				return acc + course.credits;
 			}
 			return acc;
