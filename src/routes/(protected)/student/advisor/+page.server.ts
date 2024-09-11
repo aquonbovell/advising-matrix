@@ -1,5 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/db';
+import { error } from '@sveltejs/kit';
 
 export const load = (async ({ locals }) => {
 	const data = await db

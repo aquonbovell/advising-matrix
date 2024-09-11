@@ -23,14 +23,14 @@ export const load = (async ({ locals }) => {
 	if (user?.role === 'STUDENT') {
 		program = await db
 			.selectFrom('Student')
-			.where('user_id', '=', user.id)
+			// .where('user_id', '=', user.id)
 			.select(['program_id'])
 			.executeTakeFirst();
 	}
 
 	const programs = await db.selectFrom('Program').select(['id', 'name']).execute();
 
-	return { person: user, programs, program };
+	return {};
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

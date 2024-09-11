@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
-import { completedCourses } from './stores/ProgramMatrix';
+import { completedCourses } from './stores/student';
 import type { CourseWithPrerequisites, CourseWithRequirement, Grade } from './types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -88,12 +88,14 @@ export function createMajorMinor(name: string): {
 }
 
 // Helper functions
+
+// TODO: Implement the function `arePrerequisitesMet` that takes a course object and returns a boolean value
 export function arePrerequisitesMet(
 	course: CourseWithPrerequisites | CourseWithRequirement
 ): boolean {
 	if (!course.prerequisites || course.prerequisites.length === 0) return true;
 	let courses: Record<string, boolean> = {};
-	completedCourses.subscribe((value) => (courses = value));
+	// completedCourses.subscribe((value) => (courses = value));
 	return course.prerequisites.every((prereq) => courses[prereq.id]);
 }
 

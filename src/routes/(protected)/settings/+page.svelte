@@ -1,55 +1,55 @@
 <script lang="ts">
-	import type { ActionData, PageData } from './$types';
-	import { Button } from '$lib/components/ui/button';
-	import { Card, CardContent, CardHeader } from '$lib/components/ui/card';
-	import { Label } from '$lib/components/ui/label';
-	import Input from '$lib/components/ui/Input.svelte';
-	import * as Select from '$lib/components/ui/select';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import * as Alert from '$lib/components/ui/alert';
-	import PasswordRequirements from '$lib/components/PasswordRequirements.svelte';
-	import { enhance } from '$app/forms';
-	export let data: PageData;
+	// import type { ActionData, PageData } from './$types';
+	// import { Button } from '$lib/components/ui/button';
+	// import { Card, CardContent, CardHeader } from '$lib/components/ui/card';
+	// import { Label } from '$lib/components/ui/label';
+	// import Input from '$lib/components/ui/Input.svelte';
+	// import * as Select from '$lib/components/ui/select';
+	// import Avatar from '$lib/components/ui/Avatar.svelte';
+	// import * as Alert from '$lib/components/ui/alert';
+	// import PasswordRequirements from '$lib/components/PasswordRequirements.svelte';
+	// import { enhance } from '$app/forms';
+	// export let data: PageData;
 
-	export let form: ActionData;
-	$: setTimeout(() => {
-		if (form?.success) {
-			form = null;
-		}
-		if (form?.errors) {
-			form = null;
-		}
-	}, 10000);
-	$: selectedMajorName = data.programs.find((major) => major.id === data.program?.program_id)?.name;
+	// export let form: ActionData;
+	// $: setTimeout(() => {
+	// 	if (form?.success) {
+	// 		form = null;
+	// 	}
+	// 	if (form?.errors) {
+	// 		form = null;
+	// 	}
+	// }, 10000);
+	// $: selectedMajorName = data.programs.find((major) => major.id === data.program?.program_id)?.name;
 
-	let password = '';
-	let confirmPassword = '';
+	// let password = '';
+	// let confirmPassword = '';
 
-	$: isPasswordValid =
-		password.length >= 8 &&
-		/[A-Z]/.test(password) &&
-		password === confirmPassword &&
-		password !== '';
+	// $: isPasswordValid =
+	// 	password.length >= 8 &&
+	// 	/[A-Z]/.test(password) &&
+	// 	password === confirmPassword &&
+	// 	password !== '';
 </script>
 
 <h1>Profile Settings</h1>
 
-<div class="">
+<!-- <div class="">
 	{#if form?.success}
-		<Alert.Root class="text-green-600">
-			<!-- <Terminal class="h-4 w-4" /> -->
-			<Alert.Title>Heads up!</Alert.Title>
+		<Alert.Root class="text-green-600"> -->
+<!-- <Terminal class="h-4 w-4" /> -->
+<!-- <Alert.Title>Heads up!</Alert.Title>
 			<Alert.Description>{form.message}</Alert.Description>
 		</Alert.Root>
-	{/if}
-	<!-- {#if form?.error}
+	{/if} -->
+<!-- {#if form?.error}
 		<Alert.Root class="text-red-600">
 			<Terminal class="h-4 w-4" />
 			<Alert.Title>Heads up!</Alert.Title>
 			<Alert.Description>{form.message}</Alert.Description>
 		</Alert.Root>
 	{/if} -->
-	<div class="px-4">
+<!-- <div class="px-4">
 		<form action="?/save" method="post">
 			<input type="text" name="id" hidden value={'$form.id'} />
 			<header class="py-4">
@@ -60,9 +60,9 @@
 					</div>
 				</div>
 			</header>
-			<div class="space-y-8">
-				<!-- Student Details -->
-				<Card>
+			<div class="space-y-8"> -->
+<!-- Student Details -->
+<!-- <Card>
 					<CardContent class="space-y-6 pt-6">
 						<div class="space-y-2">
 							<Label for="name">Name</Label>
@@ -105,9 +105,9 @@
 							{/if}
 						</div>
 					</CardContent>
-				</Card>
-				<!-- Student Major -->
-				{#if data.person?.role === 'STUDENT'}
+				</Card> -->
+<!-- Student Major -->
+<!-- {#if data.person?.role === 'STUDENT'}
 					<Card>
 						<CardHeader>
 							<div>Undergraduate Major</div>
@@ -133,9 +133,9 @@
 							</div>
 						</CardContent>
 					</Card>
-				{/if}
-				<!-- Alternative Email -->
-				<Card>
+				{/if} -->
+<!-- Alternative Email -->
+<!-- <Card>
 					<CardHeader>
 						<div>Alternative Email</div>
 						<div>For your security, please use your offical university email.</div>
@@ -180,7 +180,7 @@
 					<CardContent class="space-y-4">
 						{#if form?.data_invalid}
 							<Alert.Root class="text-red-600">
-								<!-- <Terminal class="h-4 w-4" /> -->
+								<Terminal class="h-4 w-4" />
 								<Alert.Title>Heads up!</Alert.Title>
 								<Alert.Description>{form.data_invalid}</Alert.Description>
 							</Alert.Root>
@@ -226,3 +226,4 @@
 		</form>
 	</div>
 </div>
+ -->

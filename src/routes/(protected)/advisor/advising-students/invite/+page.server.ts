@@ -2,7 +2,6 @@ import { error, fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { db } from '$lib/db';
 import { generateTokenWithExpiration } from '$lib/server/auth';
-import { generateId } from 'lucia';
 import Vine from '@vinejs/vine';
 import { message, superValidate, setError } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
