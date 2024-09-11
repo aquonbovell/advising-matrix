@@ -55,7 +55,7 @@ export const load = (async ({ locals, params }) => {
 		.executeTakeFirst();
 
 	if (!studentData) {
-		throw error(404, 'Student Not found');
+		error(404, 'Student Not found');
 	}
 
 	const majors = await db.selectFrom('Majors').selectAll().execute();
@@ -118,8 +118,6 @@ export const actions: Actions = {
 		}
 
 		const { email, name, majorId, minorId, id } = form.data;
-
-		console.log(form.data);
 
 		try {
 			await db.transaction().execute(async (trx) => {

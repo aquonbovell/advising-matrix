@@ -2,7 +2,7 @@ import { db } from '$lib/db';
 import { Argon2id } from 'oslo/password';
 import type { Actions, PageServerLoad } from './$types';
 import { DEFAULT_PASSWORD } from '$env/static/private';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 export const load = (async ({ params }) => {
 	const user = await db
@@ -10,6 +10,7 @@ export const load = (async ({ params }) => {
 		.where('email', '=', params.email)
 		.selectAll()
 		.executeTakeFirst();
+	if (!user) error(404, { message: 'User not found' });
 	return { person: user };
 }) satisfies PageServerLoad;
 

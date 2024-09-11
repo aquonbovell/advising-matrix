@@ -3,16 +3,18 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	if (!params.id) throw error(400, 'Missing student ID');
+	if (!params.id) error(400, 'Missing student ID');
 
 	const userId = locals.user?.id;
-	if (!userId) throw error(401, 'Unauthorized');
+	if (!userId) error(401, 'Unauthorized');
 
 	const student = await db
 		.selectFrom('StudentT')
-		.select('program_id')
+		.select(['major_id', 'minor_id'])
 		.where('id', '=', params.id!)
-		.execute();
+		.executeTakeFirst();
+
+	if (!student) error(404, 'Student not found');
 
 	return {
 		program: student

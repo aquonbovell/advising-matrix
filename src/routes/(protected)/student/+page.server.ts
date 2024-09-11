@@ -1,21 +1,9 @@
 import type { PageServerLoad } from './$types';
-import { db } from '$lib/db';
 import { error } from '@sveltejs/kit';
 
 export const load = (async ({ locals }) => {
 	const userId = locals.user?.id;
 	if (!userId) throw error(401, 'Unauthorized');
 
-	const student = await db
-		.selectFrom('User')
-		.innerJoin('StudentT', 'User.id', 'StudentT.user_id')
-		.where('User.id', '=', userId)
-		.select(['major_id', 'minor_id'])
-		.executeTakeFirst();
-
-	if (!student) error(404, 'Student not found');
-
-	return {
-		program: student
-	};
+	return {};
 }) satisfies PageServerLoad;

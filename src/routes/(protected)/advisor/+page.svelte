@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Button from '$lib/components/ui/Button.svelte';
+	import { Button } from '$lib/components/ui/button';
 </script>
 
-<h1>{$page.data.user.role} Dashboard</h1>
+<h1>Dashboard</h1>
 <p>Welcome to Advising Matrix!</p>
 
 <h2>Quick Links</h2>

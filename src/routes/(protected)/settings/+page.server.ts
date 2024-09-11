@@ -7,11 +7,16 @@ import { Argon2id } from 'oslo/password';
 import { lucia } from '$lib/server/auth';
 
 export const load = (async ({ locals }) => {
+	error(500, 'Not implemented');
 	const user = await db
 		.selectFrom('User')
 		.where('id', '=', locals?.user?.id!)
 		.select(['id', 'email', 'name', 'role', 'alternate_email'])
 		.executeTakeFirst();
+
+	if (!user) {
+		error(404, { message: 'User not found' });
+	}
 
 	let program;
 

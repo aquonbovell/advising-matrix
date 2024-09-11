@@ -3,7 +3,7 @@
 
 	export let data: PageData;
 
-	import DataTable from '../../admin/courses/data-table.svelte';
+	import DataTable from './data-table.svelte';
 </script>
 
 <DataTable {data} />

@@ -8,7 +8,8 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 		!user &&
 		!url.pathname.startsWith('/login') &&
 		!url.pathname.startsWith('/register') &&
-		!url.pathname.startsWith('/forgot-password')
+		!url.pathname.startsWith('/forgot-password') &&
+		!url.pathname.startsWith('/request-access')
 	) {
 		throw redirect(303, '/login');
 	}

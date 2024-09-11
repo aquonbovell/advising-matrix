@@ -56,11 +56,13 @@ export const GET: RequestHandler = async ({ params }) => {
 		.where('id', '=', majorId)
 		.select('name')
 		.executeTakeFirst();
+	const isDM = false;
 	const minorName = await db
 		.selectFrom('Minors')
 		.where('id', '=', minorId)
 		.select('name')
 		.executeTakeFirst();
+	let isMinor = minorName?.name === 'No Minor' ? false : true;
 	let data: Degree = {
 		dgId: program,
 		requirements: [],
@@ -122,20 +124,45 @@ export const GET: RequestHandler = async ({ params }) => {
 	) {
 		const req = degree.filter((req) => req.level === 1 && req.type === 'CREDITS');
 
+		const memo = [];
+		req.forEach((req) => {
+			if (!memo.find((r) => r.id === req.id)) {
+				memo.push(req);
+			}
+		});
+
+		console.log('memo', memo);
+
+		const newCourses = [];
+		memo.forEach((req) => {
+			const details = req.details as { courses?: string[]; area?: string[] };
+			if (details.courses) {
+				for (const courseId of details.courses) {
+					newCourses.push(courseId);
+				}
+			}
+		});
+		console.log('newCourses', newCourses);
+
+		const uniCourses = [];
+
+		newCourses.forEach((course) => {
+			if (!uniCourses.includes(course)) {
+				uniCourses.push(course);
+			}
+		});
+
+		console.log('uniCourses', uniCourses);
+
 		const newRequirement = {
-			dgId: degree[0]?.dgId!,
+			dgId: req[0]?.dgId!,
 			id: req[0]!.id,
 			type: 'CREDITS' as RequirementType,
-			credits: degree
-				.filter((req) => req.level === 1 && req.type === 'CREDITS')
-				.reduce((acc, req) => acc + req.credits, 0),
+			credits:
+				memo.reduce((acc, req) => acc + req.credits, 0) -
+				(newCourses.length - uniCourses.length) * 3,
 			details: {
-				courses: degree
-					.filter((req) => req.level === 1 && req.type === 'CREDITS')
-					.flatMap((req) => {
-						const details = req.details as { courses?: string[]; area?: string[] };
-						return details.courses ?? [];
-					})
+				courses: uniCourses
 			},
 			level: 1
 		};
@@ -147,6 +174,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		degree = degree.filter((req) => !ids.includes(req.id));
 		degree.push(newRequirement);
 	}
+	console.log(isMinor);
 
 	// This removes the level elective pool requirement if the program has 2 majors / 1 minor
 
@@ -156,7 +184,10 @@ export const GET: RequestHandler = async ({ params }) => {
 				req.level === 4 &&
 				req.type === 'POOL' &&
 				Object.entries(req.details as { courses?: string[]; area?: string[] }).length === 0
-		) && program.length > 1;
+		) &&
+		program.length > 1 &&
+		!isMinor &&
+		isDM;
 
 	if (removeElectivePool) {
 		const ids = degree
@@ -168,6 +199,60 @@ export const GET: RequestHandler = async ({ params }) => {
 			)
 			.flatMap((req) => req.id);
 		degree = degree.filter((req) => !ids.includes(req.id));
+	}
+
+	if (isMinor) {
+		const req = degree
+			.filter(
+				(req) =>
+					req.level === 4 &&
+					req.type === 'POOL' &&
+					Object.entries(req.details as { courses?: string[]; area?: string[] }).length === 0
+			)
+			.flatMap((req) => {
+				return { id: req.id, dgId: req.dgId };
+			});
+		const reqs = degree
+			.filter(
+				(req) =>
+					Object.entries(req.details as { courses?: string[]; area?: string[] }).length > 0 &&
+					req.level !== 1
+			)
+			.flatMap((req) => {
+				return { id: req.id, dgId: req.dgId, credits: req.credits };
+			});
+
+		console.log('jjj', reqs);
+
+		const reqCreds = [];
+		reqs.forEach((req) => {
+			if (!reqCreds.find((r) => r.id === req.id)) {
+				reqCreds.push({ id: req.id, credits: req.credits });
+			}
+		});
+
+		console.log(reqCreds.reduce((acc, req) => acc + req.credits, 0));
+
+		const newRequirement = {
+			dgId: req[0]?.dgId!,
+			id: req[0]!.id,
+			type: 'POOL' as RequirementType,
+			credits: 60 - reqCreds.reduce((acc, req) => acc + req.credits, 0),
+			details: {},
+			level: 4
+		};
+
+		const ids = degree
+			.filter(
+				(req) =>
+					req.level === 4 &&
+					req.type === 'POOL' &&
+					Object.entries(req.details as { courses?: string[]; area?: string[] }).length === 0
+			)
+			.flatMap((req) => req.id);
+
+		degree = degree.filter((req) => !ids.includes(req.id));
+		degree.push(newRequirement);
 	}
 
 	const CoursesDB = await db.selectFrom('Course').selectAll().execute();

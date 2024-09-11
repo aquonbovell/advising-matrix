@@ -246,7 +246,7 @@
 			},
 			{
 				"type": "CREDITS",
-				"level": 2,
+				"level": 3,
 				"credits": 3,
 				"data": { "courses": ["12823"] }
 			},

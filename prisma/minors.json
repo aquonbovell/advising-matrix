@@ -1,0 +1,42 @@
+[
+	{
+		"name": "Mathematics",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 12,
+				"data": { "courses": ["146", "383", "319", "382", "315"] }
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 15,
+				"data": { "courses": ["694", "674", "693", "8432", "13638"] }
+			}
+		]
+	},
+	{
+		"name": "Biochemistry",
+		"details": [
+			{
+				"type": "CREDITS",
+				"level": 1,
+				"credits": 18,
+				"data": { "courses": ["12966", "7720", "12994", "378", "12993", "12992"] }
+			},
+			{
+				"type": "CREDITS",
+				"level": 2,
+				"credits": 3,
+				"data": { "courses": ["12980"] }
+			},
+			{
+				"type": "POOL",
+				"level": 4,
+				"credits": 12,
+				"data": { "courses": ["12980", "12833", "12983", "12835", "13011", "12989", "12822"] }
+			}
+		]
+	}
+]

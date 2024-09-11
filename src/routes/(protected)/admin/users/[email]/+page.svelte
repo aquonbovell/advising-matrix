@@ -19,8 +19,11 @@
 		<p>Role: {data.person?.role}</p>
 
 		<Dialog.Root>
-			<Dialog.Trigger class="rounded-lg bg-red-500 p-2 font-medium text-white"
-				>Reset Password</Dialog.Trigger
+			<Dialog.Trigger>
+				<Button
+					class="inline-flex h-12 w-full items-center justify-center rounded-lg border bg-slate-50 px-[21px] text-[15px] font-semibold text-red-500 shadow-sm hover:bg-slate-100/95 active:scale-90 active:transition-all"
+					type="button">Reset Password</Button
+				></Dialog.Trigger
 			>
 			<Dialog.Content>
 				<Dialog.Header>
@@ -31,7 +34,12 @@
 				</Dialog.Header>
 				<Dialog.Footer>
 					<form method="post">
-						<Button type="submit" formaction="?/resetPassword">Reset Password</Button>
+						<Button
+							type="submit"
+							formaction="?/resetPassword"
+							class="inline-flex h-12 w-full items-center justify-center rounded-lg border bg-slate-50 px-[21px] text-[15px] font-semibold text-red-500 shadow-sm hover:bg-slate-100/95 active:scale-90 active:transition-all"
+							>Reset Password</Button
+						>
 					</form>
 				</Dialog.Footer>
 			</Dialog.Content>

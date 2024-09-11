@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Course } from '$lib/db/schema';
-	import { courseGrades, dialogRequirementID, selectedCourse } from './store';
+	import { courseGrades, dialogRequirementID, selectedCourse } from '$lib/stores/student';
 	import TrashIcon from '$lib/components/icons/TrashIcon.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as Select from '$lib/components/ui/select';
