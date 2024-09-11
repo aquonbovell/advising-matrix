@@ -12,7 +12,7 @@
 	import { gradePoints, type CourseWithPrerequisites, type Grade } from '$lib/types';
 	import type { Selected } from 'bits-ui';
 	import { arePrerequisitesMet, isCompleted, requiredCourses } from '$lib/utils';
-	import { Badge } from "$lib/components/ui/badge";
+	import { Badge } from '$lib/components/ui/badge';
 	export let course: CourseWithPrerequisites;
 	export let required: boolean = true;
 	export let requirementId: string;
@@ -107,8 +107,10 @@
 		{/if}
 		<Button
 			variant="outline"
-			hidden={$courseGrades[course.id] && isCompleted($courseGrades[course.id]?.grade) ||! arePrerequisitesMet(course)}
-			disabled={$courseGrades[course.id] && isCompleted($courseGrades[course.id]?.grade) || ! arePrerequisitesMet(course)}
+			hidden={($courseGrades[course.id] && isCompleted($courseGrades[course.id]?.grade)) ||
+				!arePrerequisitesMet(course)}
+			disabled={($courseGrades[course.id] && isCompleted($courseGrades[course.id]?.grade)) ||
+				!arePrerequisitesMet(course)}
 			on:click={() => {
 				$selectedCourse = { value: course };
 				$dialogRequirementID = requirementId;
@@ -122,7 +124,7 @@
 	<div class="flex items-center gap-3 pl-8">
 		<span class="text-red-500">Requirement</span>
 		{#each requiredCourses(course) as code}
-		<Badge variant="outline" class="text-red-500">{code}</Badge>
+			<Badge variant="outline" class="text-red-500">{code}</Badge>
 		{/each}
 	</div>
 {/if}

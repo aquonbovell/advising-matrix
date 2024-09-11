@@ -94,14 +94,16 @@ export function arePrerequisitesMet(course: CourseWithPrerequisites): boolean {
 	if (!course.prerequisites || course.prerequisites.length === 0) return true;
 	let courses: number[] = [];
 	completedCourse.subscribe((value) => (courses = value));
-	return course.prerequisites.every((prerequisite) => courses.includes(prerequisite.id))
+	return course.prerequisites.every((prerequisite) => courses.includes(prerequisite.id));
 }
 
 export function requiredCourses(course: CourseWithPrerequisites): string[] {
 	if (!course.prerequisites || course.prerequisites.length === 0) return [];
 	let courses: number[] = [];
 	completedCourse.subscribe((value) => (courses = value));
-	return course.prerequisites.filter((prerequisite) => !courses.includes(prerequisite.id)).map((prerequisite) => prerequisite.code);
+	return course.prerequisites
+		.filter((prerequisite) => !courses.includes(prerequisite.id))
+		.map((prerequisite) => prerequisite.code);
 }
 
 export function formatDate(date: Date) {

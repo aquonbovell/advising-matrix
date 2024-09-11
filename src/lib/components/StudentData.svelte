@@ -66,7 +66,7 @@
 		const coursesDB = degree.requirements
 			.flatMap((req) => req.details)
 			.map((course) => {
-				return { id: course.id, credits: course.credits, code:course.code };
+				return { id: course.id, credits: course.credits, code: course.code };
 			});
 
 		courses.set(coursesDB);
@@ -150,21 +150,12 @@
 {#await getDegree(major_id, minor_id)}
 	<p>loading...</p>
 {:then degree}
-
 	<div class="flex flex-col gap-6">
 		<Card.Root>
 			<Card.Header class="flex flex-row items-baseline justify-between">
 				<Card.Title>{`${degree.name}`}</Card.Title>
-				<Button
-					variant="outline"
-					type="button"
-					>Degree GPA: {$degreeGPA?? 0}</Button
-				>
-				<Button
-					variant="outline"
-					type="button"
-					>Overall GPA: {$gpa ?? 0}</Button
-				>
+				<Button variant="outline" type="button">Degree GPA: {$degreeGPA ?? 0}</Button>
+				<Button variant="outline" type="button">Overall GPA: {$gpa ?? 0}</Button>
 				<Button
 					variant="outline"
 					disabled={loading}
