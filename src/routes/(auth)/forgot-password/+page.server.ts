@@ -2,7 +2,7 @@ import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { zfd } from 'zod-form-data';
 import { z } from 'zod';
 import { db } from '$lib/db';
-import { hash } from '@node-rs/argon2';
+import { hashPassword } from '$lib/utils';
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -50,7 +50,7 @@ export const actions: Actions = {
 			return fail(400, { errors: { user: 'Invalid Credentials' } });
 		}
 
-		const hashedPassword = await hash(result.data.password);
+		const hashedPassword = await hashPassword(result.data.password);
 
 		try {
 			await db.transaction().execute(async (trx) => {

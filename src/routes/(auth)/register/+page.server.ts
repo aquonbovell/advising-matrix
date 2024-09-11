@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
 import { zfd } from 'zod-form-data';
 import { DEFAULT_PASSWORD } from '$env/static/private';
-import { hash, verify } from '@node-rs/argon2';
+import { hashPassword, verifyPassword } from '$lib/utils';
 
 export const load: PageServerLoad = async ({ url, locals }) => {
 	const token = url.searchParams.get('token');
@@ -55,9 +55,9 @@ export const actions: Actions = {
 
 		const { old_password, password, confirm_password } = result.data;
 
-		const old_password_hash = await hash(DEFAULT_PASSWORD);
+		const old_password_hash = await hashPassword(DEFAULT_PASSWORD);
 
-		const userPassword = await verify(old_password_hash, old_password);
+		const userPassword = await verifyPassword(old_password_hash, old_password);
 
 		if (!userPassword) {
 			return fail(400, { invalid: 'Invalid Current or New Password' });
@@ -67,7 +67,7 @@ export const actions: Actions = {
 			return fail(400, { invalid: 'New Passwords do not match' });
 		}
 
-		const hashedPassword = await hash(password);
+		const hashedPassword = await hashPassword(password);
 
 		const user = await db
 			.selectFrom('Student')

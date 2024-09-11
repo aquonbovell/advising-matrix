@@ -5,7 +5,7 @@ import { db } from '$lib/db';
 import { superValidate } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
 import { loginSchema } from './schema';
-import { hash, verify } from '@node-rs/argon2';
+import { verifyPassword } from '$lib/utils';
 
 const defaults = { email: '', password: '' };
 
@@ -46,7 +46,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const validPassword = await verify(user.password, password);
+		const validPassword = await verifyPassword(user.password, password);
 		if (!validPassword) {
 			form.errors._errors = ['Invalid email or password'];
 			return fail(400, { form });

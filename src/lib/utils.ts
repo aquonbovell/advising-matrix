@@ -4,7 +4,7 @@ import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { completedCourses } from './stores/student';
 import type { CourseWithPrerequisites, Grade } from './types';
-import { hash, verify } from '@node-rs/argon2';
+import bcrypt from 'bcrypt';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -134,4 +134,12 @@ export function isCompleted(grades: Grade[] | undefined): boolean {
 		}
 	}
 	return foundValidGrade ? true : false;
+}
+
+export async function hashPassword(password: string): Promise<string> {
+	return await bcrypt.hash(password, process.env.SECRET!)
+}
+
+export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+	return await bcrypt.compare(password, hash);
 }
