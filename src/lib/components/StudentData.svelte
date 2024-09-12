@@ -154,8 +154,7 @@
 		<Card.Root>
 			<Card.Header class="flex flex-row items-baseline justify-between">
 				<Card.Title>{`${degree.name}`}</Card.Title>
-				<Button variant="outline" type="button">Degree GPA: {$degreeGPA ?? 0}</Button>
-				<Button variant="outline" type="button">Overall GPA: {$gpa ?? 0}</Button>
+
 				<Button
 					variant="outline"
 					disabled={loading}
@@ -168,6 +167,10 @@
 				>
 			</Card.Header>
 			<Card.Content>
+				<div class="flex gap-3 pb-3">
+					<Button variant="outline" type="button">Degree GPA: {$degreeGPA ?? 0}</Button>
+					<Button variant="outline" type="button">Overall GPA: {$gpa ?? 0}</Button>
+				</div>
 				<div class="flex flex-col gap-3">
 					<div class="flex flex-wrap gap-3">
 						<Button variant="outline">All Courses</Button>
@@ -186,7 +189,7 @@
 			<Card.Root>
 				<Card.Header class="flex flex-row items-baseline justify-between">
 					<Card.Title
-						>{`Level ${req.level === 4 ? '2 / 3' : req.level} - ${req.credits} ${req.type === 'POOL' ? 'Elective' : 'Required'}`}</Card.Title
+						>{`Level ${req.level === 4 ? '2 / 3' : req.level} - ${req.credits} credits`}</Card.Title
 					>
 					{#if req.type === 'POOL'}
 						<Button
@@ -204,20 +207,22 @@
 						>
 					{/if}
 				</Card.Header>
-				<Card.Content>
-					{#each req.details.filter((course) => {
-						if (req.type === 'POOL') {
-							return $courseGrades[course.id] && $courseGrades[course.id]?.requirementId === req.id;
-						}
-						return true;
-					}) as course}
-						<Course
-							{course}
-							required={req.type === 'POOL' ? false : true}
-							requirementId={req.id}
-							addGradeDialog={openGradeDialog}
-						/>
-					{/each}
+				<Card.Content class="px-0">
+					<ul class="divide-y-2">
+						{#each req.details.filter((course) => {
+							if (req.type === 'POOL') {
+								return $courseGrades[course.id] && $courseGrades[course.id]?.requirementId === req.id;
+							}
+							return true;
+						}) as course}
+							<Course
+								{course}
+								required={req.type === 'POOL' ? false : true}
+								requirementId={req.id}
+								addGradeDialog={openGradeDialog}
+							/>
+						{/each}
+					</ul>
 				</Card.Content>
 			</Card.Root>
 		{/each}
@@ -225,12 +230,14 @@
 
 	<Dialog.Root bind:open={addCourseDialog}>
 		<Dialog.Trigger />
-		<Dialog.Content>
+		<Dialog.Content class="max-w-md">
 			<Dialog.Header>
-				<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
+				<Dialog.Title>Select a course</Dialog.Title>
 				<Dialog.Description>
-					This action cannot be undone. This will permanently delete your account and remove your
-					data from our servers.
+					<p class="pb-4">
+						Select a course from the list below to add. The course will be added to your list of
+						courses.
+					</p>
 					<div class="flex gap-3">
 						<Select.Root
 							required={true}
@@ -239,7 +246,7 @@
 								value && (selectedCourseId = value);
 							}}
 						>
-							<Select.Trigger class="w-[350px]">
+							<Select.Trigger class="w-[340px]">
 								<Select.Value placeholder="Select A course" />
 							</Select.Trigger>
 							<Select.Content class=" max-h-[18rem] overflow-y-auto">

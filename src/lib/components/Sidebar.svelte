@@ -78,7 +78,7 @@
 
 <aside
 	use:clickOutside
-	on:clickoutside={() => sidebarOpen.set(false)}
+	on:clickoutside={() => isMobile && sidebarOpen.set(false)}
 	class="sidebar fixed inset-y-0 left-0 z-50 h-screen w-64 transform border-r border-gray-200 bg-white shadow-lg transition-all duration-300 ease-in-out
 	{$sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
 	aria-label="Sidebar"
