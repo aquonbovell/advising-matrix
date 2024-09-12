@@ -1,9 +1,14 @@
 import { lucia } from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async () => {
+	return redirect(303, '/login');
+};
 
 export const actions: Actions = {
 	default: async ({ locals, cookies }) => {
+		console.log(locals.session, 'log');
 		if (!locals.session) {
 			return fail(401, { error: 'Unauthorized' });
 		}

@@ -4,4 +4,4 @@
 	import StudentPage from '$lib/components/StudentData.svelte';
 </script>
 
-<StudentPage {data} />
+<StudentPage data={{ program: data.program }} />

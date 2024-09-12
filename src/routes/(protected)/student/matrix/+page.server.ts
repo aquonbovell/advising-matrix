@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		.selectFrom('User')
 		.innerJoin('Student', 'User.id', 'Student.user_id')
 		.where('User.id', '=', userId)
-		.select(['major_id', 'minor_id'])
+		.select(['major_id', 'minor_id', 'Student.id'])
 		.executeTakeFirst();
 
 	if (!student) error(404, 'Student not found');

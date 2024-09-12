@@ -8,12 +8,7 @@ declare global {
 			session: import('lucia').Session | null;
 		}
 		// interface PageData {}
-		interface PageState {
-			student: {
-				completedcredits: number;
-				totalcredits: number;
-			};
-		}
+		// interface PageState {}
 		// interface Platform {}
 	}
 

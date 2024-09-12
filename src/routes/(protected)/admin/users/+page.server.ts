@@ -3,6 +3,7 @@ import { fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
+	// locals.user?.role === 'ADVISOR';
 	if (locals.user?.role !== 'ADMIN') {
 		return fail(401, { message: 'Unauthorized' });
 	}

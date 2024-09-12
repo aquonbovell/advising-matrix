@@ -29,7 +29,7 @@
 	import { notifications } from '$lib/stores/notifications';
 	import type { User } from 'lucia';
 
-	export let data: { user: User; program: { major_id: string; minor_id: string } };
+	export let data: { program: { major_id: string; minor_id: string; id: string } };
 
 	async function getDegree(majorId: string, minorId: string): Promise<Degree> {
 		const res = await fetch(`/api/degree/${majorId}x${minorId}`);
@@ -46,7 +46,7 @@
 	}
 
 	async function getCourses() {
-		const res = await fetch(`/api/student/${data.user?.id}/courses`);
+		const res = await fetch(`/api/student/${data.program.id}/courses`);
 		const content: {
 			grades: string[];
 			courseId: number | null;
@@ -119,7 +119,7 @@
 	}
 
 	async function saveGrades() {
-		const respone = await fetch(`/api/student/${data.user?.id}/grades`, {
+		const respone = await fetch(`/api/student/${data.program.id}/grades`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

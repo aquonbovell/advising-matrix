@@ -10,10 +10,6 @@ import { Argon2id } from 'oslo/password';
 const defaults = { email: '', password: '' };
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
-		throw redirect(302, `/${locals.user.role.toLowerCase()}`);
-	}
-
 	const loginForm = await superValidate(vine(loginSchema, { defaults }));
 
 	return { loginForm };

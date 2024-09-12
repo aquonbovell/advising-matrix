@@ -1,7 +1,5 @@
 import { lucia } from '$lib/server/auth';
-import type { Cookie } from 'lucia';
-import '$lib/validator/validator';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 const preloadFonts: Handle = async ({ event, resolve }) => {
@@ -14,30 +12,36 @@ const preloadFonts: Handle = async ({ event, resolve }) => {
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
+	console.log(sessionId);
+
+	console.log(event.route);
 
 	if (!sessionId) {
 		event.locals.user = null;
 		event.locals.session = null;
+
+		if (event.route.id?.includes('protected') || event.url.pathname === '/') {
+			throw redirect(303, '/login');
+		}
 		return resolve(event);
 	}
-
-	const { session, user } = await lucia.validateSession(sessionId);
-	let sessionCookie: Cookie | undefined;
-	if (session && session.fresh) {
-		sessionCookie = lucia.createSessionCookie(session.id);
+	if (sessionId) {
+		const { session, user } = await lucia.validateSession(sessionId);
+		console.log(session, user);
+		if (user || session) {
+			event.locals.user = user;
+			event.locals.session = session;
+			if (
+				(event.route.id?.includes('auth') && !event.route.id?.includes('logout')) ||
+				event.url.pathname === '/'
+			) {
+				throw redirect(303, `/${user.role.toLowerCase()}`);
+			} else {
+				return resolve(event);
+			}
+		}
+		return resolve(event);
 	}
-	if (!session) {
-		sessionCookie = lucia.createBlankSessionCookie();
-	}
-
-	if (sessionCookie) {
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
-	}
-	event.locals.user = user;
-	event.locals.session = session;
 
 	return resolve(event);
 };

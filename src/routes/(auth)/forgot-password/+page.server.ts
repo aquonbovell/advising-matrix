@@ -3,6 +3,7 @@ import { zfd } from 'zod-form-data';
 import { z } from 'zod';
 import { db } from '$lib/db';
 import { Argon2id } from 'oslo/password';
+
 export const actions: Actions = {
 	default: async ({ request }) => {
 		const formData = await request.formData();

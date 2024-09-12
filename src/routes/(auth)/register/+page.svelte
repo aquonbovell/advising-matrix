@@ -19,74 +19,74 @@
 		password !== '';
 </script>
 
-{#if data.token}
-	<div
-		class="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#fdfdfc] to-[#f9f9f8] font-sans"
-	>
-		<div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-lg">
-			<div class="mb-8 flex justify-center">
-				<img src={uwiBanner} alt="UWI Banner" class="h-auto max-w-full" />
-			</div>
-
-			<h1 class="mb-2 text-center text-2xl font-semibold text-gray-800">Complete Registration</h1>
-			<p class="mb-8 text-center text-sm text-gray-600">Set your account password</p>
-
-			{#if form?.invalid}
-				<div
-					class="mb-4 mt-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700"
-					role="alert"
-				>
-					<p>{form?.invalid}</p>
-				</div>
-			{/if}
-			{#if form?.invalid_token}
-				<div
-					class="mb-4 mt-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700"
-					role="alert"
-				>
-					<p>This token has expired.</p>
-				</div>
-			{/if}
-
-			<form method="POST" action="?/resetPassword" use:enhance class="space-y-4">
-				<input type="hidden" name="token" value={data.token} />
-				<Input
-					type="password"
-					id="old_password"
-					name="old_password"
-					label="Current Password"
-					placeholder="Enter your current password"
-					error={form?.errors?.old_password}
-				/>
-				<Input
-					type="password"
-					id="password"
-					name="password"
-					label="Password"
-					placeholder="Enter your password"
-					error={form?.errors?.password}
-					bind:value={password}
-				/>
-				<Input
-					type="password"
-					id="confirm_password"
-					name="confirm_password"
-					label="Confirm Password"
-					placeholder="Confirm your password"
-					error={form?.errors?.confirm_password}
-					bind:value={confirmPassword}
-				/>
-				<PasswordRequirements {password} {confirmPassword} />
-				<button
-					type="submit"
-					class="w-full rounded-md bg-indigo-600 px-4 py-3 text-sm font-medium text-white shadow-sm transition-colors duration-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-					disabled={!isPasswordValid}
-				>
-					Complete Registration
-				</button>
-			</form>
+<!-- {#if data.token} -->
+<div
+	class="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#fdfdfc] to-[#f9f9f8] font-sans"
+>
+	<div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-lg">
+		<div class="mb-8 flex justify-center">
+			<img src={uwiBanner} alt="UWI Banner" class="h-auto max-w-full" />
 		</div>
+
+		<h1 class="mb-2 text-center text-2xl font-semibold text-gray-800">Complete Registration</h1>
+		<p class="mb-8 text-center text-sm text-gray-600">Set your account password</p>
+
+		{#if form?.invalid}
+			<div
+				class="mb-4 mt-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700"
+				role="alert"
+			>
+				<p>{form?.invalid}</p>
+			</div>
+		{/if}
+		{#if form?.invalid_token}
+			<div
+				class="mb-4 mt-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700"
+				role="alert"
+			>
+				<p>This token has expired.</p>
+			</div>
+		{/if}
+
+		<form method="POST" action="?/resetPassword" use:enhance class="space-y-4">
+			<input type="hidden" name="token" value={data.token} />
+			<Input
+				type="password"
+				id="old_password"
+				name="old_password"
+				label="Current Password"
+				placeholder="Enter your current password"
+				error={form?.errors?.old_password}
+			/>
+			<Input
+				type="password"
+				id="password"
+				name="password"
+				label="Password"
+				placeholder="Enter your password"
+				error={form?.errors?.password}
+				bind:value={password}
+			/>
+			<Input
+				type="password"
+				id="confirm_password"
+				name="confirm_password"
+				label="Confirm Password"
+				placeholder="Confirm your password"
+				error={form?.errors?.confirm_password}
+				bind:value={confirmPassword}
+			/>
+			<PasswordRequirements {password} {confirmPassword} />
+			<button
+				type="submit"
+				class="w-full rounded-md bg-indigo-600 px-4 py-3 text-sm font-medium text-white shadow-sm transition-colors duration-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+				disabled={!isPasswordValid}
+			>
+				Complete Registration
+			</button>
+		</form>
 	</div>
-{:else}
+</div>
+<!-- {:else}
 	<RequestAccess />
-{/if}
+{/if} -->

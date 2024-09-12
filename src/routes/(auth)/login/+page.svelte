@@ -72,7 +72,7 @@
 	</form>
 
 	<p class="mt-6 text-center text-sm text-gray-600">
-		Need access? <a href="/request-access" class="font-medium text-indigo-600 hover:underline"
+		Need access? <a href="/access" class="font-medium text-indigo-600 hover:underline"
 			>Request here</a
 		>
 	</p>
