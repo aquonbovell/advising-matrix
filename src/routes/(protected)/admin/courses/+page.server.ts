@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ locals, setHeaders }) => {
 	const userId = locals.user?.id;
 
 	if (!userId) {
-		throw error(401, 'Unauthorized');
+		error(401, 'Unauthorized');
 	}
 
 	try {
@@ -23,6 +23,6 @@ export const load: PageServerLoad = async ({ locals, setHeaders }) => {
 		};
 	} catch (err) {
 		console.error(err);
-		throw error(500, 'An error occurred while fetching the advisor');
+		throw error(500, 'An error occurred while fetching the courses');
 	}
 };

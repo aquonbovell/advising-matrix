@@ -5,10 +5,19 @@
 	import { Button } from '$lib/components/ui/button';
 	import type { ActionData } from './$types';
 	import { enhance } from '$app/forms';
+	import { getToastState } from '$lib/components/toast/toast-state.svelte';
+
+	const toastState = getToastState();
 
 	export let data: PageData;
 
 	export let form: ActionData;
+
+	$: if (form?.success) {
+		toastState.add('Notice', 'Password Reset was successfull', 'success');
+	} else if (form?.message) {
+		toastState.add('Error', form.message, 'error');
+	}
 </script>
 
 <Card.Root>
@@ -44,11 +53,6 @@
 				</Dialog.Footer>
 			</Dialog.Content>
 		</Dialog.Root>
-		{#if form?.success}
-			<p class="text-green-500">Password Reset was successfull</p>
-		{:else if form?.message}
-			<p class="text-red-500">{form.message}</p>
-		{/if}
 	</Card.Content>
 	<Card.Footer>
 		<p>Faculty: Sci Tech</p>

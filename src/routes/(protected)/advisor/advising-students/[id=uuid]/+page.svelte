@@ -184,8 +184,7 @@
 				</Card>
 			</div>
 			<div class="pt-6">
-				<Button type="submit" class="bg-blue-600 hover:bg-blue-400 focus:bg-blue-300">Update</Button
-				>
+				<Button type="submit">Update</Button>
 			</div>
 		</form>
 	</div>

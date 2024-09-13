@@ -1,21 +1,21 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import Sidebar from '$lib/components/Sidebar.svelte';
-	import Toast from '$lib/components/Toast.svelte';
-	import { notifications } from '$lib/stores/notifications';
+	import Sidebar from '$lib/components/layout/desktop-sidebar.svelte';
+	import type { LayoutData } from './$types';
+	import MobileSidebar from '$lib/components/layout/mobile-sidebar.svelte';
+	import Toast from '$lib/components/toast/Toast.svelte';
+	import { setToastState } from '$lib/components/toast/toast-state.svelte';
+	export let data: LayoutData;
 
-	$: user = $page.data.user;
+	setToastState();
 </script>
 
-<slot name="sidebar">
-	<Sidebar {user} />
-</slot>
-
-<slot name="main">
-	<main class="ms-16 h-dvh overflow-y-auto bg-gray-50 p-6 md:ms-64">
-		<div class=" mx-auto h-full max-w-5xl">
-			<slot />
-			<Toast />
-		</div>
+<Toast />
+<div
+	class="grid min-h-screen w-full grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-cols-[200px_1fr] md:grid-rows-none lg:grid-cols-[230px_1fr]"
+>
+	<Sidebar user={{ name: data.user?.name, role: data.user?.role }} />
+	<MobileSidebar user={{ name: data.user?.name, role: data.user?.role }} />
+	<main class="max-h-screen overflow-y-auto p-5">
+		<slot />
 	</main>
-</slot>
+</div>

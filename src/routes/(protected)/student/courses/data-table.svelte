@@ -172,7 +172,7 @@
 								<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
 									<Table.Head {...attrs} class="[&:has([role=checkbox])]:pl-3">
 										{#if cell.id === 'credits'}
-											<div class="text-right">
+											<div class="text-center">
 												<Render of={cell.render()} />
 											</div>
 										{:else if cell.id === 'code' || cell.id === 'level'}

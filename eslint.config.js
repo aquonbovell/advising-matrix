@@ -42,5 +42,18 @@ export default ts.config(
 	{
 		rules: { 'prettier/prettier': 'warn' }
 	},
-	{ ignores: ['**/.svelte-kit', 'build/', 'dist/'] }
+	{ ignores: ['**/.svelte-kit', 'build/', 'dist/'] },
+	{
+		/* location of your components where you would like to apply these rules  */
+		files: ['**/components/ui/**/*.svelte'],
+		rules: {
+			'@typescript-eslint/no-unused-vars': [
+				'warn',
+				{
+					argsIgnorePattern: '^_',
+					varsIgnorePattern: '^$$(Props|Events|Slots|Generic)$'
+				}
+			]
+		}
+	}
 );

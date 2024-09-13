@@ -3,21 +3,17 @@ import type { PageServerLoad, Actions } from './$types';
 import { lucia } from '$lib/server/auth';
 import { db } from '$lib/db';
 import { superValidate } from 'sveltekit-superforms';
-import { vine } from 'sveltekit-superforms/adapters';
-import { loginSchema } from './schema';
+import { zod } from 'sveltekit-superforms/adapters';
+import { formSchema } from './schema';
 import { Argon2id } from 'oslo/password';
 
-const defaults = { email: '', password: '' };
-
-export const load: PageServerLoad = async ({ locals }) => {
-	const loginForm = await superValidate(vine(loginSchema, { defaults }));
-
-	return { loginForm };
+export const load: PageServerLoad = async () => {
+	return { form: await superValidate(zod(formSchema)) };
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies }) => {
-		const form = await superValidate(request, vine(loginSchema, { defaults }));
+	default: async (event) => {
+		const form = await superValidate(event, zod(formSchema));
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -29,16 +25,18 @@ export const actions: Actions = {
 		const user = await db
 			.selectFrom('User')
 			.where('email', '=', email)
-			.selectAll()
+			.select(['id', 'password', 'role'])
 			.executeTakeFirst();
 
 		if (!user) {
-			form.errors._errors = ['Invalid email or password'];
+			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or password'];
+			form.errors.password = [...(form.errors.password ?? ''), 'Invalid email or password'];
 			return fail(400, { form });
 		}
 
-		if (user.password == '') {
-			form.errors._errors = ['Invalid email or password'];
+		if (user.password === '') {
+			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or password'];
+			form.errors.password = [...(form.errors.password ?? ''), 'Invalid email or password'];
 			return fail(400, { form });
 		}
 
@@ -47,15 +45,18 @@ export const actions: Actions = {
 		const argon2id = new Argon2id({ secret });
 
 		const validPassword = await argon2id.verify(user.password, password);
+
 		if (!validPassword) {
-			form.errors._errors = ['Invalid email or password'];
+			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or password'];
+			form.errors.password = [...(form.errors.password ?? ''), 'Invalid email or password'];
 			return fail(400, { form });
 		}
 
 		const session = await lucia.createSession(user.id, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
+		console.log('login', session, user);
 
-		cookies.set(sessionCookie.name, sessionCookie.value, {
+		event.cookies.set(sessionCookie.name, sessionCookie.value, {
 			path: '.',
 			...sessionCookie.attributes
 		});

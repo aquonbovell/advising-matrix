@@ -3,7 +3,6 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
-	error(500, 'Not implemented');
 	const course = await db
 		.selectFrom('Course')
 		.where('code', '=', params.code)

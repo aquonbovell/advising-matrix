@@ -6,6 +6,4 @@
 	import DataTable from './data-table.svelte';
 </script>
 
-<div class="border">
-	<DataTable {data} />
-</div>
+<DataTable {data} />

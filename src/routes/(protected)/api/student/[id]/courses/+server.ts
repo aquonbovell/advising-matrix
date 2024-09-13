@@ -11,7 +11,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	const student = await db
 		.selectFrom('Student')
-		.where('user_id', '=', id)
+		.where('id', '=', id)
 		.select(['id'])
 		.executeTakeFirst();
 

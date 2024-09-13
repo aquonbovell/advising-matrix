@@ -1,10 +1,10 @@
 # advising-matrix
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Everything you need to build this Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
 ## Developing
 
-Once you've created/cloned a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Once you've created/cloned this project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
 npm run dev
@@ -15,7 +15,7 @@ npm run dev -- --open
 
 ## Building
 
-To create a production version of your app:
+To create a production version of this app:
 
 ```bash
 npm run build
@@ -32,7 +32,7 @@ You can preview the production build with `npm run preview`.
 To migrate the database use the following command:
 
 ```bash
-npm run db:push
+npx prisma migrate dev --name init
 ```
 
 This generates the database depending on what the variable `DATABASE_URL` is set to in the `.env` file.
@@ -42,7 +42,7 @@ This generates the database depending on what the variable `DATABASE_URL` is set
 To seed the database use the following command:
 
 ```bash
-npm run db:seed
+npx prisma db seed
 ```
 
-This will seed the database with, currently, 3 users for testing the authentication.
+This will seed the database with 3 default users for demo scenarios

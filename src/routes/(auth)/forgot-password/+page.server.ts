@@ -1,48 +1,42 @@
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
-import { zfd } from 'zod-form-data';
-import { z } from 'zod';
 import { db } from '$lib/db';
 import { Argon2id } from 'oslo/password';
+import type { PageServerLoad } from './$types';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { formSchema } from './schema';
+
+export const load: PageServerLoad = async () => {
+	return { form: await superValidate(zod(formSchema)) };
+};
 
 export const actions: Actions = {
-	default: async ({ request }) => {
-		const formData = await request.formData();
+	default: async (event) => {
+		const form = await superValidate(event, zod(formSchema));
 
-		const registerSchema = zfd.formData({
-			email: zfd.text(
-				z
-					.string()
-					.email()
-					.regex(
-						/(@cavehill\.uwi\.edu|@mycavehill\.uwi\.edu)$/i,
-						'Must be a UWI Cave Hill email address'
-					)
-			),
-			alternate_email: zfd.text(),
-			password: zfd.text(),
-			confirm_password: zfd.text()
-		});
-
-		const result = registerSchema.safeParse(formData);
-
-		if (!result.success) {
-			const data = {
-				data: Object.fromEntries(formData),
-				errors: result.error.flatten().fieldErrors
-			};
-			return fail(400, data);
+		if (!form.valid) {
+			return fail(400, { form });
 		}
+		const email = form.data.email;
+		const alternate_email = form.data.alternate_email;
+		const password = form.data.password;
+		const passwordConfirm = form.data.confirmPassword;
 
-		if (result.data.password !== result.data.confirm_password) {
+		if (password !== passwordConfirm) {
+			form.errors.password = [...(form.errors.password ?? ''), 'Passwords do not match'];
+			form.errors.confirmPassword = [
+				...(form.errors.confirmPassword ?? ''),
+				'Passwords do not match'
+			];
 			return fail(400, {
-				errors: { confirm_password: 'Passwords do not match', password: 'Passwords do not match' }
+				form
 			});
 		}
 
 		const user = await db
 			.selectFrom('User')
-			.where('email', '=', result.data.email)
-			.where('alternate_email', '=', result.data.alternate_email)
+			.where('email', '=', email)
+			.where('alternate_email', '=', alternate_email)
 			.select(['id'])
 			.executeTakeFirst();
 
@@ -54,7 +48,7 @@ export const actions: Actions = {
 		const secret = encoder.encode(process.env.SECRET!);
 		const argon2id = new Argon2id({ secret });
 
-		const hashedPassword = await argon2id.hash(result.data.password);
+		const hashedPassword = await argon2id.hash(password);
 
 		try {
 			await db.transaction().execute(async (trx) => {

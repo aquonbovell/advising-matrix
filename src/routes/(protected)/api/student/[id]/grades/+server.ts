@@ -10,7 +10,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 	}
 	const student = await db
 		.selectFrom('Student')
-		.where('user_id', '=', id)
+		.where('id', '=', id)
 		.select('id')
 		.executeTakeFirst();
 	if (!student) {
