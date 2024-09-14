@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { Access } from '$lib/components/auth/index';
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import type { ActionData, PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
 	import * as Button from '$lib/components/ui/button';
 	import RegisterForm from './register-form.svelte';
+	import AccessInfo from '$lib/components/auth/access-info.svelte';
 
 	export let data: PageData;
 </script>
@@ -26,5 +26,5 @@
 		</Card.Footer>
 	</Card.Root>
 {:else}
-	<Access />
+	<AccessInfo />
 {/if}
