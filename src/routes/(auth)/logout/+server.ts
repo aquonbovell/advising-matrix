@@ -3,7 +3,6 @@ import type { RequestHandler } from './$types';
 import { lucia } from '$lib/server/auth';
 
 export const POST: RequestHandler = async ({ locals, cookies }) => {
-	console.log(locals.session, 'log');
 	if (!locals.session) {
 		return error(401, 'Unauthorized');
 	}

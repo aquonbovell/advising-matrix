@@ -1,3 +1,2 @@
-import Access from './access.svelte';
-import Requirement from './requirement.svelte';
-export { Access, Requirement };
+export { default as Access } from './access.svelte';
+export { default as Requirement } from './requirement.svelte';

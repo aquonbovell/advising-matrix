@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Access from '$lib/components/auth/access.svelte';
+	import { Access } from '$lib/components/auth/index';
 </script>
 
 <Access />
