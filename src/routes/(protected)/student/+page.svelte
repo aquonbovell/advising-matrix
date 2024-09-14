@@ -4,6 +4,4 @@
 	export let data: PageData;
 </script>
 
-<!-- <AdvisingMatrix {major_id} {minor_id} {id} /> -->
-
 <StudentChart studentId={data.studentId} />

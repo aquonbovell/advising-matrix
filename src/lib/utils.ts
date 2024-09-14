@@ -143,3 +143,23 @@ export function isCompleted(grades: Grade[] | undefined): boolean {
 	}
 	return foundValidGrade ? true : false;
 }
+
+export function getName(major, minor, program): string {
+	if (minor.length > 0) {
+		return `${major[0].name} with ${minor[0].name}`;
+	}
+	if (minor.length === 0) {
+		const names: string[] = [];
+		major.forEach((m) => {
+			if (names.includes(m.name)) return;
+			names.push(m.name);
+		});
+		return names.join(' and ');
+	}
+	if (major.length > 1) {
+		console.log('major');
+
+		return `${major[0].name} and ${major[1].name}`;
+	}
+	return 'None';
+}

@@ -21,14 +21,16 @@ export const load: PageServerLoad = async () => {
 		.selectFrom('Minors')
 		.select(['Minors.id as id', 'name'])
 		.innerJoin('MinorRequirements', 'MinorRequirements.minorId', 'Minors.id')
-		.union(
-			db
-				.selectFrom('Majors')
-				.select(['Majors.id as id', 'name'])
-				.where('Majors.name', 'not like', '%Double%')
-		)
-		.groupBy('Minors.id')
+		// .union(
+		// 	db
+		// 		.selectFrom('Majors')
+		// 		.select(['Majors.id as id', 'name'])
+		// 		.where('Majors.name', 'not like', '%Double%')
+		// )
+		// .groupBy('Minors.id')
 		.execute();
+
+	console.log(minors);
 
 	return { form: await superValidate(zod(formSchema)), majors, minors };
 };

@@ -3,6 +3,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { Course, RequirementType } from '$lib/db/schema';
 import type { CourseWithPrerequisites, Degree, Requirement } from '$lib/types';
+import { getName } from '$lib/utils';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { majorId, minorId } = params;
@@ -36,10 +37,7 @@ export const GET: RequestHandler = async ({ params }) => {
 			.join('')
 			.concat(minor.map((m) => m.id).join('')),
 		requirements: [],
-		name: major
-			.map((m) => m.name)
-			.join('')
-			.concat(minor.map((m) => m.name).join(''))
+		name: getName(major, minor, program)
 	};
 
 	studentData.requirements = [...major, ...minor].map(
@@ -63,15 +61,16 @@ export const GET: RequestHandler = async ({ params }) => {
 			return requirement;
 		}
 	);
+
 	const levelOneRequirements = studentData.requirements.filter(
 		(req) => req.level === 1 && Object.keys(req.info).length > 0 && req.type === 'CREDITS'
 	);
 
-	const levelOne = levelOneRequirements.reduce((acc, req) => {
+	let levelOne = levelOneRequirements.reduce((acc, req) => {
 		return acc + req.credits;
 	}, 0);
 
-	if (levelOne >= 24) {
+	if (levelOne >= 12) {
 		const requirementPool = studentData.requirements.filter(
 			(req) => req.level === 1 && req.type === 'POOL' && Object.keys(req.info).length === 0
 		);
@@ -79,17 +78,50 @@ export const GET: RequestHandler = async ({ params }) => {
 		studentData.requirements = studentData.requirements.filter(
 			(req) => !poolReqId.includes(req.id)
 		);
-	}
 
-	if (levelOneRequirements.length > 1) {
-		const reqIds = levelOneRequirements.map((req) => req.id);
-		const totalCredits = levelOneRequirements.reduce((acc, req) => acc + req.credits, 0);
+		let totalCredits = 0;
+
 		const uniInfo: string[] = [];
 		levelOneRequirements.forEach((req) => {
 			const info = req.info as { courses?: string[]; area?: string[] };
 			if (info.courses) {
 				for (const courseId of info.courses) {
-					if (!uniInfo.includes(courseId)) uniInfo.push(courseId);
+					if (!uniInfo.includes(courseId)) {
+						uniInfo.push(courseId);
+						totalCredits += 3;
+					}
+				}
+			}
+		});
+
+		if (totalCredits < 24) {
+			const newRequirement = {
+				degreeId: requirementPool[0]!.degreeId,
+				id: requirementPool[0]!.id,
+				type: 'POOL',
+				credits: 24 - totalCredits,
+				info: {},
+				level: 1
+			} as Requirement;
+			studentData.requirements = [newRequirement, ...studentData.requirements];
+		}
+	}
+
+	if (levelOneRequirements.length > 1) {
+		const reqIds = levelOneRequirements.map((req) => req.id);
+		let totalCredits = 0;
+		console.log('Enter the level one requirements credits');
+		console.log(levelOneRequirements);
+
+		const uniInfo: string[] = [];
+		levelOneRequirements.forEach((req) => {
+			const info = req.info as { courses?: string[]; area?: string[] };
+			if (info.courses) {
+				for (const courseId of info.courses) {
+					if (!uniInfo.includes(courseId)) {
+						uniInfo.push(courseId);
+						totalCredits += 3;
+					}
 				}
 			}
 		});
@@ -108,7 +140,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	const requiredCredits = studentData.requirements
 		.filter((req) => {
-			return Object.values(req.info).length !== 0 && req.level !== 1;
+			return Object.entries(req.info).length !== 0 && req.level !== 1;
 		})
 		.reduce((acc, req) => {
 			return acc + req.credits;
@@ -122,16 +154,20 @@ export const GET: RequestHandler = async ({ params }) => {
 		studentData.requirements = studentData.requirements.filter(
 			(req) => !poolReqId.includes(req.id)
 		);
+		if (60 - requiredCredits > 0) {
+			const newRequirement = {
+				degreeId: requirementPool[0]!.degreeId,
+				id: requirementPool[0]!.id,
+				type: 'POOL',
+				credits: 60 - requiredCredits,
+				info: {},
+				level: 4
+			} as Requirement;
 
-		const newRequirement = {
-			degreeId: requirementPool[0]!.degreeId,
-			id: requirementPool[0]!.id,
-			type: 'POOL',
-			credits: 60 - requiredCredits,
-			info: {},
-			level: 4
-		} as Requirement;
-		studentData.requirements = [newRequirement, ...studentData.requirements];
+			// console.log(newRequirement);
+
+			studentData.requirements = [newRequirement, ...studentData.requirements];
+		}
 	}
 
 	const CoursesDB = await db.selectFrom('Course').selectAll().execute();
@@ -149,6 +185,8 @@ export const GET: RequestHandler = async ({ params }) => {
 			'Course.departmentId'
 		])
 		.execute();
+
+	// GET the level one credits
 
 	for (const requirement of studentData.requirements) {
 		const details = requirement.info as { courses?: string[]; area?: string[] };

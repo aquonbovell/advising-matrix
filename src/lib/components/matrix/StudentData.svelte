@@ -132,8 +132,6 @@
 {#await fetchDegree(major_id, minor_id)}
 	<p>Please wait loading...</p>
 {:then degree}
-	<pre>{JSON.stringify($courseGrades, null, 2)}</pre>
-
 	<div class="mx-auto flex max-w-3xl flex-col gap-6" transition:fly={{ y: 30, delay: 200 }}>
 		<!-- Degree Info -->
 		<Card.Root>

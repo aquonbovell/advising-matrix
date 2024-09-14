@@ -63,13 +63,13 @@ export const load = (async ({ locals, params }) => {
 		.selectFrom('Minors')
 		.select(['Minors.id as id', 'name'])
 		// .innerJoin('MinorRequirements', 'MinorRequirements.minorId', 'Minors.id')
-		.union(
-			db
-				.selectFrom('Majors')
-				.select(['Majors.id as id', 'name'])
-				.where('Majors.name', 'not like', '%Double%')
-		)
-		.groupBy('Minors.id')
+		// .union(
+		// 	db
+		// 		.selectFrom('Majors')
+		// 		.select(['Majors.id as id', 'name'])
+		// 		.where('Majors.name', 'not like', '%Double%')
+		// )
+		// .groupBy('Minors.id')
 		.execute();
 
 	return { majors, minors, form: await getForm(studentData) };
