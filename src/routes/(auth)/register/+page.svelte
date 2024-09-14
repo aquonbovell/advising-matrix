@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Access } from '$lib/components/auth';
+	import Access from '$lib/components/auth/access.svelte';
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import type { ActionData, PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
