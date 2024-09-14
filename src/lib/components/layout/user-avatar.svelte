@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { UserRole } from '$lib/db/schema';
-	import Avatar from '../ui/Avatar.svelte';
+	import Avatar from '$lib/components/ui/Avatar.svelte';
 
 	export let user: { name: string | undefined; role: UserRole | undefined };
 </script>

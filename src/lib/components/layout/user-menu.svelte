@@ -1,14 +1,11 @@
 <script lang="ts">
-	import uwiBanner from '$lib/assets/img/uwi_banner.png';
-	import Menu from 'lucide-svelte/icons/menu';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import Users from 'lucide-svelte/icons/users';
-	import Settings from 'lucide-svelte/icons/settings';
-	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import type { UserRole } from '$lib/db/schema';
+	import * as Button from '$lib/components/ui/button';
+	import Settings from 'lucide-svelte/icons/settings';
+	import Logout from 'lucide-svelte/icons/log-out';
+	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import * as Popover from '$lib/components/ui/popover';
-	import Avatar from '../ui/Avatar.svelte';
-	import { specificMenuItems } from './data';
+	import Avatar from '$lib/components/ui/Avatar.svelte';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 
@@ -34,22 +31,24 @@
 				/>
 			</Popover.Trigger>
 			<Popover.Content
-				class="w-fit translate-x-16 bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5"
+				class="w-fit -translate-x-4 -translate-y-3 bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5"
 			>
-				<Button variant="ghost">
+				<Button.Root variant="ghost">
 					<a href="##" class="flex"><Settings class="mr-3 h-5 w-5 text-gray-400" /> Settings </a>
-				</Button>
+				</Button.Root>
 				<form
 					method="POST"
 					action="/logout"
 					use:enhance={async () => {
-						return async ({ result, update }) => {
+						return async ({ update }) => {
 							await update();
 							invalidateAll();
 						};
 					}}
 				>
-					<Button type="submit" variant="ghost" class="w-full">Logout</Button>
+					<Button.Root type="submit" variant="ghost">
+						<Logout class="mr-3 h-5 w-5 text-gray-400" />Logout</Button.Root
+					>
 				</form>
 			</Popover.Content>
 		</Popover.Root>

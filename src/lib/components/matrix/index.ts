@@ -1,5 +1,3 @@
-import Course from './Course.svelte';
-import StudentData from './StudentData.svelte';
-import StudentChart from './StudentChart.svelte';
-
-export { Course, StudentData, StudentChart };
+export { default as Course } from './Course.svelte';
+export { default as StudentData } from './StudentData.svelte';
+export { default as StudentChart } from './StudentChart.svelte';

@@ -9,6 +9,8 @@ export const courseGrades = writable<Record<string, { requirementId: string; gra
 export const courses = writable<{ id: number; credits: number; code: string }[]>([]);
 
 export const requiredCourses = writable<{ id: number; credits: number }[]>([]);
+export const requirements = writable<string[]>([]);
+
 export const dialogRequirementID = writable<string | null>(null);
 
 export const selectedCourse = writable<Selected<Course | null>>(undefined);
@@ -16,24 +18,30 @@ export const selectedCourse = writable<Selected<Course | null>>(undefined);
 export const totalCredits = writable<number>(0);
 export const totalCourses = writable<number>(0);
 
-export const completedCredits = derived([courseGrades, courses], ([$courseGrades, $courses]) => {
-	return Object.entries($courseGrades).reduce((acc, courseGrade) => {
-		if (isCompleted(courseGrade[1].grade)) {
-			const course = $courses.find((course) => course.id === parseInt(courseGrade[0]));
+export const completedCredits = derived(
+	[courseGrades, courses, requirements],
+	([$courseGrades, $courses, $requirements]) => {
+		return Object.entries($courseGrades).reduce((acc, courseGrade) => {
+			if (
+				isCompleted(courseGrade[1].grade) &&
+				$requirements.includes(courseGrade[1].requirementId)
+			) {
+				const course = $courses.find((course) => course.id === parseInt(courseGrade[0]));
 
-			if (course) {
-				acc += course.credits;
-			} else {
-				return acc;
+				if (course) {
+					acc += course.credits;
+				} else {
+					return acc;
+				}
 			}
-		}
-		return acc;
-	}, 0);
-});
+			return acc;
+		}, 0);
+	}
+);
 
 export const completedCourse: Readable<number[]> = derived(
-	[courseGrades, courses],
-	([$courseGrades, $courses]) => {
+	[courseGrades, courses, requirements],
+	([$courseGrades, $courses, $requirements]) => {
 		let uniqueCourses: { id: number; credits: number }[] = [];
 
 		$courses.forEach((course) => {
@@ -45,7 +53,10 @@ export const completedCourse: Readable<number[]> = derived(
 			.map((course) => {
 				const grade = $courseGrades[course.id.toString()]?.grade;
 				let courseCompleted: number | undefined = undefined;
-				if (isCompleted(grade)) {
+				if (
+					isCompleted(grade) &&
+					$requirements.includes($courseGrades[course.id.toString()]?.requirementId!)
+				) {
 					courseCompleted = course.id!;
 				}
 				return courseCompleted;
@@ -54,14 +65,17 @@ export const completedCourse: Readable<number[]> = derived(
 	}
 );
 
-export const completedCourses = derived([courseGrades, courses], ([$courseGrades, $courses]) => {
-	return Object.values($courseGrades).reduce((acc, { grade }) => {
-		if (isCompleted(grade)) {
-			return acc + 1;
-		}
-		return acc;
-	}, 0);
-});
+export const completedCourses = derived(
+	[courseGrades, courses, requirements],
+	([$courseGrades, $courses, $requirements]) => {
+		return Object.entries($courseGrades).reduce((acc, course) => {
+			if (isCompleted(course[1].grade) && $requirements.includes(course[1].requirementId)) {
+				return acc + 1;
+			}
+			return acc;
+		}, 0);
+	}
+);
 
 export const pendingCourses = derived(
 	[courseGrades, requiredCourses],
@@ -92,44 +106,51 @@ export const outstandingCourses = derived(
 	}
 );
 
-export const gpa = derived([courseGrades, courses], ([$courseGrades, $courses]) => {
-	let totalGradePoints = 0;
-	let totalCredits = 0;
+export const gpa = derived(
+	[courseGrades, courses, requirements],
+	([$courseGrades, $courses, $requirement]) => {
+		let totalGradePoints = 0;
+		let totalCredits = 0;
 
-	const studentGrades = Object.entries($courseGrades);
+		const studentGrades = Object.entries($courseGrades);
 
-	for (const [courseId, { grade }] of studentGrades) {
-		if (isCompleted(grade)) {
-			totalGradePoints +=
-				getGradePoint(grade) *
-				($courses.find((course) => course.id === parseInt(courseId))?.credits || 0);
-			totalCredits += $courses.find((course) => course.id === parseInt(courseId))?.credits || 0;
+		for (const [courseId, { grade }] of studentGrades) {
+			if (isCompleted(grade) && $requirement.includes($courseGrades[courseId]?.requirementId!)) {
+				totalGradePoints +=
+					getGradePoint(grade) *
+					($courses.find((course) => course.id === parseInt(courseId))?.credits || 0);
+				totalCredits += $courses.find((course) => course.id === parseInt(courseId))?.credits || 0;
+			}
 		}
+		// Return GPA as total grade points divided by total credits
+		return totalCredits === 0 ? 0 : (totalGradePoints / totalCredits).toFixed(2);
 	}
-	// Return GPA as total grade points divided by total credits
-	return totalCredits === 0 ? 0 : (totalGradePoints / totalCredits).toFixed(2);
-});
+);
 
-export const degreeGPA = derived([courseGrades, courses], ([$courseGrades, $courses]) => {
-	let totalGradePoints = 0;
-	let totalCredits = 0;
+export const degreeGPA = derived(
+	[courseGrades, courses, requirements],
+	([$courseGrades, $courses, $requirements]) => {
+		let totalGradePoints = 0;
+		let totalCredits = 0;
 
-	const studentGrades = Object.entries($courseGrades);
+		const studentGrades = Object.entries($courseGrades);
 
-	for (const [courseId, { grade }] of studentGrades) {
-		if (
-			isCompleted(grade) &&
-			!($courses.find((course) => course.id === parseInt(courseId))?.code[4]! === '1')
-		) {
-			totalGradePoints +=
-				getGradePoint(grade) *
-				($courses.find((course) => course.id === parseInt(courseId))?.credits || 0);
-			totalCredits += $courses.find((course) => course.id === parseInt(courseId))?.credits || 0;
+		for (const [courseId, { grade }] of studentGrades) {
+			if (
+				isCompleted(grade) &&
+				!($courses.find((course) => course.id === parseInt(courseId))?.code[4]! === '1') &&
+				$requirements.includes($courseGrades[courseId]?.requirementId!)
+			) {
+				totalGradePoints +=
+					getGradePoint(grade) *
+					($courses.find((course) => course.id === parseInt(courseId))?.credits || 0);
+				totalCredits += $courses.find((course) => course.id === parseInt(courseId))?.credits || 0;
+			}
 		}
+		// Return GPA as total grade points divided by total credits
+		return totalCredits === 0 ? 0 : (totalGradePoints / totalCredits).toFixed(2);
 	}
-	// Return GPA as total grade points divided by total credits
-	return totalCredits === 0 ? 0 : (totalGradePoints / totalCredits).toFixed(2);
-});
+);
 
 function getGradePoint(grade: Grade[]): number {
 	// Assuming grade[0] contains the primary grade value (adjust as necessary)

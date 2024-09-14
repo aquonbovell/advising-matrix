@@ -2,6 +2,7 @@
 <script lang="ts">
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import * as Card from '$lib/components/ui/card';
+	import * as Button from '$lib/components/ui/button';
 </script>
 
 <Card.Root class="w-full max-w-md rounded-3xl bg-white p-4 shadow-lg">
@@ -24,8 +25,10 @@
 		</div>
 	</Card.Content>
 	<Card.Footer class=" mt-4 justify-around text-center text-sm text-gray-600">
-		<a href="/login" class="font-medium text-muted-foreground hover:underline"
-			>Already have an account? Sign in</a
+		<Button.Root
+			href="/login"
+			class="font-medium text-muted-foreground hover:underline"
+			variant="link">Already have an account? Sign in</Button.Root
 		>
 	</Card.Footer>
 </Card.Root>
