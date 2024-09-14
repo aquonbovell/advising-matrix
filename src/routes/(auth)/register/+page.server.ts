@@ -1,7 +1,6 @@
 import { fail, redirect, error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
-import { zfd } from 'zod-form-data';
 import { DEFAULT_PASSWORD } from '$env/static/private';
 import { Argon2id } from 'oslo/password';
 import { superValidate } from 'sveltekit-superforms';

@@ -1,22 +1,17 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
-	import { Button } from '$lib/components/ui/button';
+	import * as Button from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { formSchema, type FormSchema } from './schema.js';
 	import Requirement from '$lib/components/auth/requirement.svelte';
-	import { getToastState } from '$lib/components/toast/toast-state.svelte.js';
 
 	export let data: SuperValidated<Infer<FormSchema>>;
 
-	const toastState = getToastState();
-
 	const form = superForm(data, {
-		validators: zodClient(formSchema),
-		delayMs: 500,
-		timeoutMs: 8000
+		validators: zodClient(formSchema)
 	});
 	$: isPasswordValid =
 		$formData.password.length >= 8 &&
@@ -58,7 +53,5 @@
 	</Form.Field>
 	<Requirement password={$formData.password} confirmPassword={$formData.confirmPassword} />
 	<Form.Button class="mt-5 w-full" disabled={!isPasswordValid}>Continue</Form.Button>
-	<Button type="button" variant="outline" class="mt-5	w-full">
-		<a href="/login"> Sign In </a>
-	</Button>
+	<Button.Root variant="link" class="w-full" href="/login">Sign In</Button.Root>
 </form>

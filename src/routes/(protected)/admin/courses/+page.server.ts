@@ -23,6 +23,6 @@ export const load: PageServerLoad = async ({ locals, setHeaders }) => {
 		};
 	} catch (err) {
 		console.error(err);
-		throw error(500, 'An error occurred while fetching the courses');
+		error(500, 'An error occurred while fetching the courses');
 	}
 };

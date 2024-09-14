@@ -6,16 +6,11 @@
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { formSchema, type FormSchema } from './schema.js';
 	import Requirement from '$lib/components/auth/requirement.svelte';
-	import { getToastState } from '$lib/components/toast/toast-state.svelte.js';
 
 	export let data: SuperValidated<Infer<FormSchema>>;
 
-	const toastState = getToastState();
-
 	const form = superForm(data, {
-		validators: zodClient(formSchema),
-		delayMs: 500,
-		timeoutMs: 8000
+		validators: zodClient(formSchema)
 	});
 	$: isPasswordValid =
 		$formData.password.length >= 8 &&
@@ -23,10 +18,8 @@
 		$formData.password === $formData.passwordConfirm &&
 		$formData.password !== '';
 
-	const { form: formData, enhance, errors } = form;
+	const { form: formData, enhance } = form;
 </script>
-
-<pre>{JSON.stringify(form, null, 2)}</pre>
 
 <form method="POST" use:enhance>
 	<Form.Field {form} name="token">
@@ -45,14 +38,14 @@
 	</Form.Field>
 	<Form.Field {form} name="defaultPassword">
 		<Form.Control let:attrs>
-			<Form.Label>defaultPassword</Form.Label>
+			<Form.Label>Password</Form.Label>
 			<Input {...attrs} bind:value={$formData.defaultPassword} />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="password">
 		<Form.Control let:attrs>
-			<Form.Label>Password</Form.Label>
+			<Form.Label>New Password</Form.Label>
 			<Input {...attrs} bind:value={$formData.password} />
 		</Form.Control>
 		<Form.FieldErrors />

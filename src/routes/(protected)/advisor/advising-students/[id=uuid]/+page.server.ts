@@ -1,32 +1,32 @@
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail, json, redirect } from '@sveltejs/kit';
 import { db } from '$lib/db';
-import Vine from '@vinejs/vine';
 import { message, superValidate } from 'sveltekit-superforms';
-import { vine } from 'sveltekit-superforms/adapters';
+import { vine, zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
+import { formSchema } from './schema';
+import type { UserRole } from '$lib/db/schema';
+async function getForm(student: {
+	id: string;
+	major_id: string;
+	minor_id: string;
+	email: string;
+	name: string;
+	role: UserRole;
+	alternate_email: string;
+}) {
+	const form = await superValidate(zod(formSchema));
+	form.data = {
+		id: student.id,
+		email: student.email,
+		name: student.name,
+		majorId: student.major_id,
+		minorId: student.minor_id,
+		alternateEmail: student.alternate_email,
+		alternateEmailConfirm: ''
+	};
 
-const defaults = {
-	id: '',
-	email: '',
-	name: '',
-	majorId: '',
-	minorId: 'fb8cd353-fd2d-43c7-aa5f-856d8e087f16',
-	alternate_email: '',
-	alternate_email1: ''
-};
-
-const schema = Vine.object({
-	id: Vine.string().trim(),
-	email: Vine.string()
-		.trim()
-		.email()
-		.regex(/@mycavehill\.uwi\.edu$/),
-	alternate_email: Vine.string().trim().email(),
-	alternate_email1: Vine.string().trim().email(),
-	name: Vine.string().trim().minLength(3).maxLength(50),
-	majorId: Vine.string().trim().uuid(),
-	minorId: Vine.string().optional()
-});
+	return form;
+}
 
 export const load = (async ({ locals, params }) => {
 	const userId = locals.user?.id;
@@ -58,83 +58,101 @@ export const load = (async ({ locals, params }) => {
 		error(404, 'Student Not found');
 	}
 
-	const majors = await db.selectFrom('Majors').selectAll().execute();
-	const minors = await db.selectFrom('Minors').selectAll().execute();
+	const majors = await db.selectFrom('Majors').select(['Majors.id', 'Majors.name']).execute();
+	const minors = await db
+		.selectFrom('Minors')
+		.select(['Minors.id as id', 'name'])
+		// .innerJoin('MinorRequirements', 'MinorRequirements.minorId', 'Minors.id')
+		.union(
+			db
+				.selectFrom('Majors')
+				.select(['Majors.id as id', 'name'])
+				.where('Majors.name', 'not like', '%Double%')
+		)
+		.groupBy('Minors.id')
+		.execute();
 
-	const form = await superValidate(vine(schema, { defaults }));
-	form.data = {
-		alternate_email: studentData.alternate_email || '',
-		alternate_email1: '',
-		id: studentData.id,
-		majorId: studentData.major_id,
-		minorId: studentData.minor_id,
-		email: studentData.email,
-		name: studentData.name || ''
-	};
-
-	return { student: { ...studentData }, majors, minors, form };
+	return { majors, minors, form: await getForm(studentData) };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	save: async ({ request }) => {
-		const form = await superValidate(request, vine(schema, { defaults }));
+	default: async (event) => {
+		const userId = event.locals.user?.id;
 
-		if (form.errors.email) {
-			form.errors.email = [
-				'Please enter a valid email address with the domain @mycavehill.uwi.edu'
-			];
+		if (!userId) {
+			error(403, 'Unauthorized');
 		}
 
-		if (form.errors.name) {
-			form.errors.name = ['Please enter a valid name'];
+		if (event.locals.user?.role === 'STUDENT') {
+			error(403, 'Unauthorized');
 		}
-
-		if (form.errors.majorId) {
-			form.errors.majorId = ['Please select a valid major'];
-		}
-
-		if (form.errors.minorId) {
-			form.errors.minorId = ['Please select a valid minor'];
-		}
-
-		if (form.errors.alternate_email) {
-			form.errors.alternate_email = ['Please enter a valid email address'];
-		}
-
-		if (form.errors.alternate_email1) {
-			form.errors.alternate_email1 = ['Please enter a valid email address'];
-		}
-
-		if (form.data.alternate_email !== form.data.alternate_email1) {
-			form.errors.alternate_email1 = ['Alternate emails must match'];
-			// the emails need to be the same
-			form.errors.alternate_email = ['Alternate emails must match'];
-
-			return fail(400, { form });
-		}
-
+		const form = await superValidate(event, zod(formSchema));
+		console.log(form);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
-		const { email, name, majorId, minorId, id } = form.data;
+		const official_email = form.data.email;
+		const alternate_email = form.data.alternateEmail;
+		const alternate_email1 = form.data.alternateEmailConfirm;
+		const name = form.data.name;
+		const majorId = form.data.majorId;
+		const minorId = form.data.minorId;
+		const id = form.data.id;
+
+		if (alternate_email !== alternate_email1) {
+			form.errors.alternateEmail = [
+				...(form.errors.alternateEmail ?? ''),
+				'Alternate emails must match'
+			];
+			form.errors.alternateEmailConfirm = [
+				...(form.errors.alternateEmailConfirm ?? ''),
+				'Alternate emails must match'
+			];
+			return fail(400, { form });
+		}
+
+		const user = await db
+			.selectFrom('User')
+			.where('id', 'in', [id])
+			.select(['id', 'email'])
+			.executeTakeFirst();
+
+		if (!user) {
+			form.errors.email = [...(form.errors.email ?? ''), 'Student does not exist'];
+			form.errors.name = [...(form.errors.name ?? ''), 'Student does not exist'];
+			form.errors.majorId = [...(form.errors.majorId ?? ''), 'Student does not exist'];
+			form.errors.minorId = [...(form.errors.minorId ?? ''), 'Student does not exist'];
+			form.errors.alternateEmail = [
+				...(form.errors.alternateEmail ?? ''),
+				'Student does not exist'
+			];
+
+			return fail(400, { form });
+		}
+
+		if (user.email !== official_email) {
+			form.errors.email = [...(form.errors.email ?? ''), 'Cant change official email'];
+			return fail(400, { form });
+		}
 
 		try {
 			await db.transaction().execute(async (trx) => {
 				await trx
 					.updateTable('User')
 					.set({
-						email,
-						name,
+						email: official_email,
+						name: name,
+						alternate_email: alternate_email,
 						updated_at: new Date()
 					})
-					.where('id', '=', id)
+					.where('id', '=', user.id)
 					.execute();
 
 				await trx
 					.updateTable('Student')
 					.set({ major_id: majorId, minor_id: minorId, updated_at: new Date() })
-					.where('id', '=', id)
+					.where('user_id', '=', user.id)
 					.execute();
 			});
 			return message(form, 'Student updated successfully');

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import StudentData from '$lib/components/matrix/StudentData.svelte';
 	export let data: PageData;
-	import StudentPage from '$lib/components/StudentData.svelte';
 </script>
 
-<StudentPage data={{ program: data.program }} />
+<StudentData data={{ program: data.program }} />

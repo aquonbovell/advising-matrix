@@ -2,7 +2,6 @@ import { error, fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { db } from '$lib/db';
 import { generateTokenWithExpiration } from '$lib/server/auth';
-import Vine from '@vinejs/vine';
 import { message, superValidate, setError } from 'sveltekit-superforms';
 import { vine, zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from '../$types';
@@ -22,6 +21,12 @@ export const load: PageServerLoad = async () => {
 		.selectFrom('Minors')
 		.select(['Minors.id as id', 'name'])
 		.innerJoin('MinorRequirements', 'MinorRequirements.minorId', 'Minors.id')
+		.union(
+			db
+				.selectFrom('Majors')
+				.select(['Majors.id as id', 'name'])
+				.where('Majors.name', 'not like', '%Double%')
+		)
 		.groupBy('Minors.id')
 		.execute();
 

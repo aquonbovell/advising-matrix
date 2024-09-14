@@ -17,27 +17,26 @@
 </script>
 
 <ol
-	class="notifications absolute bottom-4 right-4
-  flex flex-col gap-3
+	class="absolute bottom-4 right-4
+  z-50 flex flex-col gap-3
 "
 >
 	{#each toasts as { title, id, message, type }, _ (id)}
-		<li animate:flip transition:fly={{ y: 30 }}>
+		<li animate:flip transition:fly={{ y: 30 }} class="bg-card">
 			<Alert.Root variant={`${type === 'error' ? 'destructive' : 'default'}`}>
 				<CircleAlert class="h-4 w-4" />
 				<Alert.Title>{title}</Alert.Title>
 				<Alert.Description
-					><div class="flex justify-between gap-2">
+					><div class="flex items-center justify-between gap-2">
 						<p class="max-w-[30ch]">{message}</p>
 						<Button
 							variant="outline"
-							class="text-inherit hover:text-inherit"
 							on:click={() => {
 								toastState.remove(id);
 							}}>OK</Button
 						>
 					</div>
-					<div class="text-sm opacity-90">{moment().format('dddd, MMMM D, YYYY [at] h:mm A')}</div>
+					<div class="text-sm">{moment().format('dddd, MMMM D, YYYY [at] h:mm A')}</div>
 				</Alert.Description>
 			</Alert.Root>
 		</li>

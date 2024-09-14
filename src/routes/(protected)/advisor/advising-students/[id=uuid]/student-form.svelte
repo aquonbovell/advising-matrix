@@ -1,12 +1,14 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import * as Select from '$lib/components/ui/select';
+	import * as Button from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
 	import { getToastState } from '$lib/components/toast/toast-state.svelte';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { formSchema, type FormSchema } from './schema.js';
-	import * as Select from '$lib/components/ui/select';
 	export let data: SuperValidated<Infer<FormSchema>>;
 	export let majors: { name: string; id: string }[];
 	export let minors: { name: string; id: string }[];
@@ -43,6 +45,13 @@
 </script>
 
 <form method="POST" use:enhance class="">
+	<Form.Field {form} name="id">
+		<Form.Control let:attrs>
+			<Form.Label hidden>Name</Form.Label>
+			<input hidden bind:value={$formData.id} name={attrs.name} />
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
 	<Form.Field {form} name="name">
 		<Form.Control let:attrs>
 			<Form.Label>Name</Form.Label>
@@ -50,17 +59,24 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Field {form} name="official_email">
+	<Form.Field {form} name="email">
 		<Form.Control let:attrs>
 			<Form.Label>Official Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.official_email} />
+			<Input {...attrs} bind:value={$formData.email} />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Field {form} name="alternate_email">
+	<Form.Field {form} name="alternateEmail">
 		<Form.Control let:attrs>
 			<Form.Label>Alternate Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.alternate_email} />
+			<Input {...attrs} bind:value={$formData.alternateEmail} />
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="alternateEmailConfirm">
+		<Form.Control let:attrs>
+			<Form.Label>Alternate Email confirmPassword</Form.Label>
+			<Input {...attrs} bind:value={$formData.alternateEmailConfirm} />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
@@ -115,5 +131,28 @@
 			<Form.FieldErrors />
 		</Form.Field>
 	</div>
-	<Form.Button class="mt-5 w-full">Invite</Form.Button>
+	<AlertDialog.Root>
+		<AlertDialog.Trigger><Button.Root class="mt-5 w-full">Update</Button.Root></AlertDialog.Trigger>
+		<AlertDialog.Content>
+			<AlertDialog.Header>
+				<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+				<AlertDialog.Description>
+					This action cannot be undone. This will permanently update the student's account on our
+					servers.
+				</AlertDialog.Description>
+			</AlertDialog.Header>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+				<AlertDialog.Action
+					on:click={async (event) => {
+						const userform = await form.validateForm();
+						if (userform.valid) {
+							form.submit();
+						}
+						console.log('clicked', event);
+					}}>Continue</AlertDialog.Action
+				>
+			</AlertDialog.Footer>
+		</AlertDialog.Content>
+	</AlertDialog.Root>
 </form>

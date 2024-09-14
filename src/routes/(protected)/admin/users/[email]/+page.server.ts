@@ -9,7 +9,7 @@ export const load = (async ({ params }) => {
 		const user = await db
 			.selectFrom('User')
 			.where('email', '=', params.email)
-			.select(['id', 'role', 'email', 'name'])
+			.select(['id', 'role', 'email', 'name', 'alternate_email'])
 			.executeTakeFirst();
 		if (!user) error(404, { message: 'User not found' });
 		return { person: user };
@@ -32,6 +32,7 @@ export const actions: Actions = {
 				.executeTakeFirst();
 
 			if (!user) return fail(404, { message: 'User not found' });
+
 			const encoder = new TextEncoder();
 			const secret = encoder.encode(process.env.SECRET!);
 			const argon2id = new Argon2id({ secret });

@@ -14,7 +14,8 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 	if (!student) return json({ error: 'Student not found' }, { status: 404 });
 	const degreeResponse = await fetch(`/api/degree/${student.major_id}x${student.minor_id}`);
 
-	const degree: Degree = await degreeResponse.json();
+	const content = await degreeResponse.json();
+	const degree: Degree = content.data;
 
 	const response = await fetch(`/api/student/${id}/grades`);
 

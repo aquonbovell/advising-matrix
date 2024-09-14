@@ -1,6 +1,18 @@
 import type { Course, RequirementType } from './db/schema';
 
-export type Grade = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'F1' | 'F2' | 'F3';
+export type Grade =
+	| 'A+'
+	| 'A'
+	| 'A-'
+	| 'B+'
+	| 'B'
+	| 'B-'
+	| 'C+'
+	| 'C'
+	| 'F1'
+	| 'F2'
+	| 'F3'
+	| undefined;
 
 export const gradePoints: Record<NonNullable<Grade>, number> = {
 	'A+': 4.3,
@@ -40,13 +52,17 @@ export type Requirement = {
 	id: string;
 	type: RequirementType;
 	credits: number;
+	info: {
+		courses?: string[];
+		area?: string[];
+	};
 	details: CourseWithPrerequisites[];
 	level: number;
 };
 
 export type Degree = {
 	name: string;
-	degreeIds: string[];
+	id: string;
 	requirements: Requirement[];
 };
 

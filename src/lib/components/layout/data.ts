@@ -7,7 +7,7 @@ const specificMenuItems: Record<UserRole, { label: string; href: string }[]> = {
 		{ label: 'Courses', href: '/student/courses' }
 	],
 	ADVISOR: [
-		{ label: 'Invite Student', href: 'advisor/advising-students/invite' },
+		{ label: 'Invite Student', href: '/	advisor/advising-students/invite' },
 		{ label: 'My Students', href: '/advisor/advising-students' },
 		{ label: 'All Students', href: '/advisor/students' },
 		{ label: 'Courses', href: '/advisor/courses' }

@@ -1,6 +1,6 @@
 <script lang="ts">
+	import StudentData from '$lib/components/matrix/StudentData.svelte';
 	import type { PageData } from './$types';
-	import StudentData from '$lib/components/StudentData.svelte';
 
 	export let data: PageData;
 </script>

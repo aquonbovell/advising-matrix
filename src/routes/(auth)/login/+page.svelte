@@ -16,5 +16,4 @@
 	<Card.Content>
 		<LoginForm data={data.form} />
 	</Card.Content>
-	<Card.Footer class=" mt-4 justify-around text-center text-sm text-gray-600"></Card.Footer>
 </Card.Root>

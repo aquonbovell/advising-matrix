@@ -171,11 +171,7 @@
 							{#each headerRow.cells as cell (cell.id)}
 								<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
 									<Table.Head {...attrs} class="[&:has([role=checkbox])]:pl-3">
-										{#if cell.id === 'credits'}
-											<div class="text-right">
-												<Render of={cell.render()} />
-											</div>
-										{:else if cell.id === 'code' || cell.id === 'level'}
+										{#if cell.id === 'code' || cell.id === 'level'}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
 												<ArrowUpDown class={'ml-2 h-4 w-4'} />

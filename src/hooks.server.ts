@@ -4,21 +4,15 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
-	console.log(sessionId);
-
-	console.log(event.route);
 
 	if (!sessionId) {
 		if (event.route.id?.includes('protected') || event.url.pathname === '/') {
-			console.log('redirecting');
-
 			throw redirect(303, '/login');
 		}
 		return resolve(event);
 	}
 
 	const { session, user } = await lucia.validateSession(sessionId);
-	console.log(session);
 
 	if (session && session.fresh) {
 		const sessionCookie = lucia.createSessionCookie(session.id);

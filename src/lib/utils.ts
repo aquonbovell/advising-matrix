@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
-import { completedCourse, completedCourses } from './stores/student';
+import { completedCourse } from './stores/student';
 import type { CourseWithPrerequisites, Grade } from './types';
 
 export function cn(...inputs: ClassValue[]) {

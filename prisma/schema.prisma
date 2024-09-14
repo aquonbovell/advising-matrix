@@ -44,14 +44,14 @@ model Student {
   id             String           @id @db.Uuid
   user_id        String           @db.Uuid
   major_id       String           @db.Uuid
-  minor_id       String           @unique @db.Uuid
+  minor_id       String           @db.Uuid
   invite_token   String?
   invite_expires DateTime?
   created_at     DateTime         @default(now())
   updated_at     DateTime
   Advisor        Advisor[]
-  Minors         Minors?          @relation(fields: [minor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Majors         Majors?          @relation(fields: [major_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Majors         Majors           @relation(fields: [major_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Minors         Minors           @relation(fields: [minor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   user           User             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   StudentCourses StudentCourses[]
 }
@@ -94,40 +94,37 @@ model Minors {
   id                String              @id @unique @db.Uuid
   name              String              @unique(map: "Minors_name_idx")
   MinorRequirements MinorRequirements[]
-  Student           Student?
+  Student           Student[]
 }
 
 model MajorRequirements {
-  id             String           @id @db.Uuid
-  majorId        String           @db.Uuid
-  type           RequirementType
-  credits        Int
-  details        Json
-  level          Int
-  Majors         Majors           @relation(fields: [majorId], references: [id], onUpdate: NoAction)
-
+  id      String          @id @db.Uuid
+  majorId String          @db.Uuid
+  type    RequirementType
+  credits Int
+  details Json
+  level   Int
+  Majors  Majors          @relation(fields: [majorId], references: [id], onUpdate: NoAction)
 }
 
 model MinorRequirements {
-  id             String           @id @db.Uuid
-  minorId        String           @db.Uuid
-  type           RequirementType
-  credits        Int
-  details        Json
-  level          Int
-  Minors         Minors           @relation(fields: [minorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
+  id      String          @id @db.Uuid
+  minorId String          @db.Uuid
+  type    RequirementType
+  credits Int
+  details Json
+  level   Int
+  Minors  Minors          @relation(fields: [minorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model StudentCourses {
-  id                String             @id @db.Uuid
-  grade             String
-  requirementId     String             @db.Uuid
-  studentId         String             @db.Uuid
-  courseId          Int
-  Course            Course?            @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  Student           Student?           @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id            String  @id @db.Uuid
+  grade         String
+  requirementId String  @db.Uuid
+  studentId     String  @db.Uuid
+  courseId      Int
+  Course        Course  @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Student       Student @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 enum UserRole {

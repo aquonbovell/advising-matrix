@@ -1,14 +1,13 @@
 <script lang="ts">
+	import { gradePoints, type Grade } from '$lib/types';
 	import * as Card from '$lib/components/ui/card';
-	import { gradePoints, type Degree, type Grade } from '$lib/types';
+	import * as Button from '$lib/components/ui/button/index.js';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import * as Select from '$lib/components/ui/select';
 	import { onMount } from 'svelte';
 	import Course from './Course.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as Dialog from '$lib/components/ui/dialog';
 	import Reload from 'svelte-radix/Reload.svelte';
-	let addCourseDialog = false;
-	let addGradeDialog = false;
-	import * as Select from '$lib/components/ui/select';
+
 	import {
 		completedCourses,
 		completedCredits,
@@ -26,42 +25,24 @@
 	} from '$lib/stores/student';
 	import type { Selected } from 'bits-ui';
 	import { Progress } from '$lib/components/ui/progress';
-	import { notifications } from '$lib/stores/notifications';
-	import type { User } from 'lucia';
+	import { fly } from 'svelte/transition';
+	import { getToastState } from '$lib/components/toast/toast-state.svelte';
+	import { fetchCourses, fetchDegree } from './utils';
 
 	export let data: { program: { major_id: string; minor_id: string; id: string } };
+	const toastState = getToastState();
 
-	async function getDegree(majorId: string, minorId: string): Promise<Degree> {
-		const res = await fetch(`/api/degree/${majorId}x${minorId}`);
-		let content: Degree = await res.json();
-		const sortedRequirements = content.requirements.sort((a, b) => {
-			const typeOrder = (a.type === 'CREDITS' ? -1 : 1) - (b.type === 'CREDITS' ? -1 : 1);
-			if (typeOrder !== 0) return typeOrder;
+	let addCourseDialog = false;
+	let addGradeDialog = false;
+	let loading = false;
+	let selectedCourseId: Selected<number>;
+	let selectedGrade: Selected<Grade>;
 
-			// If types are the same, sort by level in descending order
-			return a.level! - b.level!;
-		});
-		content.requirements = sortedRequirements;
-		return content;
-	}
-
-	async function getCourses() {
-		const res = await fetch(`/api/student/${data.program.id}/courses`);
-		const content: {
-			grades: string[];
-			courseId: number | null;
-			credits: number;
-			id: string;
-			requirementId: string | null;
-		}[] = await res.json();
-		return content;
-	}
-
-	$: ({ major_id, minor_id } = data.program);
+	$: ({ major_id, minor_id, id } = data.program);
 
 	onMount(async () => {
-		const degree = await getDegree(major_id, minor_id);
-		const studentCourses = await getCourses();
+		const degree = await fetchDegree(major_id, minor_id);
+		const studentCourses = await fetchCourses(id);
 
 		const coursesDB = degree.requirements
 			.flatMap((req) => req.details)
@@ -71,21 +52,24 @@
 
 		courses.set(coursesDB);
 
-		studentCourses.forEach((course) => {
-			const courseGrade = <Record<string, { requirementId: string; grade: Grade[] }>>{};
-			courseGrade[course.courseId!] = {
-				grade: course.grades as Grade[],
-				requirementId: course.requirementId!
-			};
-			courseGrades.update((grades) => ({ ...grades, ...courseGrade }));
-		});
-
 		const requiredCoursesDegree = degree.requirements
 			.filter((req) => req.type === 'CREDITS')
 			.flatMap((req) => req.details)
 			.map((course) => {
 				return { id: course.id, credits: course.credits };
 			});
+
+		requiredCourses.update((courses) => [...courses, ...requiredCoursesDegree]);
+
+		studentCourses.forEach((course) => {
+			if (!course.courseId) return;
+			const courseGrade = <Record<string, { requirementId: string; grade: Grade[] }>>{};
+			courseGrade[course.courseId] = {
+				grade: course.grades as Grade[],
+				requirementId: course.requirementId!
+			};
+			courseGrades.update((grades) => ({ ...grades, ...courseGrade }));
+		});
 
 		let totalDegreeCredits = 0;
 		let totalDegreeCourses = 0;
@@ -97,8 +81,6 @@
 
 		totalCredits.set(totalDegreeCredits);
 		totalCourses.set(totalDegreeCourses);
-
-		requiredCourses.update((courses) => [...courses, ...requiredCoursesDegree]);
 	});
 
 	function openGradeDialog() {
@@ -107,7 +89,12 @@
 
 	function addCourse(selectedCourseId: Selected<number>) {
 		const courseGrade = <Record<string, { requirementId: string; grade: Grade[] }>>{};
-		courseGrade[selectedCourseId.value!] = {
+
+		if (!selectedCourseId) {
+			toastState.add('Error', 'No course was selected', 'error');
+			return;
+		}
+		courseGrade[selectedCourseId.value] = {
 			grade: [] as Grade[],
 			requirementId: $dialogRequirementID!
 		};
@@ -118,8 +105,8 @@
 		};
 	}
 
-	async function saveGrades() {
-		const respone = await fetch(`/api/student/${data.program.id}/grades`, {
+	async function saveGrades(id: string) {
+		const respone = await fetch(`/api/student/${id}/grades`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -130,61 +117,55 @@
 		const content = await respone.json();
 
 		if (content.status === 200) {
-			alert('Grades saved successfully');
-			notifications.info('Grades saved successfully', 5000);
+			toastState.add('Notice', 'Grades saved successfully', 'success');
 		} else if (content.status === 404) {
-			alert(content.message);
-			notifications.info(content.message, 5000);
+			toastState.add('Error', content.message, 'error');
 		} else {
-			alert('An error occurred');
-			notifications.info('An error occurred. Try again later', 5000);
+			toastState.add('Error', 'An error occurred while saving grades', 'error');
 		}
 	}
-
-	let selectedCourseId: Selected<number>;
-	let selectedGrade: Selected<Grade>;
-
-	let loading = false;
 </script>
 
-{#await getDegree(major_id, minor_id)}
-	<p>loading...</p>
+{#await fetchDegree(major_id, minor_id)}
+	<p>Please wait loading...</p>
 {:then degree}
-	<div class="flex flex-col gap-6">
+	<div class="mx-auto flex max-w-3xl flex-col gap-6" transition:fly={{ y: 30, delay: 200 }}>
+		<!-- Degree Info -->
 		<Card.Root>
 			<Card.Header class="flex flex-row items-baseline justify-between">
-				<Card.Title>{`${degree.name}`}</Card.Title>
-
-				<Button
+				<Card.Title>{degree.name}</Card.Title>
+				<Button.Root
 					variant="outline"
 					disabled={loading}
 					on:click={async () => {
 						loading = true;
-						await saveGrades();
+						await saveGrades(data.program.id);
 						loading = false;
 					}}
-					>{#if loading}<Reload class="mr-2 h-4 w-4 animate-spin" />{/if}Save Changes</Button
+					>{#if loading}<Reload class="mr-2 h-4 w-4 animate-spin" />{/if}Save Changes</Button.Root
 				>
 			</Card.Header>
 			<Card.Content>
-				<div class="flex gap-3 pb-3">
-					<Button variant="outline" type="button">Degree GPA: {$degreeGPA ?? 0}</Button>
-					<Button variant="outline" type="button">Overall GPA: {$gpa ?? 0}</Button>
+				<div class="flex gap-3 pb-4">
+					<Button.Root variant="ghost" type="button">Degree GPA: {$degreeGPA}</Button.Root>
+					<Button.Root variant="ghost" type="button">Overall GPA: {$gpa}</Button.Root>
 				</div>
-				<div class="flex flex-col gap-3">
+				<!-- Courses Statistics -->
+				<!-- <div class="flex flex-col gap-3">
 					<div class="flex flex-wrap gap-3">
-						<Button variant="outline">All Courses</Button>
-						<Button variant="outline">Completed Courses ({$completedCourses})</Button>
-						<Button variant="outline">Pending Courses ({$pendingCourses})</Button>
-						<Button variant="outline">Outstanding Courses ({$outstandingCourses})</Button>
+						<Button.Root variant="outline">All Courses</Button.Root>
+						<Button.Root variant="outline">Completed Courses ({$completedCourses})</Button.Root>
+						<Button.Root variant="outline">Pending Courses ({$pendingCourses})</Button.Root>
+						<Button.Root variant="outline">Outstanding Courses ({$outstandingCourses})</Button.Root> 
 					</div>
-					<div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-						<Progress value={$completedCredits} max={$totalCredits} />
-						<p class="block w-fit">{$completedCredits} / {$totalCredits} Credits</p>
-					</div>
+				</div>  -->
+				<div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+					<Progress value={$completedCredits} max={$totalCredits} class="h-3" />
+					<p class="w-fit">{$completedCredits} / {$totalCredits} Credits</p>
 				</div>
 			</Card.Content>
 		</Card.Root>
+		<!-- Degree Requirements -->
 		{#each degree.requirements as req}
 			<Card.Root>
 				<Card.Header class="flex flex-row items-baseline justify-between">
@@ -192,7 +173,7 @@
 						>{`Level ${req.level === 4 ? '2 / 3' : req.level} - ${req.credits} credits`}</Card.Title
 					>
 					{#if req.type === 'POOL'}
-						<Button
+						<Button.Root
 							variant="outline"
 							on:click={() => {
 								$dialogRequirementID = req.id;
@@ -203,7 +184,7 @@
 									(course) =>
 										$courseGrades[course.id] && $courseGrades[course.id]?.requirementId === req.id
 								)
-								.reduce((acc, c) => acc + c.credits, 0) >= req.credits}>Add A Course</Button
+								.reduce((acc, c) => acc + c.credits, 0) >= req.credits}>Add A Course</Button.Root
 						>
 					{/if}
 				</Card.Header>
@@ -228,9 +209,15 @@
 		{/each}
 	</div>
 
-	<Dialog.Root bind:open={addCourseDialog}>
-		<Dialog.Trigger />
-		<Dialog.Content class="max-w-md">
+	<Dialog.Root
+		bind:open={addCourseDialog}
+		onOpenChange={(open) => {
+			if (!open) {
+				selectedCourseId = { value: 0, label: '' };
+			}
+		}}
+	>
+		<Dialog.Content class="max-w-min">
 			<Dialog.Header>
 				<Dialog.Title>Select a course</Dialog.Title>
 				<Dialog.Description>
@@ -249,7 +236,7 @@
 							<Select.Trigger class="w-[340px]">
 								<Select.Value placeholder="Select A course" />
 							</Select.Trigger>
-							<Select.Content class=" max-h-[18rem] overflow-y-auto">
+							<Select.Content class=" max-h-60 overflow-y-auto">
 								{@const index = degree.requirements.findIndex((r) => r.id === $dialogRequirementID)}
 								{@const requirement = degree.requirements[index]}
 								{#if requirement}
@@ -267,13 +254,7 @@
 							on:click={() => {
 								addCourseDialog = false;
 								addCourse(selectedCourseId);
-								selectedCourseId = {
-									value: 0,
-									label: ''
-								};
-							}}
-							class="active:scale-98 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-							>Add Course</Dialog.Close
+							}}><Button.Root>Add Course</Button.Root></Dialog.Close
 						>
 					</div>
 				</Dialog.Description>
@@ -281,9 +262,15 @@
 		</Dialog.Content>
 	</Dialog.Root>
 
-	<Dialog.Root bind:open={addGradeDialog}>
-		<Dialog.Trigger />
-		<Dialog.Content>
+	<Dialog.Root
+		bind:open={addGradeDialog}
+		onOpenChange={(open) => {
+			if (!open) {
+				selectedGrade = { value: undefined, label: '' };
+			}
+		}}
+	>
+		<Dialog.Content class="max-w-min">
 			<Dialog.Header>
 				<Dialog.Title>{$selectedCourse.value?.code}</Dialog.Title>
 				<Dialog.Description>
@@ -296,10 +283,10 @@
 								value && (selectedGrade = value);
 							}}
 						>
-							<Select.Trigger class="w-[350px]">
+							<Select.Trigger class="w-[200px]">
 								<Select.Value placeholder="Enter Grade" />
 							</Select.Trigger>
-							<Select.Content class=" max-h-[18rem] overflow-y-auto">
+							<Select.Content class=" max-h-60 overflow-y-auto">
 								{#each Object.keys(gradePoints) as grade}
 									<Select.Item value={grade}>{grade}</Select.Item>
 								{/each}
@@ -309,6 +296,11 @@
 							on:click={() => {
 								if ($selectedCourse.value?.id === undefined) return;
 								const course = $courseGrades[$selectedCourse.value?.id];
+
+								if (!selectedGrade) {
+									toastState.add('Error', 'No grade was selected', 'error');
+									return;
+								}
 
 								if (course && $courseGrades[$selectedCourse.value?.id]) {
 									const grades = $courseGrades[$selectedCourse.value?.id]?.grade ?? [];
@@ -323,10 +315,10 @@
 									};
 								}
 
+								selectedGrade = { value: undefined, label: '' };
+
 								addGradeDialog = false;
-							}}
-							class="active:scale-98 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-							>Add Grade</Dialog.Close
+							}}><Button.Root>Add Grade</Button.Root></Dialog.Close
 						>
 					</div>
 				</Dialog.Description>

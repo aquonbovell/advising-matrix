@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	const student = await db
 		.selectFrom('Student')
 		.select(['major_id', 'minor_id', 'id'])
-		.where('id', '=', params.id!)
+		.where('id', '=', params.id)
 		.executeTakeFirst();
 
 	if (!student) error(404, 'Student not found');
