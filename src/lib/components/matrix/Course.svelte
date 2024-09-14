@@ -64,7 +64,7 @@
 						}}><TrashIcon class={'w-4'} /></Button.Root
 					>
 				{/if}
-				<div class="flex gap-2">
+				<div class="flex flex-wrap gap-2">
 					<Badge variant="secondary">Level: {course.level}</Badge>
 					<Badge class=" bg-green-200 px-2 text-green-600	hover:bg-green-200" variant="secondary"
 						>{course.credits} credits</Badge

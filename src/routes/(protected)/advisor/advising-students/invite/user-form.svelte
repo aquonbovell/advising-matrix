@@ -65,7 +65,7 @@
 		<Form.FieldErrors />
 	</Form.Field>
 
-	<div class="flex justify-between gap-5">
+	<div class="flex flex-col justify-between gap-5 md:flex-row">
 		<Form.Field {form} name="majorId">
 			<Form.Control let:attrs>
 				<Form.Label>Major</Form.Label>
