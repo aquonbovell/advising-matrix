@@ -15,12 +15,12 @@ const postgresql = new Pool({
 	// password: PGPASSWORD,
 	// database: PGDATABASE,
 	// port: parseInt(PGPORT as string),
-	max: 200,
-	idleTimeoutMillis: 30000,
+	// max: 200,
+	// idleTimeoutMillis: 30000,
 	ssl: {
 		rejectUnauthorized: true
-	},
-	connectionTimeoutMillis: 2000
+	}
+	// connectionTimeoutMillis: 2000
 });
 
 export { postgresql };

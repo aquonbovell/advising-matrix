@@ -121,7 +121,22 @@ export const actions: Actions = {
 					.execute();
 			});
 
-			return message(form, 'Invitation sent successfully!');
+			const emailform = new FormData();
+
+			emailform.append('email', official_email);
+			emailform.append('alternate', alternate_email);
+			emailform.append('token', token);
+			emailform.append('url', event.url.hostname);
+
+			const res = await event.fetch('/api/sendemail', {
+				method: 'POST',
+				body: emailform
+			});
+
+			const data = await res.json();
+
+			if (data.status === 200) return message(form, 'Invitation sent successfully!');
+			return message(form, data.message);
 		} catch (err) {
 			console.error(err);
 			error(500, { message: 'Failed to invite student' });

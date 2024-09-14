@@ -5,6 +5,9 @@
 	import { page } from '$app/stores';
 	import { notifications } from '$lib/stores/notifications';
 	import { selectedStudent } from '$lib/stores/advisor';
+	import { getToastState } from '$lib/components/toast/toast-state.svelte';
+
+	const toastState = getToastState();
 
 	export let code: string;
 	export let token: { value: string | null; expires: Date | null };
@@ -33,6 +36,34 @@
 							`${window.location.origin}/register?token=${token.value}`
 						);
 					}}>Copy Student Token</DropdownMenu.Item
+				>
+			{/if}
+			{#if token.value}
+				<DropdownMenu.Item
+					on:click={async () => {
+						if (token.value === null) return '';
+						if (typeof window === 'undefined') return '';
+						navigator.clipboard.writeText(
+							`${window.location.origin}/register?token=${token.value}`
+						);
+
+						const form = new FormData();
+
+						form.append('token', token.value);
+
+						const res = await fetch('/api/senduseremail', {
+							method: 'POST',
+							body: form
+						});
+
+						const data = await res.json();
+
+						if (data.status === 200) {
+							toastState.add('Notice', 'Invitation sent successfully!', 'success');
+						} else {
+							toastState.add('Notice', data.message, 'error');
+						}
+					}}>Send Invite</DropdownMenu.Item
 				>
 			{/if}
 			{#if token.expires && new Date(token.expires) < new Date()}
