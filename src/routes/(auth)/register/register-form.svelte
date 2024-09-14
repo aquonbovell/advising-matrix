@@ -32,28 +32,33 @@
 	<Form.Field {form} name="email">
 		<Form.Control let:attrs>
 			<Form.Label>Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.email} placeholder="m@mycavehill.uwi.edu" />
+			<Input
+				{...attrs}
+				bind:value={$formData.email}
+				placeholder="m@mycavehill.uwi.edu"
+				type="email"
+			/>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="defaultPassword">
 		<Form.Control let:attrs>
 			<Form.Label>Password</Form.Label>
-			<Input {...attrs} bind:value={$formData.defaultPassword} />
+			<Input {...attrs} bind:value={$formData.defaultPassword} type="password" />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="password">
 		<Form.Control let:attrs>
 			<Form.Label>New Password</Form.Label>
-			<Input {...attrs} bind:value={$formData.password} />
+			<Input {...attrs} bind:value={$formData.password} type="password" />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="passwordConfirm">
 		<Form.Control let:attrs>
 			<Form.Label>Confirm Password</Form.Label>
-			<Input {...attrs} bind:value={$formData.passwordConfirm} />
+			<Input {...attrs} bind:value={$formData.passwordConfirm} type="password" />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>

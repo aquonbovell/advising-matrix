@@ -118,7 +118,7 @@
 						plugins: {
 							title: {
 								display: true,
-								text: 'Level 4 Credits'
+								text: 'Electives'
 							}
 						}
 					},
@@ -126,10 +126,10 @@
 						labels: ['Completed credits', 'Remaining Credits'],
 						datasets: [
 							{
-								label: 'Level 4',
+								label: 'Electives',
 								data: [
-									data.overview.levelFour.completed,
-									data.overview.levelFour.total - data.overview.levelFour.completed
+									data.overview.electives.completed,
+									data.overview.electives.total - data.overview.electives.completed
 								],
 								backgroundColor: ['rgb(35, 206, 107)', 'rgb(54, 162, 235)'],
 								hoverOffset: 3
@@ -142,7 +142,7 @@
 	});
 </script>
 
-<div class="grid grid-cols-2">
+<div class="mx-auto grid max-w-max grid-cols-2">
 	{#if Object.entries(data).length === 0}
 		<p>Loading...</p>
 	{/if}

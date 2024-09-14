@@ -6,6 +6,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { formSchema } from './schema';
 import { Argon2id } from 'oslo/password';
+import { DEFAULT_PASSWORD } from '$env/static/private';
 
 export const load: PageServerLoad = async () => {
 	return { form: await superValidate(zod(formSchema)) };
@@ -49,6 +50,15 @@ export const actions: Actions = {
 		if (!validPassword) {
 			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or password'];
 			form.errors.password = [...(form.errors.password ?? ''), 'Invalid email or password'];
+			return fail(400, { form });
+		}
+
+		const defaultHash = await argon2id.hash(DEFAULT_PASSWORD);
+		const isDefaultPassword = await argon2id.verify(user.password, defaultHash);
+
+		if (isDefaultPassword) {
+			form.errors.email = [...(form.errors.email ?? ''), 'Please change your password'];
+			form.errors.password = [...(form.errors.password ?? ''), 'Please change your password'];
 			return fail(400, { form });
 		}
 

@@ -135,27 +135,27 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			completed: studentCoursesThree
 		};
 
-		const levelFour = degree.requirements.filter((req) => req.level === 4);
+		const electives = degree.requirements.filter((req) => req.level === 4);
 
-		const totalFour = degree.requirements
+		const totalElectives = degree.requirements
 			.filter((req) => req.level === 4)
 			.reduce((acc, req) => {
 				return acc + req.credits;
 			}, 0);
 
-		const levelFourCourses = levelFour.map((req) => req.details).flat();
+		const electivesCourses = electives.map((req) => req.details).flat();
 
-		const levelFourCourseIds: {
+		const electivesCourseIds: {
 			id: number;
 			credits: number;
 		}[] = [];
-		levelFourCourses.forEach((course) => {
-			if (!levelFourCourseIds.find((c) => c.id === course.id)) {
-				levelFourCourseIds.push({ id: course.id, credits: course.credits });
+		electivesCourses.forEach((course) => {
+			if (!electivesCourseIds.find((c) => c.id === course.id)) {
+				electivesCourseIds.push({ id: course.id, credits: course.credits });
 			}
 		});
 
-		const studentCoursesFour = levelFourCourseIds.reduce((acc, course) => {
+		const studentCoursesElectives = electivesCourseIds.reduce((acc, course) => {
 			const studentCourse = grades.grades[course.id];
 			if (!studentCourse) return acc;
 			if (isCompleted(studentCourse.grade)) {
@@ -164,9 +164,9 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 			return acc;
 		}, 0);
 
-		overview.levelFour = {
-			total: totalFour,
-			completed: studentCoursesFour
+		overview.electives = {
+			total: totalElectives,
+			completed: studentCoursesElectives
 		};
 	}
 

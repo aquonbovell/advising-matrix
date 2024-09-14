@@ -4,4 +4,5 @@
 	export let data: PageData;
 </script>
 
+<h1>Dashboard</h1>
 <StudentChart studentId={data.studentId} />

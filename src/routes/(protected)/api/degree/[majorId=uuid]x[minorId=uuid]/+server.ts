@@ -255,6 +255,10 @@ export const GET: RequestHandler = async ({ params }) => {
 		}
 	}
 
+	const sortedRequirements = studentData.requirements.sort((a, b) => a.level - b.level);
+
+	studentData.requirements = sortedRequirements;
+
 	return json({
 		majorId,
 		minorId,

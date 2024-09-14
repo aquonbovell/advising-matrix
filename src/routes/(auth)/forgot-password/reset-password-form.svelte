@@ -26,28 +26,38 @@
 	<Form.Field {form} name="email">
 		<Form.Control let:attrs>
 			<Form.Label>Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.email} placeholder="m@mycavehill.uwi.edu" />
+			<Input
+				{...attrs}
+				bind:value={$formData.email}
+				placeholder="m@mycavehill.uwi.edu"
+				type="email"
+			/>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="alternate_email">
 		<Form.Control let:attrs>
 			<Form.Label>Alternate Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.alternate_email} placeholder="m@outlook.com" />
+			<Input
+				{...attrs}
+				bind:value={$formData.alternate_email}
+				placeholder="m@outlook.com"
+				type="email"
+			/>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="password">
 		<Form.Control let:attrs>
 			<Form.Label>Password</Form.Label>
-			<Input {...attrs} bind:value={$formData.password} />
+			<Input {...attrs} bind:value={$formData.password} type="password" />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="confirmPassword">
 		<Form.Control let:attrs>
 			<Form.Label>Confirm Password</Form.Label>
-			<Input {...attrs} bind:value={$formData.confirmPassword} />
+			<Input {...attrs} bind:value={$formData.confirmPassword} type="password" />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
