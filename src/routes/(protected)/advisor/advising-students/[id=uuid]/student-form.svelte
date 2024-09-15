@@ -75,7 +75,7 @@
 	</Form.Field>
 	<Form.Field {form} name="alternateEmailConfirm">
 		<Form.Control let:attrs>
-			<Form.Label>Alternate Email confirmPassword</Form.Label>
+			<Form.Label>Alternate Email</Form.Label>
 			<Input {...attrs} bind:value={$formData.alternateEmailConfirm} />
 		</Form.Control>
 		<Form.FieldErrors />
