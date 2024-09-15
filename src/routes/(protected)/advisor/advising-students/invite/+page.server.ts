@@ -21,18 +21,30 @@ export const load: PageServerLoad = async () => {
 		.selectFrom('Minors')
 		.select(['Minors.id as id', 'name'])
 		.innerJoin('MinorRequirements', 'MinorRequirements.minorId', 'Minors.id')
-		// .union(
-		// 	db
-		// 		.selectFrom('Majors')
-		// 		.select(['Majors.id as id', 'name'])
-		// 		.where('Majors.name', 'not like', '%Double%')
-		// )
-		// .groupBy('Minors.id')
+		.groupBy('Minors.id')
 		.execute();
 
-	console.log(minors);
+	const noMinor = await db
+		.selectFrom('Minors')
+		.select(['Minors.id as id', 'name'])
+		.where('Minors.name', 'like', '%No%')
+		.execute();
 
-	return { form: await superValidate(zod(formSchema)), majors, minors };
+	return {
+		form: await superValidate(zod(formSchema)),
+		majors,
+		minors: [
+			...noMinor,
+			...minors.map((m) => {
+				return { id: m.id, name: m.name.concat(' (Minor)') };
+			}),
+			...majors
+				.filter((m) => !m.name.match(/Double/i))
+				.map((m) => {
+					return { id: m.id, name: m.name.concat(' (Major)') };
+				})
+		]
+	};
 };
 
 export const actions: Actions = {
