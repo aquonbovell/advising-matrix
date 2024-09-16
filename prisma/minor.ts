@@ -24,6 +24,24 @@ type MinorData = {
 
 const MinorData: MinorData[] = JSON.parse(data);
 
+for (const minor of MinorData) {
+	const id = await db
+		.selectFrom('Minors')
+		.where('name', 'like', minor.name)
+		.select('id')
+		.executeTakeFirst();
+
+	if (!id) {
+		await db
+			.insertInto('Minors')
+			.values({
+				id: crypto.randomUUID(),
+				name: minor.name
+			})
+			.execute();
+	}
+}
+
 await db.deleteFrom('MinorRequirements').execute();
 
 for (const major of MinorData) {
