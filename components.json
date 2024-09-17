@@ -2,8 +2,8 @@
 	"$schema": "https://shadcn-svelte.com/schema.json",
 	"style": "default",
 	"tailwind": {
-		"config": "tailwind.config.js",
-		"css": "src/app.{p,post}css",
+		"config": "tailwind.config.cjs",
+		"css": "src/app.pcss",
 		"baseColor": "slate"
 	},
 	"aliases": {

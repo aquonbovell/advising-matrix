@@ -1,10 +1,10 @@
-import { fontFamily } from 'tailwindcss/defaultTheme';
+/* eslint-disable @typescript-eslint/no-require-imports */
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
-const config = {
+module.exports = {
 	darkMode: ['class'],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
-	safelist: ['dark'],
 	theme: {
 		container: {
 			center: true,
@@ -58,11 +58,9 @@ const config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: ['Inter Variable', ...fontFamily.sans]
+				sans: ['Inter var', ...defaultTheme.fontFamily.sans]
 			}
 		}
 	},
 	plugins: [require('@tailwindcss/typography')]
 };
-
-export default config;

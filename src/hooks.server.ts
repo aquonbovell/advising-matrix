@@ -2,6 +2,14 @@ import { lucia } from '$lib/server/auth';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
+const preloadFonts: Handle = async ({ event, resolve }) => {
+	const response = await resolve(event, {
+		preload: ({ type }) => type === 'font'
+	});
+
+	return response;
+};
+
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
 
@@ -58,4 +66,4 @@ const handleRole: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle = sequence(handleAuth, handleRole);
+export const handle = sequence(preloadFonts, handleAuth, handleRole);
