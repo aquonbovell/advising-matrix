@@ -1,7 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	export let data: PageData;
-
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import {
 		addPagination,
@@ -10,7 +7,7 @@
 		addHiddenColumns,
 		addSelectedRows
 	} from 'svelte-headless-table/plugins';
-	import { readable } from 'svelte/store';
+	import { writable } from 'svelte/store';
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 	import * as Table from '$lib/components/ui/table';
 	import DataTableActions from './data-table-actions.svelte';
@@ -19,19 +16,37 @@
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
+	import { cn } from '$lib/utils';
 
 	type ICourse = {
 		id: number;
 		code: string;
 		name: string;
-		credits: number;
 		level: number;
+		credits: number;
 	};
 
-	const courses: ICourse[] = [...data.courses];
+	export let courses: ICourse[];
+	export let count: number;
 
-	const table = createTable(readable(courses), {
-		page: addPagination({ initialPageSize: 10 }),
+	const paginatedData = writable(courses);
+	const countStore = writable(count);
+
+	$: {
+		$paginatedData = courses;
+		$countStore = count;
+	}
+
+	const table = createTable(paginatedData, {
+		page: addPagination({
+			serverSide: true,
+			serverItemCount: countStore,
+			initialPageIndex: parseInt($page.url.searchParams.get('pageIndex') || '0', 10),
+			initialPageSize: parseInt($page.url.searchParams.get('pageSize') || '10', 10)
+		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
@@ -114,13 +129,10 @@
 
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns, rows } =
 		table.createViewModel(columns);
-
 	const { hasNextPage, hasPreviousPage, pageIndex, pageCount, pageSize } = pluginStates.page;
-
+	const { sortKeys } = pluginStates.sort;
 	const { filterValue } = pluginStates.filter;
-
 	const { hiddenColumnIds } = pluginStates.hide;
-
 	const { selectedDataIds } = pluginStates.select;
 
 	const ids = flatColumns.map((col) => col.id);
@@ -131,6 +143,19 @@
 		.map(([id]) => id);
 
 	const hidableCols = ['credits', 'level'];
+
+	$: {
+		if (browser) {
+			const q = new URLSearchParams($page.url.searchParams);
+			q.set('pageIndex', $pageIndex.toString());
+			q.set('pageSize', $pageSize.toString());
+			// Order
+			// if ($sortKeys.length) {
+			// 	q.set('sort', ($sortKeys[0]!.order === 'asc' ? '+' : '-') + $sortKeys[0]!.id);
+			// }
+			goto(`?${q}`, { noScroll: true });
+		}
+	}
 </script>
 
 <div>
@@ -174,7 +199,12 @@
 										{#if cell.id === 'code' || cell.id === 'level'}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
-												<ArrowUpDown class={'ml-2 h-4 w-4'} />
+												<ArrowUpDown
+													class={cn(
+														$sortKeys[0]?.id === cell.id && 'text-foreground',
+														'ml-2 h-4 w-4'
+													)}
+												/>
 											</Button>
 										{:else}
 											<Render of={cell.render()} />

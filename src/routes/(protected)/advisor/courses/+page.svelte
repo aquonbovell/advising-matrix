@@ -1,9 +1,8 @@
 <script lang="ts">
+	import DataTable from './data-table.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-
-	import DataTable from './data-table.svelte';
 </script>
 
-<DataTable {data} />
+<DataTable courses={data.courses} count={data.count} />
