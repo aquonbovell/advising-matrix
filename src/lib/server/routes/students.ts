@@ -31,7 +31,7 @@ export const studentRouter = router({
 						.innerJoin('Student', 'Student.id', 'Advisor.student_id')
 						.innerJoin('User as StudentUser', 'StudentUser.id', 'Student.user_id')
 						.innerJoin('Majors', 'Majors.id', 'Student.major_id')
-						.innerJoin('Minors', 'Minors.id', 'Student.minor_id')
+						.leftJoin('Minors', 'Minors.id', 'Student.minor_id')
 						.innerJoin('User as AdvisorUser', 'AdvisorUser.id', 'Advisor.advisor_id')
 						.select((eb) => [
 							'AdvisorUser.name as advisor_name',
@@ -45,7 +45,7 @@ export const studentRouter = router({
 								.fn<string>('concat', [
 									'Majors.name',
 									eb.case().when('Minors.name', 'is not', null).then(' with ').else('').end(),
-									'Minors.name'
+									eb.fn.coalesce('Minors.name', eb.val(''))
 								])
 								.as('program_name'),
 							'Student.created_at',
@@ -64,6 +64,8 @@ export const studentRouter = router({
 						.select(db.fn.countAll<number>().as('count'))
 						.executeTakeFirst()
 				]);
+
+				console.log(students);
 
 				const count = countResult?.count ?? 0;
 

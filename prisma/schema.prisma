@@ -44,7 +44,7 @@ model Student {
   id             String    @id @db.Uuid
   user_id        String    @db.Uuid
   major_id       String    @db.Uuid
-  minor_id       String    @db.Uuid
+  minor_id       String?    @db.Uuid
   invite_token   String?
   invite_expires DateTime?
   created_at     DateTime  @default(now())
