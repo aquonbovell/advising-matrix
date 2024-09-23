@@ -1,7 +1,6 @@
 import { TRPCError, initTRPC } from '@trpc/server';
 import type { Context } from './context';
 import { transformer } from '$lib/trpc/transformer';
-import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 
 const t = initTRPC.context<Context>().create({
 	transformer
@@ -22,8 +21,3 @@ export const protectedProcedure = publicProcedure.use(({ ctx, next }) => {
 		}
 	});
 });
-
-// export type Router = typeof router;
-
-// export type RouterInputs = inferRouterInputs<Router>;
-// export type RouterOutputs = inferRouterOutputs<Router>;

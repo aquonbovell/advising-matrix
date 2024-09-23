@@ -12,7 +12,8 @@
 	);
 	const order = derived(page, ($page) => $page.url.searchParams.get('order') || 'asc');
 
-	$: courseQuery = trpc.getCourses.query({ page: $pageIndex, size: $pageSize });
+	$: courseQuery = trpc.courses.getCourses.query({ page: $pageIndex, size: $pageSize });
+
 	$: console.log($courseQuery);
 </script>
 
@@ -21,5 +22,5 @@
 {:else if $courseQuery.isError}
 	<p style="color: red">{$courseQuery.error.message}</p>
 {:else if $courseQuery.data}
-	<DataTable courses={$courseQuery.data?.courses} count={$courseQuery.data?.count} />
+	<DataTable data={$courseQuery.data} />
 {/if}

@@ -17,7 +17,14 @@ export const load: PageServerLoad = async (event) => {
 		Math.min(100, parseInt(event.url.searchParams.get('pageSize') ?? '10', 10))
 	);
 
-	const result = await trpcServer.getCourses.ssr({ order, page: pageIndex, size: pageSize }, event);
+	const result = await trpcServer.courses.getCourses.ssr(
+		{
+			order,
+			page: pageIndex,
+			size: pageSize
+		},
+		event
+	);
 
 	return {
 		courses: result!.courses,

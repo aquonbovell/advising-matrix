@@ -1,10 +1,9 @@
 import { Lucia, TimeSpan } from 'lucia';
 import { NodePostgresAdapter } from '@lucia-auth/adapter-postgresql';
 import { dev } from '$app/environment';
-import type { DB, UserRole } from '$lib/db/schema';
+import type { DB } from '$lib/db/schema';
 import { postgresql } from '$lib/db';
 import { alphabet, generateRandomString } from 'oslo/crypto';
-import { redirect, type RequestEvent } from '@sveltejs/kit';
 import { createDate } from 'oslo';
 
 const adapter = new NodePostgresAdapter(postgresql, {
@@ -29,7 +28,6 @@ export const lucia = new Lucia(adapter, {
 declare module 'lucia' {
 	interface Register {
 		Lucia: typeof lucia;
-
 		DatabaseUserAttributes: DB['User'];
 	}
 }

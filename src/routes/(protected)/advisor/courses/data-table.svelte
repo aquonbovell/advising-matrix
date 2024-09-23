@@ -20,24 +20,16 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { cn } from '$lib/utils';
+	import type { RouterOutputs } from '$lib/server/routes/_app';
 
-	type ICourse = {
-		id: number;
-		code: string;
-		name: string;
-		level: number;
-		credits: number;
-	};
+	export let data: RouterOutputs['courses']['getCourses'];
 
-	export let courses: ICourse[];
-	export let count: number;
-
-	const paginatedData = writable(courses);
-	const countStore = writable(count);
+	const paginatedData = writable(data.courses);
+	const countStore = writable(data.count);
 
 	$: {
-		$paginatedData = courses;
-		$countStore = count;
+		$paginatedData = data.courses;
+		$countStore = data.count;
 	}
 
 	const table = createTable(paginatedData, {
