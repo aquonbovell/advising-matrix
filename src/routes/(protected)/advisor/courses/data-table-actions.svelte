@@ -29,6 +29,8 @@
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item href={`${$page.url.toString()}/${code}`}>View course</DropdownMenu.Item>
+		<DropdownMenu.Item href={`${$page.url.pathname.toString()}/${code}`}
+			>View course</DropdownMenu.Item
+		>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
