@@ -10,7 +10,8 @@
 	const toastState = getToastState();
 
 	export let code: string;
-	export let token: { value: string | null; expires: Date | null };
+	export let token: string | null;
+	export let expires: Date | null;
 	export let exists: boolean;
 </script>
 
@@ -27,29 +28,25 @@
 			<DropdownMenu.Item on:click={() => navigator.clipboard.writeText(code)}>
 				Copy Student Code
 			</DropdownMenu.Item>
-			{#if token.value}
+			{#if token}
 				<DropdownMenu.Item
 					on:click={() => {
-						if (token.value === null) return '';
+						if (token === null) return '';
 						if (typeof window === 'undefined') return '';
-						navigator.clipboard.writeText(
-							`${window.location.origin}/register?token=${token.value}`
-						);
+						navigator.clipboard.writeText(`${window.location.origin}/register?token=${token}`);
 					}}>Copy Student Token</DropdownMenu.Item
 				>
 			{/if}
-			{#if token.value}
+			{#if token}
 				<DropdownMenu.Item
 					on:click={async () => {
-						if (token.value === null) return '';
+						if (token === null) return '';
 						if (typeof window === 'undefined') return '';
-						navigator.clipboard.writeText(
-							`${window.location.origin}/register?token=${token.value}`
-						);
+						navigator.clipboard.writeText(`${window.location.origin}/register?token=${token}`);
 
 						const form = new FormData();
 
-						form.append('token', token.value);
+						form.append('token', token);
 
 						const res = await fetch('/api/senduseremail', {
 							method: 'POST',
@@ -66,7 +63,7 @@
 					}}>Send Invite</DropdownMenu.Item
 				>
 			{/if}
-			{#if token.expires && new Date(token.expires) < new Date()}
+			{#if expires && new Date(expires) < new Date()}
 				<DropdownMenu.Item
 					on:click={async () => {
 						const response = await fetch(`/api/student/${code}/reset-token`, {

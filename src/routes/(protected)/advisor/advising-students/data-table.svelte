@@ -1,7 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	export let data: PageData;
-
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import {
 		addPagination,
@@ -10,7 +7,7 @@
 		addHiddenColumns,
 		addSelectedRows
 	} from 'svelte-headless-table/plugins';
-	import { readable } from 'svelte/store';
+	import { writable } from 'svelte/store';
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 	import * as Table from '$lib/components/ui/table';
 	import DataTableActions from './data-table-actions.svelte';
@@ -21,26 +18,28 @@
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 
 	import DataTableTag from './data-table-tag.svelte';
+	import type { RouterOutputs } from '$lib/server/routes/_app';
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 
-	type IStudent = {
-		id: string;
-		user_id: string;
-		name: string | null;
-		email: string;
-		token: {
-			value: string | null;
-			expires: Date | null;
-		};
-		created_at: Date;
-		updated_at: Date;
-		program_name: string | null;
-		advisor: string;
-	};
+	export let data: RouterOutputs['students']['getStudents'];
 
-	const students: IStudent[] = [...data.students];
+	const paginatedData = writable(data.students);
+	const countStore = writable(data.count);
 
-	const table = createTable(readable(students), {
-		page: addPagination({ initialPageSize: 10 }),
+	$: {
+		$paginatedData = data.students;
+		$countStore = data.count;
+	}
+
+	const table = createTable(paginatedData, {
+		page: addPagination({
+			serverSide: true,
+			serverItemCount: countStore,
+			initialPageIndex: parseInt($page.url.searchParams.get('pageIndex') || '0', 10),
+			initialPageSize: parseInt($page.url.searchParams.get('pageSize') || '10', 10)
+		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
@@ -51,7 +50,7 @@
 
 	const columns = table.createColumns([
 		table.column({
-			accessor: 'id',
+			accessor: 'student_id',
 			header: (_, { pluginStates }) => {
 				const { allPageRowsSelected } = pluginStates.select;
 				return createRender(DataTableCheckbox, {
@@ -76,7 +75,7 @@
 			}
 		}),
 		table.column({
-			accessor: 'name',
+			accessor: 'student_name',
 			header: 'Name'
 		}),
 		table.column({
@@ -88,7 +87,7 @@
 			header: 'Program'
 		}),
 		table.column({
-			accessor: 'advisor',
+			accessor: 'advisor_name',
 			header: 'Advisor'
 		}),
 		table.column({
@@ -116,12 +115,14 @@
 			}
 		}),
 		table.column({
-			accessor: 'token',
+			accessor: ({ invite_token, invite_expires }) => {
+				return { invite_token, invite_expires };
+			},
 			header: 'Status',
 			cell: ({ value }) => {
 				return createRender(DataTableTag, {
-					invite_token: value.value,
-					invite_expires: value.expires
+					invite_token: value.invite_token,
+					invite_expires: value.invite_expires
 				});
 			},
 			plugins: {
@@ -132,15 +133,16 @@
 		}),
 
 		table.column({
-			accessor: ({ id, token, advisor }) => {
-				return { id, token, exists: advisor.includes(data.user?.name ?? '') };
+			accessor: ({ student_id, invite_token, invite_expires, advisor_name }) => {
+				return { student_id, invite_token, invite_expires, advisor_name };
 			},
 			header: 'Actions',
 			cell: ({ value }) => {
 				return createRender(DataTableActions, {
-					code: value.id,
-					token: value.token,
-					exists: value.exists
+					code: value.student_id,
+					token: value.invite_token,
+					expires: value.invite_expires,
+					exists: value.advisor_name !== null
 				});
 			},
 			plugins: {
@@ -173,6 +175,19 @@
 		.map(([id]) => id);
 
 	const hidableCols = ['created_at', 'updated_at', 'token', 'advisor', 'email'];
+
+	$: {
+		if (browser) {
+			const q = new URLSearchParams($page.url.searchParams);
+			q.set('pageIndex', $pageIndex.toString());
+			q.set('pageSize', $pageSize.toString());
+			// Order
+			// if ($sortKeys.length) {
+			// 	q.set('sort', ($sortKeys[0]!.order === 'asc' ? '+' : '-') + $sortKeys[0]!.id);
+			// }
+			goto(`?${q}`, { noScroll: true });
+		}
+	}
 </script>
 
 <div>

@@ -1,28 +1,51 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import DataTable from '../advising-students/data-table.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { selectedStudent } from '$lib/stores/advisor';
 	import StudentChart from '$lib/components/matrix/StudentChart.svelte';
+	import { page } from '$app/stores';
+	import { trpc } from '$lib/trpc';
+	import { derived } from 'svelte/store';
 
-	export let data: PageData;
+	const pageIndex = derived(page, ($page) =>
+		parseInt($page.url.searchParams.get('pageIndex') || '0', 10)
+	);
+	const pageSize = derived(page, ($page) =>
+		parseInt($page.url.searchParams.get('pageSize') || '10', 10)
+	);
+	const order = derived(page, ($page) => $page.url.searchParams.get('order') || 'asc');
+
+	$: studentQuery = trpc.students.getStudents.query({ page: $pageIndex, size: $pageSize });
+
+	$: console.log($studentQuery);
 </script>
 
-<h1 class="text-2xl font-bold text-stone-800">All Students</h1>
+<h1 class="text-2xl font-bold text-stone-800">
+	All Students
+	{#if $studentQuery.data}
+		({$studentQuery.data?.count})
+	{/if}
+</h1>
 
-<DataTable {data} />
+{#if $studentQuery.isLoading}
+	<p>Loading...</p>
+{:else if $studentQuery.isError}
+	<p style="color: red">{$studentQuery.error.message}</p>
+{:else if $studentQuery.data}
+	<DataTable data={$studentQuery.data} />
 
-<Dialog.Root
-	open={$selectedStudent !== null}
-	onOpenChange={(open) => {
-		if (!open) {
-			$selectedStudent = null;
-		}
-	}}
->
-	<Dialog.Content>
-		{#if $selectedStudent !== null}
-			<StudentChart studentId={$selectedStudent} />
-		{/if}
-	</Dialog.Content>
-</Dialog.Root>
+	<Dialog.Root
+		open={$selectedStudent !== null}
+		onOpenChange={(open) => {
+			if (!open) {
+				$selectedStudent = null;
+			}
+		}}
+	>
+		<Dialog.Content>
+			{#if $selectedStudent !== null}
+				<StudentChart studentId={$selectedStudent} />
+			{/if}
+		</Dialog.Content>
+	</Dialog.Root>
+{/if}
