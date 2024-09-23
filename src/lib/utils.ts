@@ -4,6 +4,7 @@ import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { completedCourse } from './stores/student';
 import type { CourseWithPrerequisites, Grade } from './types';
+import { z, type ZodRawShape } from 'zod';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -186,4 +187,22 @@ export function restrict<T extends string>(
 		}
 	}
 	return null;
+}
+
+export function extractPagination(url: URL, defaultPageSize = 10, defaultPage = 1) {
+	const page = Number(url.searchParams.get('page') || defaultPage);
+	const pageSize = Number(url.searchParams.get('pageSize') || defaultPageSize);
+
+	return {
+		page: isNaN(page) ? defaultPage : page,
+		pageSize: isNaN(pageSize) ? defaultPageSize : pageSize
+	};
+}
+
+export function paginatable<T extends ZodRawShape>(schema: T) {
+	return z.object({
+		...schema,
+		page: z.number().int().positive().optional(),
+		pageSize: z.number().int().positive().optional()
+	});
 }
