@@ -13,8 +13,6 @@
 	const order = derived(page, ($page) => $page.url.searchParams.get('order') || 'asc');
 
 	$: courseQuery = trpc.courses.getCourses.query({ page: $pageIndex, size: $pageSize });
-
-	$: console.log($courseQuery);
 </script>
 
 {#if $courseQuery.isLoading}

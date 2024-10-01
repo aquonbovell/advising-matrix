@@ -1,7 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	export let data: PageData;
-
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import {
 		addPagination,
@@ -10,7 +7,7 @@
 		addHiddenColumns,
 		addSelectedRows
 	} from 'svelte-headless-table/plugins';
-	import { readable } from 'svelte/store';
+	import { writable } from 'svelte/store';
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 	import * as Table from '$lib/components/ui/table';
 	import DataTableActions from './data-table-actions.svelte';
@@ -19,19 +16,28 @@
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
+	import type { RouterOutputs } from '$lib/server/routes/_app';
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 
-	type ICourse = {
-		id: number;
-		code: string;
-		name: string;
-		credits: number;
-		level: number;
-	};
+	export let data: RouterOutputs['courses']['getCourses'];
 
-	const courses: ICourse[] = [...data.courses];
+	const paginatedData = writable(data.courses);
+	const countStore = writable(data.count);
 
-	const table = createTable(readable(courses), {
-		page: addPagination({ initialPageSize: 10 }),
+	$: {
+		$paginatedData = data.courses;
+		$countStore = data.count;
+	}
+
+	const table = createTable(paginatedData, {
+		page: addPagination({
+			serverSide: true,
+			serverItemCount: countStore,
+			initialPageIndex: parseInt($page.url.searchParams.get('pageIndex') || '0', 10),
+			initialPageSize: parseInt($page.url.searchParams.get('pageSize') || '10', 10)
+		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
@@ -131,6 +137,19 @@
 		.map(([id]) => id);
 
 	const hidableCols = ['credits', 'level'];
+
+	$: {
+		if (browser) {
+			const q = new URLSearchParams($page.url.searchParams);
+			q.set('pageIndex', $pageIndex.toString());
+			q.set('pageSize', $pageSize.toString());
+			// Order
+			// if ($sortKeys.length) {
+			// 	q.set('sort', ($sortKeys[0]!.order === 'asc' ? '+' : '-') + $sortKeys[0]!.id);
+			// }
+			goto(`?${q}`, { noScroll: true });
+		}
+	}
 </script>
 
 <div>
