@@ -10,14 +10,15 @@
 	import { Course } from '$lib/components/matrix';
 	import type { Selected } from 'bits-ui';
 
-    import {
-        degree as degreeStore,
-        completedCredits as completedCreditsStore,
-        completedCourses as completedCoursesStore,
-        program as programStore,
-        studentCourses as studentCoursesStore
-    } from '$lib/stores/newstudent';
-	
+	import {
+		degree as degreeStore,
+		completedCredits as completedCreditsStore,
+		completedCourses as completedCoursesStore,
+		program as programStore,
+		studentCourses as studentCoursesStore,
+		totalCredits as totalCreditsStore
+	} from '$lib/stores/newstudent';
+
 	export let studentCourses: RouterOutputs['students']['getStudentCourses'];
 	export let degree: RouterOutputs['students']['getStudentDegree'];
 	export let program: RouterOutputs['students']['getStudentProgram'];
@@ -39,8 +40,13 @@
 			$courseGrades.filter((course) => course.grade && !course.grade.startsWith('F')).length
 	);
 
-	let selectedCourseId: Selected<number>;
+    const totalCredits = derived(writable(degree), $degree => 
+        $degree.degree.requirements.reduce((total, req) => total + req.credits, 0)
+    );
 
+
+	let selectedCourseId: Selected<number>;
+	
 </script>
 
 <div class="mx-auto flex max-w-3xl flex-col gap-6" transition:fly={{ y: 30, delay: 200 }}>
@@ -55,8 +61,8 @@
 				<Button.Root variant="ghost" type="button">Overall GPA:</Button.Root>
 			</div>
 			<div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-				<Progress value={completedCredits} max={100} class="h-3" />
-				<p class="w-fit">{completedCredits} / 100 Credits</p>
+				<Progress value={completedCredits} max={$totalCredits} class="h-3" />
+				<p class="w-fit">{completedCredits} / {$totalCredits} Credits</p>
 			</div>
 		</Card.Content>
 	</Card.Root>
