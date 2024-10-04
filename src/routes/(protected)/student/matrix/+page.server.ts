@@ -1,9 +1,10 @@
 import { db } from '$lib/db';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { trpcServer } from '$lib/server/server';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const userId = locals.user?.id;
+export const load: PageServerLoad = async (event) => {
+	const userId = event.locals.user?.id;
 	if (!userId) throw error(401, 'Unauthorized');
 
 	const student = await db
@@ -15,8 +16,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	if (!student) error(404, 'Student not found');
 
+	const program = await trpcServer.students.getStudentProgram.ssr(event);
+	const courses = await trpcServer.students.getStudentCourses.ssr(event);
+	const degree = await trpcServer.students.getStudentDegree.ssr(
+		{ majorId: student.major_id, minorId: student.minor_id },
+		event
+	);
+
 	return {
-		program: student
+		program: program!.program,
+		courses: courses!.courses,
+		degree: degree!.degree
 	};
 };
 
