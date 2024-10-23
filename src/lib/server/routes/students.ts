@@ -3,8 +3,13 @@ import { protectedProcedure, router } from '../trpc';
 import { db } from '$lib/db';
 import { getName, paginatable } from '$lib/utils';
 import { TRPCError } from '@trpc/server';
-import type { CourseWithPrerequisites, Degree } from '$lib/types';
+import { gradeSchema, type CourseWithPrerequisites, type Degree } from '$lib/types';
 import type { Requirement } from '$lib/types';
+
+const UpdateGradeInputSchema = z.object({
+	courseId: z.number(),
+	grade: gradeSchema
+});
 
 export const studentRouter = router({
 	getStudents: protectedProcedure
@@ -281,10 +286,6 @@ export const studentRouter = router({
 				}
 			}
 
-			for (const requirement of requirements) {
-				console.log(requirement.details);
-			}
-
 			return {
 				degree: {
 					id: `${majorId}${minorId ? `x${minorId}` : ''}`,
@@ -323,5 +324,34 @@ export const studentRouter = router({
 				.execute();
 
 			return { grades };
+		}),
+
+	updateStudentGrades: protectedProcedure
+		.input(z.array(UpdateGradeInputSchema))
+		.mutation(async ({ input, ctx }) => {
+			const student = await db
+				.selectFrom('Student')
+				.select(['id'])
+				.where('id', '=', ctx.user.id)
+				.executeTakeFirst();
+
+			if (!student) {
+				throw new TRPCError({
+					code: 'NOT_FOUND',
+					message: 'Student not found'
+				});
+			}
+
+			const updatePromises = input.map(async (update) => {
+				db.updateTable('StudentCourses')
+					.set({ grade: update.grade })
+					.where('studentId', '=', student.id)
+					.where('courseId', '=', update.courseId)
+					.execute();
+			});
+
+			await Promise.all(updatePromises);
+
+			return { success: true };
 		})
 });

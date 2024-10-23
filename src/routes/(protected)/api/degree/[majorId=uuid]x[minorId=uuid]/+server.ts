@@ -110,8 +110,8 @@ export const GET: RequestHandler = async ({ params }) => {
 	if (levelOneRequirements.length > 1) {
 		const reqIds = levelOneRequirements.map((req) => req.id);
 		let totalCredits = 0;
-		console.log('Enter the level one requirements credits');
-		console.log(levelOneRequirements);
+		// console.log('Enter the level one requirements credits');
+		// console.log(levelOneRequirements);
 
 		const uniInfo: string[] = [];
 		levelOneRequirements.forEach((req) => {
