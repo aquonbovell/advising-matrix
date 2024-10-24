@@ -18,8 +18,8 @@
 		degreeGPA,
 		program as programStore,
 		studentCourses as studentCoursesStore,
-		totalCredits as totalCreditsStore,
-		selectedCourse
+		totalCredits,
+		selectedCourse,
 	} from '$lib/stores/newstudent';
 	import { gradePoints } from '$lib/types';
 	import GradeDialog from '$lib/components/dialogs/GradeDialog.svelte';
@@ -36,11 +36,8 @@
 
 	$: {
 		studentCoursesStore.set(studentCourses.courses);
+		degreeStore.set(degree.degree);
 	}
-
-	const totalCredits = derived(writable(degree), ($degree) =>
-		$degree.degree.requirements.reduce((total, req) => total + req.credits, 0)
-	);
 
 	let isAddCourseDialogOpen = false;
 	let isGradeDialogOpen = false;
@@ -52,8 +49,8 @@
 		isAddCourseDialogOpen = true;
 	}
 
-	function openGradeDialog() {
-		currentRequirementId = 's';
+	function openGradeDialog(requirementId: string) {
+		currentRequirementId = requirementId;
 		isGradeDialogOpen = true;
 	}
 </script>
@@ -97,8 +94,7 @@
 							<CourseCard
 								{course}
 								required={req.type === 'POOL' ? false : true}
-								requirementId={req.id}
-								addGradeDialog={openGradeDialog}
+								addGradeDialog={() => openGradeDialog(req.id)}
 							/>
 						{/each}
 					{/if}

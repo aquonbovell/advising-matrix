@@ -20,6 +20,7 @@ export const program = writable<StudentProgram>({
 	minor_id: null
 });
 export const selectedCourse = writable<Selected<Course | null>>(undefined);
+// Trying to remove this writable
 export const dialogRequirementID = writable<string | undefined>(undefined);
 
 const isValidCourse = (course: StudentCourse) => {
@@ -85,8 +86,11 @@ export const overallGPA = derived([studentCourses, degree], ([$courses, $degree]
 });
 
 export const degreeGPA = derived([studentCourses, degree], ([$courses, $degree]) => {
+	// console.log($courses);
 	const { totalPoints, totalCredits } = $courses
 		.filter((course) => {
+			if (!course.grade || !course.requirementId) return false;
+
 			// Check if course is completed and part of a non-level-1 requirement
 			const requirement = $degree.requirements.find((req) => req.id === course.requirementId);
 			return isCourseCompleted(course) && requirement && requirement.level !== 1;

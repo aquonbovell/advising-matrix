@@ -3,14 +3,13 @@
 	import * as Select from '$lib/components/ui/select';
 	import { Badge } from '$lib/components/ui/badge';
 	import { TrashIcon } from 'lucide-svelte';
-	import { studentCourses, isCourseCompleted, selectedCourse, dialogRequirementID } from '$lib/stores/newstudent';
+	import { studentCourses, isCourseCompleted, selectedCourse } from '$lib/stores/newstudent';
 	import { gradePoints } from '$lib/types';
 	import type { CourseWithPrerequisites } from '$lib/types';
 	import { arePrerequisitesMet, cn, requiredCourses } from '$lib/utils';
 
 	export let course: CourseWithPrerequisites;
 	export let required: boolean = true;
-    export let requirementId: string;
 	export let addGradeDialog: () => void;
 
 	$: currentCourse = $studentCourses.find((c) => c.courseId === course.id);
@@ -22,7 +21,6 @@
 
 	function handleGradeDialogOpen() {
 		selectedCourse.set({ value: course });
-		dialogRequirementID.set(requirementId);
 		addGradeDialog();
 	}
 </script>
