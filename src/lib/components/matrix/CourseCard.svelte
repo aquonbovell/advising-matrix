@@ -16,8 +16,8 @@
 	$: isComplete = currentCourse && isCourseCompleted(currentCourse);
 
 	$: statusColor = !arePrerequisitesMet(course)
-			? 'bg-red-50 border-red-100'
-			: 'bg-white hover:bg-gray-50';
+		? 'bg-red-50 border-red-100'
+		: 'bg-white hover:bg-gray-50';
 
 	function handleGradeDialogOpen() {
 		selectedCourse.set({ value: course });
@@ -26,11 +26,7 @@
 </script>
 
 <div
-	class={cn(
-		'group relative border transition-all duration-200',
-		'overflow-hidden',
-		statusColor
-	)}
+	class={cn('group relative border transition-all duration-200', 'overflow-hidden', statusColor)}
 >
 	<div class="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
 		<div class="flex-grow space-y-2">

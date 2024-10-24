@@ -19,7 +19,7 @@
 		program as programStore,
 		studentCourses as studentCoursesStore,
 		totalCredits,
-		selectedCourse,
+		selectedCourse
 	} from '$lib/stores/newstudent';
 	import { gradePoints } from '$lib/types';
 	import GradeDialog from '$lib/components/dialogs/GradeDialog.svelte';
