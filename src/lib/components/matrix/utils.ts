@@ -1,6 +1,6 @@
 import type { Degree } from '$lib/types';
 
-export const fetchDegree = async (majorId: string, minorId: string): Promise<Degree> => {
+export const fetchDegree = async (majorId: string, minorId: string | null): Promise<Degree> => {
 	const res = await fetch(`/api/degree/${majorId}x${minorId}`);
 	let content = await res.json();
 	return content.data;

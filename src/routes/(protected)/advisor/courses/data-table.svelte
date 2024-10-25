@@ -153,7 +153,7 @@
 <div>
 	<div class="flex-1 text-right text-sm text-muted-foreground">
 		Page {$pageIndex + 1} of{' '}
-		{Math.floor($rows.length / $pageSize) + 1}
+		{$pageCount}
 	</div>
 	<div class="flex items-center py-4">
 		<Input

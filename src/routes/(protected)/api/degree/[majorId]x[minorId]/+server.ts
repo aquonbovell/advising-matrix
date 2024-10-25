@@ -12,11 +12,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		return json({ error: 'Major ID is required' }, { status: 400 });
 	}
 
-	if (!minorId) {
-		return json({ error: 'Minor ID is required' }, { status: 400 });
-	}
-
-	const program = [majorId, minorId];
+	const program = [majorId, minorId].filter((id) => id !== 'null');
 
 	const major = await db
 		.selectFrom('Majors')

@@ -17,12 +17,13 @@
 
 	$: studentQuery = trpc.students.getStudents.query({ page: $pageIndex, size: $pageSize });
 
-	$: console.log($studentQuery);
+	// $: console.log($studentQuery);
 </script>
 
 <h1 class="text-2xl font-bold text-stone-800">
 	All Students
 	{#if $studentQuery.data}
+		<!-- Incorrect -->
 		({$studentQuery.data?.count})
 	{/if}
 </h1>

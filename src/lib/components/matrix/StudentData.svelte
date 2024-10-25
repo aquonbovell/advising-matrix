@@ -30,7 +30,7 @@
 	import { getToastState } from '$lib/components/toast/toast-state.svelte';
 	import { fetchCourses, fetchDegree } from './utils';
 
-	export let data: { program: { major_id: string; minor_id: string; id: string } };
+	export let data: { program: { major_id: string; minor_id: string | null; id: string } };
 	const toastState = getToastState();
 
 	let addCourseDialog = false;
@@ -43,6 +43,7 @@
 
 	onMount(async () => {
 		const degree = await fetchDegree(major_id, minor_id);
+
 		const studentCourses = await fetchCourses(id);
 
 		const coursesDB = degree.requirements

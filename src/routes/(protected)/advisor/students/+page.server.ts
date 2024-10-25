@@ -1,7 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/db';
-import { sql } from 'kysely';
 import { restrict } from '$lib/utils';
 import { trpcServer } from '$lib/server/server';
 

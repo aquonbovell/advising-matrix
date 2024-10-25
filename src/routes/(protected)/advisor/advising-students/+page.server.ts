@@ -1,70 +1,36 @@
 import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/db';
+import { trpcServer } from '$lib/server/server';
+import { restrict } from '$lib/utils';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const userId = locals.user?.id;
+export const load: PageServerLoad = async (event) => {
+	const userId = event.locals.user?.id;
 
 	if (!userId) {
-		error(403, 'Unauthorized');
-	}
-	if (locals.user?.role === 'STUDENT') {
-		error(403, 'Unauthorized');
+		throw error(401, 'Unauthorized');
 	}
 
-	try {
-		const students = await db
-			.selectFrom('Student')
-			.innerJoin('Majors', 'Majors.id', 'Student.major_id')
-			.innerJoin('Minors', 'Minors.id', 'Student.minor_id')
-			.innerJoin('User', 'User.id', 'Student.user_id')
-			.innerJoin('Advisor', 'Advisor.student_id', 'Student.id')
-			.select([
-				'Student.id',
-				'Student.user_id',
-				'User.name',
-				'User.email',
-				'Student.created_at',
-				'Student.updated_at',
-				'Student.invite_token',
-				'Student.invite_expires',
-				'Majors.name as major',
-				'Minors.name as minor'
-			])
-			.execute();
+	const order = restrict(event.url.searchParams.get('order'), ['asc', 'desc']) ?? 'asc';
+	const pageIndex = Math.max(0, parseInt(event.url.searchParams.get('pageIndex') ?? '0', 10));
+	const pageSize = Math.max(
+		1,
+		Math.min(100, parseInt(event.url.searchParams.get('pageSize') ?? '10', 10))
+	);
 
-		let studentData = [];
+	const result = await trpcServer.students.getStudents.ssr(
+		{
+			order,
+			page: pageIndex,
+			size: pageSize
+		},
+		event
+	);
 
-		const AdvisorsDB = await db
-			.selectFrom('Advisor')
-			.innerJoin('User', 'User.id', 'Advisor.advisor_id')
-			.select(['User.name', 'Advisor.student_id'])
-			.execute();
-
-		for (const student of students) {
-			const advisor = AdvisorsDB.filter((a) => a.student_id === student.id);
-
-			studentData.push({
-				id: student.id,
-				user_id: student.user_id,
-				name: student.name,
-				email: student.email,
-				program_name:
-					student.minor === 'No Minor' ? student.major : student.major + ' with ' + student.minor,
-				created_at: student.created_at,
-				updated_at: student.updated_at,
-				token: { value: student.invite_token, expires: student.invite_expires },
-				advisor: advisor.flatMap((a) => a.name).join(', ') || 'No advisor'
-			});
-		}
-
-		return {
-			students: studentData
-		};
-	} catch (err) {
-		console.error(err);
-		error(500, 'An error occurred while fetching data');
-	}
+	return {
+		students: result!.students,
+		count: result!.count
+	};
 };
 
 export const actions: Actions = {
