@@ -31,63 +31,61 @@ export const studentRouter = router({
 			}
 
 			try {
-				const [studentsData, countResult, majors, minors] = await Promise.all([
-					db
-						.selectFrom('Advisor')
-						// .where('Advisor.advisor_id', '=', userId)
-						.innerJoin('Student', 'Student.id', 'Advisor.student_id')
-						.innerJoin('User as StudentUser', 'StudentUser.id', 'Student.user_id')
-						.innerJoin('User as AdvisorUser', 'AdvisorUser.id', 'Advisor.advisor_id')
-						.select([
-							'AdvisorUser.name as advisor_name',
-							'Student.id as student_id',
-							'Student.user_id',
-							'StudentUser.name as student_name',
-							'Student.major_id',
-							'Student.minor_id',
-							'StudentUser.email',
-							'Student.created_at',
-							'Student.updated_at',
-							'Student.invite_token',
-							'Student.invite_expires'
-						])
-						.limit(size)
-						.offset(page * size)
-						.orderBy('StudentUser.name', order)
-						.execute(),
-					db
-						.selectFrom('Advisor')
-						.where('Advisor.advisor_id', '=', userId)
-						.innerJoin('Student', 'Student.id', 'Advisor.student_id')
-						.select(db.fn.countAll<number>().as('count'))
-						.executeTakeFirst(),
-					db.selectFrom('Majors').selectAll().execute(),
-					db.selectFrom('Minors').selectAll().execute()
+				const countQuery = db
+					.selectFrom('Advisor')
+					// .where('Advisor.advisor_id', '=', userId)
+					.innerJoin('Student', 'Student.id', 'Advisor.student_id')
+					.select(db.fn.countAll<number>().as('total'))
+					.executeTakeFirst();
+
+				const studentsQuery = db
+					.selectFrom('Advisor')
+					// .where('Advisor.advisor_id', '=', userId)
+					.innerJoin('Student', 'Student.id', 'Advisor.student_id')
+					.innerJoin('User as StudentUser', 'StudentUser.id', 'Student.user_id')
+					.innerJoin('User as AdvisorUser', 'AdvisorUser.id', 'Advisor.advisor_id')
+					.innerJoin('Majors as Major1', 'Major1.id', 'Student.major_id')
+					.leftJoin('Minors', 'Minors.id', 'Student.minor_id')
+					.leftJoin('Majors as Major2', 'Major2.id', 'Student.minor_id')
+					.select([
+						'AdvisorUser.name as advisor_name',
+						'Student.id as student_id',
+						'Student.user_id',
+						'StudentUser.name as student_name',
+						'StudentUser.email',
+						'Student.created_at',
+						'Student.updated_at',
+						'Student.invite_token',
+						'Student.invite_expires',
+						'Major1.name as major_name',
+						'Minors.name as minor_name',
+						'Major2.name as major2_name'
+					])
+					.limit(size)
+					.offset(page * size)
+					.orderBy('StudentUser.name', order);
+
+				const [countResult, studentsData] = await Promise.all([
+					countQuery,
+					studentsQuery.execute()
 				]);
 
-				const count = countResult?.count ?? 0;
+				// Avoid running the map function if there are no results
+				if (!studentsData.length) {
+					return { students: [], count: 0 };
+				}
 
-				const students = studentsData.map((student) => {
-					const major = majors.find((m) => m.id === student.major_id)?.name;
-					let program_name = major;
-
-					const minor = minors.find((m) => m.id === student.minor_id)?.name;
-
-					const major2 = majors.find((m) => m.id === student.minor_id)?.name;
-
-					if (minor) {
-						program_name = `${major} with ${minor}`;
-					}
-
-					if (major2) {
-						program_name = `${major} and ${major2}`;
-					}
-					return {
+				return {
+					students: studentsData.map((student) => ({
 						...student,
-						program_name
-					};
-				});
-				return { students, count };
+						program_name: student.minor_name
+							? `${student.major_name} with ${student.minor_name}`
+							: student.major2_name
+								? `${student.major_name} and ${student.major2_name}`
+								: student.major_name
+					})),
+					count: countResult?.total ?? 0
+				};
 			} catch (err) {
 				console.error('Error fetching students:', err);
 				throw new TRPCError({

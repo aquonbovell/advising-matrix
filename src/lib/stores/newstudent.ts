@@ -70,7 +70,7 @@ export const totalCredits = derived(degree, ($degree) =>
 // 	return totalCredits > 0 ? Number((totalPoints / totalCredits).toFixed(2)) : 0;
 // });
 
-export const overallGPA = derived([studentCourses, degree], ([$courses, $degree]) => {
+export const overallGPA = derived([studentCourses], ([$courses]) => {
 	const { totalPoints, totalCredits } = $courses.filter(isValidCourse).reduce(
 		(acc, course) => {
 			if (course.grade) {
