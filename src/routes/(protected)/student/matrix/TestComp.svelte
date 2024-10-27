@@ -21,10 +21,13 @@
 		totalCredits,
 		selectedCourse
 	} from '$lib/stores/newstudent';
-	import { gradePoints } from '$lib/types';
+	import { gradePoints, type NonNullableGrade } from '$lib/types';
 	import GradeDialog from '$lib/components/dialogs/GradeDialog.svelte';
 	import CourseSelectionDialog from '$lib/components/dialogs/CourseSelectionDialog.svelte';
 	import CourseCard from '$lib/components/matrix/CourseCard.svelte';
+	import { getToastState } from '$lib/components/toast/toast-state.svelte';
+	import { trpc } from '$lib/trpc';
+	import { Loader2 } from 'lucide-svelte';
 
 	export let studentCourses: RouterOutputs['students']['getStudentCourses'];
 	export let degree: RouterOutputs['students']['getStudentDegree'];
@@ -39,10 +42,32 @@
 		degreeStore.set(degree.degree);
 	}
 
+	const toastState = getToastState();
+
+	const updateGradesMutation = trpc.students.updateStudentGrades.mutation({
+		onSuccess: () => {
+			toastState.add('Success', 'Grades updated successfully', 'success');
+		},
+		onError: (error) => {
+			console.error('Failed to update grades:', error);
+			toastState.add('Error', 'Failed to update grades', 'error');
+		}
+	});
+
 	let isAddCourseDialogOpen = false;
 	let isGradeDialogOpen = false;
 	let selectedCourseId: Selected<number> = { value: 0, label: '' };
 	let currentRequirementId: string | null = null;
+
+	async function saveGrades() {
+		const gradesToUpdate = $studentCoursesStore.map((course) => ({
+			courseId: course.courseId,
+			grade: course.grade as NonNullableGrade,
+			requirementId: course.requirementId
+		}));
+
+		$updateGradesMutation.mutateAsync(gradesToUpdate);
+	}
 
 	function openAddCourseDialog(requirementId: string) {
 		currentRequirementId = requirementId;
@@ -59,7 +84,15 @@
 	<Card.Root>
 		<Card.Header class="flex flex-row items-baseline justify-between">
 			<Card.Title>{degree.degree.name}</Card.Title>
-			<Button.Root variant="outline">Save Changes</Button.Root>
+			<Button.Root
+				variant="outline"
+				on:click={saveGrades}
+				disabled={$updateGradesMutation.isPending}
+				>{#if $updateGradesMutation.isPending}
+					<Loader2 class="mr-2 size-5 animate-spin" />
+					Saving...
+				{:else}Save Changes{/if}</Button.Root
+			>
 		</Card.Header>
 		<Card.Content>
 			<div class="flex gap-3 pb-4">

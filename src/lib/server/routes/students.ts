@@ -4,11 +4,12 @@ import { db } from '$lib/db';
 import { getName, paginatable } from '$lib/utils';
 import { TRPCError } from '@trpc/server';
 import { gradeSchema, type CourseWithPrerequisites, type Degree } from '$lib/types';
-import type { Requirement } from '$lib/types';
+import type { NonNullableGrade, Requirement } from '$lib/types';
 
 const UpdateGradeInputSchema = z.object({
 	courseId: z.number(),
-	grade: gradeSchema
+	grade: gradeSchema,
+	requirementId: z.string().uuid()
 });
 
 export const studentRouter = router({
@@ -424,29 +425,54 @@ export const studentRouter = router({
 	updateStudentGrades: protectedProcedure
 		.input(z.array(UpdateGradeInputSchema))
 		.mutation(async ({ input, ctx }) => {
-			const student = await db
-				.selectFrom('Student')
-				.select(['id'])
-				.where('id', '=', ctx.user.id)
-				.executeTakeFirst();
+			if (input.length === 0) return { success: true };
 
-			if (!student) {
+			try {
+				await db.transaction().execute(async (trx) => {
+					const student = await trx
+						.selectFrom('Student')
+						.select(['id'])
+						.where('user_id', '=', ctx.user.id)
+						.executeTakeFirst();
+
+					if (!student) {
+						throw new TRPCError({
+							code: 'NOT_FOUND',
+							message: 'Student not found'
+						});
+					}
+
+					await trx
+						.deleteFrom('StudentCourses')
+						.where('studentId', '=', student.id)
+						.where(
+							'courseId',
+							'in',
+							input.map((i) => i.courseId)
+						)
+						.execute();
+
+					await trx
+						.insertInto('StudentCourses')
+						.values(
+							input.map((i) => ({
+								id: crypto.randomUUID(),
+								studentId: student.id,
+								courseId: i.courseId,
+								grade: i.grade as NonNullableGrade,
+								requirementId: i.requirementId
+							}))
+						)
+						.execute();
+				});
+
+				return { success: true };
+			} catch (err) {
+				console.error(err);
 				throw new TRPCError({
-					code: 'NOT_FOUND',
-					message: 'Student not found'
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'An error occurred while updating student grades'
 				});
 			}
-
-			const updatePromises = input.map(async (update) => {
-				db.updateTable('StudentCourses')
-					.set({ grade: update.grade })
-					.where('studentId', '=', student.id)
-					.where('courseId', '=', update.courseId)
-					.execute();
-			});
-
-			await Promise.all(updatePromises);
-
-			return { success: true };
 		})
 });
