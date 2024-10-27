@@ -112,23 +112,23 @@
 					{`Level ${req.level === 4 ? '2 / 3' : req.level} - ${req.credits} credits`}
 				</Card.Title>
 				{#if req.type === 'POOL'}
-					<Button.Root
-						on:click={() => {
-							currentRequirementId = req.id;
-							isAddCourseDialogOpen = true;
-						}}>Add Course</Button.Root
-					>
+					<Button.Root on:click={() => openAddCourseDialog(req.id)}>Add Course</Button.Root>
 				{/if}
 			</Card.Header>
 			<Card.Content class="px-0">
 				<ul class="divide-y-2">
 					{#if Array.isArray(req.details)}
 						{#each req.details as course}
-							<CourseCard
-								{course}
-								required={req.type === 'POOL' ? false : true}
-								addGradeDialog={() => openGradeDialog(req.id)}
-							/>
+							{@const isInStudentCourses = $studentCoursesStore.some(
+								(sc) => sc.courseId === course.id && sc.requirementId === req.id
+							)}
+							{#if req.type !== 'POOL' || isInStudentCourses}
+								<CourseCard
+									{course}
+									required={req.type === 'POOL' ? false : true}
+									addGradeDialog={() => openGradeDialog(req.id)}
+								/>
+							{/if}
 						{/each}
 					{/if}
 				</ul>
@@ -197,9 +197,7 @@
 		</Dialog.Header>
 	</Dialog.Content>
 </Dialog.Root>
-<!-- <CourseSelectionDialog
-	bind:open={isAddCourseDialogOpen}
-	requirementId={currentRequirementId}
-/> -->
+
+<CourseSelectionDialog bind:open={isAddCourseDialogOpen} requirementId={currentRequirementId} />
 
 <GradeDialog bind:open={isGradeDialogOpen} requirementId={currentRequirementId} />
