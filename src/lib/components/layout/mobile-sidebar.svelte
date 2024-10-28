@@ -9,7 +9,7 @@
 	import UserMenu from './user-menu.svelte';
 	import UserAvatar from './user-avatar.svelte';
 
-	export let user: { name: string | undefined; role: UserRole };
+	export let user: { name: string; role: UserRole };
 </script>
 
 <header

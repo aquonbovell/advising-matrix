@@ -5,7 +5,7 @@
 	import { UserMenuItems } from './navigation-data.svelte';
 	import UserMenu from './user-menu.svelte';
 
-	export let user: { name: string | undefined; role: UserRole | undefined };
+	export let user: { name: string; role: UserRole };
 </script>
 
 <aside class="hidden border-r bg-muted/40 md:block">
