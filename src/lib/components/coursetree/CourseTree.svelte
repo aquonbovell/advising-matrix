@@ -61,11 +61,7 @@
 		const edges: Edge[] = [];
 		const visited = new Set<number>();
 
-		function addCourseNode(
-			course: CourseWithPrerequisites,
-			level: number,
-			isRoot = false
-		) {
+		function addCourseNode(course: CourseWithPrerequisites, level: number, isRoot = false) {
 			if (visited.has(course.id)) return;
 			visited.add(course.id);
 
