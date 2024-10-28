@@ -2,9 +2,9 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Select from '$lib/components/ui/select';
 	import * as Button from '$lib/components/ui/button';
-	import type { Selected } from 'bits-ui';
-	import { selectedCourse } from '$lib/stores/student';
+	import { studentCourses, degree } from '$lib/stores/newstudent';
 	import { getToastState } from '$lib/components/toast/toast-state.svelte';
+	import type { Selected } from 'bits-ui';
 
 	export let open = false;
 	export let requirementId: string | null;
@@ -54,9 +54,16 @@
 							<Select.Value placeholder="Select a course" />
 						</Select.Trigger>
 						<Select.Content class="max-h-60 overflow-y-auto">
-							{#if requirementId}
-								<!-- Add your course list filtering logic here -->
-								<!-- <Select.Item value={courseId}>{course.code} - {course.name}</Select.Item> -->
+							{@const index = $degree.requirements.findIndex((r) => r.id === requirementId)}
+							{@const requirement = $degree.requirements[index]}
+							{#if requirement}
+								{#each requirement.details.filter((course) => !$studentCourses.some((sc) => sc.courseId === course.id) && !$degree.requirements // Not already taken // Not a required course
+											.filter((r) => r.type === 'CREDITS')
+											.some((r) => r.details.some((c) => c.id === course.id))) as course}
+									<Select.Item value={course.id}>
+										{course.code} - {course.name}
+									</Select.Item>
+								{/each}
 							{:else}
 								<Select.Item value={0} disabled>No courses found</Select.Item>
 							{/if}

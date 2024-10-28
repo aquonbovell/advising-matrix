@@ -6,8 +6,7 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Select from '$lib/components/ui/select';
 	import { Progress } from '$lib/components/ui/progress';
-	import { derived, writable } from 'svelte/store';
-	import { Course } from '$lib/components/matrix';
+	import { writable } from 'svelte/store';
 	import type { Selected } from 'bits-ui';
 
 	import {
@@ -21,7 +20,7 @@
 		totalCredits,
 		selectedCourse
 	} from '$lib/stores/newstudent';
-	import { gradePoints, type NonNullableGrade } from '$lib/types';
+	import type { NonNullableGrade } from '$lib/types';
 	import GradeDialog from '$lib/components/dialogs/GradeDialog.svelte';
 	import CourseSelectionDialog from '$lib/components/dialogs/CourseSelectionDialog.svelte';
 	import CourseCard from '$lib/components/matrix/CourseCard.svelte';
@@ -135,68 +134,7 @@
 			</Card.Content>
 		</Card.Root>
 	{/each}
-
-	<h1>Test</h1>
-	<p>Student Courses: {studentCourses.courses.length}</p>
-	<p>Degree: {degree.degree.name}</p>
-	<p>Program: {program.program.id}</p>
-	<p>Completed Credits: {$completedCredits}</p>
-	<p>Completed Courses: {$completedCourses}</p>
-	<p>Overall GPA: {$overallGPA}</p>
 </div>
-
-<Dialog.Root
-	bind:open={isAddCourseDialogOpen}
-	onOpenChange={(open) => {
-		if (!open) {
-			selectedCourseId = { value: 0, label: '' };
-		}
-	}}
->
-	<Dialog.Content class="max-w-min">
-		<Dialog.Header>
-			<Dialog.Title>Select a course</Dialog.Title>
-			<Dialog.Description>
-				<p class="pb-4">
-					Select a course from the list below to add. The course will be added to your list of
-					courses.
-				</p>
-				<div class="flex gap-3">
-					<Select.Root
-						required={true}
-						selected={selectedCourseId}
-						onSelectedChange={(value) => {
-							value && (selectedCourseId = value);
-						}}
-					>
-						<Select.Trigger class="w-[340px]">
-							<Select.Value placeholder="Select A course" />
-						</Select.Trigger>
-						<Select.Content class=" max-h-60 overflow-y-auto">
-							<!-- {@const index = degree.requirements.findIndex((r) => r.id === $dialogRequirementID)}
-						{@const requirement = degree.requirements[index]}
-						{#if requirement}
-							{#each requirement.details.filter((course) => !$courseGrades[course.id] && !$requiredCourses
-										.flatMap((c) => c.id)
-										.includes(course.id)) as course}
-								<Select.Item value={course.id}>{course.code} - {course.name}</Select.Item>
-							{/each}
-						{:else}
-							<Select.Item value="No courses found" disabled>No courses found</Select.Item>
-						{/if} -->
-						</Select.Content>
-					</Select.Root>
-					<Dialog.Close
-						on:click={() => {
-							isAddCourseDialogOpen = false;
-							// addCourse(selectedCourseId);
-						}}><Button.Root>Add Course</Button.Root></Dialog.Close
-					>
-				</div>
-			</Dialog.Description>
-		</Dialog.Header>
-	</Dialog.Content>
-</Dialog.Root>
 
 <CourseSelectionDialog bind:open={isAddCourseDialogOpen} requirementId={currentRequirementId} />
 
