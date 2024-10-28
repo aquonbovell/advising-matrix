@@ -64,7 +64,6 @@
 		function addCourseNode(
 			course: CourseWithPrerequisites,
 			level: number,
-			position: { x: number; y: number },
 			isRoot = false
 		) {
 			if (visited.has(course.id)) return;
@@ -78,12 +77,12 @@
 					isRoot,
 					isLeaf: !course.prerequisites || course.prerequisites.length === 0
 				},
-				position
+				position: { x: 0, y: 0 }
 			});
 
 			if (course.prerequisites && course.prerequisites.length > 0) {
 				course.prerequisites.forEach((prereq, _index) => {
-					addCourseNode(prereq as CourseWithPrerequisites, level + 1, { x: 0, y: 0 }, false);
+					addCourseNode(prereq as CourseWithPrerequisites, level + 1, false);
 					edges.push({
 						id: `${course.id}-${prereq.id}`,
 						source: course.id.toString(),
@@ -93,7 +92,7 @@
 			}
 		}
 
-		addCourseNode(course, 0, { x: 0, y: 0 }, true);
+		addCourseNode(course, 0, true);
 
 		return { nodes, edges };
 	}
