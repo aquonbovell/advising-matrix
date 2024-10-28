@@ -1,26 +1,21 @@
-import { db } from '$lib/db';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { trpcServer } from '$lib/server/server';
 
-export const load = (async ({ params }) => {
-	try {
-		const course = await db
-			.selectFrom('Course')
-			.where('code', '=', params.code)
-			.selectAll()
-			.executeTakeFirst();
-		if (!course) error(404, 'Course not found');
+export const load: PageServerLoad = async (event) => {
+	const userId = event.locals.user?.id;
 
-		const prerequisites = await db
-			.selectFrom('CoursePrerequisite')
-			.innerJoin('Course', 'CoursePrerequisite.prerequisiteId', 'Course.id')
-			.where('CoursePrerequisite.courseId', '=', course.id)
-			.selectAll()
-			.execute();
-
-		return { course, prerequisites };
-	} catch (err) {
-		console.error(err);
-		error(500, 'An error occurred while fetching the course');
+	if (!userId) {
+		throw error(401, 'Unauthorized');
 	}
-}) satisfies PageServerLoad;
+
+	const courseId = event.params.code;
+
+	const course = await trpcServer.courses.getSpecificCourse.ssr({ code: courseId }, event);
+
+	if (!course) {
+		throw error(404, 'Course not found');
+	}
+
+	return { course };
+};
