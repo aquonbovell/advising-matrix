@@ -4,8 +4,10 @@
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import { UserMenuItems } from './navigation-data.svelte';
 	import UserMenu from './user-menu.svelte';
+	import { page } from '$app/stores';
 
 	export let user: { name: string; role: UserRole };
+	$: url = $page.url.toString();
 </script>
 
 <aside class="hidden border-r bg-muted/40 md:block">
@@ -19,7 +21,7 @@
 			<nav class="grid items-start px-2 text-sm font-medium lg:px-4">
 				<a
 					href="/"
-					class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+					class={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${url.endsWith(user.role.toLowerCase()) ? 'text-primary' : ''}`}
 				>
 					<Menu class="h-4 w-4" />
 					Home
@@ -28,7 +30,7 @@
 					{#each UserMenuItems[user.role] ?? [] as item}
 						<a
 							href={item.href}
-							class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+							class={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${url.includes(item.href) ? 'text-primary' : ''}`}
 						>
 							<svelte:component this={item.icon} class="h-5 w-5" />
 							<span>{item.label}</span>

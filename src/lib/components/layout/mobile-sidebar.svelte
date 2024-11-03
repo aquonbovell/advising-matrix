@@ -8,8 +8,11 @@
 	import { UserMenuItems } from './navigation-data.svelte';
 	import UserMenu from './user-menu.svelte';
 	import UserAvatar from './user-avatar.svelte';
+	import { page } from '$app/stores';
 
 	export let user: { name: string; role: UserRole };
+
+	$: url = $page.url.toString();
 </script>
 
 <header
@@ -30,7 +33,7 @@
 				</a>
 				<a
 					href="/"
-					class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+					class={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground ${url.endsWith(user.role.toLowerCase()) ? 'text-primary' : ''}`}
 				>
 					<Home class="h-5 w-5" />
 					Dashboard
@@ -39,7 +42,7 @@
 					{#each UserMenuItems[user.role] ?? [] as item}
 						<a
 							href={item.href}
-							class="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
+							class={`mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground ${url.includes(item.href) ? 'text-primary' : ''}`}
 						>
 							<svelte:component this={item.icon} class="h-5 w-5" />
 							<span>{item.label}</span>
