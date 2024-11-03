@@ -5,51 +5,14 @@ import { courseSchema } from './schema';
 import { error, redirect } from '@sveltejs/kit';
 import { db } from '$lib/db';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user?.role !== 'ADMIN') {
 		error(401, 'Unauthorized');
 	}
 	const form = await superValidate(zod(courseSchema));
-	const course = await db
-		.selectFrom('Courses')
-		.where('code', '=', params.code)
-		.selectAll()
-		.executeTakeFirst();
-
-	if (!course) error(404, 'Course not found');
-
-	const prerequisites = await db
-		.selectFrom('Prerequisites')
-		.where('Prerequisites.courseId', '=', course.id)
-		.select('Prerequisites.prerequisiteId')
-		.execute();
-
-	const levelRestrictions = await db
-		.selectFrom('LevelRestriction')
-		.where('courseId', '=', course.id)
-		.selectAll()
-		.execute();
 
 	const departments = await db.selectFrom('Departments').selectAll().execute();
 	const courses = await db.selectFrom('Courses').selectAll().execute();
-
-	if (!course) {
-		redirect(303, '/courses');
-	}
-
-	form.data = {
-		...course,
-		levelRestriction: levelRestrictions.map((levelRestriction) => ({
-			...levelRestriction,
-			area: levelRestriction.area.split(','),
-			level: levelRestriction.level.split(',').map((level) => parseInt(level))
-		})),
-		prerequisites: {
-			courses: prerequisites.map((prerequisite) => prerequisite.prerequisiteId.toString()),
-			dataType: course.prerequisiteType as 'all' | 'one',
-			requiredAmount: course.prerequisiteAmount
-		}
-	};
 
 	return {
 		form,
@@ -59,7 +22,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 };
 
 export const actions: Actions = {
-	update: async (event) => {
+	create: async (event) => {
 		const form = await superValidate(event, zod(courseSchema));
 
 		if (event.locals.user?.role !== 'ADMIN') {

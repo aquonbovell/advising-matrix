@@ -30,7 +30,7 @@
 							type="submit"
 							formaction="?/delete"
 							class="inline-flex h-12 w-full items-center justify-center rounded-lg border bg-slate-50 px-[21px] text-[15px] font-semibold text-red-500 shadow-sm hover:bg-slate-100/95 active:scale-90 active:transition-all"
-							>Delete Faculty</Dialog.Close
+							>Delete Department</Dialog.Close
 						>
 					</form>
 				</Dialog.Footer>

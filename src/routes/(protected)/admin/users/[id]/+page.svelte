@@ -14,8 +14,10 @@
 	export let form: ActionData;
 
 	$: if (form?.success) {
+		alert('Password Reset was successfull');
 		toastState.add('Notice', 'Password Reset was successfull', 'success');
 	} else if (form?.message) {
+		alert(form.message);
 		toastState.add('Error', form.message, 'error');
 	}
 </script>

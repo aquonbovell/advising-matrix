@@ -34,6 +34,17 @@ export type CoursePrerequisite = {
     courseId: number;
     prerequisiteId: number;
 };
+export type Courses = {
+    id: string;
+    code: string;
+    name: string;
+    level: number;
+    credits: number;
+    departmentId: string;
+    prerequisiteType: Generated<string>;
+    prerequisiteAmount: Generated<number>;
+    comment: string | null;
+};
 export type CoursesLevelRestriction = {
     id: Generated<string>;
     courseId: number;
@@ -44,6 +55,22 @@ export type CoursesLevelRestriction = {
 export type Department = {
     id: Generated<string>;
     name: string;
+};
+export type Departments = {
+    id: string;
+    facultyId: string;
+    name: string;
+};
+export type Faculties = {
+    id: string;
+    name: string;
+};
+export type LevelRestriction = {
+    id: string;
+    courseId: string;
+    area: string;
+    credits: number;
+    level: string;
 };
 export type MajorRequirements = {
     id: string;
@@ -68,6 +95,11 @@ export type MinorRequirements = {
 export type Minors = {
     id: string;
     name: string;
+};
+export type Prerequisites = {
+    id: Generated<string>;
+    courseId: string;
+    prerequisiteId: string;
 };
 export type Session = {
     id: Generated<string>;
@@ -105,12 +137,17 @@ export type DB = {
     Advisor: Advisor;
     Course: Course;
     CoursePrerequisite: CoursePrerequisite;
+    Courses: Courses;
     CoursesLevelRestriction: CoursesLevelRestriction;
     Department: Department;
+    Departments: Departments;
+    Faculties: Faculties;
+    LevelRestriction: LevelRestriction;
     MajorRequirements: MajorRequirements;
     Majors: Majors;
     MinorRequirements: MinorRequirements;
     Minors: Minors;
+    Prerequisites: Prerequisites;
     Session: Session;
     Student: Student;
     StudentCourses: StudentCourses;

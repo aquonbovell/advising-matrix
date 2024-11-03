@@ -5,7 +5,10 @@ import { facultySchema } from './schema';
 import { error, redirect } from '@sveltejs/kit';
 import { db } from '$lib/db';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
+	if (locals.user?.role !== 'ADMIN') {
+		error(401, 'Unauthorized');
+	}
 	const form = await superValidate(zod(facultySchema));
 	const faculty = await db
 		.selectFrom('Faculties')
@@ -31,6 +34,10 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	update: async (event) => {
 		const form = await superValidate(event, zod(facultySchema));
+
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(form, 'You are not authorized to perform this action', { status: 401 });
+		}
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -66,7 +73,11 @@ export const actions: Actions = {
 		}
 	},
 	delete: async ({ params, locals }) => {
-		if (locals.user?.role !== 'ADMIN') error(401, 'Unauthorized');
+		if (locals.user?.role !== 'ADMIN')
+			return fail(401, {
+				message: 'You are not authorized to perform this action',
+				success: false
+			});
 
 		try {
 			await db.transaction().execute(async (db) => {

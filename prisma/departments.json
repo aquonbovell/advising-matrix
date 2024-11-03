@@ -1,15 +1,6 @@
 [
-	{ "id": 1, "name": "Biochemistry" },
-	{ "id": 2, "name": "Biology" },
-	{ "id": 3, "name": "Ecology" },
-	{ "id": 4, "name": "Microbiology" },
-	{ "id": 5, "name": "Environmental Science" },
-	{ "id": 6, "name": "Chemistry" },
-	{ "id": 7, "name": "Computer Science" },
-	{ "id": 8, "name": "Information Technology" },
-	{ "id": 9, "name": "Software Engineering" },
-	{ "id": 10, "name": "Mathematics" },
-	{ "id": 11, "name": "Electronics" },
-	{ "id": 12, "name": "Physics" },
-	{ "id": 13, "name": "Meteorology" }
+	{ "name": "BCS", "faculty": "Sci Tech" },
+	{ "name": "CMP", "faculty": "Sci Tech" },
+	{ "name": "CIMH", "faculty": "Sci Tech" },
+	{ "name": "CERMES", "faculty": "Sci Tech" }
 ]

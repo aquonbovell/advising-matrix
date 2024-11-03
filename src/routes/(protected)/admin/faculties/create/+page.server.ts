@@ -6,7 +6,10 @@ import { error, fail } from '@sveltejs/kit';
 import { db } from '$lib/db';
 import { generateId } from '$lib/utils';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user?.role !== 'ADMIN') {
+		error(401, 'Unauthorized');
+	}
 	const form = await superValidate(zod(facultySchema));
 	return { form };
 };
@@ -15,6 +18,9 @@ export const actions: Actions = {
 	default: async (event) => {
 		const form = await superValidate(event, zod(facultySchema));
 
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(form, 'You are not authorized to perform this action', { status: 401 });
+		}
 		if (!form.valid) {
 			return fail(400, { form });
 		}

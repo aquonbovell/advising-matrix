@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
+import { encodeBase32LowerCase } from '@oslojs/encoding';
 import type { TransitionConfig } from 'svelte/transition';
 import { completedCourse } from './stores/student';
 import type { CourseWithPrerequisites, Grade } from './types';
@@ -61,32 +62,6 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
-
-export function createMajorMinor(name: string): {
-	major: string[];
-	minor: string;
-} {
-	let degree: { major: string[]; minor: string } = {
-		major: [],
-		minor: ''
-	};
-
-	if (name && name.includes(' with ')) {
-		const [major, minor] = name.split(' with ');
-		degree.major = [...(major || 'None')];
-		degree.minor = minor || 'None';
-	} else if (name && name.includes(' and ')) {
-		const [major1, major2] = name.split(' and ');
-		degree.major = [major1 || 'None', major2 || 'None'];
-		degree.major = degree.major.filter((m) => m !== 'None');
-		degree.minor = 'None';
-	} else {
-		degree.major = [name || 'None'];
-		degree.minor = 'None';
-	}
-
-	return degree;
-}
 
 // Helper functions
 
@@ -205,4 +180,10 @@ export function paginatable<T extends ZodRawShape>(schema: T) {
 		page: z.number().int().min(0).optional().default(0),
 		size: z.number().int().min(1).max(100).optional().default(10)
 	});
+}
+
+export function generateId() {
+	const bytes = crypto.getRandomValues(new Uint8Array(20));
+	const token = encodeBase32LowerCase(bytes);
+	return token;
 }

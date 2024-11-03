@@ -1,62 +1,58 @@
 import 'dotenv/config';
-import path from 'path';
-import fs from 'fs/promises';
+import data from './courses.json';
 import { db } from './db';
 
-type CourseData = {
-	id: number;
-	code: string;
-	name: string;
-	level: number;
-	credits: number;
-	departmentId: string;
-	prerequisites: {
-		courseId: number;
-		prerequisiteId: number;
-		code: string;
-		name: string;
-		level: number;
-		credits: number;
-		departmentId: string;
-	}[];
-};
+await db.deleteFrom('Courses').execute();
 
-const __dirname = path.dirname(__filename);
+await db.deleteFrom('Prerequisites').execute();
 
-const data = await fs.readFile(path.join(__dirname, 'coursesdata.json'), 'utf-8');
+await db.deleteFrom('LevelRestriction').execute();
 
-const courseData: CourseData[] = JSON.parse(data);
-
-await db.deleteFrom('Course').execute();
-
-await db.deleteFrom('CoursePrerequisite').execute();
-
-for (const course of courseData) {
-	await db
-		.insertInto('Course')
-		.values({
-			id: course.id,
-			code: course.code,
-			name: course.name,
-			level: course.level,
-			credits: course.credits,
-			departmentId: course.departmentId
-		})
-		.execute();
+for (const course of data) {
+	let departmentId = await db
+		.selectFrom('Departments')
+		.where('name', 'like', course.departmentId)
+		.select('id')
+		.executeTakeFirst();
+	if (departmentId) {
+		await db
+			.insertInto('Courses')
+			.values({
+				id: course.id.toString(),
+				code: course.code,
+				name: course.name,
+				level: course.level,
+				credits: course.credits,
+				departmentId: departmentId.id,
+				comment: course.prerequisiteNote || course.warning || ''
+			})
+			.execute();
+	}
 }
 
-for (const course of courseData) {
+for (const course of data) {
 	const prerequisites = course.prerequisites;
 
-	for (const prerequisite of prerequisites) {
-		console.log(prerequisite);
-
+	for (const level of course.levelRestriction || []) {
 		await db
-			.insertInto('CoursePrerequisite')
+			.insertInto('LevelRestriction')
 			.values({
 				id: crypto.randomUUID(),
-				courseId: course.id,
-				prerequisiteId: prerequisite.prerequisiteId
+				courseId: course.id.toString(),
+				level: level.level.join(','),
+				credits: level.credits,
+				area: level.area.join(',')
+			})
+			.execute();
+	}
+
+	for (const prerequisite of prerequisites) {
+		await db
+			.insertInto('Prerequisites')
+			.values({
+				id: crypto.randomUUID(),
+				courseId: course.id.toString(),
+				prerequisiteId: prerequisite.prerequisiteId.toString()
 			})
 			.execute();
 	}

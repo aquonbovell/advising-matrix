@@ -4,25 +4,26 @@ import type { Actions, PageServerLoad } from './$types';
 import { DEFAULT_PASSWORD } from '$env/static/private';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import { userSchema } from './schema';
 import type { UserRole } from '$lib/db/schema';
 
-type DataUser = {
-	id: string;
-	alternate_email: string;
-	email: string;
-	name: string;
-	role: UserRole;
-};
-
-async function getUserForm(user: DataUser) {
+export const load = (async ({ params }) => {
 	const form = await superValidate(zod(userSchema));
 
-	if (user.role === 'ADMIN') {
-		throw error(403, 'Admins cannot be edited');
+	const user = await db
+		.selectFrom('User')
+		.where('id', '=', params.id)
+		.select(['id', 'role', 'email', 'name', 'alternate_email'])
+		.executeTakeFirst();
+
+	if (!user) {
+		error(404, { message: 'User not found' });
 	}
 
+	if (user?.role === 'ADMIN') {
+		error(400, { message: 'Cannot edit an admin user' });
+	}
 	form.data = {
 		id: user.id,
 		alternate_email: user.alternate_email,
@@ -30,28 +31,16 @@ async function getUserForm(user: DataUser) {
 		name: user.name,
 		role: user.role
 	};
-
-	return form;
-}
-
-export const load = (async ({ params }) => {
-	try {
-		const user = await db
-			.selectFrom('User')
-			.where('id', '=', params.id)
-			.select(['id', 'role', 'email', 'name', 'alternate_email'])
-			.executeTakeFirst();
-		if (!user) error(404, { message: 'User not found' });
-		return { person: user, form: await getUserForm(user) };
-	} catch (err) {
-		console.error(err);
-		error(500, 'An error occurred while fetching the user');
-	}
+	return { person: user, form };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
 	resetPassword: async ({ params, locals }) => {
-		if (locals.user?.role !== 'ADMIN') error(401, 'Unauthorized');
+		if (locals.user?.role !== 'ADMIN')
+			return fail(401, {
+				message: 'You are not authorized to perform this action',
+				success: false
+			});
 
 		try {
 			// Reset the password
@@ -61,7 +50,7 @@ export const actions: Actions = {
 				.select('id')
 				.executeTakeFirst();
 
-			if (!user) return fail(404, { message: 'User not found' });
+			if (!user) return fail(404, { message: 'User not found', success: false });
 
 			const encoder = new TextEncoder();
 			const secret = encoder.encode(process.env.SECRET!);
@@ -75,7 +64,7 @@ export const actions: Actions = {
 				.where('id', '=', user.id)
 				.execute();
 
-			if (!result) return fail(404, { message: 'Failed to reset password' });
+			if (!result) return fail(404, { message: 'Failed to reset password', success: false });
 			return { success: true };
 		} catch (err) {
 			console.error(err);
@@ -85,6 +74,9 @@ export const actions: Actions = {
 	edit: async (event) => {
 		const form = await superValidate(event, zod(userSchema));
 
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(form, 'You are not authorized to perform this action', { status: 401 });
+		}
 		if (!form.valid) {
 			return fail(400, { form });
 		}

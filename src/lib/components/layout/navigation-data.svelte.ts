@@ -22,7 +22,9 @@ const UserMenuItems: menuItemsType = {
 	],
 	ADMIN: [
 		{ label: 'Users', href: '/admin/users', icon: Users },
-		{ label: 'Admin Courses', href: '/admin/courses', icon: Book }
+		{ label: 'Courses', href: '/admin/courses', icon: Book },
+		{ label: 'Faculties', href: '/admin/faculties', icon: Book },
+		{ label: 'Departments', href: '/admin/departments', icon: Book }
 	]
 };
 export { UserMenuItems };

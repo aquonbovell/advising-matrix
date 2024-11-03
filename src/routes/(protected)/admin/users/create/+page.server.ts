@@ -8,7 +8,10 @@ import type { UserRole } from '$lib/db/schema';
 import { Argon2id } from 'oslo/password';
 import { DEFAULT_PASSWORD } from '$env/static/private';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user?.role !== 'ADMIN') {
+		error(401, 'Unauthorized');
+	}
 	return { form: await superValidate(zod(userSchema)) };
 };
 
@@ -16,11 +19,13 @@ export const actions: Actions = {
 	create: async (event) => {
 		const form = await superValidate(event, zod(userSchema));
 
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(form, 'You are not authorized to perform this action', { status: 401 });
+		}
+
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-
-		console.log(form.data);
 
 		const userEmail = await db
 			.selectFrom('User')
@@ -68,7 +73,7 @@ export const actions: Actions = {
 		const userId = data.at(0);
 
 		if (!userId) {
-			error(500, { message: 'An error occurred. Please try again later.' });
+			return message(form, 'An error occurred while creating the user', { status: 500 });
 		}
 
 		return redirect(303, `/admin/users/${userId.id}`);

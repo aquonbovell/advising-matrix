@@ -1,5 +1,5 @@
 import { z } from 'zod';
-export const userOptions = ['STUDENT', 'ADVISOR'] as const;
+export const userOptions = ['STUDENT', 'ADVISOR', 'ADMIN'] as const;
 export const userSchema = z.object({
 	id: z.string(),
 	name: z.string(),

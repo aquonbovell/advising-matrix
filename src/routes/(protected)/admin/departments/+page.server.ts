@@ -3,9 +3,7 @@ import type { PageServerLoad } from './$types';
 import { db } from '$lib/db';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const userId = locals.user?.id;
-
-	if (!userId) {
+	if (locals.user?.role !== 'ADMIN') {
 		error(401, 'Unauthorized');
 	}
 

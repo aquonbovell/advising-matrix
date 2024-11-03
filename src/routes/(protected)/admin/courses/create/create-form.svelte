@@ -81,14 +81,14 @@
 	$: selectedPrerequisite = $formData.prerequisites.courses
 		? {
 				label: courses
-					.filter((course) => $formData.prerequisites.courses.includes(course.id))
+					.filter((course) => $formData.prerequisites.courses.includes(course.id.toString()))
 					.map((course) => course.name),
 				value: $formData.prerequisites.courses
 			}
 		: undefined;
 </script>
 
-<form method="POST" use:enhance class="space-y-4" action="?/update">
+<form method="POST" use:enhance class="space-y-4" action="?/create">
 	<Form.Field {form} name="id">
 		<Form.Control let:attrs>
 			<Input {...attrs} bind:value={$formData.id} type="hidden" />
@@ -272,7 +272,7 @@
 									<Command.Item
 										value={course.name}
 										onSelect={(courseName) => {
-											const cv = courses.find((c) => c.name === courseName)?.id || '';
+											const cv = courses.find((c) => c.name === courseName)?.id.toString() || '';
 
 											if ($formData.prerequisites.courses.includes(cv)) {
 												$formData.prerequisites.courses = $formData.prerequisites.courses.filter(

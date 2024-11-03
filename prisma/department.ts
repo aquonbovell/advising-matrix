@@ -1,34 +1,23 @@
 import 'dotenv/config';
-import path from 'path';
-import fs from 'fs/promises';
+import data from './departments.json';
 import { db } from './db';
 
-const __dirname = path.dirname(__filename);
+await db.deleteFrom('Departments').execute();
 
-const data = await fs.readFile(path.join(__dirname, 'departments.json'), 'utf-8');
-type DepartmentData = {
-	id: number;
-	name: string;
-};
-
-const departmentsData: DepartmentData[] = JSON.parse(data);
-
-await db.deleteFrom('Department').execute();
-
-for (const department of departmentsData) {
-	let id = await db
-		.selectFrom('Department')
-		.where('name', 'like', department.name)
+for (const department of data) {
+	let facultyId = await db
+		.selectFrom('Faculties')
+		.where('name', 'like', department.faculty)
 		.select('id')
 		.executeTakeFirst();
-	if (!id) {
-		id = await db
-			.insertInto('Department')
+	if (facultyId) {
+		await db
+			.insertInto('Departments')
 			.values({
-				id: department.id.toString(),
-				name: department.name
+				id: crypto.randomUUID(),
+				name: department.name,
+				facultyId: facultyId.id
 			})
-			.returning('id')
-			.executeTakeFirst();
+			.execute();
 	}
 }

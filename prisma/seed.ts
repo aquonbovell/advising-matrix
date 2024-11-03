@@ -71,8 +71,8 @@ const seed = async () => {
 			.values({
 				id: crypto.randomUUID(),
 				user_id: student_id,
-				major_id: '0408fea6-d1a8-4c86-ab83-1d114cb32ba1',
-				minor_id: '6fdc41ad-a47c-4fce-a86f-7fabcd145a9b',
+				major_id: 'b8b97b70-b61a-49df-a9fa-703d5528997a',
+				minor_id: '4e3026cb-502f-423e-96d1-0c1787a23970',
 				invite_token: null,
 				invite_expires: null,
 				created_at: new Date().toISOString(),
