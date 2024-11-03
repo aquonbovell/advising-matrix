@@ -12,6 +12,7 @@ const adapter = new NodePostgresAdapter(postgresql, {
 });
 
 export const lucia = new Lucia(adapter, {
+	sessionExpiresIn: new TimeSpan(30, 'm'),
 	sessionCookie: {
 		attributes: {
 			secure: !dev

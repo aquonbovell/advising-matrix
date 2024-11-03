@@ -11,13 +11,6 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
-
-	declare namespace svelteHTML {
-		interface HTMLAttributes<T> {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			'on:clickoutside'?: (event: CustomEvent<any> & { target: EventTarget & T }) => any;
-		}
-	}
 }
 
 export {};
