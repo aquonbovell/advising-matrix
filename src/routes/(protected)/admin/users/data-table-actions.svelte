@@ -6,6 +6,7 @@
 	import { getToastState } from '$lib/components/toast/toast-state.svelte';
 
 	export let email: string;
+	export let id: string;
 	const toastState = getToastState();
 </script>
 
@@ -29,6 +30,6 @@
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item href={$page.url.toString() + '/' + email}>View user</DropdownMenu.Item>
+		<DropdownMenu.Item href={$page.url.toString() + '/' + id}>View user</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

@@ -10,7 +10,7 @@ export const load = (async ({ locals }) => {
 		const users = await db
 			.selectFrom('User')
 			.where('User.role', '<>', 'ADMIN')
-			.select(['id', 'name', 'email', 'role'])
+			.select(['id', 'name', 'email', 'role', 'alternate_email'])
 			.execute();
 		return { users };
 	} catch (err) {

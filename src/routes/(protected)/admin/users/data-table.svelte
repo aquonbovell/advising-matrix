@@ -1,7 +1,16 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	export let data: PageData;
+	import type { UserRole } from '$lib/db/schema';
+	type User = {
+		id: string;
+		name: string | null;
+		email: string;
+		alternate_email: string | null;
+		role: UserRole;
+	};
 
+	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
+	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import {
 		addPagination,
@@ -11,26 +20,19 @@
 		addSelectedRows
 	} from 'svelte-headless-table/plugins';
 	import { readable } from 'svelte/store';
-	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
+
 	import * as Table from '$lib/components/ui/table';
-	import DataTableActions from './data-table-actions.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import DataTableActions from './data-table-actions.svelte';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
-	import type { User, UserRole } from '$lib/db/schema';
 
-	type User = {
-		id: string;
-		name: string | null;
-		email: string;
-		role: UserRole;
-	};
+	export let data: PageData;
 
-	const courses: User[] = [...(data.users ?? [])];
+	const users: User[] = [...(data.users ?? [])];
 
-	const table = createTable(readable(courses), {
+	const table = createTable(readable(users), {
 		page: addPagination({ initialPageSize: 10 }),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -75,6 +77,10 @@
 			header: 'Email'
 		}),
 		table.column({
+			accessor: 'alternate_email',
+			header: 'Alternate Email'
+		}),
+		table.column({
 			accessor: 'role',
 			header: 'Role',
 			plugins: {
@@ -84,10 +90,12 @@
 			}
 		}),
 		table.column({
-			accessor: ({ email }) => email,
+			accessor: ({ email, id }) => {
+				return { email, id };
+			},
 			header: 'Actions',
 			cell: ({ value }) => {
-				return createRender(DataTableActions, { email: value });
+				return createRender(DataTableActions, { email: value.email, id: value.id });
 			},
 			plugins: {
 				sort: {
@@ -103,7 +111,7 @@
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns, rows } =
 		table.createViewModel(columns);
 
-	const { hasNextPage, hasPreviousPage, pageIndex, pageCount, pageSize } = pluginStates.page;
+	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 
 	const { filterValue } = pluginStates.filter;
 
@@ -118,18 +126,17 @@
 		.filter(([, hide]) => !hide)
 		.map(([id]) => id);
 
-	const hidableCols = ['credits', 'level'];
+	const hidableCols = ['alternate_email'];
 </script>
 
 <div>
 	<div class="flex-1 text-right text-sm text-muted-foreground">
-		Page {$pageIndex + 1} of{' '}
-		{Math.floor($rows.length / $pageSize) + 1}
+		Page {$pageIndex + 1} of {$pageCount}
 	</div>
 	<div class="flex items-center py-4">
 		<Input
 			class="max-w-sm"
-			placeholder="Filter user names or emails..."
+			placeholder="Filter names or emails..."
 			type="text"
 			bind:value={$filterValue}
 		/>

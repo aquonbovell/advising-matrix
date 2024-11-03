@@ -1,12 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import * as Card from '$lib/components/ui/card';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Button from '$lib/components/ui/button';
 	import type { ActionData } from './$types';
 	import { enhance } from '$app/forms';
 	import { getToastState } from '$lib/components/toast/toast-state.svelte';
-	import { Badge } from '$lib/components/ui/badge';
+	import EditForm from './edit-form.svelte';
 
 	const toastState = getToastState();
 
@@ -21,15 +20,9 @@
 	}
 </script>
 
-<Card.Root class="mx-auto max-w-md">
-	<Card.Header>
-		<Card.Title class="flex items-center gap-4"
-			><span>{data.person.name} </span><Badge>{data.person.role}</Badge></Card.Title
-		>
-		<Card.Description>Email: {data.person.email}</Card.Description>
-		<Card.Description>Alterate Email:{data.person.alternate_email}</Card.Description>
-	</Card.Header>
-	<Card.Content>
+<div class="mx-auto max-w-2xl">
+	<div class="flex items-center justify-between">
+		<h1 class="font-bold">Edit user</h1>
 		<Dialog.Root>
 			<Dialog.Trigger>
 				<Button.Root variant="destructive" type="button">Reset Password</Button.Root
@@ -54,5 +47,6 @@
 				</Dialog.Footer>
 			</Dialog.Content>
 		</Dialog.Root>
-	</Card.Content>
-</Card.Root>
+	</div>
+	<EditForm data={data.form} />
+</div>
