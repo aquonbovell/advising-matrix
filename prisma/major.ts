@@ -27,11 +27,21 @@ const majorData: MajorData[] = JSON.parse(data);
 await db.deleteFrom('MajorRequirements').execute();
 
 for (const major of majorData) {
-	const id = await db
+	let id = await db
 		.selectFrom('Majors')
 		.where('name', 'like', major.name)
 		.select('id')
 		.executeTakeFirst();
+	if (!id) {
+		id = await db
+			.insertInto('Majors')
+			.values({
+				id: crypto.randomUUID(),
+				name: major.name
+			})
+			.returning('id')
+			.executeTakeFirst();
+	}
 	console.log(`${major.name} - ${id?.id}`);
 	for (const detail of major.details) {
 		await db

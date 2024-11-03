@@ -25,20 +25,21 @@ type MinorData = {
 const MinorData: MinorData[] = JSON.parse(data);
 
 for (const minor of MinorData) {
-	const id = await db
+	let id = await db
 		.selectFrom('Minors')
 		.where('name', 'like', minor.name)
 		.select('id')
 		.executeTakeFirst();
 
 	if (!id) {
-		await db
+		id = await db
 			.insertInto('Minors')
 			.values({
 				id: crypto.randomUUID(),
 				name: minor.name
 			})
-			.execute();
+			.returning('id')
+			.executeTakeFirst();
 	}
 }
 

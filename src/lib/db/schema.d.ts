@@ -32,6 +32,13 @@ export type CoursePrerequisite = {
     courseId: number;
     prerequisiteId: number;
 };
+export type CoursesLevelRestriction = {
+    id: Generated<string>;
+    courseId: number;
+    area: string[];
+    credits: number;
+    level: number[];
+};
 export type Department = {
     id: Generated<string>;
     name: string;
@@ -96,6 +103,7 @@ export type DB = {
     Advisor: Advisor;
     Course: Course;
     CoursePrerequisite: CoursePrerequisite;
+    CoursesLevelRestriction: CoursesLevelRestriction;
     Department: Department;
     MajorRequirements: MajorRequirements;
     Majors: Majors;
