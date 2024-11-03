@@ -68,18 +68,18 @@
 		}),
 		table.column({
 			accessor: 'code',
-			header: 'Code'
+			header: 'Course Code'
 		}),
 		table.column({
 			accessor: 'name',
-			header: 'Name'
+			header: 'Course Name'
 		}),
 		table.column({
 			accessor: 'level',
 			header: 'Level',
 			plugins: {
 				filter: {
-					exclude: false
+					exclude: true
 				}
 			}
 		}),
@@ -115,7 +115,7 @@
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns, rows } =
 		table.createViewModel(columns);
 
-	const { hasNextPage, hasPreviousPage, pageIndex, pageCount, pageSize } = pluginStates.page;
+	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 
 	const { filterValue } = pluginStates.filter;
 
@@ -135,8 +135,7 @@
 
 <div>
 	<div class="flex-1 text-right text-sm text-muted-foreground">
-		Page {$pageIndex + 1} of{' '}
-		{Math.floor($rows.length / $pageSize) + 1}
+		Page {$pageIndex + 1} of {$pageCount}
 	</div>
 	<div class="flex items-center py-4">
 		<Input

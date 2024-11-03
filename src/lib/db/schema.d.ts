@@ -26,6 +26,8 @@ export type Course = {
     level: number;
     credits: number;
     departmentId: string;
+    prerequisiteType: Generated<string>;
+    prerequisiteAmount: Generated<number>;
 };
 export type CoursePrerequisite = {
     id: Generated<string>;
@@ -35,9 +37,9 @@ export type CoursePrerequisite = {
 export type CoursesLevelRestriction = {
     id: Generated<string>;
     courseId: number;
-    area: string[];
+    area: string;
     credits: number;
-    level: number[];
+    level: string;
 };
 export type Department = {
     id: Generated<string>;
