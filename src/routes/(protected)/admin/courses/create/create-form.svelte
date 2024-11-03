@@ -102,15 +102,15 @@
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
-	<div class="grid grid-cols-3 gap-3">
-		<Form.Field {form} name="code">
+	<div class="grid grid-cols-2 gap-3 lg:grid-cols-12">
+		<Form.Field {form} name="code" class="lg:col-span-4">
 			<Form.Control let:attrs>
 				<Form.Label class="font-semibold">Course Code</Form.Label>
 				<Input {...attrs} bind:value={$formData.code} placeholder="PHIL2406" />
 			</Form.Control>
 			<Form.FieldErrors class="mt-2 text-sm" />
 		</Form.Field>
-		<Form.Field {form} name="credits">
+		<Form.Field {form} name="credits" class="lg:col-span-4">
 			<Form.Control let:attrs>
 				<Form.Label class="font-semibold">Course Credits</Form.Label>
 				<Input
@@ -125,7 +125,7 @@
 			<Form.FieldErrors class="mt-2 text-sm" />
 		</Form.Field>
 
-		<Form.Field {form} name="departmentId">
+		<Form.Field {form} name="departmentId" class="col-span-full lg:col-span-4">
 			<Form.Control let:attrs>
 				<Form.Label>Department</Form.Label>
 				<Select.Root
@@ -134,7 +134,7 @@
 						v && ($formData.departmentId = v.value);
 					}}
 				>
-					<Select.Trigger {...attrs} class="min-w-max flex-1">
+					<Select.Trigger {...attrs} class="min-w-max">
 						<Select.Value placeholder="Select a verified department" />
 					</Select.Trigger>
 					<Select.Content>
@@ -145,13 +145,24 @@
 				</Select.Root>
 				<input hidden bind:value={$formData.departmentId} name={attrs.name} />
 			</Form.Control>
-			<Form.Description class="max-w-[40ch]">
+			<Form.Description>
 				Select a verified faculty from the list. If the department is not listed, please contact the
 				administrator.
 			</Form.Description>
 			<Form.FieldErrors />
 		</Form.Field>
 	</div>
+	<Form.Field {form} name="comment">
+		<Form.Control let:attrs>
+			<Form.Label class="font-semibold">Comment</Form.Label>
+			<Input
+				{...attrs}
+				bind:value={$formData.comment}
+				placeholder="Course restrictions and disclaimers"
+			/>
+		</Form.Control>
+		<Form.FieldErrors class="mt-2 text-sm" />
+	</Form.Field>
 	<Form.Field {form} name="levelRestriction">
 		<Form.Control let:attrs>
 			<div class="flex items-baseline justify-between">
@@ -161,50 +172,63 @@
 
 			{#each $formData.levelRestriction as restriction (restriction.id)}
 				<div class="flex gap-3">
-					<div class="flex w-full gap-3">
+					<div class="relative grid w-full grid-cols-6 gap-3 pt-5 sm:grid-cols-12">
 						<!-- Level Dropdown -->
-						<Select.Root
-							multiple
-							selected={restriction.level.map((l) => ({ label: 'Level ' + l, value: l }))}
-							onSelectedChange={(l) => {
-								restriction.level = l?.map((v) => v.value) || [];
-							}}
-						>
-							<Select.Trigger {...attrs} class="w-fit min-w-48">
-								<Select.Value placeholder="Select a verified level" />
-							</Select.Trigger>
-							<Select.Content class="min-w-48">
-								{#each { length: 4 } as _, i}
-									{#if i > 0}
-										<Select.Item value={i} label={`Level ${i}`} />
-									{/if}
-								{/each}
-							</Select.Content>
-						</Select.Root>
+						<div class="col-span-4 w-full">
+							<Form.Label class="font-semibold">Level</Form.Label>
+							<Select.Root
+								multiple
+								selected={restriction.level.map((l) => ({ label: 'Level ' + l, value: l }))}
+								onSelectedChange={(l) => {
+									restriction.level = l?.map((v) => v.value) || [];
+								}}
+							>
+								<Select.Trigger {...attrs}>
+									<Select.Value placeholder="Select a verified level" />
+								</Select.Trigger>
+								<Select.Content class="min-w-48">
+									{#each { length: 4 } as _, i}
+										{#if i > 0}
+											<Select.Item value={i} label={`Level ${i}`} />
+										{/if}
+									{/each}
+								</Select.Content>
+							</Select.Root>
+						</div>
 
 						<!-- Credits Input -->
-						<Input
-							value={restriction.credits}
-							class="w-fit"
-							type="number"
-							step="3"
-							min="0"
-							max="100"
-							on:input={(event) => convertStringToNumber(event, restriction.id)}
-						/>
+						<div class="col-span-2 w-full">
+							<Form.Label class="font-semibold">Credits</Form.Label>
+							<Input
+								value={restriction.credits}
+								type="number"
+								step="3"
+								min="0"
+								max="100"
+								on:input={(event) => convertStringToNumber(event, restriction.id)}
+							/>
+						</div>
 
 						<!-- Area Input -->
-						<Input
-							bind:value={restriction.area}
-							type="text"
-							on:input={(event) => {
-								updateArea(event, restriction.id);
-							}}
-						/>
+						<div class="col-span-full w-full sm:col-span-6">
+							<Form.Label class="font-semibold">Area</Form.Label>
+							<Input
+								bind:value={restriction.area}
+								type="text"
+								on:input={(event) => {
+									updateArea(event, restriction.id);
+								}}
+							/>
+						</div>
+						<button
+							class="absolute right-0 top-0"
+							on:click={() => removeRestriction(restriction.id)}
+							type="button"
+							><Badge class="bg-white px-2 py-1 font-bold text-destructive hover:bg-slate-200"
+								>X</Badge
+							></button
+						>
 					</div>
-					<Button variant="outline" on:click={() => removeRestriction(restriction.id)} type="button"
-						>Remove</Button
-					>
 				</div>
 			{/each}
 		</Form.Control>

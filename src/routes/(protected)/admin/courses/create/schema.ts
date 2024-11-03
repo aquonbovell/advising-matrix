@@ -21,6 +21,7 @@ export const courseSchema = z.object({
 			area: z.array(z.string())
 		})
 	),
+	comment: z.string().optional(),
 	prerequisites: z.object({
 		dataType: z.enum(prerequisiteOptions),
 		courses: z.array(z.string()),

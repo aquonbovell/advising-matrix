@@ -39,7 +39,7 @@ export const actions: Actions = {
 			.executeTakeFirst();
 
 		if (courseCode) {
-			form.errors.name = [...(form.errors.code ?? ''), 'Course already exists with this code'];
+			form.errors.code = [...(form.errors.code ?? ''), 'Course already exists with this code'];
 			return fail(400, { form });
 		}
 
@@ -66,7 +66,8 @@ export const actions: Actions = {
 						departmentId: courseData.departmentId,
 						level: parseInt(courseData.code[4] ?? '0'),
 						prerequisiteAmount: courseData.prerequisites.requiredAmount,
-						prerequisiteType: courseData.prerequisites.dataType
+						prerequisiteType: courseData.prerequisites.dataType,
+						comment: courseData.comment
 					})
 					.where('code', '=', courseData.code)
 					.returning('id')
