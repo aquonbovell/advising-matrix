@@ -6,8 +6,7 @@
 </script>
 
 <Toast />
-<div
-	class="flex min-h-full min-w-80 items-center justify-center bg-gradient-to-b from-[#fdfdfc] to-[#f9f9f8] p-5 font-sans"
->
+
+<div class="relative z-10 flex min-h-full min-w-80 items-center justify-center p-5 font-sans">
 	<slot />
 </div>

@@ -10,8 +10,9 @@
 
 {#if data.user}
 	<Toast />
+
 	<div
-		class="grid min-h-screen w-full grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-cols-[200px_1fr] md:grid-rows-none"
+		class="relative z-10 grid min-h-screen w-full grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-cols-[200px_1fr] md:grid-rows-none"
 	>
 		<DesktopSidebar user={{ name: data.user.name, role: data.user.role }} />
 		<MobileSidebar user={{ name: data.user.name, role: data.user.role }} />

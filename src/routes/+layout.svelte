@@ -10,5 +10,8 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
+	<div class="main">
+		<div class="gradient" />
+	</div>
 	<slot />
 </QueryClientProvider>
