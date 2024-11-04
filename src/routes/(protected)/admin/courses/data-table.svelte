@@ -21,7 +21,7 @@
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 
 	type ICourse = {
-		id: number;
+		id: string;
 		code: string;
 		name: string;
 		credits: number;
