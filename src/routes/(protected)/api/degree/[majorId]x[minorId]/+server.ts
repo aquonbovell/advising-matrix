@@ -1,7 +1,7 @@
 import { db } from '$lib/db';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import type { Course, RequirementType } from '$lib/db/schema';
+import type { Course, Courses, RequirementType } from '$lib/db/schema';
 import type { CourseWithPrerequisites, Degree, Requirement } from '$lib/types';
 import { getName } from '$lib/utils';
 
@@ -166,19 +166,19 @@ export const GET: RequestHandler = async ({ params }) => {
 		}
 	}
 
-	const CoursesDB = await db.selectFrom('Course').selectAll().execute();
+	const CoursesDB = await db.selectFrom('Courses').selectAll().execute();
 
 	const CoursePrerequisitesDB = await db
-		.selectFrom('CoursePrerequisite')
-		.innerJoin('Course', 'Course.id', 'CoursePrerequisite.prerequisiteId')
+		.selectFrom('Prerequisites')
+		.innerJoin('Courses', 'Courses.id', 'Prerequisites.prerequisiteId')
 		.select([
-			'CoursePrerequisite.courseId',
-			'Course.id',
-			'Course.code',
-			'Course.name',
-			'Course.level',
-			'Course.credits',
-			'Course.departmentId'
+			'Prerequisites.courseId',
+			'Courses.id',
+			'Courses.code',
+			'Courses.name',
+			'Courses.level',
+			'Courses.credits',
+			'Courses.departmentId'
 		])
 		.execute();
 
@@ -190,11 +190,11 @@ export const GET: RequestHandler = async ({ params }) => {
 		if (details.courses) {
 			let courses: CourseWithPrerequisites[] = [];
 			for (const courseId of details.courses) {
-				const course = CoursesDB.find((c) => c.id === parseInt(courseId));
+				const course = CoursesDB.find((c) => c.id === courseId);
 				if (!course) {
 					continue;
 				}
-				const CoursePrerequisites: Course[] = CoursePrerequisitesDB.filter(
+				const CoursePrerequisites: Courses[] = CoursePrerequisitesDB.filter(
 					(c) => c.courseId === course.id
 				);
 				courses.push({ ...course, prerequisites: CoursePrerequisites });
