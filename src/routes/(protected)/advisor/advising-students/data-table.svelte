@@ -22,8 +22,13 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import type { User } from '$lib/db/schema';
 
-	export let data: RouterOutputs['students']['getStudents'];
+	export let data:
+		| RouterOutputs['students']['getStudents']
+		| RouterOutputs['students']['getMyStudents'];
+
+	export let user: string;
 
 	const paginatedData = writable(data.students);
 	const countStore = writable(data.count);
@@ -87,24 +92,12 @@
 			header: 'Program'
 		}),
 		table.column({
-			accessor: 'advisor_name',
+			accessor: 'advisor_names',
 			header: 'Advisor'
 		}),
 		table.column({
 			accessor: 'created_at',
 			header: 'Joined',
-			cell: ({ value }) => {
-				return new Date(value).toLocaleDateString();
-			},
-			plugins: {
-				filter: {
-					exclude: false
-				}
-			}
-		}),
-		table.column({
-			accessor: 'updated_at',
-			header: 'Updated',
 			cell: ({ value }) => {
 				return new Date(value).toLocaleDateString();
 			},
@@ -133,8 +126,8 @@
 		}),
 
 		table.column({
-			accessor: ({ student_id, invite_token, invite_expires, advisor_name }) => {
-				return { student_id, invite_token, invite_expires, advisor_name };
+			accessor: ({ student_id, invite_token, invite_expires, advisor_names }) => {
+				return { student_id, invite_token, invite_expires, advisor_names };
 			},
 			header: 'Actions',
 			cell: ({ value }) => {
@@ -142,7 +135,7 @@
 					code: value.student_id,
 					token: value.invite_token,
 					expires: value.invite_expires,
-					exists: value.advisor_name !== null
+					exists: value.advisor_names.includes(user)
 				});
 			},
 			plugins: {

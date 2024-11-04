@@ -8,7 +8,7 @@ import type { UserRole } from '$lib/db/schema';
 async function getForm(student: {
 	id: string;
 	major_id: string;
-	minor_id: string;
+	minor_id: string | null;
 	email: string;
 	name: string;
 	role: UserRole;
@@ -59,24 +59,13 @@ export const load = (async ({ locals, params }) => {
 	}
 
 	const majors = await db.selectFrom('Majors').select(['Majors.id', 'Majors.name']).execute();
-	const minors = await db
-		.selectFrom('Minors')
-		.select(['Minors.id as id', 'name'])
-		// .innerJoin('MinorRequirements', 'MinorRequirements.minorId', 'Minors.id')
-		// .union(
-		// 	db
-		// 		.selectFrom('Majors')
-		// 		.select(['Majors.id as id', 'name'])
-		// 		.where('Majors.name', 'not like', '%Double%')
-		// )
-		// .groupBy('Minors.id')
-		.execute();
+	const minors = await db.selectFrom('Minors').select(['Minors.id as id', 'name']).execute();
 
 	return { majors, minors, form: await getForm(studentData) };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	default: async (event) => {
+	update: async (event) => {
 		const userId = event.locals.user?.id;
 
 		if (!userId) {
@@ -159,6 +148,48 @@ export const actions: Actions = {
 		} catch (err) {
 			console.error(err);
 			error(500, { message: 'Failed to update student' });
+		}
+	},
+	delete: async ({ params, locals }) => {
+		const userId = locals.user?.id;
+
+		if (!userId) {
+			return fail(401, {
+				message: 'You are not authorized to perform this action',
+				success: false
+			});
+		}
+
+		if (locals.user?.role === 'STUDENT') {
+			return fail(401, {
+				message: 'You are not authorized to perform this action',
+				success: false
+			});
+		}
+
+		const student = await db
+			.selectFrom('Student')
+			.where('id', 'in', [params.id])
+			.select(['id', 'user_id'])
+			.executeTakeFirst();
+
+		if (!student) {
+			return fail(404, {
+				message: 'Student does not exist',
+				success: false
+			});
+		}
+		try {
+			await db.transaction().execute(async (trx) => {
+				await trx.deleteFrom('Advisor').where('student_id', '=', student.id).execute();
+				await trx.deleteFrom('User').where('id', '=', student.user_id).execute();
+
+				await trx.deleteFrom('Student').where('user_id', '=', student.id).execute();
+			});
+			return { success: true };
+		} catch (err) {
+			console.error(err);
+			error(500, { message: 'Failed to delete student' });
 		}
 	}
 };

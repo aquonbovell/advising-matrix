@@ -5,10 +5,8 @@ import { trpcServer } from '$lib/server/server';
 import { restrict } from '$lib/utils';
 
 export const load: PageServerLoad = async (event) => {
-	const userId = event.locals.user?.id;
-
-	if (!userId) {
-		throw error(401, 'Unauthorized');
+	if (event.locals.user?.role !== 'ADVISOR') {
+		error(401, 'Unauthorized');
 	}
 
 	const order = restrict(event.url.searchParams.get('order'), ['asc', 'desc']) ?? 'asc';
@@ -29,7 +27,8 @@ export const load: PageServerLoad = async (event) => {
 
 	return {
 		students: result!.students,
-		count: result!.count
+		count: result!.count,
+		name: event.locals.user?.name ?? ''
 	};
 };
 

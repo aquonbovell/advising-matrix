@@ -46,7 +46,6 @@
 		hide: addHiddenColumns(),
 		select: addSelectedRows()
 	});
-
 	const columns = table.createColumns([
 		table.column({
 			accessor: 'id',
@@ -75,18 +74,18 @@
 		}),
 		table.column({
 			accessor: 'code',
-			header: 'Code'
+			header: 'Course Code'
 		}),
 		table.column({
 			accessor: 'name',
-			header: 'Name'
+			header: 'Course Name'
 		}),
 		table.column({
 			accessor: 'level',
 			header: 'Level',
 			plugins: {
 				filter: {
-					exclude: false
+					exclude: true
 				}
 			}
 		}),
@@ -121,10 +120,13 @@
 
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns, rows } =
 		table.createViewModel(columns);
+
 	const { hasNextPage, hasPreviousPage, pageIndex, pageCount, pageSize } = pluginStates.page;
-	const { sortKeys } = pluginStates.sort;
+
 	const { filterValue } = pluginStates.filter;
+
 	const { hiddenColumnIds } = pluginStates.hide;
+
 	const { selectedDataIds } = pluginStates.select;
 
 	const ids = flatColumns.map((col) => col.id);
@@ -152,8 +154,7 @@
 
 <div>
 	<div class="flex-1 text-right text-sm text-muted-foreground">
-		Page {$pageIndex + 1} of{' '}
-		{$pageCount}
+		Page {$pageIndex + 1} of {$pageCount}
 	</div>
 	<div class="flex items-center py-4">
 		<Input
@@ -191,12 +192,7 @@
 										{#if cell.id === 'code' || cell.id === 'level'}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
-												<ArrowUpDown
-													class={cn(
-														$sortKeys[0]?.id === cell.id && 'text-foreground',
-														'ml-2 h-4 w-4'
-													)}
-												/>
+												<ArrowUpDown class={'ml-2 h-4 w-4'} />
 											</Button>
 										{:else}
 											<Render of={cell.render()} />

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import DataTable from './data-table.svelte';
+	import * as Button from '$lib/components/ui/button';
 	import { trpc } from '$lib/trpc';
 	import { page } from '$app/stores';
 	import { derived } from 'svelte/store';
@@ -15,6 +16,10 @@
 	$: courseQuery = trpc.courses.getCourses.query({ page: $pageIndex, size: $pageSize });
 </script>
 
+<div class="flex justify-between py-2">
+	<h1 class="text-2xl font-bold text-stone-800">Courses</h1>
+	<Button.Root variant="link" href="/advisor/courses/create" class="p-0">Create Course</Button.Root>
+</div>
 {#if $courseQuery.isLoading}
 	<p>Loading...</p>
 {:else if $courseQuery.isError}

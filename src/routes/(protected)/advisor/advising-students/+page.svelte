@@ -18,15 +18,17 @@
 	const order = derived(page, ($page) => $page.url.searchParams.get('order') || 'asc');
 
 	$: studentQuery = trpc.students.getMyStudents.query({ page: $pageIndex, size: $pageSize });
+
+	export let data: PageData;
 </script>
 
-<div class="mb-6 flex items-center justify-between">
+<div class=" flex items-center justify-between">
 	<h1 class="text-2xl font-bold text-stone-800">
 		My Students {#if $studentQuery.data}
 			({$studentQuery.data?.count})
 		{/if}
 	</h1>
-	<Button.Root href={'/advisor/advising-students/invite'} variant="link"
+	<Button.Root href={'/advisor/advising-students/invite'} variant="link" class="h-max py-0"
 		>Invite A Student</Button.Root
 	>
 </div>
@@ -36,7 +38,7 @@
 {:else if $studentQuery.isError}
 	<p style="color: red">{$studentQuery.error.message}</p>
 {:else if $studentQuery.data}
-	<DataTable data={$studentQuery.data} />
+	<DataTable data={$studentQuery.data} user={data.name} />
 
 	<Dialog.Root
 		open={$selectedStudent !== null}

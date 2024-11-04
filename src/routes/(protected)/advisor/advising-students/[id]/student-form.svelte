@@ -44,7 +44,7 @@
 		: undefined;
 </script>
 
-<form method="POST" use:enhance class="">
+<form method="POST" use:enhance class="" action="?/update">
 	<Form.Field {form} name="id">
 		<Form.Control let:attrs>
 			<Form.Label hidden>Name</Form.Label>
@@ -75,7 +75,7 @@
 	</Form.Field>
 	<Form.Field {form} name="alternateEmailConfirm">
 		<Form.Control let:attrs>
-			<Form.Label>Alternate Email</Form.Label>
+			<Form.Label>Confirm Alternate Email</Form.Label>
 			<Input {...attrs} bind:value={$formData.alternateEmailConfirm} />
 		</Form.Control>
 		<Form.FieldErrors />
