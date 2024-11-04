@@ -33,8 +33,6 @@
 	}
 </script>
 
-<pre>{JSON.stringify($message, null, 2)}</pre>
-
 <form method="POST" use:enhance class="space-y-4" action="?/create">
 	<Form.Field {form} name="name">
 		<Form.Control let:attrs>
