@@ -24,7 +24,8 @@ const UserMenuItems: menuItemsType = {
 		{ label: 'Users', href: '/admin/users', icon: Users },
 		{ label: 'Courses', href: '/admin/courses', icon: Book },
 		{ label: 'Faculties', href: '/admin/faculties', icon: Book },
-		{ label: 'Departments', href: '/admin/departments', icon: Book }
+		{ label: 'Departments', href: '/admin/departments', icon: Book },
+		{ label: 'Students', href: '/admin/students', icon: Book }
 	]
 };
 export { UserMenuItems };

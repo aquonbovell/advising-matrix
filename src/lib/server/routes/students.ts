@@ -5,6 +5,7 @@ import { getName, paginatable } from '$lib/utils';
 import { TRPCError } from '@trpc/server';
 import { gradeSchema, type CourseWithPrerequisites, type Degree } from '$lib/types';
 import type { NonNullableGrade, Requirement } from '$lib/types';
+import { sql } from 'kysely';
 
 const UpdateGradeInputSchema = z.object({
 	courseId: z.number(),
@@ -33,15 +34,12 @@ export const studentRouter = router({
 
 			try {
 				const countQuery = db
-					.selectFrom('Advisor')
-					// .where('Advisor.advisor_id', '=', userId)
-					.innerJoin('Student', 'Student.id', 'Advisor.student_id')
+					.selectFrom('Student')
 					.select(db.fn.countAll<number>().as('total'))
 					.executeTakeFirst();
 
 				const studentsQuery = db
 					.selectFrom('Advisor')
-					// .where('Advisor.advisor_id', '=', userId)
 					.innerJoin('Student', 'Student.id', 'Advisor.student_id')
 					.innerJoin('User as StudentUser', 'StudentUser.id', 'Student.user_id')
 					.innerJoin('User as AdvisorUser', 'AdvisorUser.id', 'Advisor.advisor_id')
@@ -49,13 +47,12 @@ export const studentRouter = router({
 					.leftJoin('Minors', 'Minors.id', 'Student.minor_id')
 					.leftJoin('Majors as Major2', 'Major2.id', 'Student.minor_id')
 					.select([
-						'AdvisorUser.name as advisor_name',
+						sql<string>`STRING_AGG("AdvisorUser".name, ', ')`.as('advisor_names'),
 						'Student.id as student_id',
 						'Student.user_id',
 						'StudentUser.name as student_name',
 						'StudentUser.email',
 						'Student.created_at',
-						'Student.updated_at',
 						'Student.invite_token',
 						'Student.invite_expires',
 						'Major1.name as major_name',
@@ -64,6 +61,17 @@ export const studentRouter = router({
 					])
 					.limit(size)
 					.offset(page * size)
+					.groupBy([
+						'Student.id',
+						'StudentUser.name',
+						'StudentUser.email',
+						'Student.created_at',
+						'Student.invite_token',
+						'Student.invite_expires',
+						'Major1.name',
+						'Minors.name',
+						'Major2.name'
+					])
 					.orderBy('StudentUser.name', order);
 
 				const [countResult, studentsData] = await Promise.all([
@@ -114,15 +122,29 @@ export const studentRouter = router({
 			}
 
 			try {
+				const studentIds = await db
+					.selectFrom('Advisor')
+					.select('student_id')
+					.where('advisor_id', '=', userId)
+					.execute();
+
+				if (studentIds.map((s) => s.student_id).length === 0) {
+					return { students: [], count: 0 };
+				}
+
 				const [studentsData, countResult, majors, minors] = await Promise.all([
 					db
-						.selectFrom('Advisor')
-						.where('Advisor.advisor_id', '=', userId)
-						.innerJoin('Student', 'Student.id', 'Advisor.student_id')
+						.selectFrom('Student')
+						.where(
+							'Student.id',
+							'in',
+							studentIds.map((s) => s.student_id)
+						)
 						.innerJoin('User as StudentUser', 'StudentUser.id', 'Student.user_id')
+						.innerJoin('Advisor', 'Advisor.student_id', 'Student.id')
 						.innerJoin('User as AdvisorUser', 'AdvisorUser.id', 'Advisor.advisor_id')
 						.select([
-							'AdvisorUser.name as advisor_name',
+							sql<string>`STRING_AGG("AdvisorUser".name, ', ')`.as('advisor_names'),
 							'Student.id as student_id',
 							'Student.user_id',
 							'StudentUser.name as student_name',
@@ -136,6 +158,16 @@ export const studentRouter = router({
 						])
 						.limit(size)
 						.offset(page * size)
+						.groupBy([
+							'Student.id',
+							'StudentUser.name',
+							'StudentUser.email',
+							'Student.created_at',
+							'Student.invite_token',
+							'Student.invite_expires',
+							'Student.major_id',
+							'Student.minor_id'
+						])
 						.orderBy('StudentUser.name', order)
 						.execute(),
 					db
@@ -282,8 +314,8 @@ export const studentRouter = router({
 			const allCourseIDs = new Set(
 				requirements
 					.flatMap((r) => r.info.courses || [])
-					.map(Number)
-					.filter((id) => !isNaN(id))
+					.map(String)
+					.filter((id) => !isNaN(parseInt(id)))
 			);
 
 			// Cause we have the IDs of the courses stored as Int and not Strings
@@ -292,17 +324,17 @@ export const studentRouter = router({
 			// 	.filter((id) => !isNaN(id));
 
 			const coursesWithPrereqs = await db
-				.selectFrom('Course')
-				.leftJoin('CoursePrerequisite', 'Course.id', 'CoursePrerequisite.courseId')
-				.leftJoin('Course as PrereqCourse', 'CoursePrerequisite.prerequisiteId', 'PrereqCourse.id')
-				.where('Course.id', 'in', Array.from(allCourseIDs))
+				.selectFrom('Courses')
+				.leftJoin('Prerequisites', 'Courses.id', 'Prerequisites.courseId')
+				.leftJoin('Courses as PrereqCourse', 'Prerequisites.prerequisiteId', 'PrereqCourse.id')
+				.where('Courses.id', 'in', Array.from(allCourseIDs))
 				.select([
-					'Course.id',
-					'Course.code',
-					'Course.name',
-					'Course.level',
-					'Course.credits',
-					'Course.departmentId',
+					'Courses.id',
+					'Courses.code',
+					'Courses.name',
+					'Courses.level',
+					'Courses.credits',
+					'Courses.departmentId',
 					'PrereqCourse.id as prereqId',
 					'PrereqCourse.code as prereqCode',
 					'PrereqCourse.name as prereqName',

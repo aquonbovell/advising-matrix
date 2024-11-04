@@ -34,7 +34,7 @@
 				class="w-fit -translate-x-4 -translate-y-3 bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5"
 			>
 				<Button.Root variant="ghost">
-					<a href="##" class="flex"><Settings class="mr-3 h-5 w-5 text-gray-400" /> Settings </a>
+					<a href="/##" class="flex"><Settings class="mr-3 h-5 w-5 text-gray-400" /> Settings </a>
 				</Button.Root>
 				<form
 					method="POST"
@@ -46,7 +46,7 @@
 						};
 					}}
 				>
-					<Button.Root type="submit" variant="ghost">
+					<Button.Root type="submit" variant="ghost" class="w-full">
 						<Logout class="mr-3 h-5 w-5 text-gray-400" />Logout</Button.Root
 					>
 				</form>

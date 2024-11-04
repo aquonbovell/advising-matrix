@@ -65,13 +65,13 @@ export const courseRouter = router({
 			try {
 				const [courses, countResult] = await Promise.all([
 					db
-						.selectFrom('Course')
+						.selectFrom('Courses')
 						.select(['id', 'code', 'name', 'level', 'credits'])
 						.orderBy('code', order)
 						.limit(size)
 						.offset(page * size)
 						.execute(),
-					db.selectFrom('Course').select(db.fn.countAll<number>().as('count')).executeTakeFirst()
+					db.selectFrom('Courses').select(db.fn.countAll<number>().as('count')).executeTakeFirst()
 				]);
 
 				const count = countResult?.count ?? 0;
