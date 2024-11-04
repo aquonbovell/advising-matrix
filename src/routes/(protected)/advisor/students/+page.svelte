@@ -6,6 +6,7 @@
 	import { page } from '$app/stores';
 	import { trpc } from '$lib/trpc';
 	import { derived } from 'svelte/store';
+	import type { PageData } from './$types';
 
 	const pageIndex = derived(page, ($page) =>
 		parseInt($page.url.searchParams.get('pageIndex') || '0', 10)
@@ -18,6 +19,7 @@
 	$: studentQuery = trpc.students.getStudents.query({ page: $pageIndex, size: $pageSize });
 
 	// $: console.log($studentQuery);
+	export let data: PageData;
 </script>
 
 <h1 class="text-2xl font-bold text-stone-800">
@@ -33,7 +35,7 @@
 {:else if $studentQuery.isError}
 	<p style="color: red">{$studentQuery.error.message}</p>
 {:else if $studentQuery.data}
-	<DataTable data={$studentQuery.data} />
+	<DataTable data={$studentQuery.data} user={data.name} />
 
 	<Dialog.Root
 		open={$selectedStudent !== null}

@@ -5,10 +5,8 @@ import { restrict } from '$lib/utils';
 import { trpcServer } from '$lib/server/server';
 
 export const load: PageServerLoad = async (event) => {
-	const userId = event.locals.user?.id;
-
-	if (!userId) {
-		throw error(401, 'Unauthorized');
+	if (event.locals.user?.role !== 'ADVISOR') {
+		error(401, 'Unauthorized');
 	}
 
 	const order = restrict(event.url.searchParams.get('order'), ['asc', 'desc']) ?? 'asc';
@@ -29,14 +27,18 @@ export const load: PageServerLoad = async (event) => {
 
 	return {
 		students: result!.students,
-		count: result!.count
+		count: result!.count,
+		name: event.locals.user?.name ?? ''
 	};
 };
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
 		if (locals.user?.role !== 'ADVISOR') {
-			return fail(403, { error: 'Unauthorized' });
+			return fail(401, {
+				message: 'You are not authorized to perform this action',
+				success: false
+			});
 		}
 		const formData = await request.formData();
 		const studentCode = formData.get('student_code') as string;
