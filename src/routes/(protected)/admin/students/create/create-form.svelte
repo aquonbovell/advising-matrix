@@ -61,7 +61,7 @@
 <form method="POST" use:enhance class="space-y-4" action="?/create">
 	<Form.Field {form} name="userId">
 		<Form.Control let:attrs>
-			<Form.Label class="font-semibold">User</Form.Label>
+			<Form.Label class="font-semibold">Student</Form.Label>
 			<Select.Root
 				selected={selectedUser}
 				onSelectedChange={(v) => {
@@ -82,7 +82,7 @@
 	</Form.Field>
 	<Form.Field {form} name="advisors">
 		<Form.Control let:attrs>
-			<Form.Label class="font-semibold">Advisors</Form.Label>
+			<Form.Label class="font-semibold">Advisor</Form.Label>
 			<Select.Root
 				multiple
 				selected={selectedAdvisor}

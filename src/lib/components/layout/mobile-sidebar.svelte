@@ -4,7 +4,7 @@
 	import * as Sheet from '$lib/components/ui/sheet';
 	import Menu from 'lucide-svelte/icons/menu';
 	import Home from 'lucide-svelte/icons/house';
-	import Package from 'lucide-svelte/icons/package';
+	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import { UserMenuItems } from './navigation-data.svelte';
 	import UserMenu from './user-menu.svelte';
 	import UserAvatar from './user-avatar.svelte';
@@ -12,13 +12,15 @@
 
 	export let user: { name: string; role: UserRole };
 
+	let sheetOpen = false;
+
 	$: url = $page.url.toString();
 </script>
 
 <header
 	class="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:hidden md:px-6"
 >
-	<Sheet.Root>
+	<Sheet.Root bind:open={sheetOpen}>
 		<Sheet.Trigger asChild let:builder>
 			<Button.Root variant="outline" size="icon" class="shrink-0 md:hidden" builders={[builder]}>
 				<Menu class="h-5 w-5" />
@@ -26,9 +28,9 @@
 			</Button.Root>
 		</Sheet.Trigger>
 		<Sheet.Content side="left" class="flex w-max flex-col p-0">
-			<nav class="grid gap-2 p-6 text-lg font-medium">
-				<a href="##" class="flex items-center gap-2 text-lg font-semibold">
-					<Package class="h-6 w-6" />
+			<nav class="grid gap-2 p-6 pt-12 text-lg font-medium">
+				<a href="/" class="mx-[-0.65rem] flex max-w-44 items-center gap-4 rounded-xl">
+					<img src={uwiBanner} class="" alt="UWI Banner" />
 					<span class="sr-only">FST Matrix</span>
 				</a>
 				<a
@@ -42,6 +44,7 @@
 					{#each UserMenuItems[user.role] ?? [] as item}
 						<a
 							href={item.href}
+							on:click={() => (sheetOpen = false)}
 							class={`mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground ${url.includes(item.href) ? 'text-primary' : ''}`}
 						>
 							<svelte:component this={item.icon} class="h-5 w-5" />

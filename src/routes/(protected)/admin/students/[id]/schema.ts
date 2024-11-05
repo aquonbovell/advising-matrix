@@ -4,7 +4,7 @@ export const studentSchema = z.object({
 	studentId: z.string().uuid(),
 	userId: z.string().uuid(),
 	majorId: z.string().uuid(),
-	minorId: z.string().uuid().nullish(),
+	minorId: z.string().uuid(),
 	advisors: z.array(z.string().uuid())
 });
 

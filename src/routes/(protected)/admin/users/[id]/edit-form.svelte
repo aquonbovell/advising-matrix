@@ -1,6 +1,8 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import * as Button from '$lib/components/ui/button';
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
@@ -16,7 +18,7 @@
 		dataType: 'json'
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance, message, validateForm, submit } = form;
 
 	$: {
 		if ($message) {
@@ -78,5 +80,29 @@
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 
-	<Form.Button type="submit">Update</Form.Button>
+	<Dialog.Root>
+		<Dialog.Trigger>
+			<Button.Root type="button">Update</Button.Root></Dialog.Trigger
+		>
+		<Dialog.Content>
+			<Dialog.Header>
+				<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
+				<Dialog.Description>
+					This action cannot be undone. This will permanently change this account credentials.
+				</Dialog.Description>
+			</Dialog.Header>
+			<Dialog.Footer>
+				<Dialog.Close
+					on:click={async () => {
+						const response = await validateForm();
+						if (response.valid) {
+							submit();
+						}
+					}}
+					class="inline-flex h-12 w-full items-center justify-center rounded-lg border bg-slate-50 px-[21px] text-[15px] font-semibold text-red-500 shadow-sm hover:bg-slate-100/95 active:scale-90 active:transition-all"
+					>Update</Dialog.Close
+				>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 </form>

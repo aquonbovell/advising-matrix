@@ -24,7 +24,7 @@
 
 <div class="mx-auto max-w-2xl">
 	<div class="flex items-center justify-between">
-		<h1 class="font-bold">Edit user</h1>
+		<h1 class="font-bold">Edit student</h1>
 		<Dialog.Root>
 			<Dialog.Trigger>
 				<Button.Root variant="destructive" type="button">Delete</Button.Root></Dialog.Trigger

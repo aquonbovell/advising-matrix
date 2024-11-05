@@ -8,5 +8,5 @@
 <h2>Quick Links</h2>
 <div class="my-1 flex gap-6">
 	<Button href="/advisor/advising-students">Students</Button>
-	<Button href="/advisor/courses">Program Courses</Button>
+	<Button href="/advisor/courses">Courses</Button>
 </div>

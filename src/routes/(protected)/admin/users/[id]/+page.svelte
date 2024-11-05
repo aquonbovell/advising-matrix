@@ -27,23 +27,22 @@
 		<h1 class="font-bold">Edit user</h1>
 		<Dialog.Root>
 			<Dialog.Trigger>
-				<Button.Root variant="destructive" type="button">Reset Password</Button.Root
-				></Dialog.Trigger
+				<Button.Root variant="destructive" type="button">Delete User</Button.Root></Dialog.Trigger
 			>
 			<Dialog.Content>
 				<Dialog.Header>
 					<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
 					<Dialog.Description>
-						This action cannot be undone. This will permanently change this account credentials.
+						This action cannot be undone. This will permanently remove this account from the system.
 					</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Footer>
 					<form method="post" use:enhance>
 						<Dialog.Close
 							type="submit"
-							formaction="?/resetPassword"
+							formaction="?/delete"
 							class="inline-flex h-12 w-full items-center justify-center rounded-lg border bg-slate-50 px-[21px] text-[15px] font-semibold text-red-500 shadow-sm hover:bg-slate-100/95 active:scale-90 active:transition-all"
-							>Reset Password</Dialog.Close
+							>Delete User</Dialog.Close
 						>
 					</form>
 				</Dialog.Footer>
@@ -51,4 +50,28 @@
 		</Dialog.Root>
 	</div>
 	<EditForm data={data.form} />
+
+	<Dialog.Root>
+		<Dialog.Trigger class="my-4">
+			<Button.Root variant="destructive" type="button">Reset Password</Button.Root></Dialog.Trigger
+		>
+		<Dialog.Content>
+			<Dialog.Header>
+				<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
+				<Dialog.Description>
+					This action cannot be undone. This will permanently change this account credentials.
+				</Dialog.Description>
+			</Dialog.Header>
+			<Dialog.Footer>
+				<form method="post" use:enhance>
+					<Dialog.Close
+						type="submit"
+						formaction="?/resetPassword"
+						class="inline-flex h-12 w-full items-center justify-center rounded-lg border bg-slate-50 px-[21px] text-[15px] font-semibold text-red-500 shadow-sm hover:bg-slate-100/95 active:scale-90 active:transition-all"
+						>Reset Password</Dialog.Close
+					>
+				</form>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 </div>

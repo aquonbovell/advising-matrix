@@ -15,7 +15,7 @@ const UserMenuItems: menuItemsType = {
 		{ label: 'Courses', href: '/student/courses', icon: Book }
 	],
 	ADVISOR: [
-		{ label: 'Invite Student', href: '/	advisor/advising-students/invite', icon: UserPlus },
+		{ label: 'Invite Student', href: '/advisor/invite', icon: UserPlus },
 		{ label: 'My Students', href: '/advisor/advising-students', icon: Users },
 		{ label: 'All Students', href: '/advisor/students', icon: Users },
 		{ label: 'Courses', href: '/advisor/courses', icon: Book }

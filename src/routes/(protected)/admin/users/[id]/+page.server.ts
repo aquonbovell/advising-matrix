@@ -126,5 +126,48 @@ export const actions: Actions = {
 		}
 
 		return redirect(303, `/admin/users/${userId.id}`);
+	},
+	delete: async (event) => {
+		if (event.locals.user?.role !== 'ADMIN') {
+			return fail(401, {
+				message: 'You are not authorized to perform this action',
+				success: false
+			});
+		}
+
+		try {
+			const result = await db.transaction().execute(async (db) => {
+				const user = await db
+					.selectFrom('User')
+					.where('id', '=', event.params.id)
+					.select('id')
+					.executeTakeFirst();
+
+				if (!user) return fail(404, { message: 'User not found', success: false });
+
+				await db.deleteFrom('Advisor').where('advisor_id', '=', user.id).execute();
+
+				const student = await db
+					.selectFrom('Student')
+					.where('user_id', '=', user.id)
+					.select('id')
+					.executeTakeFirst();
+
+				if (student) {
+					await db.deleteFrom('Advisor').where('student_id', '=', student.id).executeTakeFirst();
+					await db.deleteFrom('Student').where('id', '=', student.id).executeTakeFirst();
+				}
+
+				await db.deleteFrom('User').where('id', '=', user.id).execute();
+			});
+
+			console.log(result);
+
+			if (result?.status === 404) return fail(404, result.data);
+		} catch (err) {
+			console.error(err);
+			error(500, { message: 'An error occurred while deleting the user' });
+		}
+		return redirect(303, '/admin/users');
 	}
 };

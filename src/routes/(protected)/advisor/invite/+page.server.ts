@@ -2,9 +2,9 @@ import { error, fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { db } from '$lib/db';
 import { generateTokenWithExpiration } from '$lib/server/auth';
-import { message, superValidate, setError } from 'sveltekit-superforms';
-import { vine, zod } from 'sveltekit-superforms/adapters';
-import type { PageServerLoad } from '../$types';
+import { message, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import type { PageServerLoad } from './$types';
 import { Argon2id } from 'oslo/password';
 import { DEFAULT_PASSWORD } from '$env/static/private';
 import { formSchema } from './schema';
@@ -54,7 +54,6 @@ export const actions: Actions = {
 		}
 
 		const form = await superValidate(event, zod(formSchema));
-		console.log(form);
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -66,17 +65,30 @@ export const actions: Actions = {
 		const majorId = form.data.majorId;
 		const minorId = form.data.minorId;
 
-		const user = await db
+		const users = await db
 			.selectFrom('User')
-			.where('email', 'in', [official_email])
-			.select(['id'])
-			.executeTakeFirst();
+			.where((eb) =>
+				eb.or([
+					eb('User.email', '=', official_email),
+					eb('User.alternate_email', '=', alternate_email)
+				])
+			)
+			.select(['id', 'email', 'alternate_email'])
+			.execute();
 
-		if (user) {
-			form.errors.official_email = [
-				...(form.errors.official_email ?? ''),
-				'Student already exists on official email'
-			];
+		if (users.length > 0) {
+			if (users.find((u) => u.email === official_email)) {
+				form.errors.official_email = [
+					...(form.errors.official_email ?? []),
+					'Student already exists on official email'
+				];
+			}
+			if (users.find((u) => u.alternate_email === alternate_email)) {
+				form.errors.alternate_email = [
+					...(form.errors.alternate_email ?? []),
+					'Student already exists on alternate email'
+				];
+			}
 			return fail(400, { form });
 		}
 

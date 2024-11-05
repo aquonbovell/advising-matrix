@@ -73,15 +73,8 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Field {form} name="alternateEmailConfirm">
-		<Form.Control let:attrs>
-			<Form.Label>Confirm Alternate Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.alternateEmailConfirm} />
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
 
-	<div class="flex justify-between gap-5">
+	<div class="justify-between gap-5 md:flex">
 		<Form.Field {form} name="majorId">
 			<Form.Control let:attrs>
 				<Form.Label>Major</Form.Label>
@@ -144,12 +137,11 @@
 			<AlertDialog.Footer>
 				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 				<AlertDialog.Action
-					on:click={async (event) => {
+					on:click={async () => {
 						const userform = await form.validateForm();
 						if (userform.valid) {
 							form.submit();
 						}
-						console.log('clicked', event);
 					}}>Continue</AlertDialog.Action
 				>
 			</AlertDialog.Footer>

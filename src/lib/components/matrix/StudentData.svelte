@@ -30,6 +30,8 @@
 	import { getToastState } from '$lib/components/toast/toast-state.svelte';
 
 	import type { UserRole } from '$lib/db/schema';
+	import { deserialize } from '$app/forms';
+	import type { ActionResult } from '@sveltejs/kit';
 
 	export let student: { major_id: string; minor_id: string; id: string };
 	export let role: UserRole | undefined;
@@ -154,24 +156,28 @@
 			body: formData
 		});
 
-		const content = await response.json();
+		const result: ActionResult = deserialize(await response.text());
 
-		if (content.status === 200) {
-			toastState.add('Notice', 'Grades saved successfully', 'success');
-		} else if (content.status === 400) {
-			toastState.add('Error', content.data, 'error');
-		} else if (content.status === 404) {
-			toastState.add('Error', content.data, 'error');
-		} else {
-			toastState.add('Error', 'An error occurred while saving grades', 'error');
-		}
+		alert(result.status);
+
+		// if (result.status === 200) {
+		// 	toastState.add('Notice', 'Grades saved successfully', 'success');
+		// } else if (result.status === 400) {
+		// 	toastState.add('Error', 'result.data', 'error');
+		// } else if (result.status === 404) {
+		// 	toastState.add('Error', 'result.data', 'error');
+		// } else {
+		// 	toastState.add('Error', 'An error occurred while saving grades', 'error');
+		// }
+
+		return;
 	}
 </script>
 
 <div class="mx-auto flex flex-col gap-5" transition:fly={{ y: 30, delay: 200 }}>
 	<!-- Degree Info -->
 	<Card.Root class="min-w-80">
-		<Card.Header class="flex flex-row items-baseline justify-between px-4 py-3">
+		<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
 			<Card.Title>{degree.name}</Card.Title>
 			<Button.Root
 				variant="outline"
@@ -190,7 +196,7 @@
 			</Button.Root>
 		</Card.Header>
 		<Card.Content class="flex flex-col gap-3 px-4 py-3 ">
-			<div class="flex gap-3">
+			<div class="flex flex-wrap gap-3">
 				<Button.Root variant="ghost" type="button">Degree GPA: {$degreeGPA}</Button.Root>
 				<Button.Root variant="ghost" type="button">Overall GPA: {$gpa}</Button.Root>
 				<Button.Root variant="outline">Completed Courses ({$completedCourses})</Button.Root>
@@ -229,8 +235,14 @@
 								(course) =>
 									$courseGrades[course.id] && $courseGrades[course.id]?.requirementId === req.id
 							)
-							.reduce((acc, c) => acc + c.credits, 0) >= req.credits}>Add A Course</Button.Root
+							.reduce((acc, c) => acc + c.credits, 0) >= req.credits}
 					>
+						{#if role !== 'STUDENT'}
+							Add Suggestion
+						{:else}
+							Add A Course
+						{/if}
+					</Button.Root>
 				{/if}
 			</Card.Header>
 			<Card.Content class="p-0">
@@ -270,7 +282,7 @@
 					Select a course from the list below to add. The course will be added to your list of
 					courses.
 				</p>
-				<div class="flex gap-3">
+				<div class="flex flex-col gap-3 md:flex-row">
 					<Select.Root
 						required={true}
 						selected={selectedCourseId}
@@ -278,7 +290,7 @@
 							value && (selectedCourseId = value);
 						}}
 					>
-						<Select.Trigger class="w-[340px]">
+						<Select.Trigger class="w-72 md:w-80">
 							<Select.Value placeholder="Select A course" />
 						</Select.Trigger>
 						<Select.Content class=" max-h-60 overflow-y-auto">

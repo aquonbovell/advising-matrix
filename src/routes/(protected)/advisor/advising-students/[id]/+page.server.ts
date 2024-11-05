@@ -1,14 +1,15 @@
-import { error, fail, json, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/db';
 import { message, superValidate } from 'sveltekit-superforms';
-import { vine, zod } from 'sveltekit-superforms/adapters';
+import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { formSchema } from './schema';
 import type { UserRole } from '$lib/db/schema';
+import { sql } from 'kysely';
 async function getForm(student: {
 	id: string;
 	major_id: string;
-	minor_id: string | null;
+	minor_id: string;
 	email: string;
 	name: string;
 	role: UserRole;
@@ -21,8 +22,7 @@ async function getForm(student: {
 		name: student.name,
 		majorId: student.major_id,
 		minorId: student.minor_id,
-		alternateEmail: student.alternate_email,
-		alternateEmailConfirm: ''
+		alternateEmail: student.alternate_email
 	};
 
 	return form;
@@ -59,7 +59,15 @@ export const load = (async ({ locals, params }) => {
 	}
 
 	const majors = await db.selectFrom('Majors').select(['Majors.id', 'Majors.name']).execute();
-	const minors = await db.selectFrom('Minors').select(['Minors.id as id', 'name']).execute();
+	const minors = await db
+		.selectFrom('Majors')
+		.select(['Majors.id as id', sql<string>`CONCAT("Majors".name, ' (Major) ')`.as('name')])
+		.union(
+			db
+				.selectFrom('Minors')
+				.select(['Minors.id as id', sql<string>`CONCAT("Minors".name, ' (Minor) ')`.as('name')])
+		)
+		.execute();
 
 	return { majors, minors, form: await getForm(studentData) };
 }) satisfies PageServerLoad;
@@ -83,23 +91,10 @@ export const actions: Actions = {
 
 		const official_email = form.data.email;
 		const alternate_email = form.data.alternateEmail;
-		const alternate_email1 = form.data.alternateEmailConfirm;
 		const name = form.data.name;
 		const majorId = form.data.majorId;
 		const minorId = form.data.minorId;
 		const id = form.data.id;
-
-		if (alternate_email !== alternate_email1) {
-			form.errors.alternateEmail = [
-				...(form.errors.alternateEmail ?? ''),
-				'Alternate emails must match'
-			];
-			form.errors.alternateEmailConfirm = [
-				...(form.errors.alternateEmailConfirm ?? ''),
-				'Alternate emails must match'
-			];
-			return fail(400, { form });
-		}
 
 		const user = await db
 			.selectFrom('User')
@@ -186,10 +181,10 @@ export const actions: Actions = {
 
 				await trx.deleteFrom('Student').where('user_id', '=', student.id).execute();
 			});
-			return { success: true };
 		} catch (err) {
 			console.error(err);
 			error(500, { message: 'Failed to delete student' });
 		}
+		return redirect(303, '/advisor/advising-students');
 	}
 };

@@ -7,5 +7,6 @@
 <h2>Quick Links</h2>
 <div class="my-1 flex gap-6">
 	<Button href="/admin/users">Users</Button>
+	<Button href="/admin/students">Students</Button>
 	<Button href="/admin/courses">Courses</Button>
 </div>

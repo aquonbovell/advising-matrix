@@ -22,16 +22,11 @@
 	export let data: PageData;
 </script>
 
-<div class=" flex items-center justify-between">
-	<h1 class="text-2xl font-bold text-stone-800">
-		My Students {#if $studentQuery.data}
-			({$studentQuery.data?.count})
-		{/if}
-	</h1>
-	<Button.Root href={'/advisor/advising-students/invite'} variant="link" class="h-max py-0"
-		>Invite A Student</Button.Root
-	>
-</div>
+<h1 class="text-2xl font-bold text-stone-800">
+	My Students {#if $studentQuery.data}
+		({$studentQuery.data?.count})
+	{/if}
+</h1>
 
 {#if $studentQuery.isLoading}
 	<p>Loading...</p>

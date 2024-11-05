@@ -53,21 +53,21 @@
 <form method="POST" use:enhance class="space-y-4" action="?/edit">
 	<Form.Field {form} name="userId">
 		<Form.Control let:attrs>
-			<Form.Label class="font-semibold" hidden>User</Form.Label>
-			<Input {...attrs} bind:value={$formData.name} placeholder="John Doe..." type="hidden" />
+			<Form.Label class="font-semibold" hidden>Student</Form.Label>
+			<Input {...attrs} bind:value={$formData.userId} type="hidden" />
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 	<Form.Field {form} name="name">
 		<Form.Control let:attrs>
-			<Form.Label class="font-semibold">User</Form.Label>
+			<Form.Label class="font-semibold">Student</Form.Label>
 			<Input {...attrs} bind:value={$formData.name} placeholder="John Doe..." disabled />
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 	<Form.Field {form} name="advisors">
 		<Form.Control let:attrs>
-			<Form.Label class="font-semibold">Advisors</Form.Label>
+			<Form.Label class="font-semibold">Advisor</Form.Label>
 			<Select.Root
 				multiple
 				selected={selectedAdvisor}
