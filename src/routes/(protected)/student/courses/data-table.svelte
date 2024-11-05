@@ -16,10 +16,11 @@
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
-	import type { RouterOutputs } from '$lib/server/routes/_app';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { cn } from '$lib/utils';
+	import type { RouterOutputs } from '$lib/server/routes/_app';
 
 	export let data: RouterOutputs['courses']['getCourses'];
 
@@ -45,7 +46,6 @@
 		hide: addHiddenColumns(),
 		select: addSelectedRows()
 	});
-
 	const columns = table.createColumns([
 		table.column({
 			accessor: 'id',
@@ -74,18 +74,18 @@
 		}),
 		table.column({
 			accessor: 'code',
-			header: 'Code'
+			header: 'Course Code'
 		}),
 		table.column({
 			accessor: 'name',
-			header: 'Name'
+			header: 'Course Name'
 		}),
 		table.column({
 			accessor: 'level',
 			header: 'Level',
 			plugins: {
 				filter: {
-					exclude: false
+					exclude: true
 				}
 			}
 		}),
@@ -154,8 +154,7 @@
 
 <div>
 	<div class="flex-1 text-right text-sm text-muted-foreground">
-		Page {$pageIndex + 1} of{' '}
-		{Math.floor($rows.length / $pageSize) + 1}
+		Page {$pageIndex + 1} of {$pageCount}
 	</div>
 	<div class="flex items-center py-4">
 		<Input

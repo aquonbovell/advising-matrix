@@ -172,13 +172,16 @@ export const GET: RequestHandler = async ({ params }) => {
 		.selectFrom('Prerequisites')
 		.innerJoin('Courses', 'Courses.id', 'Prerequisites.prerequisiteId')
 		.select([
-			'Prerequisites.courseId',
 			'Courses.id',
 			'Courses.code',
 			'Courses.name',
 			'Courses.level',
 			'Courses.credits',
-			'Courses.departmentId'
+			'Courses.prerequisiteAmount',
+			'Courses.prerequisiteType',
+			'Courses.comment',
+			'Courses.departmentId',
+			'Prerequisites.courseId'
 		])
 		.execute();
 
@@ -213,12 +216,12 @@ export const GET: RequestHandler = async ({ params }) => {
 						c.code.startsWith(area)
 				);
 				for (const course of areaCourses) {
-					courses.push({ ...course, prerequisites: [] as Course[] });
+					courses.push({ ...course, prerequisites: [] as Courses[] });
 				}
 			}
 
 			for (const course of courses) {
-				const CoursePrerequisites: Course[] = CoursePrerequisitesDB.filter(
+				const CoursePrerequisites: Courses[] = CoursePrerequisitesDB.filter(
 					(c) => c.courseId === course.id
 				);
 				course.prerequisites = CoursePrerequisites;
@@ -235,11 +238,11 @@ export const GET: RequestHandler = async ({ params }) => {
 			);
 
 			for (const course of anyCourses) {
-				courses.push({ ...course, prerequisites: [] as Course[] });
+				courses.push({ ...course, prerequisites: [] as Courses[] });
 			}
 
 			for (const course of courses) {
-				const CoursePrerequisites: Course[] = CoursePrerequisitesDB.filter(
+				const CoursePrerequisites: Courses[] = CoursePrerequisitesDB.filter(
 					(c) => c.courseId === course.id
 				);
 				course.prerequisites = CoursePrerequisites;

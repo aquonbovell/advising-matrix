@@ -1,19 +1,24 @@
-import type { Course } from '$lib/db/schema';
+import type { Courses } from '$lib/db/schema';
 import { gradePoints, type Grade } from '$lib/types';
 import { isCompleted } from '$lib/utils';
 import type { Selected } from 'bits-ui';
 import { derived, writable, type Readable } from 'svelte/store';
 
-export const courseGrades = writable<Record<string, { requirementId: string; grade: Grade[] }>>({});
+export const courseGrades = writable<
+	Record<
+		string,
+		{ requirementId: string; grade: Grade[]; userId: string | null; name: string | null }
+	>
+>({});
 
-export const courses = writable<{ id: number; credits: number; code: string }[]>([]);
+export const courses = writable<{ id: string; credits: number; code: string }[]>([]);
 
-export const requiredCourses = writable<{ id: number; credits: number }[]>([]);
+export const requiredCourses = writable<{ id: string; credits: number }[]>([]);
 export const requirements = writable<string[]>([]);
 
 export const dialogRequirementID = writable<string | null>(null);
 
-export const selectedCourse = writable<Selected<Course | null>>(undefined);
+export const selectedCourse = writable<Selected<Courses | null>>(undefined);
 
 export const totalCredits = writable<number>(0);
 export const totalCourses = writable<number>(0);
@@ -26,7 +31,7 @@ export const completedCredits = derived(
 				isCompleted(courseGrade[1].grade) &&
 				$requirements.includes(courseGrade[1].requirementId)
 			) {
-				const course = $courses.find((course) => course.id === parseInt(courseGrade[0]));
+				const course = $courses.find((course) => course.id === courseGrade[0]);
 
 				if (course) {
 					acc += course.credits;
@@ -39,10 +44,10 @@ export const completedCredits = derived(
 	}
 );
 
-export const completedCourse: Readable<number[]> = derived(
+export const completedCourse: Readable<string[]> = derived(
 	[courseGrades, courses, requirements],
 	([$courseGrades, $courses, $requirements]) => {
-		let uniqueCourses: { id: number; credits: number }[] = [];
+		let uniqueCourses: { id: string; credits: number }[] = [];
 
 		$courses.forEach((course) => {
 			if (!uniqueCourses.some((uniqueCourse) => uniqueCourse.id === course.id)) {
@@ -52,12 +57,12 @@ export const completedCourse: Readable<number[]> = derived(
 		return uniqueCourses
 			.map((course) => {
 				const grade = $courseGrades[course.id.toString()]?.grade;
-				let courseCompleted: number | undefined = undefined;
+				let courseCompleted: string | undefined = undefined;
 				if (
 					isCompleted(grade) &&
 					$requirements.includes($courseGrades[course.id.toString()]?.requirementId!)
 				) {
-					courseCompleted = course.id!;
+					courseCompleted = course.id;
 				}
 				return courseCompleted;
 			})
@@ -115,11 +120,13 @@ export const gpa = derived(
 		const studentGrades = Object.entries($courseGrades);
 
 		for (const [courseId, { grade }] of studentGrades) {
-			if (isCompleted(grade) && $requirement.includes($courseGrades[courseId]?.requirementId!)) {
-				totalGradePoints +=
-					getGradePoint(grade) *
-					($courses.find((course) => course.id === parseInt(courseId))?.credits || 0);
-				totalCredits += $courses.find((course) => course.id === parseInt(courseId))?.credits || 0;
+			if (grade.length > 0 && $requirement.includes($courseGrades[courseId]?.requirementId!)) {
+				totalGradePoints += getGradePoint(
+					grade,
+					$courses.find((course) => course.id === courseId)?.credits || 0
+				);
+				totalCredits +=
+					($courses.find((course) => course.id === courseId)?.credits || 0) * grade.length;
 			}
 		}
 		// Return GPA as total grade points divided by total credits
@@ -137,24 +144,31 @@ export const degreeGPA = derived(
 
 		for (const [courseId, { grade }] of studentGrades) {
 			if (
-				isCompleted(grade) &&
-				!($courses.find((course) => course.id === parseInt(courseId))?.code[4]! === '1') &&
+				grade.length > 0 &&
+				!($courses.find((course) => course.id === courseId)?.code[4]! === '1') &&
 				$requirements.includes($courseGrades[courseId]?.requirementId!)
 			) {
-				totalGradePoints +=
-					getGradePoint(grade) *
-					($courses.find((course) => course.id === parseInt(courseId))?.credits || 0);
-				totalCredits += $courses.find((course) => course.id === parseInt(courseId))?.credits || 0;
+				totalGradePoints += getGradePoint(
+					grade,
+					$courses.find((course) => course.id === courseId)?.credits || 0
+				);
+				totalCredits +=
+					($courses.find((course) => course.id === courseId)?.credits || 0) * grade.length;
 			}
 		}
+
 		// Return GPA as total grade points divided by total credits
 		return totalCredits === 0 ? 0 : (totalGradePoints / totalCredits).toFixed(2);
 	}
 );
 
-function getGradePoint(grade: Grade[]): number {
-	// Assuming grade[0] contains the primary grade value (adjust as necessary)
-	const gradeValue = grade[grade.length - 1];
+export function getGradePoint(grades: Grade[], credits: number): number {
+	let total = 0;
+	for (const grade of grades) {
+		if (grade) {
+			total += gradePoints[grade] * credits;
+		}
+	}
 
-	return gradePoints[gradeValue!];
+	return total;
 }

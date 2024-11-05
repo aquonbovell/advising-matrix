@@ -14,6 +14,7 @@ export const fetchCourses = async (
 		courseId: number | null;
 		credits: number;
 		id: string;
+		userId: string;
 		requirementId: string | null;
 	}[]
 > => {
@@ -23,7 +24,9 @@ export const fetchCourses = async (
 		courseId: number | null;
 		credits: number;
 		id: string;
+		userId: string;
 		requirementId: string | null;
 	}[] = await res.json();
 	return content;
 };
+

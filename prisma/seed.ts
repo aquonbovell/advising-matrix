@@ -66,39 +66,52 @@ const seed = async () => {
 			})
 			.execute();
 
-		await db
-			.insertInto('Student')
-			.values({
-				id: crypto.randomUUID(),
-				user_id: student_id,
-				major_id: 'b8b97b70-b61a-49df-a9fa-703d5528997a',
-				minor_id: '4e3026cb-502f-423e-96d1-0c1787a23970',
-				invite_token: null,
-				invite_expires: null,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString()
-			})
-			.execute();
-
-		// Get Student ID from db
-		const student = await db
-			.selectFrom('Student')
-			.where('Student.user_id', '=', student_id)
+		const major_id = await db
+			.selectFrom('Majors')
+			.where('name', '=', 'Biochemistry')
+			.select('id')
+			.executeTakeFirst();
+		const minor_id = await db
+			.selectFrom('Majors')
+			.where('name', '=', 'Chemistry')
 			.select('id')
 			.executeTakeFirst();
 
-		if (!student) {
-			throw new Error('Student not found');
-		}
+		if (major_id && minor_id) {
+			await db
+				.insertInto('Student')
+				.values({
+					id: crypto.randomUUID(),
+					user_id: student_id,
+					major_id: major_id.id,
+					minor_id: minor_id.id,
+					invite_token: null,
+					invite_expires: null,
+					created_at: new Date().toISOString(),
+					updated_at: new Date().toISOString()
+				})
+				.execute();
 
-		// Insert Advisor data - Students
-		await db
-			.insertInto('Advisor')
-			.values({
-				advisor_id: advisor_id,
-				student_id: student.id
-			})
-			.execute();
+			// Get Student ID from db
+			const student = await db
+				.selectFrom('Student')
+				.where('Student.user_id', '=', student_id)
+				.select('id')
+				.executeTakeFirst();
+
+			if (!student) {
+				throw new Error('Student not found');
+			}
+
+			// Insert Advisor data - Students
+			await db
+				.insertInto('Advisor')
+				.values({
+					advisor_id: advisor_id,
+					student_id: student.id
+				})
+				.execute();
+		}
 	});
 
 	db.destroy();

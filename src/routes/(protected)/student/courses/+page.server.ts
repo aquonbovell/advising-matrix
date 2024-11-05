@@ -7,7 +7,7 @@ export const load: PageServerLoad = async (event) => {
 	const userId = event.locals.user?.id;
 
 	if (!userId) {
-		error(401, 'Unauthorized');
+		throw error(401, 'Unauthorized');
 	}
 
 	const order = restrict(event.url.searchParams.get('order'), ['asc', 'desc']) ?? 'asc';

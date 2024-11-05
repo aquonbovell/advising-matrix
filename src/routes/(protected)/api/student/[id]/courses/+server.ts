@@ -22,7 +22,12 @@ export const GET: RequestHandler = async ({ params }) => {
 		.execute();
 
 	const courseIds = courses.map((course) => {
-		return { courseId: course.courseId, id: course.id, requirementId: course.requirementId };
+		return {
+			courseId: course.courseId,
+			id: course.id,
+			requirementId: course.requirementId,
+			userId: course.userId
+		};
 	});
 
 	let data = [];

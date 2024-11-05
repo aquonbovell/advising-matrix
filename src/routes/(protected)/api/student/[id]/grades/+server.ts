@@ -40,31 +40,33 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		});
 	});
 
-	try {
-		await db.transaction().execute(async (db) => {
-			await db
-				.deleteFrom('StudentCourses')
-				.where('StudentCourses.studentId', '=', student.id)
-				.execute();
+	console.log(data);
 
-			for (const { courseId, requirementId, g, studentId } of data) {
-				await db
-					.insertInto('StudentCourses')
-					.values({
-						id: crypto.randomUUID(),
-						studentId,
-						courseId: parseInt(courseId),
-						requirementId,
-						grade: g ? g.toString() : ''
-					})
-					.execute();
-			}
-		});
-		return json({ status: 200, message: 'Grades saved' });
-	} catch (error) {
-		console.error(error);
-		return json({ status: 500, message: 'An error occurred' });
-	}
+	// try {
+	// 	await db.transaction().execute(async (db) => {
+	// 		await db
+	// 			.deleteFrom('StudentCourses')
+	// 			.where('StudentCourses.studentId', '=', student.id)
+	// 			.execute();
+
+	// 		for (const { courseId, requirementId, g, studentId } of data) {
+	// 			await db
+	// 				.insertInto('StudentCourses')
+	// 				.values({
+	// 					id: crypto.randomUUID(),
+	// 					studentId,
+	// 					courseId: parseInt(courseId),
+	// 					requirementId,
+	// 					grade: g ? g.toString() : ''
+	// 				})
+	// 				.execute();
+	// 		}
+	// 	});
+	// 	return json({ status: 200, message: 'Grades saved' });
+	// } catch (error) {
+	// 	console.error(error);
+	// 	return json({ status: 500, message: 'An error occurred' });
+	// }
 };
 
 export const GET: RequestHandler = async ({ params, request }) => {
@@ -88,10 +90,14 @@ export const GET: RequestHandler = async ({ params, request }) => {
 		.selectAll()
 		.execute();
 
-	let data: Record<string, { id: string; grade: Grade[] }> = {};
+	let data: Record<string, { id: string; grade: Grade[]; userId: string }> = {};
 	for (const grade of grades) {
 		if (grade.courseId && !(grade.courseId in data)) {
-			data[grade.courseId] = { id: grade.requirementId!, grade: [grade.grade as Grade] };
+			data[grade.courseId] = {
+				id: grade.requirementId!,
+				grade: [grade.grade as Grade],
+				userId: grade.userId
+			};
 		} else if (grade.courseId) {
 			data[grade.courseId]?.grade.push(grade.grade as Grade);
 		}

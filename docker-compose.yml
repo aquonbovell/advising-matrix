@@ -8,3 +8,8 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: local
+    volumes:
+      - database:/data/db
+
+volumes:
+  database:

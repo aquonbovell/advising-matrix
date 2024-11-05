@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Course, RequirementType } from './db/schema';
+import type { Courses, RequirementType, StudentCourses } from './db/schema';
 
 export const GRADE_VALUES = [
 	'A+',
@@ -50,8 +50,8 @@ export type Student =
 	  }
 	| undefined;
 
-export type CourseWithPrerequisites = Course & {
-	prerequisites: Course[];
+export type CoursesWithPrerequisites = Courses & {
+	prerequisites: Courses[];
 };
 
 export type Requirement = {
@@ -63,7 +63,7 @@ export type Requirement = {
 		courses?: string[];
 		area?: string[];
 	};
-	details: CourseWithPrerequisites[];
+	details: CoursesWithPrerequisites[];
 	level: number;
 };
 
@@ -78,4 +78,12 @@ export type Toast = {
 	title: string;
 	message: string;
 	type: 'info' | 'success' | 'error';
+};
+
+export type StudentCoursesWithUser = {
+	courseId: string;
+	grade: string;
+	requirementId: string;
+	userId: string | null;
+	name: string | null;
 };

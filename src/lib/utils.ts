@@ -6,6 +6,7 @@ import type { TransitionConfig } from 'svelte/transition';
 import { completedCourse } from './stores/student';
 import type { CourseWithPrerequisites, Grade } from './types';
 import { z, type ZodRawShape } from 'zod';
+import type { Majors } from './db/schema';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -120,24 +121,39 @@ export function isCompleted(grades: Grade[] | undefined): boolean {
 	return foundValidGrade ? true : false;
 }
 
-export function getName(major, minor, program): string {
-	if (minor.length > 0) {
-		return `${major[0].name} with ${minor[0].name}`;
+export function getName(
+	major: {
+		id: string;
+		majorId: string;
+		name: string;
+	}[],
+	minor: {
+		id: string;
+		minorId: string;
+		name: string;
+	}[]
+): string {
+	const majors: { majorId: string; name: string }[] = [];
+	for (const m of major) {
+		if (majors.find((major) => major.majorId === m.majorId)) continue;
+		majors.push({ majorId: m.majorId, name: m.name });
 	}
-	if (minor.length === 0) {
-		const names: string[] = [];
-		major.forEach((m) => {
-			if (names.includes(m.name)) return;
-			names.push(m.name);
-		});
-		return names.join(' and ');
-	}
-	if (major.length > 1) {
-		console.log('major');
 
-		return `${major[0].name} and ${major[1].name}`;
+	const minors: { minorId: string; name: string }[] = [];
+	for (const m of minor) {
+		if (minors.find((minor) => minor.minorId === m.minorId)) continue;
+		minors.push({ minorId: m.minorId, name: m.name });
 	}
-	return 'None';
+
+	if (majors.length === 2) {
+		return majors.map((m) => m.name).join(' and ');
+	} else if (majors.length === 1 && minors.length === 1) {
+		return majors.at(0)?.name + ' with ' + minors.at(0)?.name;
+	} else if (majors.length === 1 && minors.length === 0) {
+		return majors.at(0)?.name ?? 'None';
+	} else {
+		return 'None';
+	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
@@ -186,4 +202,9 @@ export function generateId() {
 	const bytes = crypto.getRandomValues(new Uint8Array(20));
 	const token = encodeBase32LowerCase(bytes);
 	return token;
+}
+
+// ChatGPT generated
+export function isValidUUID(uuid: string): boolean {
+	return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(uuid);
 }

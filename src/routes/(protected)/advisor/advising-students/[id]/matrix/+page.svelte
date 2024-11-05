@@ -4,4 +4,10 @@
 	export let data: PageData;
 </script>
 
-<StudentData data={{ program: data.program }} />
+<StudentData
+	student={data.student}
+	degree={data.degree.data}
+	studentCourses={data.studentCourses}
+	role={data.user?.role}
+	userId={data.userId}
+/>

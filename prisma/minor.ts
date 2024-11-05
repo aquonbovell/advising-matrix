@@ -67,11 +67,11 @@ for (const major of MinorData) {
 		console.log(`${detail.type} ${detail.level} ${detail.credits}`);
 		if (detail.data.courses) {
 			const courses = await db
-				.selectFrom('Course')
+				.selectFrom('Courses')
 				.where(
 					'id',
 					'in',
-					detail.data.courses.map((c) => parseInt(c))
+					detail.data.courses.map((c) => c)
 				)
 				.selectAll()
 				.execute();
