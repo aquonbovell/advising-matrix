@@ -4,6 +4,17 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
+export const requirementOption = {
+    REQUIRED: "REQUIRED",
+    OPTIONAL: "OPTIONAL"
+} as const;
+export type requirementOption = (typeof requirementOption)[keyof typeof requirementOption];
+export const requirementDetailsType = {
+    COURSES: "COURSES",
+    AREAS: "AREAS",
+    FACULTIES: "FACULTIES"
+} as const;
+export type requirementDetailsType = (typeof requirementDetailsType)[keyof typeof requirementDetailsType];
 export const UserRole = {
     STUDENT: "STUDENT",
     ADVISOR: "ADVISOR",
@@ -49,10 +60,11 @@ export type LevelRestriction = {
 export type MajorRequirements = {
     id: string;
     majorId: string;
-    type: RequirementType;
+    option: requirementOption;
     credits: number;
-    details: unknown;
-    level: number;
+    details: string;
+    detailsType: requirementDetailsType;
+    level: string;
 };
 export type Majors = {
     id: string;
@@ -61,10 +73,11 @@ export type Majors = {
 export type MinorRequirements = {
     id: string;
     minorId: string;
-    type: RequirementType;
+    option: requirementOption;
     credits: number;
-    details: unknown;
-    level: number;
+    details: string;
+    detailsType: requirementDetailsType;
+    level: string;
 };
 export type Minors = {
     id: string;

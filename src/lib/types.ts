@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Courses, RequirementType, StudentCourses } from './db/schema';
+import type { Courses, RequirementType } from './db/schema';
 
 export const GRADE_VALUES = [
 	'A+',
@@ -87,3 +87,21 @@ export type StudentCoursesWithUser = {
 	userId: string | null;
 	name: string | null;
 };
+
+export const options = ['REQUIRED', 'OPTIONAL'];
+
+export const types = ['COURSES', 'AREAS', 'FACULTIES'];
+
+export const requirementOption = {
+	REQUIRED: 'REQUIRED',
+	OPTIONAL: 'OPTIONAL'
+} as const;
+export type requirementOption = (typeof requirementOption)[keyof typeof requirementOption];
+export const requirementDetailsType = {
+	COURSES: 'COURSES',
+	AREAS: 'AREAS',
+	FACULTIES: 'FACULTIES'
+} as const;
+
+export type requirementDetailsType =
+	(typeof requirementDetailsType)[keyof typeof requirementDetailsType];

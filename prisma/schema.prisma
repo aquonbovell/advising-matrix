@@ -118,23 +118,36 @@ model Minors {
 }
 
 model MajorRequirements {
-  id      String          @id @db.Uuid
-  majorId String          @db.Uuid
-  type    RequirementType
-  credits Int
-  details Json
-  level   Int
-  Majors  Majors          @relation(fields: [majorId], references: [id], onUpdate: NoAction)
+  id          String                 @id @db.Uuid
+  majorId     String                 @db.Uuid
+  option      requirementOption
+  credits     Int
+  details     String
+  detailsType requirementDetailsType
+  level       String
+  Majors      Majors                 @relation(fields: [majorId], references: [id], onUpdate: NoAction)
 }
 
 model MinorRequirements {
-  id      String          @id @db.Uuid
-  minorId String          @db.Uuid
-  type    RequirementType
-  credits Int
-  details Json
-  level   Int
-  Minors  Minors          @relation(fields: [minorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id          String                 @id @db.Uuid
+  minorId     String                 @db.Uuid
+  option      requirementOption
+  credits     Int
+  details     String
+  detailsType requirementDetailsType
+  level       String
+  Minors      Minors                 @relation(fields: [minorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum requirementOption {
+  REQUIRED
+  OPTIONAL
+}
+
+enum requirementDetailsType {
+  COURSES
+  AREAS
+  FACULTIES
 }
 
 model StudentCourses {

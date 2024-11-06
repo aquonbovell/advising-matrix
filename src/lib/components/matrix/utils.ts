@@ -29,4 +29,3 @@ export const fetchCourses = async (
 	}[] = await res.json();
 	return content;
 };
-

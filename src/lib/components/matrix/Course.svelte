@@ -59,7 +59,7 @@
 				<div class={`flex flex-wrap items-center gap-2`}>
 					{#if $courseGrades[course.id]?.name}
 						<Badge variant="secondary" class="bg-gray-200 px-2 text-gray-600"
-							>Suggest by: {$courseGrades[course.id]?.name}</Badge
+							>Suggested by: {$courseGrades[course.id]?.name}</Badge
 						>
 					{/if}
 					{#if !required}

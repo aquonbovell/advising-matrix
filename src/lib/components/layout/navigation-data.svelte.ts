@@ -25,7 +25,9 @@ const UserMenuItems: menuItemsType = {
 		{ label: 'Courses', href: '/admin/courses', icon: Book },
 		{ label: 'Faculties', href: '/admin/faculties', icon: Book },
 		{ label: 'Departments', href: '/admin/departments', icon: Book },
-		{ label: 'Students', href: '/admin/students', icon: Book }
+		{ label: 'Students', href: '/admin/students', icon: Book },
+		{ label: 'Majors', href: '/admin/majors', icon: Book },
+		{ label: 'Minors', href: '/admin/minors', icon: Book }
 	]
 };
 export { UserMenuItems };

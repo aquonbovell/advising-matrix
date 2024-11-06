@@ -9,7 +9,4 @@ services:
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: local
     volumes:
-      - database:/data/db
-
-volumes:
-  database:
+      - ./local_backup.sql:/docker-entrypoint-initdb.d/init.sql

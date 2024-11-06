@@ -1,9 +1,14 @@
-import { fetchCourses } from '../src/lib/actions/course.actions';
+import { fetchMajors, initMajors } from '../src/lib/actions/major.actions';
+import { fetchMinors, initMinors } from '../src/lib/actions/minor.actions';
 import * as fs from 'fs/promises';
 
 try {
-	const data = await fetchCourses('7aa4ba37-d686-4ebe-82b8-2c331b999684');
-	await fs.writeFile('output2.json', JSON.stringify(data, null, 2));
+	// const minors = await fetchMinors();
+	// await fs.writeFile('minors.json', JSON.stringify(minors, null, 2));
+	// const majors = await fetchMajors();
+	// await fs.writeFile('majors.json', JSON.stringify(majors, null, 2));
+	await initMajors();
+	await initMinors();
 } catch (error) {
 	console.error(error);
 } finally {
