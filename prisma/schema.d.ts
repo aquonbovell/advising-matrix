@@ -5,6 +5,23 @@ export type Generated<T> =
 		: ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
+export const prerequisiteType = {
+	ALL: 'ALL',
+	ONE: 'ONE'
+} as const;
+export type prerequisiteType = (typeof prerequisiteType)[keyof typeof prerequisiteType];
+export const requirementOption = {
+	REQUIRED: 'REQUIRED',
+	OPTIONAL: 'OPTIONAL'
+} as const;
+export type requirementOption = (typeof requirementOption)[keyof typeof requirementOption];
+export const requirementDetailsType = {
+	COURSES: 'COURSES',
+	AREAS: 'AREAS',
+	FACULTIES: 'FACULTIES'
+} as const;
+export type requirementDetailsType =
+	(typeof requirementDetailsType)[keyof typeof requirementDetailsType];
 export const UserRole = {
 	STUDENT: 'STUDENT',
 	ADVISOR: 'ADVISOR',
@@ -20,21 +37,6 @@ export type Advisor = {
 	advisor_id: string;
 	student_id: string;
 };
-export type Course = {
-	id: number;
-	code: string;
-	name: string;
-	level: number;
-	credits: number;
-	departmentId: string;
-	prerequisiteType: Generated<string>;
-	prerequisiteAmount: Generated<number>;
-};
-export type CoursePrerequisite = {
-	id: Generated<string>;
-	courseId: number;
-	prerequisiteId: number;
-};
 export type Courses = {
 	id: string;
 	code: string;
@@ -42,20 +44,9 @@ export type Courses = {
 	level: number;
 	credits: number;
 	departmentId: string;
-	prerequisiteType: Generated<string>;
-	prerequisiteAmount: Generated<number>;
+	prerequisiteType: prerequisiteType;
+	prerequisiteAmount: number;
 	comment: string | null;
-};
-export type CoursesLevelRestriction = {
-	id: Generated<string>;
-	courseId: number;
-	area: string;
-	credits: number;
-	level: string;
-};
-export type Department = {
-	id: Generated<string>;
-	name: string;
 };
 export type Departments = {
 	id: string;
@@ -76,10 +67,11 @@ export type LevelRestriction = {
 export type MajorRequirements = {
 	id: string;
 	majorId: string;
-	type: RequirementType;
+	option: requirementOption;
 	credits: number;
-	details: unknown;
-	level: number;
+	details: string;
+	detailsType: requirementDetailsType;
+	level: string;
 };
 export type Majors = {
 	id: string;
@@ -88,10 +80,11 @@ export type Majors = {
 export type MinorRequirements = {
 	id: string;
 	minorId: string;
-	type: RequirementType;
+	option: requirementOption;
 	credits: number;
-	details: unknown;
-	level: number;
+	details: string;
+	detailsType: requirementDetailsType;
+	level: string;
 };
 export type Minors = {
 	id: string;
@@ -111,7 +104,7 @@ export type Student = {
 	id: string;
 	user_id: string;
 	major_id: string;
-	minor_id: string | null;
+	minor_id: string;
 	invite_token: string | null;
 	invite_expires: Timestamp | null;
 	created_at: Generated<Timestamp>;
@@ -122,7 +115,8 @@ export type StudentCourses = {
 	grade: string;
 	requirementId: string;
 	studentId: string;
-	courseId: number;
+	courseId: string;
+	userId: string | null;
 };
 export type User = {
 	id: string;
@@ -136,11 +130,7 @@ export type User = {
 };
 export type DB = {
 	Advisor: Advisor;
-	Course: Course;
-	CoursePrerequisite: CoursePrerequisite;
 	Courses: Courses;
-	CoursesLevelRestriction: CoursesLevelRestriction;
-	Department: Department;
 	Departments: Departments;
 	Faculties: Faculties;
 	LevelRestriction: LevelRestriction;

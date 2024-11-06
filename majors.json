@@ -1,0 +1,537 @@
+[
+	{
+		"id": "34931739-532a-4c77-ac30-52c247ad3984",
+		"name": "Biology",
+		"requirements": [
+			{
+				"id": "ed93df09-0de4-4b91-8d84-e9aa47fd26a8",
+				"majorId": "34931739-532a-4c77-ac30-52c247ad3984",
+				"credits": 12,
+				"details": ["9290", "7719", "12966", "7720"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "35542554-78bb-4e9f-ad9f-8320f96c323e",
+				"majorId": "34931739-532a-4c77-ac30-52c247ad3984",
+				"credits": 12,
+				"details": [],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "c5e7ed21-bc4c-4a54-beea-e9698866029c",
+				"majorId": "34931739-532a-4c77-ac30-52c247ad3984",
+				"credits": 6,
+				"details": ["12982", "10710"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "35d10a27-282e-441d-87b1-71e4510302be",
+				"majorId": "34931739-532a-4c77-ac30-52c247ad3984",
+				"credits": 6,
+				"details": ["12967", "380", "53"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "4624442c-1a4c-4341-af28-2aec925c8426",
+				"majorId": "34931739-532a-4c77-ac30-52c247ad3984",
+				"credits": 6,
+				"details": ["12985", "12986", "12987"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "77177128-e3c2-4235-970e-c2a4d73d4f37",
+				"majorId": "34931739-532a-4c77-ac30-52c247ad3984",
+				"credits": 6,
+				"details": ["BIOC", "BIOL", "ECOL", "MICR"],
+				"level": [3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "18f810f6-8f61-4723-961c-4913d5e5bc27",
+				"majorId": "34931739-532a-4c77-ac30-52c247ad3984",
+				"credits": 6,
+				"details": ["BIOC", "BIOL", "ECOL", "MICR"],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "b200e52f-b87f-49ce-bea9-bb0eb2584ab4",
+				"majorId": "34931739-532a-4c77-ac30-52c247ad3984",
+				"credits": 30,
+				"details": [],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			}
+		]
+	},
+	{
+		"id": "18a05fe4-7387-40df-87c1-cef367e220d6",
+		"name": "Double Major In Biological Sciences",
+		"requirements": [
+			{
+				"id": "2269c4fc-e690-4fef-8459-14f99e9bf3a6",
+				"majorId": "18a05fe4-7387-40df-87c1-cef367e220d6",
+				"credits": 12,
+				"details": ["9290", "7719", "12966", "7720"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "2540887e-dbe5-444b-aa29-1e806fa6b458",
+				"majorId": "18a05fe4-7387-40df-87c1-cef367e220d6",
+				"credits": 12,
+				"details": [],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "69685bb3-73e1-4e2a-8b62-63c8820fa17f",
+				"majorId": "18a05fe4-7387-40df-87c1-cef367e220d6",
+				"credits": 15,
+				"details": ["12967", "12982", "10710", "380", "53"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "0f1eae66-e026-4c1f-b3e1-36f2894f61e9",
+				"majorId": "18a05fe4-7387-40df-87c1-cef367e220d6",
+				"credits": 6,
+				"details": ["12985", "12986", "12987"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "a6d14cdb-5e37-47a7-960d-0f36e685294f",
+				"majorId": "18a05fe4-7387-40df-87c1-cef367e220d6",
+				"credits": 9,
+				"details": ["BIOC", "BIOL", "ECOL", "MICR"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "e48ae474-d95f-41d1-a834-a8eb045c06b2",
+				"majorId": "18a05fe4-7387-40df-87c1-cef367e220d6",
+				"credits": 30,
+				"details": ["BIOC", "BIOL", "ECOL", "MICR"],
+				"level": [3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			}
+		]
+	},
+	{
+		"id": "9ce17541-8ace-4e1b-aa96-5b361fc80bae",
+		"name": "Ecology",
+		"requirements": [
+			{
+				"id": "6e13daf9-0936-4f52-af77-b27b1e5f2afc",
+				"majorId": "9ce17541-8ace-4e1b-aa96-5b361fc80bae",
+				"credits": 12,
+				"details": ["9290", "7719", "12966", "7720"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "9e1dc6d1-56ea-4fbf-9c36-1f956a870096",
+				"majorId": "9ce17541-8ace-4e1b-aa96-5b361fc80bae",
+				"credits": 12,
+				"details": [],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "f07adb10-f0e7-4dfb-8eac-1a657a18848e",
+				"majorId": "9ce17541-8ace-4e1b-aa96-5b361fc80bae",
+				"credits": 12,
+				"details": ["10710", "380", "54", "466"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "97a0dd77-5ee8-4c94-82db-d5d523cd0da3",
+				"majorId": "9ce17541-8ace-4e1b-aa96-5b361fc80bae",
+				"credits": 6,
+				"details": ["12836", "12838"],
+				"level": [3],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "d68c24cb-0c3d-470f-87cb-fc8bd83c3aa5",
+				"majorId": "9ce17541-8ace-4e1b-aa96-5b361fc80bae",
+				"credits": 12,
+				"details": ["506", "8460", "715", "10107", "327", "12820", "12982", "12988"],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "d811029c-a5ff-470e-b892-c939758ddd00",
+				"majorId": "9ce17541-8ace-4e1b-aa96-5b361fc80bae",
+				"credits": 30,
+				"details": [],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			}
+		]
+	},
+	{
+		"id": "24111f24-4ebb-46fa-ab5e-963dde2276d9",
+		"name": "Microbiology",
+		"requirements": [
+			{
+				"id": "685afe49-f2c5-4159-8846-88ebcf0ec889",
+				"majorId": "24111f24-4ebb-46fa-ab5e-963dde2276d9",
+				"credits": 12,
+				"details": ["9290", "7719", "12966", "7720"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "69972601-047c-427b-8dcd-e70a41cf00a8",
+				"majorId": "24111f24-4ebb-46fa-ab5e-963dde2276d9",
+				"credits": 12,
+				"details": [],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "5140fa94-84be-4a28-bbc3-d0573190d7f6",
+				"majorId": "24111f24-4ebb-46fa-ab5e-963dde2276d9",
+				"credits": 18,
+				"details": ["12967", "12982", "13797", "13797", "12820", "264"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "bc768af9-4731-41d3-95bc-54b7ec9eb02c",
+				"majorId": "24111f24-4ebb-46fa-ab5e-963dde2276d9",
+				"credits": 12,
+				"details": [
+					"12981",
+					"12985",
+					"265",
+					"12983",
+					"12989",
+					"12821",
+					"12820",
+					"12819",
+					"12818",
+					"264"
+				],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "3ff5b39e-d886-4431-8b66-96508bcdc832",
+				"majorId": "24111f24-4ebb-46fa-ab5e-963dde2276d9",
+				"credits": 30,
+				"details": [],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			}
+		]
+	},
+	{
+		"id": "166e98be-8398-4293-bd3c-e1ca5a2bfbd3",
+		"name": "Chemistry",
+		"requirements": [
+			{
+				"id": "b4805acd-1774-4eb1-8ecf-75edead52261",
+				"majorId": "166e98be-8398-4293-bd3c-e1ca5a2bfbd3",
+				"credits": 12,
+				"details": ["12994", "378", "12993", "12992"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "d65ec961-a2ea-429b-915e-5ebe25732cde",
+				"majorId": "166e98be-8398-4293-bd3c-e1ca5a2bfbd3",
+				"credits": 12,
+				"details": [],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "a3b4b41f-857d-4fb5-93c0-5c66f7188f9e",
+				"majorId": "166e98be-8398-4293-bd3c-e1ca5a2bfbd3",
+				"credits": 18,
+				"details": ["12995", "12996", "12997", "11919", "12999", "13000"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "0365ca2a-085a-4f06-85b7-25e4e30fcbd3",
+				"majorId": "166e98be-8398-4293-bd3c-e1ca5a2bfbd3",
+				"credits": 3,
+				"details": ["12823"],
+				"level": [3],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "90db4124-b3bf-46dd-9c39-380332d04f3e",
+				"majorId": "166e98be-8398-4293-bd3c-e1ca5a2bfbd3",
+				"credits": 6,
+				"details": ["12830", "12829", "14191"],
+				"level": [3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "aebeb6b1-f046-43e4-9767-5f74e0e55a4a",
+				"majorId": "166e98be-8398-4293-bd3c-e1ca5a2bfbd3",
+				"credits": 3,
+				"details": ["545", "13012"],
+				"level": [3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "5b9e8993-de8e-413f-bb7e-6931cd0e2614",
+				"majorId": "166e98be-8398-4293-bd3c-e1ca5a2bfbd3",
+				"credits": 30,
+				"details": [],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			}
+		]
+	},
+	{
+		"id": "72273ec9-4669-43c7-8f1b-5c06d79b5c7f",
+		"name": "Chemistry (Double)",
+		"requirements": [
+			{
+				"id": "4f4917a7-9a6d-4cea-8c76-e8e430e6edd1",
+				"majorId": "72273ec9-4669-43c7-8f1b-5c06d79b5c7f",
+				"credits": 12,
+				"details": ["12994", "378", "12993", "12992"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "74d0e70a-e2ec-48c4-a1ca-5f792ec6b9c3",
+				"majorId": "72273ec9-4669-43c7-8f1b-5c06d79b5c7f",
+				"credits": 12,
+				"details": [],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "863b5904-07fe-4f62-bf48-4527115c7144",
+				"majorId": "72273ec9-4669-43c7-8f1b-5c06d79b5c7f",
+				"credits": 18,
+				"details": ["12995", "12996", "12997", "11919", "12999", "13000"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "ccda8ea2-729b-4a02-90cb-a9b28dcb7d5d",
+				"majorId": "72273ec9-4669-43c7-8f1b-5c06d79b5c7f",
+				"credits": 12,
+				"details": ["12823", "12830", "12829", "14191"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "b9767248-39cf-4ca7-bf50-45e033170e58",
+				"majorId": "72273ec9-4669-43c7-8f1b-5c06d79b5c7f",
+				"credits": 30,
+				"details": [
+					"12831",
+					"12502",
+					"13012",
+					"545",
+					"12822",
+					"13024",
+					"13026",
+					"13027",
+					"7792",
+					"12967",
+					"327",
+					"491"
+				],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			}
+		]
+	},
+	{
+		"id": "c5881438-e54a-40e5-bf51-0424c0c7822e",
+		"name": "Environmental Science",
+		"requirements": [
+			{
+				"id": "0dd6b0bf-df48-4d5d-a843-2a814439d5f4",
+				"majorId": "c5881438-e54a-40e5-bf51-0424c0c7822e",
+				"credits": 3,
+				"details": ["327", "327"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "25a0be52-bf97-4523-9475-000a2df5f9fe",
+				"majorId": "c5881438-e54a-40e5-bf51-0424c0c7822e",
+				"credits": 3,
+				"details": ["11771"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "736dfeaa-189e-40b4-a112-1315af2f189c",
+				"majorId": "c5881438-e54a-40e5-bf51-0424c0c7822e",
+				"credits": 6,
+				"details": [["FST"]],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "9152acb2-0739-47d8-81ee-8fce7013fc31",
+				"majorId": "c5881438-e54a-40e5-bf51-0424c0c7822e",
+				"credits": 12,
+				"details": [],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "aa5ab99c-cb34-41f0-8790-669b1558f4f7",
+				"majorId": "c5881438-e54a-40e5-bf51-0424c0c7822e",
+				"credits": 9,
+				"details": ["327", "9398", "11792"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "b766411a-6957-42cd-a20d-28b16c531c7e",
+				"majorId": "c5881438-e54a-40e5-bf51-0424c0c7822e",
+				"credits": 3,
+				"details": [
+					"12502",
+					"491",
+					"380",
+					"54",
+					"11794",
+					"13012",
+					"13049",
+					"13635",
+					"11731",
+					"495",
+					"11795",
+					"470"
+				],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "73ca35d9-d6cf-40ec-9750-d93e71a1facb",
+				"majorId": "c5881438-e54a-40e5-bf51-0424c0c7822e",
+				"credits": 30,
+				"details": [],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			}
+		]
+	},
+	{
+		"id": "84b7ab15-f109-42ef-8676-3627835d85e9",
+		"name": "Biochemistr",
+		"requirements": [
+			{
+				"id": "02920c19-9b4d-4a19-9634-89e96793f5ea",
+				"majorId": "84b7ab15-f109-42ef-8676-3627835d85e9",
+				"credits": 24,
+				"details": ["9290", "7719", "12966", "7720", "12994", "378", "12993", "12992"],
+				"level": [1],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "ebc7f1f3-ec9d-42e5-95fd-0674d4a3a950",
+				"majorId": "84b7ab15-f109-42ef-8676-3627835d85e9",
+				"credits": 12,
+				"details": ["12967", "12980", "12982", "10710"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "a432cd4a-5294-4000-8d39-fa87285451cc",
+				"majorId": "84b7ab15-f109-42ef-8676-3627835d85e9",
+				"credits": 3,
+				"details": ["12985", "12981"],
+				"level": [2],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "4d7c76e8-1a9b-4721-9328-db78e5d400bc",
+				"majorId": "84b7ab15-f109-42ef-8676-3627835d85e9",
+				"credits": 3,
+				"details": ["12834"],
+				"level": [3],
+				"detailsType": "COURSES",
+				"option": "REQUIRED"
+			},
+			{
+				"id": "4625bf16-0933-4e27-9205-5b101aa6658d",
+				"majorId": "84b7ab15-f109-42ef-8676-3627835d85e9",
+				"credits": 12,
+				"details": ["311", "12833", "12983", "12835", "12984", "12989", "12822"],
+				"level": [3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			},
+			{
+				"id": "cc285d71-fd61-4ddd-8ddb-fdbf0960c620",
+				"majorId": "84b7ab15-f109-42ef-8676-3627835d85e9",
+				"credits": 30,
+				"details": [],
+				"level": [2, 3],
+				"detailsType": "COURSES",
+				"option": "OPTIONAL"
+			}
+		]
+	}
+]

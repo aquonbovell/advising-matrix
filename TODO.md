@@ -4,6 +4,13 @@
 
 - [ ] Implement a way for students to view their advisor
 - [ ] Check the advisor select statement
+- [ ] Add grades aggregation for the advisor
+- [ ] Add requirement type for CS Majors
+- [ ] Add deletion to courses
+- [ ] Add majors to student creation
+- [ ] Edit courses area select
+- [ ] check advisor data table actions
+- [ ] Add foundation courses
 
 ### In Progress
 

@@ -1,20 +1,23 @@
 import { z } from 'zod';
 import { protectedProcedure, router } from '../trpc';
-import { db } from '$lib/db';
-import { getName, paginatable } from '$lib/utils';
+import { paginatable } from '$lib/utils';
 import { TRPCError } from '@trpc/server';
-import { gradeSchema, type CourseWithPrerequisites, type Degree } from '$lib/types';
-import type { NonNullableGrade, Requirement } from '$lib/types';
-import { sql } from 'kysely';
+import { GRADE_VALUES } from '$lib/types';
+import type { NonNullableGrade } from '$lib/types';
+import { fetchMyStudents, fetchStudents } from '$lib/actions/advisor.action';
+import { fetchDegree } from '$lib/actions/degree.actions';
+import { fetchStudentCourses, updateStudentGrades } from '$lib/actions/student.actions';
+import { fetchCourseCodes } from '$lib/actions/course.action';
 
 const UpdateGradeInputSchema = z.object({
-	courseId: z.number(),
-	grade: gradeSchema,
-	requirementId: z.string().uuid()
+	courseId: z.string(),
+	grades: z.array(z.enum(Object.values(GRADE_VALUES) as [NonNullableGrade, ...NonNullableGrade[]])),
+	requirementId: z.string().uuid(),
+	userId: z.string().or(z.null())
 });
 
 export const studentRouter = router({
-	getStudents: protectedProcedure
+	fetchStudents: protectedProcedure
 		.input(
 			paginatable({
 				order: z.enum(['asc', 'desc']).optional().default('asc')
@@ -33,68 +36,8 @@ export const studentRouter = router({
 			}
 
 			try {
-				const countQuery = db
-					.selectFrom('Student')
-					.select(db.fn.countAll<number>().as('total'))
-					.executeTakeFirst();
-
-				const studentsQuery = db
-					.selectFrom('Advisor')
-					.innerJoin('Student', 'Student.id', 'Advisor.student_id')
-					.innerJoin('User as StudentUser', 'StudentUser.id', 'Student.user_id')
-					.innerJoin('User as AdvisorUser', 'AdvisorUser.id', 'Advisor.advisor_id')
-					.innerJoin('Majors as Major1', 'Major1.id', 'Student.major_id')
-					.leftJoin('Minors', 'Minors.id', 'Student.minor_id')
-					.leftJoin('Majors as Major2', 'Major2.id', 'Student.minor_id')
-					.select([
-						sql<string>`STRING_AGG("AdvisorUser".name, ', ')`.as('advisor_names'),
-						'Student.id as student_id',
-						'Student.user_id',
-						'StudentUser.name as student_name',
-						'StudentUser.email',
-						'Student.created_at',
-						'Student.invite_token',
-						'Student.invite_expires',
-						'Major1.name as major_name',
-						'Minors.name as minor_name',
-						'Major2.name as major2_name'
-					])
-					.limit(size)
-					.offset(page * size)
-					.groupBy([
-						'Student.id',
-						'StudentUser.name',
-						'StudentUser.email',
-						'Student.created_at',
-						'Student.invite_token',
-						'Student.invite_expires',
-						'Major1.name',
-						'Minors.name',
-						'Major2.name'
-					])
-					.orderBy('StudentUser.name', order);
-
-				const [countResult, studentsData] = await Promise.all([
-					countQuery,
-					studentsQuery.execute()
-				]);
-
-				// Avoid running the map function if there are no results
-				if (!studentsData.length) {
-					return { students: [], count: 0 };
-				}
-
-				return {
-					students: studentsData.map((student) => ({
-						...student,
-						program_name: student.minor_name
-							? `${student.major_name} with ${student.minor_name}`
-							: student.major2_name
-								? `${student.major_name} and ${student.major2_name}`
-								: student.major_name
-					})),
-					count: countResult?.total ?? 0
-				};
+				const data = await fetchStudents(size, page, order);
+				return { ...data };
 			} catch (err) {
 				console.error('Error fetching students:', err);
 				throw new TRPCError({
@@ -103,7 +46,7 @@ export const studentRouter = router({
 				});
 			}
 		}),
-	getMyStudents: protectedProcedure
+	fetchMyStudents: protectedProcedure
 		.input(
 			paginatable({
 				order: z.enum(['asc', 'desc']).optional().default('asc')
@@ -122,87 +65,9 @@ export const studentRouter = router({
 			}
 
 			try {
-				const studentIds = await db
-					.selectFrom('Advisor')
-					.select('student_id')
-					.where('advisor_id', '=', userId)
-					.execute();
+				const data = await fetchMyStudents(userId, size, page, order);
 
-				if (studentIds.map((s) => s.student_id).length === 0) {
-					return { students: [], count: 0 };
-				}
-
-				const [studentsData, countResult, majors, minors] = await Promise.all([
-					db
-						.selectFrom('Student')
-						.where(
-							'Student.id',
-							'in',
-							studentIds.map((s) => s.student_id)
-						)
-						.innerJoin('User as StudentUser', 'StudentUser.id', 'Student.user_id')
-						.innerJoin('Advisor', 'Advisor.student_id', 'Student.id')
-						.innerJoin('User as AdvisorUser', 'AdvisorUser.id', 'Advisor.advisor_id')
-						.select([
-							sql<string>`STRING_AGG("AdvisorUser".name, ', ')`.as('advisor_names'),
-							'Student.id as student_id',
-							'Student.user_id',
-							'StudentUser.name as student_name',
-							'Student.major_id',
-							'Student.minor_id',
-							'StudentUser.email',
-							'Student.created_at',
-							'Student.updated_at',
-							'Student.invite_token',
-							'Student.invite_expires'
-						])
-						.limit(size)
-						.offset(page * size)
-						.groupBy([
-							'Student.id',
-							'StudentUser.name',
-							'StudentUser.email',
-							'Student.created_at',
-							'Student.invite_token',
-							'Student.invite_expires',
-							'Student.major_id',
-							'Student.minor_id'
-						])
-						.orderBy('StudentUser.name', order)
-						.execute(),
-					db
-						.selectFrom('Advisor')
-						.where('Advisor.advisor_id', '=', userId)
-						.innerJoin('Student', 'Student.id', 'Advisor.student_id')
-						.select(db.fn.countAll<number>().as('count'))
-						.executeTakeFirst(),
-					db.selectFrom('Majors').selectAll().execute(),
-					db.selectFrom('Minors').selectAll().execute()
-				]);
-
-				const count = countResult?.count ?? 0;
-
-				const students = studentsData.map((student) => {
-					const major = majors.find((m) => m.id === student.major_id)?.name;
-					let program_name = major;
-
-					const minor = minors.find((m) => m.id === student.minor_id)?.name;
-
-					const major2 = majors.find((m) => m.id === student.minor_id)?.name;
-
-					if (minor) {
-						program_name = `${major} with ${minor}`;
-					}
-
-					if (major2) {
-						program_name = `${major} and ${major2}`;
-					}
-					return {
-						...student,
-						program_name
-					};
-				});
-				return { students, count };
+				return { ...data };
 			} catch (err) {
 				console.error('Error fetching students:', err);
 				throw new TRPCError({
@@ -212,215 +77,69 @@ export const studentRouter = router({
 			}
 		}),
 
-	getStudentCourses: protectedProcedure.query(async ({ ctx }) => {
-		const student = await db
-			.selectFrom('Student')
-			.select(['id'])
-			.where('user_id', '=', ctx.user.id)
-			.executeTakeFirst();
+	// getStudentCourses: protectedProcedure.query(async ({ ctx }) => {
+	// 	const student = await db
+	// 		.selectFrom('Student')
+	// 		.select(['id'])
+	// 		.where('user_id', '=', ctx.user.id)
+	// 		.executeTakeFirst();
 
-		if (!student) {
-			throw new TRPCError({
-				code: 'NOT_FOUND',
-				message: 'Student not found at getStudentCourses'
-			});
-		}
+	// 	if (!student) {
+	// 		throw new TRPCError({
+	// 			code: 'NOT_FOUND',
+	// 			message: 'Student not found at getStudentCourses'
+	// 		});
+	// 	}
 
-		const courses = await db
-			.selectFrom('StudentCourses')
-			.innerJoin('Course', 'Course.id', 'StudentCourses.courseId')
-			.select([
-				'StudentCourses.id as id',
-				'StudentCourses.courseId',
-				'StudentCourses.requirementId',
-				'StudentCourses.grade',
-				'Course.credits'
-			])
-			.where('StudentCourses.studentId', '=', student.id)
-			.execute();
+	// 	const courses = await db
+	// 		.selectFrom('StudentCourses')
+	// 		.innerJoin('Course', 'Course.id', 'StudentCourses.courseId')
+	// 		.select([
+	// 			'StudentCourses.id as id',
+	// 			'StudentCourses.courseId',
+	// 			'StudentCourses.requirementId',
+	// 			'StudentCourses.grade',
+	// 			'Course.credits'
+	// 		])
+	// 		.where('StudentCourses.studentId', '=', student.id)
+	// 		.execute();
 
-		return { courses };
-	}),
+	// 	return { courses };
+	// }),
 
-	getStudentProgram: protectedProcedure.query(async ({ ctx }) => {
-		const program = await db
-			.selectFrom('Student')
-			.select(['id', 'major_id', 'minor_id'])
-			.where('user_id', '=', ctx.user.id)
-			.executeTakeFirst();
+	// getStudentProgram: protectedProcedure.query(async ({ ctx }) => {
+	// 	const program = await db
+	// 		.selectFrom('Student')
+	// 		.select(['id', 'major_id', 'minor_id'])
+	// 		.where('user_id', '=', ctx.user.id)
+	// 		.executeTakeFirst();
 
-		if (!program) {
-			throw new TRPCError({
-				code: 'NOT_FOUND',
-				message: 'Student not found at getStudentProgram'
-			});
-		}
+	// 	if (!program) {
+	// 		throw new TRPCError({
+	// 			code: 'NOT_FOUND',
+	// 			message: 'Student not found at getStudentProgram'
+	// 		});
+	// 	}
 
-		return { program };
+	// 	return { program };
+	// }),
+
+	getCourseCodes: protectedProcedure.query(async ({ ctx }) => {
+		return await fetchCourseCodes();
 	}),
 
 	getStudentDegree: protectedProcedure
 		.input(
 			z.object({
 				majorId: z.string().uuid(),
-				minorId: z.string().uuid().nullable()
+				minorId: z.string().uuid()
 			})
 		)
 		.query(async ({ input, ctx }) => {
 			const { majorId, minorId } = input;
+			const degree = await fetchDegree(majorId, minorId);
 
-			const program = [majorId, minorId].filter(Boolean);
-
-			const [major, minor] = await Promise.all([
-				db
-					.selectFrom('Majors')
-					.innerJoin('MajorRequirements', 'Majors.id', 'MajorRequirements.majorId')
-					.where('Majors.id', 'in', program)
-					.selectAll()
-					.execute(),
-				db
-					.selectFrom('Minors')
-					.innerJoin('MinorRequirements', 'Minors.id', 'MinorRequirements.minorId')
-					.where('Minors.id', 'in', program)
-					.selectAll()
-					.execute()
-			]);
-
-			const requirements = [...major, ...minor]
-				.map(
-					(m: {
-						majorId?: string;
-						minorId?: string;
-						id: string;
-						type: string;
-						credits: number;
-						details: unknown;
-						level: number;
-					}) => {
-						const requirement = {
-							degreeId: m.majorId || m.minorId,
-							id: m.id,
-							type: m.type,
-							credits: m.credits,
-							info: m.details,
-							details: m.details,
-							level: m.level
-						} as Requirement;
-						return requirement;
-					}
-				)
-				.sort((a, b) => a.level - b.level || a.type.localeCompare(b.type));
-
-			const allCourseIDs = new Set(
-				requirements
-					.flatMap((r) => r.info.courses || [])
-					.map(String)
-					.filter((id) => !isNaN(parseInt(id)))
-			);
-
-			// Cause we have the IDs of the courses stored as Int and not Strings
-			// const testId = Array.from(allCourseIDs)
-			// 	.map(Number)
-			// 	.filter((id) => !isNaN(id));
-
-			const coursesWithPrereqs = await db
-				.selectFrom('Courses')
-				.leftJoin('Prerequisites', 'Courses.id', 'Prerequisites.courseId')
-				.leftJoin('Courses as PrereqCourse', 'Prerequisites.prerequisiteId', 'PrereqCourse.id')
-				.where('Courses.id', 'in', Array.from(allCourseIDs))
-				.select([
-					'Courses.id',
-					'Courses.code',
-					'Courses.name',
-					'Courses.level',
-					'Courses.credits',
-					'Courses.departmentId',
-					'PrereqCourse.id as prereqId',
-					'PrereqCourse.code as prereqCode',
-					'PrereqCourse.name as prereqName',
-					'PrereqCourse.level as prereqLevel',
-					'PrereqCourse.credits as prereqCredits',
-					'PrereqCourse.departmentId as prereqDepartmentId'
-				])
-				.execute();
-
-			// const prerequisites = await db
-			// 	.selectFrom('CoursePrerequisite')
-			// 	.where('CoursePrerequisite.courseId', 'in', testId)
-			// 	.select(['courseId', 'prerequisiteId'])
-			// 	.execute();
-
-			// prerequisites.forEach((prereq) => allCourseIDs.add(prereq.prerequisiteId.toString()));
-
-			// const courses = await db
-			// 	.selectFrom('Course')
-			// 	.where(
-			// 		'id',
-			// 		'in',
-			// 		Array.from(allCourseIDs)
-			// 			.map(Number)
-			// 			.filter((id) => !isNaN(id))
-			// 	)
-			// 	.selectAll()
-			// 	.execute();
-
-			const courseMap = new Map<string, CourseWithPrerequisites>();
-			coursesWithPrereqs.forEach((row) => {
-				if (!courseMap.has(row.id.toString())) {
-					courseMap.set(row.id.toString(), {
-						id: row.id,
-						code: row.code,
-						name: row.name,
-						level: row.level,
-						credits: row.credits,
-						departmentId: row.departmentId,
-						prerequisites: []
-					});
-				}
-
-				if (row.prereqId) {
-					const course = courseMap.get(row.id.toString())!;
-					course.prerequisites.push({
-						id: row.prereqId,
-						code: row.prereqCode!,
-						name: row.prereqName!,
-						level: row.prereqLevel!,
-						credits: row.prereqCredits!,
-						departmentId: row.prereqDepartmentId!
-					});
-				}
-			});
-
-			// courses.forEach((course) => {
-			// 	courseMap.set(course.id.toString(), {
-			// 		...course,
-			// 		prerequisites: []
-			// 	});
-			// });
-
-			// prerequisites.forEach((prereq) => {
-			// 	const course = courseMap.get(prereq.courseId.toString());
-			// 	const prerequisite = courseMap.get(prereq.prerequisiteId.toString());
-			// 	if (course && prerequisite) {
-			// 		course.prerequisites.push(prerequisite);
-			// 	}
-			// });
-
-			for (const requirement of requirements) {
-				if (requirement.info.courses) {
-					requirement.details = requirement.info.courses
-						.map((id) => courseMap.get(id))
-						.filter((c): c is CourseWithPrerequisites => c !== undefined);
-				}
-			}
-
-			return {
-				degree: {
-					id: `${majorId}${minorId ? `x${minorId}` : ''}`,
-					requirements,
-					name: getName(major, minor, program)
-				} as Degree
-			};
+			return { ...degree };
 		}),
 
 	getStudentGrades: protectedProcedure
@@ -432,79 +151,14 @@ export const studentRouter = router({
 		.query(async ({ input }) => {
 			const { studentId } = input;
 
-			const student = await db
-				.selectFrom('Student')
-				.select(['id'])
-				.where('id', '=', studentId)
-				.executeTakeFirst();
+			const grades = await fetchStudentCourses(studentId);
 
-			if (!student) {
-				throw new TRPCError({
-					code: 'NOT_FOUND',
-					message: 'Student not found'
-				});
-			}
-
-			const grades = await db
-				.selectFrom('StudentCourses')
-				.selectAll()
-				.where('studentId', '=', studentId)
-				.execute();
-
-			return { grades };
+			return { ...grades };
 		}),
 
 	updateStudentGrades: protectedProcedure
-		.input(z.array(UpdateGradeInputSchema))
+		.input(z.object({ grades: z.array(UpdateGradeInputSchema), studentId: z.string().uuid() }))
 		.mutation(async ({ input, ctx }) => {
-			if (input.length === 0) return { success: true };
-
-			try {
-				await db.transaction().execute(async (trx) => {
-					const student = await trx
-						.selectFrom('Student')
-						.select(['id'])
-						.where('user_id', '=', ctx.user.id)
-						.executeTakeFirst();
-
-					if (!student) {
-						throw new TRPCError({
-							code: 'NOT_FOUND',
-							message: 'Student not found'
-						});
-					}
-
-					await trx
-						.deleteFrom('StudentCourses')
-						.where('studentId', '=', student.id)
-						.where(
-							'courseId',
-							'in',
-							input.map((i) => i.courseId)
-						)
-						.execute();
-
-					await trx
-						.insertInto('StudentCourses')
-						.values(
-							input.map((i) => ({
-								id: crypto.randomUUID(),
-								studentId: student.id,
-								courseId: i.courseId,
-								grade: i.grade as NonNullableGrade,
-								requirementId: i.requirementId
-							}))
-						)
-						.execute();
-				});
-
-				return { success: true };
-			} catch (err) {
-				console.error(err);
-				throw new TRPCError({
-					code: 'INTERNAL_SERVER_ERROR',
-					message: 'An error occurred while updating student grades'
-				});
-			}
+			updateStudentGrades(input.studentId, input.grades);
 		})
 });

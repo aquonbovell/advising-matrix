@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Courses, RequirementType } from './db/schema';
+import type { Courses, LevelRestriction, RequirementType } from './db/schema';
 
 export const GRADE_VALUES = [
 	'A+',
@@ -37,8 +37,12 @@ export const isGrade = (value: unknown): value is NonNullableGrade => {
 	return typeof value === 'string' && GRADE_VALUES.includes(value as NonNullableGrade);
 };
 
-export const calculateGradePoint = (grade: NonNullableGrade): number => {
-	return gradePoints[grade];
+export const calculateGradePoint = (grade: NonNullableGrade[], credits: number): number => {
+	let courseGradePoint = 0;
+	grade.forEach((g) => {
+		courseGradePoint += gradePoints[g] * credits;
+	});
+	return courseGradePoint;
 };
 
 export type Student =
@@ -52,6 +56,15 @@ export type Student =
 
 export type CoursesWithPrerequisites = Courses & {
 	prerequisites: Courses[];
+	levelRestriction: restriction[];
+};
+
+export type restriction = {
+	id: string;
+	courseId: string;
+	area: string[];
+	credits: number;
+	level: string[];
 };
 
 export type requirement = {
@@ -79,7 +92,7 @@ export type Toast = {
 
 export type StudentCoursesWithUser = {
 	courseId: string;
-	grade: string;
+	grade: string[];
 	requirementId: string;
 	userId: string | null;
 	name: string | null;

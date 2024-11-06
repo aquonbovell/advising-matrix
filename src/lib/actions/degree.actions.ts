@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
-import type { Courses } from '$lib/db/schema';
-import type { CoursesWithPrerequisites, Degree, requirement } from '$lib/types';
+import type { Courses, LevelRestriction } from '$lib/db/schema';
+import type { CoursesWithPrerequisites, Degree, requirement, restriction } from '$lib/types';
 import { getName, isValidUUID } from '$lib/utils';
 
 export async function fetchDegree(majorId: string, minorId: string) {
@@ -185,7 +185,22 @@ export async function fetchDegree(majorId: string, minorId: string) {
 		}
 	}
 
-	const Courses = await db.selectFrom('Courses').selectAll().execute();
+	const Courses = await db
+		.selectFrom('Courses')
+		.select([
+			'Courses.id',
+			'Courses.code',
+			'Courses.name',
+			'Courses.level',
+			'Courses.credits',
+			'Courses.prerequisiteAmount',
+			'Courses.prerequisiteType',
+			'Courses.departmentId',
+			'Courses.comment'
+		])
+		.execute();
+
+	const restrictions = await db.selectFrom('LevelRestriction').selectAll().execute();
 
 	const Prerequisites = await db
 		.selectFrom('Prerequisites')
@@ -209,21 +224,56 @@ export async function fetchDegree(majorId: string, minorId: string) {
 	for (const requirement of studentData.requirements) {
 		if (requirement.detailsType === 'COURSES') {
 			let courses: CoursesWithPrerequisites[] = [];
-			for (const courseId of requirement.details) {
-				const course = Courses.find((course) => course.id === courseId);
-				if (!course) {
-					continue;
+			if (requirement.details.length === 0) {
+				for (const course of Courses.filter((course) => requirement.level.includes(course.level))) {
+					const prerequisites: Courses[] = Prerequisites.filter(
+						(prerequisite) => prerequisite.courseId === course.id
+					);
+					const levelRestrictions: LevelRestriction[] = restrictions.filter(
+						(restriction) => restriction.courseId === course.id
+					);
+					courses.push({
+						...course,
+						prerequisites: prerequisites,
+						levelRestriction: levelRestrictions.map((restriction) => {
+							return {
+								...restriction,
+								level: restriction.level.split(','),
+								area: restriction.area.split(',')
+							};
+						})
+					});
 				}
-				const prerequisites: Courses[] = Prerequisites.filter(
-					(prerequisite) => prerequisite.courseId === course.id
-				);
-				courses.push({ ...course, prerequisites: prerequisites });
+			} else {
+				for (const courseId of requirement.details) {
+					const course = Courses.find((course) => course.id === courseId);
+					if (!course) {
+						continue;
+					}
+					const prerequisites: Courses[] = Prerequisites.filter(
+						(prerequisite) => prerequisite.courseId === course.id
+					);
+					const levelRestrictions: LevelRestriction[] = restrictions.filter(
+						(restriction) => restriction.courseId === course.id
+					);
+					courses.push({
+						...course,
+						prerequisites: prerequisites,
+						levelRestriction: levelRestrictions.map((restriction) => {
+							return {
+								...restriction,
+								level: restriction.level.split(','),
+								area: restriction.area.split(',')
+							};
+						})
+					});
+				}
 			}
 			const index = studentData.requirements.findIndex(
 				(studentRequirement) => studentRequirement.id === requirement.id
 			);
 
-			if (index && studentData.requirements[index]) {
+			if (index >= 0 && studentData.requirements[index]) {
 				studentData.requirements[index].courses = [...courses];
 			}
 		}
@@ -234,7 +284,11 @@ export async function fetchDegree(majorId: string, minorId: string) {
 					(course) => requirement.level.includes(course.level) && course.code.startsWith(area)
 				);
 				for (const course of areaCourses) {
-					courses.push({ ...course, prerequisites: [] as Courses[] });
+					courses.push({
+						...course,
+						prerequisites: [] as Courses[],
+						levelRestriction: [] as restriction[]
+					});
 				}
 			}
 
@@ -257,7 +311,11 @@ export async function fetchDegree(majorId: string, minorId: string) {
 			const anyCourses = Courses.filter((course) => requirement.level.includes(course.level));
 
 			for (const course of anyCourses) {
-				courses.push({ ...course, prerequisites: [] as Courses[] });
+				courses.push({
+					...course,
+					prerequisites: [] as Courses[],
+					levelRestriction: [] as restriction[]
+				});
 			}
 
 			for (const course of courses) {

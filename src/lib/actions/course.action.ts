@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
 import type { prerequisiteType, requirementDetailsType, requirementOption } from '$lib/db/schema';
-import courses from '../../../coursesdump.json';
+import courses from '../../../courses.json';
 
 export async function updateMajor(majorData: {
 	id: string;
@@ -203,6 +203,10 @@ export async function fetchCourses() {
 		data.push(courseData);
 	}
 	return data;
+}
+export async function fetchCourseCodes() {
+	const courses = await db.selectFrom('Courses').select(['id', 'code', 'credits']).execute();
+	return courses;
 }
 
 export async function deleteMajor(id: string) {
