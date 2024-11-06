@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
-import type { Courses, RequirementType } from '$lib/db/schema';
-import type { CoursesWithPrerequisites, Degree, Requirement } from '$lib/types';
+import type { Courses } from '$lib/db/schema';
+import type { CoursesWithPrerequisites, Degree, requirement } from '$lib/types';
 import { getName, isValidUUID } from '$lib/utils';
 
 export async function fetchDegree(majorId: string, minorId: string) {
@@ -22,10 +22,11 @@ export async function fetchDegree(majorId: string, minorId: string) {
 			'Majors.id',
 			'Majors.name',
 			'MajorRequirements.id',
-			'MajorRequirements.type',
 			'MajorRequirements.credits',
-			'MajorRequirements.details',
 			'MajorRequirements.level',
+			'MajorRequirements.details',
+			'MajorRequirements.detailsType',
+			'MajorRequirements.option',
 			'MajorRequirements.majorId'
 		])
 		.execute();
@@ -37,10 +38,11 @@ export async function fetchDegree(majorId: string, minorId: string) {
 			'Minors.id',
 			'Minors.name',
 			'MinorRequirements.id',
-			'MinorRequirements.type',
 			'MinorRequirements.credits',
-			'MinorRequirements.details',
 			'MinorRequirements.level',
+			'MinorRequirements.details',
+			'MinorRequirements.detailsType',
+			'MinorRequirements.option',
 			'MinorRequirements.minorId'
 		])
 		.execute();
@@ -51,31 +53,21 @@ export async function fetchDegree(majorId: string, minorId: string) {
 		name: getName(major, minor)
 	};
 
-	studentData.requirements = [...major, ...minor].map(
-		(requirement: {
-			id: string;
-			type: RequirementType;
-			credits: number;
-			details: unknown;
-			level: number;
-		}) => {
-			const mappedRequirement = {
-				degreeId: studentData.id,
-				id: requirement.id,
-				type: requirement.type,
-				credits: requirement.credits,
-				info: requirement.details,
-				level: requirement.level
-			} as Requirement;
-			return mappedRequirement;
-		}
-	);
+	studentData.requirements = [...major, ...minor].map((requirement) => {
+		const mappedRequirement = {
+			...requirement,
+			details: JSON.parse(requirement.details) as string[],
+			courses: [],
+			level: JSON.parse(requirement.level) as number[]
+		} as requirement;
+		return mappedRequirement;
+	});
 
 	const levelOneRequirements = studentData.requirements.filter(
 		(requirement) =>
-			requirement.level === 1 &&
-			Object.keys(requirement.info).length > 0 &&
-			requirement.type === 'CREDITS'
+			requirement.level.includes(1) &&
+			requirement.details.length > 0 &&
+			requirement.option === 'REQUIRED'
 	);
 
 	let levelOneCredits = levelOneRequirements.reduce((acc, requirement) => {
@@ -85,9 +77,9 @@ export async function fetchDegree(majorId: string, minorId: string) {
 	if (levelOneCredits >= 12) {
 		const requirementPool = studentData.requirements.filter(
 			(requirement) =>
-				requirement.level === 1 &&
-				requirement.type === 'POOL' &&
-				Object.keys(requirement.info).length === 0
+				requirement.level.includes(1) &&
+				requirement.details.length === 0 &&
+				requirement.option === 'OPTIONAL'
 		);
 		const requirementPoolIds = requirementPool.map((requirement) => requirement.id);
 		studentData.requirements = studentData.requirements.filter(
@@ -98,9 +90,8 @@ export async function fetchDegree(majorId: string, minorId: string) {
 
 		const requirementDetails: string[] = [];
 		levelOneRequirements.forEach((requirement) => {
-			const info = requirement.info as { courses?: string[]; area?: string[] };
-			if (info.courses) {
-				for (const courseId of info.courses) {
+			if (requirement.detailsType === 'COURSES') {
+				for (const courseId of requirement.details) {
 					if (!requirementDetails.includes(courseId)) {
 						requirementDetails.push(courseId);
 						totalCredits += 3;
@@ -109,15 +100,18 @@ export async function fetchDegree(majorId: string, minorId: string) {
 			}
 		});
 
-		if (totalCredits < 24) {
+		const requirement = requirementPool.at(0);
+
+		if (totalCredits < 24 && requirement) {
 			const newRequirement = {
-				degreeId: studentData.id,
-				id: requirementPool.at(0)!.id,
-				type: 'POOL',
+				id: requirement.id,
+				option: 'OPTIONAL',
+				detailsType: 'COURSES',
 				credits: 24 - totalCredits,
-				info: {},
-				level: 1
-			} as Requirement;
+				details: [],
+				courses: [],
+				level: [1]
+			} as requirement;
 			studentData.requirements = [newRequirement, ...studentData.requirements];
 		}
 	}
@@ -125,14 +119,11 @@ export async function fetchDegree(majorId: string, minorId: string) {
 	if (levelOneRequirements.length > 1) {
 		const requirementIds = levelOneRequirements.map((requirement) => requirement.id);
 		let totalCredits = 0;
-		// console.log('Enter the level one requirements credits');
-		// console.log(levelOneRequirements);
 
 		const requirementDetails: string[] = [];
 		levelOneRequirements.forEach((requirement) => {
-			const info = requirement.info as { courses?: string[]; area?: string[] };
-			if (info.courses) {
-				for (const courseId of info.courses) {
+			if (requirement.detailsType === 'COURSES') {
+				for (const courseId of requirement.details) {
 					if (!requirementDetails.includes(courseId)) {
 						requirementDetails.push(courseId);
 						totalCredits += 3;
@@ -141,23 +132,27 @@ export async function fetchDegree(majorId: string, minorId: string) {
 			}
 		});
 
-		const newRequirement = {
-			degreeId: studentData.id,
-			id: levelOneRequirements.at(0)!.id,
-			type: 'CREDITS',
-			credits: totalCredits,
-			info: { courses: requirementDetails },
-			level: 1
-		} as Requirement;
-		studentData.requirements = studentData.requirements.filter(
-			(requirement) => !requirementIds.includes(requirement.id)
-		);
-		studentData.requirements = [newRequirement, ...studentData.requirements];
+		const requirement = levelOneRequirements.at(0);
+
+		if (requirement) {
+			const newRequirement = {
+				id: requirement.id,
+				option: 'REQUIRED',
+				detailsType: 'COURSES',
+				credits: totalCredits,
+				details: requirementDetails,
+				level: [1]
+			} as requirement;
+			studentData.requirements = studentData.requirements.filter(
+				(requirement) => !requirementIds.includes(requirement.id)
+			);
+			studentData.requirements = [newRequirement, ...studentData.requirements];
+		}
 	}
 
 	const requiredCredits = studentData.requirements
 		.filter((requirement) => {
-			return Object.entries(requirement.info).length !== 0 && requirement.level !== 1;
+			return requirement.details.length !== 0 && !requirement.level.includes(1);
 		})
 		.reduce((acc, requirement) => {
 			return acc + requirement.credits;
@@ -166,23 +161,25 @@ export async function fetchDegree(majorId: string, minorId: string) {
 	if (requiredCredits >= 30) {
 		const requirementPool = studentData.requirements.filter(
 			(requirement) =>
-				requirement.level !== 1 &&
-				requirement.type === 'POOL' &&
-				Object.keys(requirement.info).length === 0
+				!requirement.level.includes(1) &&
+				requirement.details.length === 0 &&
+				requirement.option === 'OPTIONAL'
 		);
 		const requirementPoolIds = requirementPool.map((requirement) => requirement.id);
 		studentData.requirements = studentData.requirements.filter(
 			(requirement) => !requirementPoolIds.includes(requirement.id)
 		);
-		if (60 - requiredCredits > 0) {
+		const requirement = requirementPool.at(0);
+		if (60 - requiredCredits > 0 && requirement) {
 			const newRequirement = {
-				degreeId: studentData.id,
-				id: requirementPool.at(0)!.id,
-				type: 'POOL',
+				id: requirement.id,
+				option: 'OPTIONAL',
+				detailsType: 'COURSES',
+				courses: [],
 				credits: 60 - requiredCredits,
-				info: {},
-				level: 4
-			} as Requirement;
+				details: [],
+				level: [2, 3]
+			} as requirement;
 
 			studentData.requirements = [newRequirement, ...studentData.requirements];
 		}
@@ -210,11 +207,9 @@ export async function fetchDegree(majorId: string, minorId: string) {
 	// GET the level one credits
 
 	for (const requirement of studentData.requirements) {
-		const details = requirement.info as { courses?: string[]; area?: string[] };
-
-		if (details.courses) {
+		if (requirement.detailsType === 'COURSES') {
 			let courses: CoursesWithPrerequisites[] = [];
-			for (const courseId of details.courses) {
+			for (const courseId of requirement.details) {
 				const course = Courses.find((course) => course.id === courseId);
 				if (!course) {
 					continue;
@@ -227,17 +222,16 @@ export async function fetchDegree(majorId: string, minorId: string) {
 			const index = studentData.requirements.findIndex(
 				(studentRequirement) => studentRequirement.id === requirement.id
 			);
-			if (index !== -1 && index !== undefined) {
-				studentData.requirements[index]!.details = [...courses];
+
+			if (index && studentData.requirements[index]) {
+				studentData.requirements[index].courses = [...courses];
 			}
 		}
-		if (details.area) {
+		if (requirement.detailsType === 'AREAS') {
 			const courses: CoursesWithPrerequisites[] = [];
-			for (const area of details.area) {
+			for (const area of requirement.details) {
 				const areaCourses = Courses.filter(
-					(course) =>
-						(requirement.level === 4 ? [2, 3] : [requirement.level]).includes(course.level) &&
-						course.code.startsWith(area)
+					(course) => requirement.level.includes(course.level) && course.code.startsWith(area)
 				);
 				for (const course of areaCourses) {
 					courses.push({ ...course, prerequisites: [] as Courses[] });
@@ -253,15 +247,14 @@ export async function fetchDegree(majorId: string, minorId: string) {
 			const index = studentData.requirements.findIndex(
 				(studentRequirement) => studentRequirement.id === requirement.id
 			);
-			if (index !== -1 && index !== undefined) {
-				studentData.requirements[index]!.details = [...courses];
+
+			if (index && studentData.requirements[index]) {
+				studentData.requirements[index].courses = [...courses];
 			}
 		}
-		if (!details.area && !details.courses) {
+		if (requirement.detailsType === 'FACULTIES') {
 			const courses: CoursesWithPrerequisites[] = [];
-			const anyCourses = Courses.filter((course) =>
-				(requirement.level === 4 ? [2, 3] : [requirement.level]).includes(course.level)
-			);
+			const anyCourses = Courses.filter((course) => requirement.level.includes(course.level));
 
 			for (const course of anyCourses) {
 				courses.push({ ...course, prerequisites: [] as Courses[] });
@@ -276,17 +269,20 @@ export async function fetchDegree(majorId: string, minorId: string) {
 			const index = studentData.requirements.findIndex(
 				(studentRequirement) => studentRequirement.id === requirement.id
 			);
-			if (index !== -1 && index !== undefined) {
-				studentData.requirements[index]!.details = [...courses];
+
+			if (index && studentData.requirements[index]) {
+				studentData.requirements[index].courses = [...courses];
 			}
 		}
 	}
 
-	const sortedRequirements = studentData.requirements.sort((a, b) => a.level - b.level);
+	const sortedRequirements = studentData.requirements.sort(
+		(a, b) =>
+			a.level.reduce((accumulator, currentValue) => accumulator + currentValue, 0) -
+			b.level.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+	);
 
 	studentData.requirements = sortedRequirements;
 
-	return {
-		data: studentData
-	};
+	return { ...studentData };
 }

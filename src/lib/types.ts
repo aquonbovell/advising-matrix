@@ -54,23 +54,20 @@ export type CoursesWithPrerequisites = Courses & {
 	prerequisites: Courses[];
 };
 
-export type Requirement = {
-	degreeId: string;
+export type requirement = {
 	id: string;
-	type: RequirementType;
+	option: requirementOption;
+	details: string[];
+	courses: CoursesWithPrerequisites[];
+	detailsType: requirementDetailsType;
 	credits: number;
-	info: {
-		courses?: string[];
-		area?: string[];
-	};
-	details: CoursesWithPrerequisites[];
-	level: number;
+	level: number[];
 };
 
 export type Degree = {
 	name: string;
 	id: string;
-	requirements: Requirement[];
+	requirements: requirement[];
 };
 
 export type Toast = {
@@ -92,6 +89,8 @@ export const options = ['REQUIRED', 'OPTIONAL'];
 
 export const types = ['COURSES', 'AREAS', 'FACULTIES'];
 
+export const prerequisiteTypes = ['ALL', 'ONE'];
+
 export const requirementOption = {
 	REQUIRED: 'REQUIRED',
 	OPTIONAL: 'OPTIONAL'
@@ -105,3 +104,9 @@ export const requirementDetailsType = {
 
 export type requirementDetailsType =
 	(typeof requirementDetailsType)[keyof typeof requirementDetailsType];
+
+export const prerequisiteType = {
+	ALL: 'ALL',
+	ONE: 'ONE'
+} as const;
+export type prerequisiteType = (typeof prerequisiteType)[keyof typeof prerequisiteType];

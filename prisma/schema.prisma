@@ -78,13 +78,18 @@ model Courses {
   credits            Int
   departmentId       String
   department         Departments        @relation(fields: [departmentId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  prerequisiteType   String             @default("all")
-  prerequisiteAmount Int                @default(1)
+  prerequisiteType   prerequisiteType
+  prerequisiteAmount Int
   comment            String?
   prerequisitecourse Prerequisites[]    @relation("PrerequisiteCourse")
   courseprerequisite Prerequisites[]    @relation("CoursePrerequisite")
   StudentCourses     StudentCourses[]
   LevelRestriction   LevelRestriction[]
+}
+
+enum prerequisiteType {
+  ALL
+  ONE
 }
 
 model LevelRestriction {
