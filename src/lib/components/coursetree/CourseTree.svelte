@@ -11,12 +11,12 @@
 		type Edge,
 		ConnectionLineType
 	} from '@xyflow/svelte';
-	import type { CourseWithPrerequisites } from '$lib/types';
+	import type { CoursesWithPrerequisites } from '$lib/types';
 	import CustomNode from './CustomNode.svelte';
 
 	import '@xyflow/svelte/dist/style.css';
 
-	export let course: CourseWithPrerequisites;
+	export let course: CoursesWithPrerequisites;
 
 	const dagreGraph = new dagre.graphlib.Graph();
 	dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -56,14 +56,14 @@
 		};
 	}
 
-	function createNodesAndEdges(course: CourseWithPrerequisites) {
+	function createNodesAndEdges(course: CoursesWithPrerequisites) {
 		const nodes: Node[] = [];
 		const edges: Edge[] = [];
 		const visited = new Set<number>();
 
-		function addCourseNode(course: CourseWithPrerequisites, level: number, isRoot = false) {
-			if (visited.has(course.id)) return;
-			visited.add(course.id);
+		function addCourseNode(course: CoursesWithPrerequisites, level: number, isRoot = false) {
+			if (visited.has(parseInt(course.id))) return;
+			visited.add(parseInt(course.id));
 
 			nodes.push({
 				id: course.id.toString(),
@@ -78,7 +78,7 @@
 
 			if (course.prerequisites && course.prerequisites.length > 0) {
 				course.prerequisites.forEach((prereq, _index) => {
-					addCourseNode(prereq as CourseWithPrerequisites, level + 1, false);
+					addCourseNode(prereq as CoursesWithPrerequisites, level + 1, false);
 					edges.push({
 						id: `${course.id}-${prereq.id}`,
 						source: course.id.toString(),
@@ -105,7 +105,7 @@
 	};
 </script>
 
-<div class="h-[600px] w-full rounded-lg border-2 border-stone-200 bg-white">
+<div class="h-full w-full rounded-lg border-2 border-stone-200 bg-white">
 	<SvelteFlow
 		nodes={nodesStore}
 		edges={edgesStore}

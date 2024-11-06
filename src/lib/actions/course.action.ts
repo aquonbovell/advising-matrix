@@ -196,9 +196,22 @@ export async function fetchCourses() {
 			.where('courseId', '=', course.id)
 			.selectAll()
 			.execute();
+		const prerequisites = await db
+			.selectFrom('Prerequisites')
+			.innerJoin('Courses', 'Prerequisites.prerequisiteId', 'Courses.id')
+			.where('courseId', '=', course.id)
+			.selectAll()
+			.execute();
 		const courseData = {
 			...course,
-			restrictions
+			levelRestriction: restrictions.map((restriction) => {
+				return {
+					...restriction,
+					level: restriction.level.split(','),
+					area: restriction.area.split(',')
+				};
+			}),
+			prerequisites
 		};
 		data.push(courseData);
 	}
