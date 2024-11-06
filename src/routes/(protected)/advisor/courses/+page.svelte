@@ -18,7 +18,6 @@
 
 <div class="flex justify-between py-2">
 	<h1 class="text-2xl font-bold text-stone-800">Courses</h1>
-	<Button.Root variant="link" href="/advisor/courses/create" class="p-0">Create Course</Button.Root>
 </div>
 {#if $courseQuery.isLoading}
 	<p>Loading...</p>

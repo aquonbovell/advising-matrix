@@ -5,15 +5,16 @@
 	import * as Command from '$lib/components/ui/command';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { Label } from '$lib/components/ui/label';
-	import { Input, type FormInputEvent } from '$lib/components/ui/input';
+	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { courseSchema, prerequisiteOptions, type CourseSchema } from './schema.js';
+	import { courseSchema, type CourseSchema } from './schema.js';
 	import { Button } from '$lib/components/ui/button';
 	import { ChevronsUpDown, Check } from 'lucide-svelte';
-	import { cn, generateId } from '$lib/utils.js';
+	import { cn } from '$lib/utils.js';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
+	import { prerequisiteTypes } from '$lib/types.js';
 
 	export let data: SuperValidated<Infer<CourseSchema>>;
 
@@ -35,40 +36,6 @@
 			alert($message);
 		}
 	}
-	function updateArea(event: FormInputEvent, id: string) {
-		const el = event.target as HTMLInputElement;
-		const restrictionIndex = $formData.levelRestriction.findIndex((r) => r.id === id);
-		if (restrictionIndex !== -1) {
-			// Update the area directly in the form data
-			$formData.levelRestriction[restrictionIndex]!.area = el.value.split(',');
-		}
-	}
-
-	function addRestriction() {
-		$formData.levelRestriction = [
-			...$formData.levelRestriction,
-			{
-				id: generateId(),
-				area: [],
-				credits: 0,
-				level: []
-			}
-		];
-	}
-
-	function removeRestriction(id: string) {
-		$formData.levelRestriction = $formData.levelRestriction.filter((r) => r.id !== id);
-	}
-
-	function convertStringToNumber(event: FormInputEvent, id: string) {
-		const el = event.target as HTMLInputElement;
-		const restrictionIndex = $formData.levelRestriction.findIndex((r) => r.id === id);
-		if (restrictionIndex !== -1) {
-			// Update the area directly in the form data
-			$formData.levelRestriction[restrictionIndex]!.credits = parseInt(el.value);
-		}
-	}
-
 	$: selectedDepartment = $formData.departmentId
 		? {
 				label:
@@ -88,17 +55,11 @@
 		: undefined;
 </script>
 
-<form method="POST" use:enhance class="space-y-4" action="?/update">
-	<Form.Field {form} name="id">
-		<Form.Control let:attrs>
-			<Input {...attrs} bind:value={$formData.id} type="hidden" />
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
+<form method="POST" use:enhance class="space-y-4">
 	<Form.Field {form} name="name">
 		<Form.Control let:attrs>
 			<Form.Label class="font-semibold">Course Name</Form.Label>
-			<Input {...attrs} bind:value={$formData.name} placeholder="Human Anatomy" />
+			<Input {...attrs} bind:value={$formData.name} placeholder="Human Anatomy" readonly />
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
@@ -106,7 +67,7 @@
 		<Form.Field {form} name="code" class="lg:col-span-4">
 			<Form.Control let:attrs>
 				<Form.Label class="font-semibold">Course Code</Form.Label>
-				<Input {...attrs} bind:value={$formData.code} placeholder="PHIL2406" />
+				<Input {...attrs} bind:value={$formData.code} placeholder="PHIL2406" readonly />
 			</Form.Control>
 			<Form.FieldErrors class="mt-2 text-sm" />
 		</Form.Field>
@@ -117,6 +78,7 @@
 					{...attrs}
 					bind:value={$formData.credits}
 					type="number"
+					readonly
 					on:change={() => {
 						$formData.credits = parseInt($formData.credits.toString());
 					}}
@@ -137,18 +99,8 @@
 					<Select.Trigger {...attrs} class="min-w-max">
 						<Select.Value placeholder="Select a verified department" />
 					</Select.Trigger>
-					<Select.Content>
-						{#each departments as department}
-							<Select.Item value={department.id} label={department.name} />
-						{/each}
-					</Select.Content>
 				</Select.Root>
-				<input hidden bind:value={$formData.departmentId} name={attrs.name} />
 			</Form.Control>
-			<Form.Description>
-				Select a verified faculty from the list. If the department is not listed, please contact the
-				administrator.
-			</Form.Description>
 			<Form.FieldErrors />
 		</Form.Field>
 	</div>
@@ -158,6 +110,7 @@
 			<Input
 				{...attrs}
 				bind:value={$formData.comment}
+				readonly
 				placeholder="Course restrictions and disclaimers"
 			/>
 		</Form.Control>
@@ -167,7 +120,6 @@
 		<Form.Control let:attrs>
 			<div class="flex items-baseline justify-between">
 				<Form.Label class="font-semibold">Course Level Restriction</Form.Label>
-				<Button variant="outline" on:click={addRestriction} type="button">Add Restriction</Button>
 			</div>
 
 			{#each $formData.levelRestriction as restriction (restriction.id)}
@@ -179,55 +131,24 @@
 							<Select.Root
 								multiple
 								selected={restriction.level.map((l) => ({ label: 'Level ' + l, value: l }))}
-								onSelectedChange={(l) => {
-									restriction.level = l?.map((v) => v.value) || [];
-								}}
 							>
-								<Select.Trigger {...attrs}>
+								<Select.Trigger>
 									<Select.Value placeholder="Select a verified level" />
 								</Select.Trigger>
-								<Select.Content class="min-w-48">
-									{#each { length: 4 } as _, i}
-										{#if i > 0}
-											<Select.Item value={i} label={`Level ${i}`} />
-										{/if}
-									{/each}
-								</Select.Content>
 							</Select.Root>
 						</div>
 
 						<!-- Credits Input -->
 						<div class="col-span-2 w-full">
 							<Form.Label class="font-semibold">Credits</Form.Label>
-							<Input
-								value={restriction.credits}
-								type="number"
-								step="3"
-								min="0"
-								max="100"
-								on:input={(event) => convertStringToNumber(event, restriction.id)}
-							/>
+							<Input value={restriction.credits} type="number" readonly />
 						</div>
 
 						<!-- Area Input -->
 						<div class="col-span-full w-full sm:col-span-6">
 							<Form.Label class="font-semibold">Area</Form.Label>
-							<Input
-								bind:value={restriction.area}
-								type="text"
-								on:input={(event) => {
-									updateArea(event, restriction.id);
-								}}
-							/>
+							<Input bind:value={restriction.area} type="text" readonly />
 						</div>
-						<button
-							class="absolute right-0 top-0"
-							on:click={() => removeRestriction(restriction.id)}
-							type="button"
-							><Badge class="bg-white px-2 py-1 font-bold text-destructive hover:bg-slate-200"
-								>X</Badge
-							></button
-						>
 					</div>
 				</div>
 			{/each}
@@ -255,11 +176,11 @@
 					}
 				}}
 			>
-				{#each prerequisiteOptions as option}
+				{#each prerequisiteTypes as option}
 					<div class="flex items-center space-x-2">
 						<RadioGroup.Item value={option} id={option} />
 						<Label for={option}
-							>{option.slice(0, 1).toUpperCase() + option.slice(1)} of the following</Label
+							>{option.slice(0, 1).toUpperCase() + option.slice(1).toLowerCase()} of the following</Label
 						>
 					</div>
 				{/each}
@@ -280,64 +201,13 @@
 								{/each}
 							</div>
 						{:else}
-							Select a verified course
+							No course
 						{/if}
 						<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 					</Button></Popover.Trigger
 				>
-				<Popover.Content align="center" class="p-1">
-					<Command.Root>
-						<Command.Input placeholder="Search course..." />
-						<Command.List class="max-h-48 p-0">
-							<Command.Loading />
-							<Command.Empty>No results found.</Command.Empty>
-							<Command.Group>
-								{#each courses as course}
-									<Command.Item
-										value={course.name}
-										onSelect={(courseName) => {
-											const cv = courses.find((c) => c.name === courseName)?.id || '';
-
-											if ($formData.prerequisites.courses.includes(cv)) {
-												$formData.prerequisites.courses = $formData.prerequisites.courses.filter(
-													(c) => c !== cv
-												);
-											} else {
-												$formData.prerequisites.courses = [...$formData.prerequisites.courses, cv];
-											}
-											switch ($formData.prerequisites.dataType) {
-												case 'all':
-													$formData.prerequisites.requiredAmount =
-														$formData.prerequisites.courses.length;
-													break;
-
-												case 'one':
-													$formData.prerequisites.requiredAmount = 1;
-													break;
-
-												default:
-													break;
-											}
-										}}
-									>
-										<Check
-											class={cn(
-												'mr-2 h-4 w-4',
-												!$formData.prerequisites.courses.includes(course.id.toString()) &&
-													'text-transparent'
-											)}
-										/>
-										{course.name}</Command.Item
-									>
-								{/each}
-							</Command.Group>
-						</Command.List>
-					</Command.Root>
-				</Popover.Content>
 			</Popover.Root>
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
-
-	<Form.Button type="submit">Update</Form.Button>
 </form>

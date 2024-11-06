@@ -1,5 +1,5 @@
 import { z } from 'zod';
-export const prerequisiteOptions = ['all', 'one'] as const;
+import { prerequisiteType, prerequisiteType as types } from '$lib/types';
 export const courseSchema = z.object({
 	id: z.string(),
 	departmentId: z.string(),
@@ -23,7 +23,7 @@ export const courseSchema = z.object({
 	),
 	comment: z.string().optional().nullish(),
 	prerequisites: z.object({
-		dataType: z.enum(prerequisiteOptions),
+		dataType: z.enum(Object.values(types) as [prerequisiteType, ...prerequisiteType[]]),
 		courses: z.array(z.string()),
 		requiredAmount: z.number()
 	})
