@@ -17,17 +17,27 @@ export async function fetchStudentCourses(
 		.execute();
 
 	return {
-		courses
+		courses: courses.map((course) => ({
+			...course,
+			grade: course.grade.split(',').filter(Boolean)
+		}))
 	};
 }
 
 export async function updateStudentGrades(
 	id: string,
-	studentCourses: { userId: string; courseId: string; requirementId: string; grades: Grade[] }[]
+	studentCourses: {
+		userId: string | null;
+		courseId: string;
+		requirementId: string;
+		grades: Grade[];
+	}[]
 ) {
 	if (!isValidUUID(id)) {
 		throw new Error('Invalid studentId');
 	}
+
+	console.log('studentCourses', studentCourses);
 
 	try {
 		await db.transaction().execute(async (db) => {
@@ -48,6 +58,7 @@ export async function updateStudentGrades(
 			}
 		});
 	} catch (error) {
+		console.error(error);
 		return { status: 400, message: 'Failed to update student courses' };
 	}
 
