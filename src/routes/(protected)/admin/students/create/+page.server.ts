@@ -8,6 +8,7 @@ import type { UserRole } from '$lib/db/schema';
 import { Argon2id } from 'oslo/password';
 import { DEFAULT_PASSWORD } from '$env/static/private';
 import { generateTokenWithExpiration } from '$lib/server/auth';
+import { sql } from 'kysely';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user?.role !== 'ADMIN') {
@@ -20,7 +21,15 @@ export const load: PageServerLoad = async ({ locals }) => {
 		.where('id', 'not in', db.selectFrom('Student').select('user_id'))
 		.execute();
 	const majors = await db.selectFrom('Majors').select(['id', 'name']).execute();
-	const minors = await db.selectFrom('Minors').select(['id', 'name']).execute();
+	const minors = await db
+		.selectFrom('Majors')
+		.select(['Majors.id as id', sql<string>`CONCAT("Majors".name, ' (Major) ')`.as('name')])
+		.union(
+			db
+				.selectFrom('Minors')
+				.select(['Minors.id as id', sql<string>`CONCAT("Minors".name, ' (Minor) ')`.as('name')])
+		)
+		.execute();
 
 	const advisors = await db
 		.selectFrom('User')

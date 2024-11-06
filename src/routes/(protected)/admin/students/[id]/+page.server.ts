@@ -4,6 +4,7 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
 import { message, superValidate } from 'sveltekit-superforms';
 import { studentSchema } from './schema';
+import { sql } from 'kysely';
 
 export const load = (async ({ params }) => {
 	const form = await superValidate(zod(studentSchema));
@@ -42,7 +43,15 @@ export const load = (async ({ params }) => {
 		advisors: studentAdvisors.map((advisor) => advisor.advisor_id)
 	};
 	const majors = await db.selectFrom('Majors').select(['id', 'name']).execute();
-	const minors = await db.selectFrom('Minors').select(['id', 'name']).execute();
+	const minors = await db
+		.selectFrom('Majors')
+		.select(['Majors.id as id', sql<string>`CONCAT("Majors".name, ' (Major) ')`.as('name')])
+		.union(
+			db
+				.selectFrom('Minors')
+				.select(['Minors.id as id', sql<string>`CONCAT("Minors".name, ' (Minor) ')`.as('name')])
+		)
+		.execute();
 
 	const advisors = await db
 		.selectFrom('User')
