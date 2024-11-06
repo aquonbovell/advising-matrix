@@ -1,8 +1,7 @@
 import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/db';
-import { fetchDegree } from '$lib/actions/degree.actions';
-import { fetchStudentCourses, updateStudentGrades } from '$lib/actions/student.actions';
+import { updateStudentGrades } from '$lib/actions/student.actions';
 import type { Grade } from '$lib/types';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -18,15 +17,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	if (!student) error(404, 'Student not found');
 
-	const degree = await fetchDegree(student.major_id, student.minor_id);
-
-	const studentCourses = await fetchStudentCourses(student.id);
-
 	return {
-		student,
-		role: locals.user?.role,
-		degree,
-		studentCourses: studentCourses.courses
+		student
 	};
 };
 
@@ -64,7 +56,7 @@ export const actions: Actions = {
 				courseId,
 				requirementId: courseData.requirementId,
 				grades: courseData.grade,
-				userId
+				userId: courseData.userId
 			});
 		});
 

@@ -16,7 +16,7 @@ export const load: PageServerLoad = async (event) => {
 		Math.min(100, parseInt(event.url.searchParams.get('pageSize') ?? '10', 10))
 	);
 
-	const result = await trpcServer.students.getStudents.ssr(
+	const result = await trpcServer.students.fetchStudents.ssr(
 		{
 			order,
 			page: pageIndex,
@@ -51,6 +51,7 @@ export const actions: Actions = {
 					student_id: studentCode
 				})
 				.execute();
+			// TODO: Add a toast message
 		} catch (err) {
 			console.error(err);
 			return fail(500, { error: 'An error occurred while adding the student' });

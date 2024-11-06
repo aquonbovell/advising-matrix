@@ -6,7 +6,7 @@
 
 <StudentData
 	student={data.student}
-	degree={data.degree.data}
+	degree={data.degree}
 	studentCourses={data.studentCourses}
 	role={data.user?.role}
 	userId={data.userId}

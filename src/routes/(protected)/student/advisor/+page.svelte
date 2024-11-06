@@ -10,7 +10,7 @@
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Academic Advisor</Card.Title>
-					<Card.Description>Card Description</Card.Description>
+					<Card.Description>For the advising matrix</Card.Description>
 				</Card.Header>
 				<Card.Content>
 					<p>Name: {advisor.name}</p>

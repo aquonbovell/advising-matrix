@@ -16,7 +16,7 @@
 	);
 	const order = derived(page, ($page) => $page.url.searchParams.get('order') || 'asc');
 
-	$: studentQuery = trpc.students.getStudents.query({ page: $pageIndex, size: $pageSize });
+	$: studentQuery = trpc.students.fetchStudents.query({ page: $pageIndex, size: $pageSize });
 
 	// $: console.log($studentQuery);
 	export let data: PageData;
