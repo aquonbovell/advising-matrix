@@ -49,7 +49,7 @@
 	export let studentCourses: StudentCoursesWithUser[];
 
 	const degreeCourses = degree.requirements
-		.flatMap((requirement) => requirement.details)
+		.flatMap((requirement) => requirement.courses)
 		.map((course) => {
 			return { id: course.id, credits: course.credits, code: course.code };
 		});
@@ -59,8 +59,8 @@
 	courses.set(degreeCourses);
 
 	const degreeRequiredCourses = degree.requirements
-		.filter((requirement) => requirement.type === 'CREDITS')
-		.flatMap((requirement) => requirement.details)
+		.filter((requirement) => requirement.option === 'REQUIRED')
+		.flatMap((requirement) => requirement.courses)
 		.map((course) => {
 			return { id: course.id, credits: course.credits };
 		});
@@ -76,7 +76,7 @@
 			>
 		>{};
 		courseGrade[course.courseId] = {
-			grade: course.grade.split(',').filter((g) => g !== '') as Grade[],
+			grade: course.grade.filter((g) => g !== '') as Grade[],
 			requirementId: course.requirementId!,
 			userId: course.userId,
 			name: course.name
@@ -219,10 +219,8 @@
 	{#each degree.requirements as req}
 		<Card.Root class="min-w-80">
 			<Card.Header class="flex flex-row items-baseline justify-between px-4 py-3 ">
-				<Card.Title
-					>{`Level ${req.level === 4 ? '2 / 3' : req.level} - ${req.credits} credits`}</Card.Title
-				>
-				{#if req.type === 'POOL'}
+				<Card.Title>Level {req.level.join(' / ')} - {req.credits} credits</Card.Title>
+				{#if req.option === 'OPTIONAL'}
 					<Button.Root
 						class="!m-0"
 						variant="outline"
@@ -230,7 +228,7 @@
 							$dialogRequirementID = req.id;
 							addCourseDialog = true;
 						}}
-						disabled={req.details
+						disabled={req.courses
 							.filter(
 								(course) =>
 									$courseGrades[course.id] && $courseGrades[course.id]?.requirementId === req.id
@@ -247,15 +245,15 @@
 			</Card.Header>
 			<Card.Content class="p-0">
 				<ul class="grid md:grid-cols-2">
-					{#each req.details.filter((course) => {
-						if (req.type === 'POOL') {
+					{#each req.courses.filter((course) => {
+						if (req.option === 'OPTIONAL') {
 							return $courseGrades[course.id] && $courseGrades[course.id]?.requirementId === req.id;
 						}
 						return true;
 					}) as course}
 						<Course
 							{course}
-							required={req.type === 'POOL' ? false : true}
+							required={req.option === 'REQUIRED'}
 							requirementId={req.id}
 							{role}
 							addGradeDialog={openGradeDialog}
@@ -297,7 +295,7 @@
 							{@const index = degree.requirements.findIndex((r) => r.id === $dialogRequirementID)}
 							{@const requirement = degree.requirements[index]}
 							{#if requirement}
-								{#each requirement.details.filter((course) => !$courseGrades[course.id] && !$requiredCourses
+								{#each requirement.courses.filter((course) => !$courseGrades[course.id] && !$requiredCourses
 											.flatMap((c) => c.id)
 											.includes(course.id)) as course}
 									<Select.Item value={course.id}>{course.code} - {course.name}</Select.Item>

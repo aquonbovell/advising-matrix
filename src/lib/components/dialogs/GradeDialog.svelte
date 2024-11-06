@@ -47,7 +47,7 @@
 		}
 	}}
 >
-	<Dialog.Content>
+	<Dialog.Content class="max-w-min">
 		<Dialog.Header>
 			<Dialog.Title>{$selectedCourse.value?.code}</Dialog.Title>
 			<Dialog.Description>

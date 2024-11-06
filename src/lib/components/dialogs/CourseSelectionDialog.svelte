@@ -10,7 +10,7 @@
 	export let requirementId: string | null;
 
 	const toastState = getToastState();
-	let selectedCourseId: Selected<number> = { value: 0, label: '' };
+	let selectedCourseId: Selected<string> = { value: '', label: '' };
 
 	function handleCourseAdd() {
 		if (!selectedCourseId.value || !requirementId) {
@@ -18,10 +18,23 @@
 			return;
 		}
 
+		// TODO: Check user's eligibility to add course
+
+		studentCourses.update((courses) => [
+			...courses,
+			{
+				courseId: selectedCourseId.value,
+				grade: [],
+				name: null,
+				userId: null,
+				requirementId
+			}
+		]);
+
 		// Add your course addition logic here
 		// addCourse(selectedCourseId.value, requirementId);
 
-		selectedCourseId = { value: 0, label: '' };
+		selectedCourseId = { value: '', label: '' };
 		open = false;
 	}
 </script>
@@ -30,7 +43,7 @@
 	bind:open
 	onOpenChange={(isOpen) => {
 		if (!isOpen) {
-			selectedCourseId = { value: 0, label: '' };
+			selectedCourseId = { value: '', label: '' };
 		}
 	}}
 >
@@ -42,30 +55,30 @@
 					Select a course from the list below to add. The course will be added to your list of
 					courses.
 				</p>
-				<div class="flex gap-3">
+				<div class="flex flex-col gap-3 md:flex-row">
 					<Select.Root
 						required={true}
 						selected={selectedCourseId}
 						onSelectedChange={(value) => {
-							selectedCourseId = value ?? { value: 0, label: '' };
+							selectedCourseId = value ?? { value: '', label: '' };
 						}}
 					>
-						<Select.Trigger class="w-[340px]">
+						<Select.Trigger class="w-72 md:w-80">
 							<Select.Value placeholder="Select a course" />
 						</Select.Trigger>
-						<Select.Content class="max-h-60 overflow-y-auto">
+						<Select.Content class=" max-h-60 overflow-y-auto">
 							{@const index = $degree.requirements.findIndex((r) => r.id === requirementId)}
 							{@const requirement = $degree.requirements[index]}
 							{#if requirement}
-								{#each requirement.details.filter((course) => !$studentCourses.some((sc) => sc.courseId === course.id) && !$degree.requirements // Not already taken // Not a required course
-											.filter((r) => r.type === 'CREDITS')
-											.some((r) => r.details.some((c) => c.id === course.id))) as course}
+								{#each requirement.courses.filter((course) => !$studentCourses.some((sc) => sc.courseId === course.id) && !$degree.requirements // Not already taken // Not a required course
+											.filter((r) => r.option === 'REQUIRED')
+											.some((r) => r.courses.some((c) => c.id === course.id))) as course}
 									<Select.Item value={course.id}>
 										{course.code} - {course.name}
 									</Select.Item>
 								{/each}
 							{:else}
-								<Select.Item value={0} disabled>No courses found</Select.Item>
+								<Select.Item value={''} disabled>No courses found</Select.Item>
 							{/if}
 						</Select.Content>
 					</Select.Root>

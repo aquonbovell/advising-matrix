@@ -11,8 +11,8 @@ type menuItemsType = Record<UserRole, { label: string; href: string; icon: Compo
 const UserMenuItems: menuItemsType = {
 	STUDENT: [
 		{ label: 'Matrix', href: '/student/matrix', icon: Terminal },
-		{ label: 'Test', href: '/student/test', icon: TestTube },
-		{ label: 'Courses', href: '/student/courses', icon: Book }
+		{ label: 'Courses', href: '/student/courses', icon: Book },
+		{ label: 'Advisor', href: '/student/advisor', icon: Users }
 	],
 	ADVISOR: [
 		{ label: 'Invite Student', href: '/advisor/invite', icon: UserPlus },

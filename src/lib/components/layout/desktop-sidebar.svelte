@@ -6,6 +6,17 @@
 	import UserMenu from './user-menu.svelte';
 	import { page } from '$app/stores';
 
+	import * as Button from '$lib/components/ui/button';
+	import Settings from 'lucide-svelte/icons/settings';
+	import Logout from 'lucide-svelte/icons/log-out';
+	import ChevronDown from 'lucide-svelte/icons/chevron-down';
+	import * as Popover from '$lib/components/ui/popover';
+	import Avatar from '$lib/components/ui/Avatar.svelte';
+	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
+
+	let settings = false;
+
 	export let user: { name: string; role: UserRole };
 	$: url = $page.url.toString();
 </script>
@@ -39,6 +50,35 @@
 				{/if}
 			</nav>
 		</div>
-		<UserMenu {user} />
+		<Popover.Root>
+			<Popover.Trigger class="border">
+				<UserMenu {user} />
+			</Popover.Trigger>
+			<Popover.Content
+				side="top"
+				align="start"
+				class="flex w-full max-w-[8rem] flex-col bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5"
+			>
+				<Button.Root variant="ghost">
+					<a href={`/${user.role?.toLocaleLowerCase()}/settings`} class="flex"
+						><Settings class="mr-3 h-5 w-5 text-gray-400" /> Settings
+					</a>
+				</Button.Root>
+				<form
+					method="POST"
+					action="/logout"
+					use:enhance={async () => {
+						return async ({ update }) => {
+							await update();
+							invalidateAll();
+						};
+					}}
+				>
+					<Button.Root type="submit" variant="ghost" class="w-full">
+						<Logout class="mr-3 h-5 w-5 text-gray-400" />Logout</Button.Root
+					>
+				</form>
+			</Popover.Content>
+		</Popover.Root>
 	</div>
 </aside>
