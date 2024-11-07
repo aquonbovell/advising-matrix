@@ -1,19 +1,24 @@
 import { db } from './db';
 import { Argon2id } from 'oslo/password';
 import 'dotenv/config';
-const encoder = new TextEncoder();
-const secret = encoder.encode(process.env.SECRET!);
-const argon2id = new Argon2id({ secret });
 
 const seed = async () => {
 	console.log('Seeding database...');
-	const encoder = new TextEncoder();
-	const secret = encoder.encode(process.env.SECRET!);
-	const argon2id = new Argon2id({ secret });
+	const secret = process.env.SECRET;
+	const defaultPassword = process.env.DEFAULT_PASSWORD;
 
-	const hashedPassword = await argon2id.hash(process.env.DEFAULT_PASSWORD!);
+	if (!secret || !defaultPassword) {
+		throw new Error('SECRET or DEFAULT_PASSWORD not found in .env');
+	}
+	const encoder = new TextEncoder();
+	const encodedSecret = encoder.encode(secret);
+	const argon2id = new Argon2id({ secret: encodedSecret });
+
+	const hashedPassword = await argon2id.hash(defaultPassword);
 
 	await db.transaction().execute(async (db) => {
+		console.log('Connection established');
+
 		await db.deleteFrom('User').execute();
 
 		await db.deleteFrom('Advisor').execute();
@@ -78,7 +83,8 @@ const seed = async () => {
 			.executeTakeFirst();
 
 		if (major_id && minor_id) {
-			await db
+			// Get Student ID from db
+			const student = await db
 				.insertInto('Student')
 				.values({
 					id: crypto.randomUUID(),
@@ -90,13 +96,7 @@ const seed = async () => {
 					created_at: new Date().toISOString(),
 					updated_at: new Date().toISOString()
 				})
-				.execute();
-
-			// Get Student ID from db
-			const student = await db
-				.selectFrom('Student')
-				.where('Student.user_id', '=', student_id)
-				.select('id')
+				.returning('id')
 				.executeTakeFirst();
 
 			if (!student) {
@@ -114,7 +114,7 @@ const seed = async () => {
 		}
 	});
 
-	db.destroy();
+	await db.destroy();
 	console.log('Connection closed');
 };
 

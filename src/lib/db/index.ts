@@ -6,21 +6,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { DATABASE_URL, CA, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
+const { DATABASE_URL } = process.env;
 
-const config = {
-	user: DB_USER,
-	password: DB_PASSWORD,
-	host: DB_HOST,
-	port: Number(DB_PORT),
-	database: DB_NAME,
+const postgresql = new Pool({
+	connectionString: DATABASE_URL,
+	max: 20,
+	idleTimeoutMillis: 3000,
 	ssl: {
-		rejectUnauthorized: true,
-		ca: CA
-	}
-};
-
-const postgresql = new Pool(config);
+		rejectUnauthorized: true
+	},
+	connectionTimeoutMillis: 2000
+});
 
 export { postgresql };
 

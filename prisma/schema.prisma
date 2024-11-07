@@ -1,6 +1,6 @@
 generator kysely {
   provider = "prisma-kysely"
-  output   = "./"
+  output   = "../src/lib/db"
   fileName = "schema.d.ts"
 }
 
