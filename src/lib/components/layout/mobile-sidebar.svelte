@@ -2,6 +2,7 @@
 	import type { UserRole } from '$lib/db/schema';
 	import * as Button from '$lib/components/ui/button';
 	import * as Sheet from '$lib/components/ui/sheet';
+	import * as Popover from '$lib/components/ui/popover';
 	import Menu from 'lucide-svelte/icons/menu';
 	import Home from 'lucide-svelte/icons/house';
 	import uwiBanner from '$lib/assets/img/uwi_banner.png';
@@ -9,6 +10,10 @@
 	import UserMenu from './user-menu.svelte';
 	import UserAvatar from './user-avatar.svelte';
 	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
+	import Settings from 'lucide-svelte/icons/settings';
+	import Logout from 'lucide-svelte/icons/log-out';
 
 	export let user: { name: string; role: UserRole };
 
@@ -54,7 +59,36 @@
 				{/if}
 			</nav>
 			<div class="mt-auto">
-				<UserMenu {user} />
+				<Popover.Root>
+					<Popover.Trigger class="w-full ">
+						<UserMenu {user} />
+					</Popover.Trigger>
+					<Popover.Content
+						side="top"
+						align="start"
+						class="flex w-full max-w-[8rem] flex-col bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5"
+					>
+						<Button.Root variant="ghost">
+							<a href={`/${user.role?.toLocaleLowerCase()}/settings`} class="flex"
+								><Settings class="mr-3 h-5 w-5 text-gray-400" /> Settings
+							</a>
+						</Button.Root>
+						<form
+							method="POST"
+							action="/logout"
+							use:enhance={async () => {
+								return async ({ update }) => {
+									await update();
+									invalidateAll();
+								};
+							}}
+						>
+							<Button.Root type="submit" variant="ghost" class="w-full">
+								<Logout class="mr-3 h-5 w-5 text-gray-400" />Logout</Button.Root
+							>
+						</form>
+					</Popover.Content>
+				</Popover.Root>
 			</div>
 		</Sheet.Content>
 	</Sheet.Root>

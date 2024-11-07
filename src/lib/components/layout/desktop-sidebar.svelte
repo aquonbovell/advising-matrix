@@ -51,7 +51,7 @@
 			</nav>
 		</div>
 		<Popover.Root>
-			<Popover.Trigger class="border">
+			<Popover.Trigger>
 				<UserMenu {user} />
 			</Popover.Trigger>
 			<Popover.Content
