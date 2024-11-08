@@ -1,7 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	export let data: PageData;
-
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import {
 		addPagination,
@@ -10,7 +7,7 @@
 		addHiddenColumns,
 		addSelectedRows
 	} from 'svelte-headless-table/plugins';
-	import { readable } from 'svelte/store';
+	import { readable, writable } from 'svelte/store';
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 	import * as Table from '$lib/components/ui/table';
 	import DataTableActions from './data-table-actions.svelte';
@@ -20,18 +17,39 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 
-	type ICourse = {
-		id: string;
-		code: string;
-		name: string;
-		credits: number;
-		level: number;
-	};
+	import type { RouterOutputs } from '$lib/server/routers';
+	import { trpc } from '$lib/trpc';
 
-	const courses: ICourse[] = [...data.courses];
+	const index = writable(0);
+	const size = writable(10);
+	const orderBy = writable<'asc' | 'desc'>('asc');
+	const search = writable('');
 
-	const table = createTable(readable(courses), {
-		page: addPagination({ initialPageSize: 10 }),
+	$: courses = trpc.courses.fetch.query({
+		page: $index,
+		size: $size,
+		orderBy: $orderBy,
+		search: $search
+	});
+
+	const paginatedData = writable<RouterOutputs['courses']['fetch']['courses']>([]);
+
+	const countStore = writable(0);
+
+	$: {
+		if ($courses.isSuccess) {
+			paginatedData.set($courses.data.courses);
+			countStore.set($courses.data.count);
+		}
+	}
+
+	const table = createTable(paginatedData, {
+		page: addPagination({
+			serverSide: true,
+			serverItemCount: countStore,
+			initialPageIndex: 0,
+			initialPageSize: 10
+		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
@@ -130,6 +148,23 @@
 		.filter(([, hide]) => !hide)
 		.map(([id]) => id);
 
+	function updateSort() {
+		pluginStates.sort.sortKeys.subscribe((value) => {
+			const key = value.at(0);
+			if (key) {
+				orderBy.set(key.order);
+			} else {
+				orderBy.set('asc');
+			}
+		});
+	}
+
+	filterValue.subscribe((value) => {
+		search.set(value);
+	});
+
+	$: console.log($search);
+
 	const hidableCols = ['credits', 'level'];
 </script>
 
@@ -171,7 +206,13 @@
 								<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
 									<Table.Head {...attrs} class="[&:has([role=checkbox])]:pl-3">
 										{#if cell.id === 'code' || cell.id === 'level'}
-											<Button variant="ghost" on:click={props.sort.toggle}>
+											<Button
+												variant="ghost"
+												on:click={(event) => {
+													props.sort.toggle(event);
+													updateSort();
+												}}
+											>
 												<Render of={cell.render()} />
 												<ArrowUpDown class={'ml-2 h-4 w-4'} />
 											</Button>
@@ -220,14 +261,20 @@
 		<Button
 			variant="outline"
 			size="sm"
-			on:click={() => ($pageIndex = $pageIndex - 1)}
+			on:click={() => {
+				$pageIndex = $pageIndex - 1;
+				$index = $pageIndex;
+			}}
 			disabled={!$hasPreviousPage}>Previous</Button
 		>
 		<Button
 			variant="outline"
 			size="sm"
 			disabled={!$hasNextPage}
-			on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+			on:click={() => {
+				$pageIndex = $pageIndex + 1;
+				$index = $pageIndex;
+			}}>Next</Button
 		>
 	</div>
 </div>

@@ -242,3 +242,138 @@ export async function deleteMajor(id: string) {
 		return { success: false };
 	}
 }
+
+export async function paginate(
+	page: number,
+	size: number,
+	orderBy: 'asc' | 'desc',
+	search: string
+) {
+	const data = [];
+	const query = db
+		.selectFrom('Courses')
+		.orderBy('code', orderBy)
+		.where((eb) =>
+			eb('code', 'like', `%${search.toUpperCase()}%`).or('name', 'like', `%${search}%`)
+		)
+		.offset(page * size)
+		.limit(size);
+
+	const courses = await query.selectAll().execute();
+
+	for (const course of courses) {
+		const restrictions = await db
+			.selectFrom('LevelRestriction')
+			.where('courseId', '=', course.id)
+			.selectAll()
+			.execute();
+		const prerequisites = await db
+			.selectFrom('Prerequisites')
+			.innerJoin('Courses', 'Prerequisites.prerequisiteId', 'Courses.id')
+			.where('courseId', '=', course.id)
+			.selectAll()
+			.execute();
+		const courseData = {
+			...course,
+			levelRestriction: restrictions.map((restriction) => {
+				return {
+					...restriction,
+					level: restriction.level.split(','),
+					area: restriction.area.split(',')
+				};
+			}),
+			prerequisites
+		};
+		data.push(courseData);
+	}
+	return data;
+}
+export async function count() {
+	const courses = await db
+		.selectFrom('Courses')
+		.select(db.fn.countAll<number>().as('count'))
+		.executeTakeFirst();
+	return courses;
+}
+
+export async function findByCode(code: string) {
+	const course = await db
+		.selectFrom('Courses')
+		.where('code', 'like', `%${code}%`)
+		.selectAll()
+		.executeTakeFirst();
+	if (!course) return null;
+
+	const restrictions = await db
+		.selectFrom('LevelRestriction')
+		.where('courseId', '=', course.id)
+		.selectAll()
+		.execute();
+	const prerequisites = await db
+		.selectFrom('Prerequisites')
+		.innerJoin('Courses', 'Prerequisites.prerequisiteId', 'Courses.id')
+		.where('courseId', '=', course.id)
+		.selectAll()
+		.execute();
+	const courseData = {
+		...course,
+		levelRestriction: restrictions.map((restriction) => {
+			return {
+				...restriction,
+				level: restriction.level.split(','),
+				area: restriction.area.split(',')
+			};
+		}),
+		prerequisites
+	};
+	return courseData;
+}
+
+export async function fetchFilter(
+	level: number | undefined,
+	exclude: string[] | undefined,
+	department: string | undefined,
+	order: 'asc' | 'desc' = 'asc'
+) {
+	const data = [];
+
+	const query = db.selectFrom('Courses').orderBy('code', order).selectAll();
+	if (level) {
+		query.where('level', '=', level);
+	}
+	if (department) {
+		query.where('departmentId', '=', department);
+	}
+
+	if (exclude && exclude.length > 0) {
+		query.where('id', 'not in', exclude);
+	}
+	const courses = await query.execute();
+
+	for (const course of courses) {
+		const restrictions = await db
+			.selectFrom('LevelRestriction')
+			.where('courseId', '=', course.id)
+			.selectAll()
+			.execute();
+		const prerequisites = await db
+			.selectFrom('Prerequisites')
+			.innerJoin('Courses', 'Prerequisites.prerequisiteId', 'Courses.id')
+			.where('courseId', '=', course.id)
+			.selectAll()
+			.execute();
+		const courseData = {
+			...course,
+			levelRestriction: restrictions.map((restriction) => {
+				return {
+					...restriction,
+					level: restriction.level.split(','),
+					area: restriction.area.split(',')
+				};
+			}),
+			prerequisites
+		};
+		data.push(courseData);
+	}
+	return data;
+}

@@ -11,6 +11,7 @@
 - [ ] Edit courses area select
 - [ ] check advisor data table actions
 - [ ] Add foundation courses
+- [ ] Add figure out courses hold up of requests
 
 ### In Progress
 

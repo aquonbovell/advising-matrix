@@ -16,28 +16,31 @@
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
-	import { page } from '$app/stores';
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
-	import { cn } from '$lib/utils';
 	import type { RouterOutputs } from '$lib/server/routes/_app';
+	import { trpc } from '$lib/trpc';
 
-	export let data: RouterOutputs['courses']['getCourses'];
+	const index = writable(0);
+	const size = writable(10);
 
-	const paginatedData = writable(data.courses);
-	const countStore = writable(data.count);
+	$: courseQuery = trpc.courses.fetch.query({ page: $index, size: $size });
+
+	const paginatedData = writable<RouterOutputs['courses']['getCourses']['courses']>([]);
+
+	const countStore = writable(0);
 
 	$: {
-		$paginatedData = data.courses;
-		$countStore = data.count;
+		if ($courseQuery.isSuccess) {
+			paginatedData.set($courseQuery.data.courses);
+			countStore.set($courseQuery.data.count);
+		}
 	}
 
 	const table = createTable(paginatedData, {
 		page: addPagination({
 			serverSide: true,
 			serverItemCount: countStore,
-			initialPageIndex: parseInt($page.url.searchParams.get('pageIndex') || '0', 10),
-			initialPageSize: parseInt($page.url.searchParams.get('pageSize') || '10', 10)
+			initialPageIndex: 0,
+			initialPageSize: 10
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -121,7 +124,7 @@
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns, rows } =
 		table.createViewModel(columns);
 
-	const { hasNextPage, hasPreviousPage, pageIndex, pageCount, pageSize } = pluginStates.page;
+	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 
 	const { filterValue } = pluginStates.filter;
 
@@ -137,19 +140,6 @@
 		.map(([id]) => id);
 
 	const hidableCols = ['credits', 'level'];
-
-	$: {
-		if (browser) {
-			const q = new URLSearchParams($page.url.searchParams);
-			q.set('pageIndex', $pageIndex.toString());
-			q.set('pageSize', $pageSize.toString());
-			// Order
-			// if ($sortKeys.length) {
-			// 	q.set('sort', ($sortKeys[0]!.order === 'asc' ? '+' : '-') + $sortKeys[0]!.id);
-			// }
-			goto(`?${q}`, { noScroll: true });
-		}
-	}
 </script>
 
 <div>
@@ -239,14 +229,20 @@
 		<Button
 			variant="outline"
 			size="sm"
-			on:click={() => ($pageIndex = $pageIndex - 1)}
+			on:click={() => {
+				$pageIndex = $pageIndex - 1;
+				$index = $pageIndex - 1;
+			}}
 			disabled={!$hasPreviousPage}>Previous</Button
 		>
 		<Button
 			variant="outline"
 			size="sm"
 			disabled={!$hasNextPage}
-			on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+			on:click={() => {
+				$pageIndex = $pageIndex + 1;
+				$index = $pageIndex + 1;
+			}}>Next</Button
 		>
 	</div>
 </div>

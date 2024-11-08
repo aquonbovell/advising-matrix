@@ -2,7 +2,7 @@ import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { courseSchema } from './schema';
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { db } from '$lib/db';
 
 export const load: PageServerLoad = async ({ locals }) => {
