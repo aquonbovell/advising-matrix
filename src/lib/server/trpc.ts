@@ -1,16 +1,16 @@
 import { TRPCError, initTRPC } from '@trpc/server';
 import type { Context } from './context';
-import { transformer } from '$lib/trpc/transformer';
+import { transformer } from '$lib/transformer';
 
-const t = initTRPC.context<Context>().create({
+const trpc = initTRPC.context<Context>().create({
 	transformer
 });
 
-export const router = t.router;
+export const router = trpc.router;
 
-export const publicProcedure = t.procedure;
+export const procedure = trpc.procedure;
 
-export const protectedProcedure = publicProcedure.use(({ ctx, next }) => {
+export const protectedProcedure = procedure.use(({ ctx, next }) => {
 	if (!ctx.session || !ctx.user) {
 		throw new TRPCError({ code: 'UNAUTHORIZED' });
 	}

@@ -228,7 +228,7 @@ export function extractPagination(url: URL, defaultPageSize = 10, defaultPage = 
 	};
 }
 
-export function paginatable<T extends ZodRawShape>(schema: T) {
+export function paginateTable<T extends ZodRawShape>(schema: T) {
 	return z.object({
 		...schema,
 		page: z.number().int().min(0).optional().default(0),

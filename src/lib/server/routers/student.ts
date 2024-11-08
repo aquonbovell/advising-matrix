@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { protectedProcedure, router } from '../trpc';
-import { paginatable } from '$lib/utils';
+import { paginateTable } from '$lib/utils';
 import { TRPCError } from '@trpc/server';
 import { GRADE_VALUES } from '$lib/types';
 import type { NonNullableGrade } from '$lib/types';
@@ -17,9 +17,9 @@ const UpdateGradeInputSchema = z.object({
 });
 
 export const studentRouter = router({
-	fetchStudents: protectedProcedure
+	findManyStudents: protectedProcedure
 		.input(
-			paginatable({
+			paginateTable({
 				order: z.enum(['asc', 'desc']).optional().default('asc')
 			})
 		)
@@ -46,9 +46,9 @@ export const studentRouter = router({
 				});
 			}
 		}),
-	fetchMyStudents: protectedProcedure
+	findMyStudents: protectedProcedure
 		.input(
-			paginatable({
+			paginateTable({
 				order: z.enum(['asc', 'desc']).optional().default('asc')
 			})
 		)
@@ -124,11 +124,11 @@ export const studentRouter = router({
 	// 	return { program };
 	// }),
 
-	getCourseCodes: protectedProcedure.query(async ({ ctx }) => {
+	findCodes: protectedProcedure.query(async ({ ctx }) => {
 		return await fetchCourseCodes();
 	}),
 
-	getStudentDegree: protectedProcedure
+	findStudent: protectedProcedure
 		.input(
 			z.object({
 				majorId: z.string().uuid(),
@@ -142,7 +142,7 @@ export const studentRouter = router({
 			return { ...degree };
 		}),
 
-	getStudentGrades: protectedProcedure
+	findStudentGrades: protectedProcedure
 		.input(
 			z.object({
 				studentId: z.string().uuid()
@@ -156,7 +156,7 @@ export const studentRouter = router({
 			return { ...grades };
 		}),
 
-	updateStudentGrades: protectedProcedure
+	updatestudentGrades: protectedProcedure
 		.input(z.object({ grades: z.array(UpdateGradeInputSchema), studentId: z.string().uuid() }))
 		.mutation(async ({ input, ctx }) => {
 			updateStudentGrades(input.studentId, input.grades);
