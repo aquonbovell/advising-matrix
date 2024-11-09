@@ -1,5 +1,11 @@
 import { db } from '$lib/db';
-import type { prerequisiteType, requirementDetailsType, requirementOption } from '$lib/db/schema';
+import type {
+	Courses,
+	prerequisiteType,
+	requirementDetailsType,
+	requirementOption
+} from '$lib/db/schema';
+import type { Course, CoursesWithPrerequisites } from '$lib/types';
 import courses from '../../../courses.json';
 
 export async function updateMajor(majorData: {
@@ -261,32 +267,7 @@ export async function paginate(
 
 	const courses = await query.selectAll().execute();
 
-	for (const course of courses) {
-		const restrictions = await db
-			.selectFrom('LevelRestriction')
-			.where('courseId', '=', course.id)
-			.selectAll()
-			.execute();
-		const prerequisites = await db
-			.selectFrom('Prerequisites')
-			.innerJoin('Courses', 'Prerequisites.prerequisiteId', 'Courses.id')
-			.where('courseId', '=', course.id)
-			.selectAll()
-			.execute();
-		const courseData = {
-			...course,
-			levelRestriction: restrictions.map((restriction) => {
-				return {
-					...restriction,
-					level: restriction.level.split(','),
-					area: restriction.area.split(',')
-				};
-			}),
-			prerequisites
-		};
-		data.push(courseData);
-	}
-	return data;
+	return courses;
 }
 export async function count() {
 	const courses = await db
@@ -327,6 +308,19 @@ export async function findByCode(code: string) {
 		prerequisites
 	};
 	return courseData;
+}
+
+export async function remove(code: string) {
+	try {
+		const result = await db.transaction().execute(async (db) => {
+			const course = await db.deleteFrom('Courses').where('code', '=', code).execute();
+			return course;
+		});
+		return { success: true };
+	} catch (error) {
+		console.error('Error deleting course:', error);
+		return { success: false };
+	}
 }
 
 export async function fetchFilter(
@@ -376,4 +370,65 @@ export async function fetchFilter(
 		data.push(courseData);
 	}
 	return data;
+}
+
+export async function find(code: string, name: string) {
+	const course = await db
+		.selectFrom('Courses')
+		.where((eb) => eb('code', 'like', `%${code.toUpperCase()}%`).or('name', 'like', `%${name}%`))
+		.select(['code', 'name'])
+		.executeTakeFirst();
+
+	return course;
+}
+
+export async function create(data: Course) {
+	try {
+		await db.transaction().execute(async (db) => {
+			const course = await db
+				.insertInto('Courses')
+				.values({
+					id: data.id,
+					code: data.code.toUpperCase(),
+					name: data.name,
+					credits: data.credits,
+					departmentId: data.departmentId,
+					level: data.level,
+					prerequisiteAmount: data.prerequisiteAmount,
+					prerequisiteType: data.prerequisiteType,
+					comment: data.comment
+				})
+				.returning('id')
+				.executeTakeFirst();
+
+			if (course) {
+				for (const prerequisite of data.prerequisites) {
+					await db
+						.insertInto('Prerequisites')
+						.values({
+							id: crypto.randomUUID(),
+							courseId: course.id,
+							prerequisiteId: prerequisite
+						})
+						.execute();
+				}
+				for (const restriction of data.levelRestriction) {
+					await db
+						.insertInto('LevelRestriction')
+						.values({
+							id: crypto.randomUUID(),
+							courseId: course.id,
+							level: restriction.level.toString(),
+							area: restriction.area.toString(),
+							credits: restriction.credits
+						})
+						.execute();
+				}
+			}
+		});
+		return { success: true };
+	} catch (error) {
+		console.error('Error creating course:', error);
+		return { success: false };
+	}
 }

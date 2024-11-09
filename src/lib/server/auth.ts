@@ -1,12 +1,12 @@
 import { Lucia, TimeSpan } from 'lucia';
-import { NodePostgresAdapter } from '@lucia-auth/adapter-postgresql';
 import { dev } from '$app/environment';
 import type { DB } from '$lib/db/schema';
-import { postgresql } from '$lib/db';
+import { client } from '$lib/db';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { createDate } from 'oslo';
+import { LibSQLAdapter } from '@lucia-auth/adapter-sqlite';
 
-const adapter = new NodePostgresAdapter(postgresql, {
+const adapter = new LibSQLAdapter(client, {
 	user: 'User',
 	session: 'Session'
 });

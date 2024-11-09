@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { protectedProcedure, router } from '../trpc';
 import { paginateTable } from '$lib/utils';
-import { count, paginate, fetchFilter, findByCode } from '$lib/actions/course.action';
+import { count, paginate, fetchFilter, findByCode, remove } from '$lib/actions/course.action';
 
 const courseFiltersSchema = z.object({
 	level: z.number().optional(),
@@ -87,6 +87,22 @@ export const courseRouter = router({
 		} catch (err) {
 			console.error('Error fetching course:', err);
 			throw new Error('Failed to fetch course');
+		}
+	}),
+	delete: protectedProcedure.input(z.object({ code: z.string() })).query(async ({ input }) => {
+		const { code } = input;
+
+		try {
+			const result = await remove(code);
+
+			if (!result.success) {
+				throw new Error('Failed to delete course');
+			}
+
+			return result;
+		} catch (err) {
+			console.error('Error deleting course:', err);
+			throw new Error('Failed to delete course');
 		}
 	}),
 	fetchFilter: protectedProcedure

@@ -14,6 +14,7 @@
 	import { ChevronsUpDown, Check } from 'lucide-svelte';
 	import { cn, generateId } from '$lib/utils.js';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
+	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 
 	export let data: SuperValidated<Infer<CourseSchema>>;
 
@@ -78,12 +79,12 @@
 			}
 		: undefined;
 
-	$: selectedPrerequisite = $formData.prerequisites.courses
+	$: selectedPrerequisite = $formData.prerequisites
 		? {
 				label: courses
-					.filter((course) => $formData.prerequisites.courses.includes(course.id.toString()))
+					.filter((course) => $formData.prerequisites.includes(course.id.toString()))
 					.map((course) => course.name),
-				value: $formData.prerequisites.courses
+				value: $formData.prerequisites
 			}
 		: undefined;
 </script>
@@ -134,7 +135,7 @@
 						v && ($formData.departmentId = v.value);
 					}}
 				>
-					<Select.Trigger {...attrs} class="min-w-max">
+					<Select.Trigger {...attrs}>
 						<Select.Value placeholder="Select a verified department" />
 					</Select.Trigger>
 					<Select.Content>
@@ -145,17 +146,13 @@
 				</Select.Root>
 				<input hidden bind:value={$formData.departmentId} name={attrs.name} />
 			</Form.Control>
-			<Form.Description>
-				Select a verified faculty from the list. If the department is not listed, please contact the
-				administrator.
-			</Form.Description>
 			<Form.FieldErrors />
 		</Form.Field>
 	</div>
 	<Form.Field {form} name="comment">
 		<Form.Control let:attrs>
 			<Form.Label class="font-semibold">Comment</Form.Label>
-			<Input
+			<Textarea
 				{...attrs}
 				bind:value={$formData.comment}
 				placeholder="Course restrictions and disclaimers"
@@ -237,29 +234,12 @@
 	<Form.Field {form} name="prerequisites">
 		<Form.Control let:attrs>
 			<Form.Label class="font-semibold">Prerequisites</Form.Label>
-			<RadioGroup.Root
-				class="flex gap-4"
-				bind:value={$formData.prerequisites.dataType}
-				onValueChange={(value) => {
-					switch (value) {
-						case 'all':
-							$formData.prerequisites.requiredAmount = $formData.prerequisites.courses.length;
-							break;
-
-						case 'one':
-							$formData.prerequisites.requiredAmount = 1;
-							break;
-
-						default:
-							break;
-					}
-				}}
-			>
+			<RadioGroup.Root class="flex gap-4" bind:value={$formData.prerequisiteType}>
 				{#each prerequisiteOptions as option}
 					<div class="flex items-center space-x-2">
 						<RadioGroup.Item value={option} id={option} />
 						<Label for={option}
-							>{option.slice(0, 1).toUpperCase() + option.slice(1)} of the following</Label
+							>{option.slice(0, 1) + option.slice(1).toLowerCase()} of the following</Label
 						>
 					</div>
 				{/each}
@@ -285,10 +265,10 @@
 						<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 					</Button></Popover.Trigger
 				>
-				<Popover.Content align="center" class="p-1">
+				<Popover.Content align="start" class="p-1">
 					<Command.Root>
 						<Command.Input placeholder="Search course..." />
-						<Command.List class="max-h-48 p-0">
+						<Command.List class="max-h-52 p-0">
 							<Command.Loading />
 							<Command.Empty>No results found.</Command.Empty>
 							<Command.Group>
@@ -298,32 +278,17 @@
 										onSelect={(courseName) => {
 											const cv = courses.find((c) => c.name === courseName)?.id.toString() || '';
 
-											if ($formData.prerequisites.courses.includes(cv)) {
-												$formData.prerequisites.courses = $formData.prerequisites.courses.filter(
-													(c) => c !== cv
-												);
+											if ($formData.prerequisites.includes(cv)) {
+												$formData.prerequisites = $formData.prerequisites.filter((c) => c !== cv);
 											} else {
-												$formData.prerequisites.courses = [...$formData.prerequisites.courses, cv];
-											}
-											switch ($formData.prerequisites.dataType) {
-												case 'all':
-													$formData.prerequisites.requiredAmount =
-														$formData.prerequisites.courses.length;
-													break;
-
-												case 'one':
-													$formData.prerequisites.requiredAmount = 1;
-													break;
-
-												default:
-													break;
+												$formData.prerequisites = [...$formData.prerequisites, cv];
 											}
 										}}
 									>
 										<Check
 											class={cn(
 												'mr-2 h-4 w-4',
-												!$formData.prerequisites.courses.includes(course.id.toString()) &&
+												!$formData.prerequisites.includes(course.id.toString()) &&
 													'text-transparent'
 											)}
 										/>
@@ -339,5 +304,5 @@
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 
-	<Form.Button type="submit">Update</Form.Button>
+	<Form.Button type="submit">Create</Form.Button>
 </form>

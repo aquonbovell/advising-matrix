@@ -59,6 +59,16 @@ export type CoursesWithPrerequisites = Courses & {
 	levelRestriction: restriction[];
 };
 
+export type Course = Courses & {
+	prerequisites: string[];
+	levelRestriction: {
+		id: string;
+		level: number[];
+		credits: number;
+		area: string[];
+	}[];
+};
+
 export type restriction = {
 	id: string;
 	courseId: string;

@@ -4,6 +4,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { courseSchema } from './schema';
 import { error } from '@sveltejs/kit';
 import { db } from '$lib/db';
+import { create, find } from '$lib/actions/course.action';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user?.role !== 'ADMIN') {
@@ -32,85 +33,31 @@ export const actions: Actions = {
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-		const courseCode = await db
-			.selectFrom('Courses')
-			.where('code', '=', form.data.code)
-			.select('id')
-			.executeTakeFirst();
+		const course = await find(form.data.code, form.data.name);
 
-		if (courseCode) {
+		if (course && course.code === form.data.code) {
 			form.errors.code = [...(form.errors.code ?? ''), 'Course already exists with this code'];
 			return fail(400, { form });
 		}
 
-		const courseName = await db
-			.selectFrom('Courses')
-			.where('code', '=', form.data.name)
-			.select('id')
-			.executeTakeFirst();
-
-		if (courseName) {
+		if (course && course.name === form.data.name) {
 			form.errors.name = [...(form.errors.name ?? ''), 'Course already exists with this name'];
 			return fail(400, { form });
 		}
 
-		const courseData = form.data;
+		const courseData = { ...form.data, id: crypto.randomUUID() };
 
 		try {
-			await db.transaction().execute(async (db) => {
-				const course = await db
-					.updateTable('Courses')
-					.set({
-						name: courseData.name,
-						credits: courseData.credits,
-						departmentId: courseData.departmentId,
-						level: parseInt(courseData.code[4] ?? '0'),
-						prerequisiteAmount: courseData.prerequisites.requiredAmount,
-						prerequisiteType: courseData.prerequisites.dataType,
-						comment: courseData.comment
-					})
-					.where('code', '=', courseData.code)
-					.returning('id')
-					.executeTakeFirst();
+			const result = await create(courseData);
 
-				const courseId = course?.id;
+			if (!result.success) {
+				error(500, { message: 'Failed to create course' });
+			}
 
-				if (!courseId) {
-					return;
-				}
-
-				await db.deleteFrom('LevelRestriction').where('courseId', '=', courseId).execute();
-
-				for (const levelRestriction of courseData.levelRestriction) {
-					await db
-						.insertInto('LevelRestriction')
-						.values({
-							id: crypto.randomUUID(),
-							courseId: courseId,
-							level: levelRestriction.level.join(','),
-							credits: levelRestriction.credits,
-							area: levelRestriction.area.join(',')
-						})
-						.execute();
-				}
-
-				await db.deleteFrom('Prerequisites').where('courseId', '=', courseId).execute();
-
-				for (const prerequisite of courseData.prerequisites.courses) {
-					await db
-						.insertInto('Prerequisites')
-						.values({
-							id: crypto.randomUUID(),
-							courseId: courseId,
-							prerequisiteId: prerequisite
-						})
-						.execute();
-				}
-			});
 			return message(form, 'Course updated successfully');
 		} catch (err) {
 			console.error(err);
-			error(500, { message: 'Failed to update course' });
+			error(500, { message: 'Failed to create course' });
 		}
 	}
 };
