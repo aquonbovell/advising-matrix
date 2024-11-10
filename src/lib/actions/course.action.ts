@@ -223,6 +223,12 @@ export async function fetchCourses() {
 	}
 	return data;
 }
+export async function fetchCourseNames() {
+	const courses = await db.selectFrom('Courses').select(['id', 'name']).execute();
+
+	return courses;
+}
+
 export async function fetchCourseCodes() {
 	const courses = await db.selectFrom('Courses').select(['id', 'code', 'credits']).execute();
 	return courses;
@@ -431,4 +437,60 @@ export async function create(data: Course) {
 		console.error('Error creating course:', error);
 		return { success: false };
 	}
+}
+
+export async function fetchCourseHierarchy(id: string) {
+	try {
+		const course = await db
+			.selectFrom('Courses')
+			.selectAll()
+			.where('id', '=', id)
+			.executeTakeFirst();
+
+		if (!course) {
+			throw new Error('Course not found');
+		}
+
+		const prerequisites = await getPrerequisites(course.id);
+
+		return prerequisites;
+	} catch (error) {
+		console.error('Error fetching course hierarchy:', error);
+		throw error;
+	}
+}
+
+async function getPrerequisites(
+	courseId: string,
+	visited = new Set<string>()
+): Promise<CoursesWithPrerequisites | null> {
+	if (visited.has(courseId)) return null;
+	visited.add(courseId);
+
+	const course = await db
+		.selectFrom('Courses')
+		.where('Courses.id', '=', courseId)
+		.selectAll()
+		.executeTakeFirst();
+
+	if (!course) return null;
+
+	const prerequisites = await db
+		.selectFrom('Prerequisites')
+		.innerJoin('Courses', 'Courses.id', 'Prerequisites.prerequisiteId')
+		.where('Prerequisites.courseId', '=', courseId)
+		.selectAll()
+		.execute();
+
+	const prereqsWithHierarchy = await Promise.all(
+		prerequisites.map(async (prereq) => {
+			return await getPrerequisites(prereq.id, new Set(visited));
+		})
+	);
+
+	return {
+		...course,
+		levelRestriction: [],
+		prerequisites: prereqsWithHierarchy.filter((p): p is CoursesWithPrerequisites => p !== null)
+	};
 }

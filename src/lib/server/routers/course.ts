@@ -7,7 +7,9 @@ import {
 	fetchFilter,
 	findByCode,
 	remove,
-	fetchCourses
+	fetchCourses,
+	fetchCourseNames,
+	fetchCourseHierarchy
 } from '$lib/actions/course.action';
 
 const courseFiltersSchema = z.object({
@@ -16,47 +18,6 @@ const courseFiltersSchema = z.object({
 	excludeCourseIds: z.array(z.string()).optional(),
 	order: z.enum(['asc', 'desc']).optional().default('asc')
 });
-
-// async function getPrerequisites(
-// 	courseId: number,
-// 	visited = new Set<number>()
-// ): Promise<CourseWithPrerequisites | null> {
-// 	if (visited.has(courseId)) return null;
-// 	visited.add(courseId);
-
-// 	const course = await db
-// 		.selectFrom('Course')
-// 		.where('Course.id', '=', courseId)
-// 		.select(['id', 'code', 'name', 'level', 'credits', 'departmentId'])
-// 		.executeTakeFirst();
-
-// 	if (!course) return null;
-
-// 	const prerequisites = await db
-// 		.selectFrom('CoursePrerequisite')
-// 		.innerJoin('Course', 'Course.id', 'CoursePrerequisite.prerequisiteId')
-// 		.where('CoursePrerequisite.courseId', '=', courseId)
-// 		.select([
-// 			'Course.id',
-// 			'Course.code',
-// 			'Course.name',
-// 			'Course.level',
-// 			'Course.credits',
-// 			'Course.departmentId'
-// 		])
-// 		.execute();
-
-// 	const prereqsWithHierarchy = await Promise.all(
-// 		prerequisites.map(async (prereq) => {
-// 			return await getPrerequisites(prereq.id, new Set(visited));
-// 		})
-// 	);
-
-// 	return {
-// 		...course,
-// 		prerequisites: prereqsWithHierarchy.filter((p): p is CourseWithPrerequisites => p !== null)
-// 	};
-// }
 
 export const courseRouter = router({
 	fetch: protectedProcedure
@@ -135,14 +96,31 @@ export const courseRouter = router({
 				throw new Error('Failed to fetch courses');
 			}
 		}),
-	findMany: protectedProcedure.query(async () => {
+	findNames: protectedProcedure.query(async () => {
 		try {
-			const courses = await fetchCourses();
+			const courses = await fetchCourseNames();
 
 			return {
 				courses,
 				count: courses.length
 			};
+		} catch (err) {
+			console.error('Error fetching courses:', err);
+			throw new Error('Failed to fetch courses');
+		}
+	}),
+	findHierarchy: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
+		const { id } = input;
+		try {
+			console.log('id', id);
+
+			if (!id) {
+				return null;
+			}
+			const course = await fetchCourseHierarchy(id);
+			console.log('course', course);
+
+			return course;
 		} catch (err) {
 			console.error('Error fetching courses:', err);
 			throw new Error('Failed to fetch courses');

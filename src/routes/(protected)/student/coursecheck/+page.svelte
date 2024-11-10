@@ -5,15 +5,14 @@
 	import type { Selected } from 'bits-ui';
 	import type { RouterOutputs } from '$lib/server/routers';
 
-	let course: RouterOutputs['courses']['findMany']['courses'][0] | undefined = undefined;
+	let course: RouterOutputs['courses']['findHierarchy'];
 
-	$: courses = trpc.courses.findMany.query();
+	$: courses = trpc.courses.findNames.query();
 
 	let selectedCourseId: Selected<unknown> | undefined = undefined;
 
-	$: {
-		course = $courses.data?.courses.find((course) => course.id === selectedCourseId?.value);
-	}
+	$: console.log(selectedCourseId);
+	$: course = trpc.courses.findHierarchy.query({ id: (selectedCourseId?.value as string) || '' });
 </script>
 
 <div class="flex justify-between py-2">
@@ -37,8 +36,9 @@
 		</Select.Content>
 	</Select.Root>
 {/if}
-{#if course}
-	<div class="h-dvh w-full py-6">
-		<CourseTree {course} />
+
+{#if $course.isSuccess && $course.data}
+	<div class="h-5/6 w-full py-6">
+		<CourseTree course={$course.data} />
 	</div>
 {/if}

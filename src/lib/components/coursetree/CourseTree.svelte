@@ -64,14 +64,14 @@
 	function createNodesAndEdges(course: CoursesWithPrerequisites) {
 		const nodes: Node[] = [];
 		const edges: Edge[] = [];
-		const visited = new Set<number>();
+		const visited = new Set<string>();
 
 		function addCourseNode(course: CoursesWithPrerequisites, level: number, isRoot = false) {
-			if (visited.has(parseInt(course.id))) return;
-			visited.add(parseInt(course.id));
+			if (visited.has(course.id)) return;
+			visited.add(course.id);
 
 			nodes.push({
-				id: course.id.toString(),
+				id: course.id,
 				type: 'courseNode',
 				data: {
 					...course,
