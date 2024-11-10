@@ -1,14 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import type { UserRole } from '$lib/db/schema';
-	type User = {
-		id: string;
-		name: string | null;
-		email: string;
-		alternate_email: string | null;
-		role: UserRole;
-	};
-
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
@@ -19,7 +9,7 @@
 		addHiddenColumns,
 		addSelectedRows
 	} from 'svelte-headless-table/plugins';
-	import { readable } from 'svelte/store';
+	import { writable } from 'svelte/store';
 
 	import * as Table from '$lib/components/ui/table';
 	import { Button } from '$lib/components/ui/button';
@@ -27,13 +17,38 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableActions from './data-table-actions.svelte';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
+	import { trpc } from '$lib/trpc';
+	import type { RouterOutputs } from '$lib/server/routers';
 
-	export let data: PageData;
+	const index = writable(0);
+	const size = writable(10);
+	const orderBy = writable<'asc' | 'desc'>('asc');
+	const search = writable('');
 
-	const users: User[] = [...(data.users ?? [])];
+	$: users = trpc.admin.users.query({
+		page: $index,
+		size: $size,
+		orderBy: $orderBy,
+		search: $search.trim()
+	});
+	const paginatedData = writable<RouterOutputs['admin']['users']['users']>([]);
 
-	const table = createTable(readable(users), {
-		page: addPagination({ initialPageSize: 10 }),
+	const countStore = writable(0);
+
+	$: {
+		if ($users.isSuccess) {
+			paginatedData.set($users.data.users);
+			countStore.set($users.data.count);
+		}
+	}
+
+	const table = createTable(paginatedData, {
+		page: addPagination({
+			serverSide: true,
+			serverItemCount: countStore,
+			initialPageIndex: 0,
+			initialPageSize: 10
+		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
@@ -125,6 +140,10 @@
 	$: $hiddenColumnIds = Object.entries(hideForId)
 		.filter(([, hide]) => !hide)
 		.map(([id]) => id);
+
+	filterValue.subscribe((value) => {
+		search.set(value);
+	});
 
 	const hidableCols = ['alternate_email'];
 </script>

@@ -1,8 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import * as Button from '$lib/components/ui/button';
-
-	export let data: PageData;
 
 	import DataTable from './data-table.svelte';
 </script>
@@ -12,4 +9,4 @@
 	<Button.Root variant="link" href="/admin/users/create" class="p-0">Create User</Button.Root>
 </div>
 
-<DataTable {data} />
+<DataTable />

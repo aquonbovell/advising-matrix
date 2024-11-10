@@ -1,19 +1,12 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
-	import * as Select from '$lib/components/ui/select';
-	import * as Popover from '$lib/components/ui/popover';
-	// import * as Command from '$lib/components/ui/command';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { Label } from '$lib/components/ui/label';
-	import { Input, type FormInputEvent } from '$lib/components/ui/input';
+	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { userSchema, type UserSchema, userOptions } from './schema.js';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Badge } from '$lib/components/ui/badge/index.js';
-	import { Check, ChevronsUpDown } from 'lucide-svelte';
-	import { cn } from '$lib/utils.js';
 
 	export let data: SuperValidated<Infer<UserSchema>>;
 
@@ -32,6 +25,8 @@
 		}
 	}
 </script>
+
+<pre>{JSON.stringify($formData, null, 2)}</pre>
 
 <form method="POST" use:enhance class="space-y-4" action="?/create">
 	<Form.Field {form} name="name">

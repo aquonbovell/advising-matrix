@@ -69,7 +69,7 @@
 		<Form.Control let:attrs>
 			<Form.Label class="font-semibold">Role</Form.Label>
 			<RadioGroup.Root bind:value={$formData.role} {...attrs} class="flex">
-				{#each userOptions as option}
+				{#each userOptions.filter((r) => r !== 'ADMIN') as option}
 					<div class="flex flex-row items-center space-x-2">
 						<RadioGroup.Item value={option} id={option} />
 						<Label for={option}>{option}</Label>

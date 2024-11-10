@@ -6,15 +6,5 @@ export const load = (async ({ locals }) => {
 	if (locals.user?.role !== 'ADMIN') {
 		error(401, 'Unauthorized');
 	}
-	try {
-		const users = await db
-			.selectFrom('User')
-			.where('User.role', '<>', 'ADMIN')
-			.select(['id', 'name', 'email', 'role', 'alternate_email'])
-			.execute();
-		return { users };
-	} catch (err) {
-		console.error(err);
-		error(500, 'An error occurred while fetching the courses');
-	}
+	return {};
 }) satisfies PageServerLoad;
