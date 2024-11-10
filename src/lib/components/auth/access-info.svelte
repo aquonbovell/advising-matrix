@@ -1,13 +1,12 @@
 <!-- Access.svelte -->
 <script lang="ts">
-	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import * as Card from '$lib/components/ui/card';
 	import * as Button from '$lib/components/ui/button';
 </script>
 
 <Card.Root class="w-full max-w-md rounded-3xl bg-white p-4 shadow-lg">
 	<Card.Header class="text-center">
-		<img src={uwiBanner} alt="UWI Banner" />
+		<img src={'/uwi_banner.png'} alt="UWI Banner" />
 		<Card.Title class="text-2xl">Request Access</Card.Title>
 		<Card.Description
 			>To register for an account, you need an invitation from your advisor.</Card.Description
