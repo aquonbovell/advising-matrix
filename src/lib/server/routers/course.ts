@@ -1,7 +1,14 @@
 import { z } from 'zod';
 import { protectedProcedure, router } from '../trpc';
 import { paginateTable } from '$lib/utils';
-import { count, paginate, fetchFilter, findByCode, remove } from '$lib/actions/course.action';
+import {
+	count,
+	paginate,
+	fetchFilter,
+	findByCode,
+	remove,
+	fetchCourses
+} from '$lib/actions/course.action';
 
 const courseFiltersSchema = z.object({
 	level: z.number().optional(),
@@ -127,5 +134,18 @@ export const courseRouter = router({
 				console.error('Error fetching filtered courses:', err);
 				throw new Error('Failed to fetch courses');
 			}
-		})
+		}),
+	findMany: protectedProcedure.query(async () => {
+		try {
+			const courses = await fetchCourses();
+
+			return {
+				courses,
+				count: courses.length
+			};
+		} catch (err) {
+			console.error('Error fetching courses:', err);
+			throw new Error('Failed to fetch courses');
+		}
+	})
 });

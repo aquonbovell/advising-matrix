@@ -15,7 +15,7 @@ const UserMenuItems: menuItemsType = {
 		{ label: 'Matrix', href: '/student/matrix', icon: Terminal },
 		{ label: 'Advisor', href: '/student/advisor', icon: Users },
 		{ label: 'Courses', href: '/student/courses', icon: Book },
-		{ label: 'What courses?', href: '/student/test', icon: Users }
+		{ label: 'What courses?', href: '/student/coursecheck', icon: Users }
 	],
 	ADVISOR: [
 		{ label: 'My Students', href: '/advisor/advising-students', icon: Users },

@@ -9,7 +9,8 @@
 		Position,
 		type Node,
 		type Edge,
-		ConnectionLineType
+		ConnectionLineType,
+		ConnectionMode
 	} from '@xyflow/svelte';
 	import type { CoursesWithPrerequisites } from '$lib/types';
 	import CustomNode from './CustomNode.svelte';
@@ -23,6 +24,10 @@
 
 	const nodeWidth = 400;
 	const nodeHeight = 200;
+
+	const nodesStore = writable<Node[]>([]);
+
+	const edgesStore = writable<Edge[]>([]);
 
 	function getLayoutedElements(nodes: Node[], edges: Edge[]) {
 		dagreGraph.setGraph({ rankdir: 'TB' });
@@ -93,13 +98,15 @@
 		return { nodes, edges };
 	}
 
-	const { nodes: initialNodes, edges: initialEdges } = createNodesAndEdges(course);
-	const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-		initialNodes,
-		initialEdges
-	);
-	const nodesStore = writable<Node[]>(layoutedNodes);
-	const edgesStore = writable<Edge[]>(layoutedEdges);
+	$: {
+		const { nodes: initialNodes, edges: initialEdges } = createNodesAndEdges(course);
+		const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+			initialNodes,
+			initialEdges
+		);
+		nodesStore.set(layoutedNodes);
+		edgesStore.set(layoutedEdges);
+	}
 	const nodeTypes = {
 		courseNode: CustomNode
 	};
@@ -107,6 +114,7 @@
 
 <div class="h-full w-full rounded-lg border-2 border-stone-200 bg-white">
 	<SvelteFlow
+		class="py-4"
 		nodes={nodesStore}
 		edges={edgesStore}
 		{nodeTypes}

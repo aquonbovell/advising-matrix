@@ -1,5 +1,4 @@
 <script lang="ts">
-	import uwiBanner from '$lib/assets/img/uwi_banner.png';
 	import type { PageData } from './$types';
 	import ResetPasswordForm from './reset-password-form.svelte';
 	import * as Card from '$lib/components/ui/card';
@@ -9,7 +8,7 @@
 
 <Card.Root class="w-full max-w-md rounded-3xl bg-white p-4 shadow-lg">
 	<Card.Header>
-		<img src={uwiBanner} alt="UWI Banner" />
+		<img src={'/uwi_banner.png'} alt="UWI Banner" />
 		<Card.Title class="text-2xl">Reset your Password</Card.Title>
 		<Card.Description
 			>Enter your new password below to reset your account password.</Card.Description
