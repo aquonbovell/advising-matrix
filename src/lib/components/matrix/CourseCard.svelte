@@ -30,9 +30,6 @@
 	}
 </script>
 
-<!-- 
-<button on:click={() => alert(arePrerequisitesMet(course))}>CLick</button> -->
-
 <div
 	class={cn(
 		'group relative border-y transition-all duration-200 @container',

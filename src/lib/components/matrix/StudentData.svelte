@@ -4,7 +4,6 @@
 	import * as Button from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Select from '$lib/components/ui/select';
-	import { onMount } from 'svelte';
 	import Course from './Course.svelte';
 	import Reload from 'svelte-radix/Reload.svelte';
 
@@ -16,8 +15,6 @@
 		degreeGPA,
 		dialogRequirementID,
 		gpa,
-		outstandingCourses,
-		pendingCourses,
 		requiredCourses,
 		requirements,
 		selectedCourse,
@@ -160,15 +157,15 @@
 
 		alert(result.status);
 
-		// if (result.status === 200) {
-		// 	toastState.add('Notice', 'Grades saved successfully', 'success');
-		// } else if (result.status === 400) {
-		// 	toastState.add('Error', 'result.data', 'error');
-		// } else if (result.status === 404) {
-		// 	toastState.add('Error', 'result.data', 'error');
-		// } else {
-		// 	toastState.add('Error', 'An error occurred while saving grades', 'error');
-		// }
+		if (result.status === 200) {
+			toastState.add('Notice', 'Grades saved successfully', 'success');
+		} else if (result.status === 400) {
+			toastState.add('Error', 'result.data', 'error');
+		} else if (result.status === 404) {
+			toastState.add('Error', 'result.data', 'error');
+		} else {
+			toastState.add('Error', 'An error occurred while saving grades', 'error');
+		}
 
 		return;
 	}
