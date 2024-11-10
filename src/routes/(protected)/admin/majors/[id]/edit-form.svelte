@@ -218,8 +218,12 @@
 									{/if}
 								</Select.Trigger>
 								<Select.Content class="max-h-48 overflow-auto">
-									{#each courses as course}
-										<Select.Item value={course.id} label={course.name} />
+									{#each courses.sort((a, b) => {
+										if (a.code < b.code) return -1;
+										else if (a.code > b.code) return 1;
+										else return 0;
+									}) as course}
+										<Select.Item value={course.id} label="{course.code}-{course.name}" />
 									{/each}
 								</Select.Content>
 							</Select.Root>

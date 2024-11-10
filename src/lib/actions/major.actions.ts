@@ -27,54 +27,22 @@ export async function updateMajor(majorData: {
 				.where('id', '=', major.id)
 				.execute();
 
-			const requirementIds: string[] = [];
+			await db.deleteFrom('MajorRequirements').where('majorId', '=', major.id).execute();
 
 			for (const requirement of majorData.requirements) {
-				const requirementId = await db
-					.selectFrom('MajorRequirements')
-					.where('id', '=', requirement.id)
-					.select('id')
-					.executeTakeFirst();
-
-				if (requirementId) {
-					await db
-						.updateTable('MajorRequirements')
-						.set({
-							option: requirement.option as requirementOption,
-							credits: requirement.credits,
-							details: JSON.stringify(requirement.details),
-							detailsType: requirement.detailsType as requirementDetailsType,
-							level: JSON.stringify(requirement.level)
-						})
-						.where('id', '=', requirementId.id)
-						.execute();
-					requirementIds.push(requirementId.id);
-				} else {
-					const newRequirementId = await db
-						.insertInto('MajorRequirements')
-						.values({
-							id: crypto.randomUUID(),
-							majorId: major.id,
-							option: requirement.option as requirementOption,
-							credits: requirement.credits,
-							details: JSON.stringify(requirement.details),
-							detailsType: requirement.detailsType as requirementDetailsType,
-							level: JSON.stringify(requirement.level)
-						})
-						.returning('id')
-						.executeTakeFirst();
-					if (!newRequirementId) {
-						throw new Error('Failed to create new requirement');
-					}
-					requirementIds.push(newRequirementId.id);
-				}
+				await db
+					.insertInto('MajorRequirements')
+					.values({
+						id: crypto.randomUUID(),
+						majorId: major.id,
+						option: requirement.option as requirementOption,
+						credits: requirement.credits,
+						details: JSON.stringify(requirement.details),
+						detailsType: requirement.detailsType as requirementDetailsType,
+						level: JSON.stringify(requirement.level)
+					})
+					.execute();
 			}
-
-			await db
-				.selectFrom('MajorRequirements')
-				.where('majorId', '=', major.id)
-				.where('id', 'not in', requirementIds)
-				.execute();
 
 			return major;
 		});

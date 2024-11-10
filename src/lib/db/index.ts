@@ -10,6 +10,10 @@ dotenv.config();
 
 const { DATABASE_URL, CA, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
 
+if (!DATABASE_URL || !CA || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_PORT || !DB_NAME) {
+	throw new Error('Missing environment variables');
+}
+
 const config = {
 	user: DB_USER,
 	password: DB_PASSWORD,
@@ -23,6 +27,8 @@ const config = {
 };
 
 const postgresql = new Pool(config);
+
+// const postgresql = new Pool({ connectionString: DATABASE_URL });
 
 export { postgresql };
 

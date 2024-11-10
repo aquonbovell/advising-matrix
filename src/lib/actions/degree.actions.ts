@@ -8,10 +8,6 @@ export async function fetchDegree(majorId: string, minorId: string) {
 		throw new Error('Invalid majorId');
 	}
 
-	if (!isValidUUID(minorId)) {
-		throw new Error('Invalid minorId');
-	}
-
 	const program = [majorId, minorId];
 
 	const major = await db

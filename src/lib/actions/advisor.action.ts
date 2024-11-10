@@ -66,7 +66,7 @@ export async function paginateStudents(
 			...student,
 			advisor_ids: '',
 			exists: student.advisor_ids.split(',').includes(id),
-			program_name: `${student.major_name} ${student.minor_name ? ' with ' + student.minor_name : ' and ' + student.major2_name}`
+			program_name: `${student.major_name} ${student.minor_name ? ' with ' + student.minor_name : student.major2_name ? ' and ' + student.major2_name : ''}`
 		};
 	});
 }

@@ -49,7 +49,10 @@
 				label: minors.find((minor) => minor.id === $formData.minorId)?.name,
 				value: $formData.minorId
 			}
-		: undefined;
+		: {
+				label: 'No Minor',
+				value: null
+			};
 	$: selectedAdvisor = $formData.advisors.map((advisorId) => {
 		return {
 			label: advisors.find((advisor) => advisor.id === advisorId)?.name,
@@ -138,6 +141,7 @@
 						<Select.Value placeholder="Select a verified minor" />
 					</Select.Trigger>
 					<Select.Content>
+						<Select.Item value={null} label={'No Minor'} />
 						{#each minors as minor}
 							<Select.Item value={minor.id} label={minor.name} />
 						{/each}

@@ -2,7 +2,7 @@ import { z } from 'zod';
 export const studentSchema = z.object({
 	userId: z.string().uuid(),
 	majorId: z.string().uuid(),
-	minorId: z.string().uuid(),
+	minorId: z.string().uuid().nullish(),
 	advisors: z.array(z.string().uuid())
 });
 

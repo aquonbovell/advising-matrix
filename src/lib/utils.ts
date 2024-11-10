@@ -177,6 +177,8 @@ export function getName(
 		majors.push({ majorId: m.majorId, name: m.name });
 	}
 
+	console.log(majors);
+
 	const minors: { minorId: string; name: string }[] = [];
 	for (const m of minor) {
 		if (minors.find((minor) => minor.minorId === m.minorId)) continue;
