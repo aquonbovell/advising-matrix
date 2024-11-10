@@ -3,27 +3,29 @@ import type { RequestHandler } from './$types';
 import Mailjet from 'node-mailjet';
 import { MJ_APIKEY_PRIVATE, MJ_APIKEY_PUBLIC } from '$env/static/private';
 import { message } from 'sveltekit-superforms';
+import { db } from '$lib/db';
+import { getStudentById } from '$lib/actions/student.actions';
 
-export const POST: RequestHandler = async ({ request }) => {
-	const requestData = await request.formData();
-	console.log(requestData);
+export const POST: RequestHandler = async ({ request, url }) => {
+	const requestData = await request.json();
 
-	const email = requestData.get('email');
-	const alternate = requestData.get('alternate');
-	const token = requestData.get('token');
-	const url = requestData.get('url');
+	if (!requestData.id) {
+		return json({ status: 401, message: 'Missing id' });
+	}
 
-	if (!email) {
-		return json({ status: 404, message: 'Official email is required' });
+	const student = await db
+		.selectFrom('Student')
+		.where('id', '=', requestData.id)
+		.executeTakeFirst();
+
+	if (!student) {
+		return json({ status: 401, message: 'Student not found' });
 	}
-	if (!alternate) {
-		return json({ status: 404, message: 'Alternate email is required' });
-	}
-	if (!token) {
-		return json({ status: 404, message: 'token is required' });
-	}
-	if (!url) {
-		return json({ status: 404, message: 'domain is required' });
+
+	const result = await getStudentById(requestData.id);
+
+	if (!result) {
+		return json({ status: 404, message: 'Error fetching student' });
 	}
 
 	const mailjet = Mailjet.apiConnect(MJ_APIKEY_PUBLIC, MJ_APIKEY_PRIVATE);
@@ -36,17 +38,17 @@ export const POST: RequestHandler = async ({ request }) => {
 				},
 				To: [
 					{
-						Email: email,
+						Email: result.email,
 						Name: 'You'
 					},
 					{
-						Email: alternate,
+						Email: result.alternate_email,
 						Name: 'You'
 					}
 				],
 				Subject: 'FST Matrix',
 				TextPart: '[FST Matrix] Your registration token is here!',
-				HTMLPart: `<h3>Hi Student,</h3><p>Your token is ${token}. Register at ${url}.</p>`
+				HTMLPart: `<h3>Hi Student,</h3><p>Your token is ${result.invite_token}. Register at ${url.hostname}.</p>`
 			}
 		]
 	});
@@ -57,5 +59,5 @@ export const POST: RequestHandler = async ({ request }) => {
 		return json({ status: 404, message: 'Error sending email try again' });
 	}
 
-	return json({ status: 200 });
+	return json({ status: 200, message: 'Email sent successfully' });
 };
