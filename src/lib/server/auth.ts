@@ -1,7 +1,7 @@
 import { Lucia, TimeSpan } from 'lucia';
 import { dev } from '$app/environment';
 import type { DB } from '$lib/db/schema';
-import { client, postgresql } from '$lib/db';
+import { postgresql } from '$lib/db';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { createDate } from 'oslo';
 import { LibSQLAdapter } from '@lucia-auth/adapter-sqlite';

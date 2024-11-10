@@ -8,31 +8,21 @@ const { Pool } = pg;
 
 dotenv.config();
 
-const { DATABASE_URL, TURSO_DATABASE_URL, TURSO_AUTH_TOKEN } = process.env;
+const { DATABASE_URL, CA, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
 
-if (!DATABASE_URL) {
-	throw new Error('DATABASE_URL is not defined');
-}
+const config = {
+	user: DB_USER,
+	password: DB_PASSWORD,
+	host: DB_HOST,
+	port: Number(DB_PORT),
+	database: DB_NAME,
+	ssl: {
+		rejectUnauthorized: true,
+		ca: CA
+	}
+};
 
-// if (!TURSO_DATABASE_URL) {
-// 	throw new Error('TURSO_DATABASE_URL is not defined');
-// }
-
-// if (!TURSO_AUTH_TOKEN) {
-// 	throw new Error('TURSO_AUTH_TOKEN is not defined');
-// }
-
-// export const client = createClient({
-// 	url: TURSO_DATABASE_URL,
-// 	authToken: TURSO_AUTH_TOKEN
-// });
-
-const postgresql = new Pool({
-	connectionString: DATABASE_URL,
-	max: 20,
-	idleTimeoutMillis: 3000,
-	connectionTimeoutMillis: 20000
-});
+const postgresql = new Pool(config);
 
 export { postgresql };
 
