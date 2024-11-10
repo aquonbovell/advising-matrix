@@ -5,13 +5,13 @@
 
 	export let data: PageData;
 
-	$: courses = trpc.students.getStudentGrades.query({ studentId: data.student.id });
-	$: degree = trpc.students.getStudentDegree.query({
+	$: courses = trpc.students.findStudentGrades.query({ studentId: data.student.id });
+	$: degree = trpc.students.findStudent.query({
 		majorId: data.student.major_id,
 		minorId: data.student.minor_id
 	});
 
-	$: codes = trpc.students.getCourseCodes.query();
+	$: codes = trpc.students.findCodes.query();
 </script>
 
 <TestComp

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
-	import type { RouterOutputs } from '$lib/server/routes/_app';
+	import type { RouterOutputs } from '$lib/server/routers';
 	import * as Card from '$lib/components/ui/card';
 	import * as Button from '$lib/components/ui/button/index.js';
 	import { Progress } from '$lib/components/ui/progress';
@@ -24,11 +24,11 @@
 	import { trpc } from '$lib/trpc';
 	import { Loader2 } from 'lucide-svelte';
 
-	export let studentCourses: RouterOutputs['students']['getStudentGrades'];
-	export let degree: RouterOutputs['students']['getStudentDegree'];
+	export let studentCourses: RouterOutputs['students']['findStudentGrades'];
+	export let degree: RouterOutputs['students']['findStudent'];
 	export let studentId: string;
 
-	export let courseCodes: RouterOutputs['students']['getCourseCodes'];
+	export let courseCodes: RouterOutputs['students']['findCodes'];
 
 	const courseGrades = writable(studentCourses.courses);
 

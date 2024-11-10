@@ -16,22 +16,29 @@
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
-	import type { RouterOutputs } from '$lib/server/routes/_app';
+	import type { RouterOutputs } from '$lib/server/routers';
 	import { trpc } from '$lib/trpc';
 
 	const index = writable(0);
 	const size = writable(10);
+	const orderBy = writable<'asc' | 'desc'>('asc');
+	const search = writable('');
 
-	$: courseQuery = trpc.courses.fetch.query({ page: $index, size: $size });
+	$: courses = trpc.courses.fetch.query({
+		page: $index,
+		size: $size,
+		orderBy: $orderBy,
+		search: $search
+	});
 
-	const paginatedData = writable<RouterOutputs['courses']['getCourses']['courses']>([]);
+	const paginatedData = writable<RouterOutputs['courses']['fetch']['courses']>([]);
 
 	const countStore = writable(0);
 
 	$: {
-		if ($courseQuery.isSuccess) {
-			paginatedData.set($courseQuery.data.courses);
-			countStore.set($courseQuery.data.count);
+		if ($courses.isSuccess) {
+			paginatedData.set($courses.data.courses);
+			countStore.set($courses.data.count);
 		}
 	}
 
