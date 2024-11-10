@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { LayoutData } from './$types';
-	import MobileSidebar from '$lib/components/layout/mobile-sidebar.svelte';
-	import DesktopSidebar from '$lib/components/layout/desktop-sidebar.svelte';
+	import MobileSidebar from '$lib/components/shared/mobile-sidebar.svelte';
+	import DesktopSidebar from '$lib/components/shared/desktop-sidebar.svelte';
 	import Toast from '$lib/components/toast/Toast.svelte';
 	import { setToastState } from '$lib/components/toast/toast-state.svelte';
 	export let data: LayoutData;
