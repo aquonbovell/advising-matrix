@@ -2,7 +2,6 @@ generator kysely {
   provider        = "prisma-kysely"
   output          = "../src/lib/db"
   previewFeatures = ["driverAdapters"]
-  // fileName = "schema.d.ts"
 }
 
 datasource db {
@@ -80,7 +79,7 @@ model Courses {
   department         Departments        @relation(fields: [departmentId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   prerequisiteType   String
   prerequisiteAmount Int
-  comment            String?
+  comment            String
   prerequisitecourse Prerequisites[]    @relation("PrerequisiteCourse")
   courseprerequisite Prerequisites[]    @relation("CoursePrerequisite")
   StudentCourses     StudentCourses[]

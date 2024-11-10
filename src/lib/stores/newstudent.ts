@@ -1,5 +1,5 @@
 import type { Courses } from '$lib/db/schema';
-import type { RouterOutputs } from '$lib/server/routes/_app';
+import type { RouterOutputs } from '$lib/server/routers';
 import {
 	calculateGradePoint,
 	type NonNullableGrade,
@@ -8,9 +8,9 @@ import {
 import type { Selected } from 'bits-ui';
 import { derived, get, writable } from 'svelte/store';
 
-type StudentCourse = RouterOutputs['students']['getStudentGrades']['courses'];
-type StudentDegree = RouterOutputs['students']['getStudentDegree'];
-type codes = RouterOutputs['students']['getCourseCodes'];
+type StudentCourse = RouterOutputs['students']['findStudentGrades']['courses'];
+type StudentDegree = RouterOutputs['students']['findStudent'];
+type codes = RouterOutputs['students']['findCodes'];
 
 export const codes = writable<codes>([]);
 export const studentCourses = writable<StudentCourse>([]);

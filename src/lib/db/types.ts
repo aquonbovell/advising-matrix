@@ -18,7 +18,7 @@ export type Courses = {
 	departmentId: string;
 	prerequisiteType: string;
 	prerequisiteAmount: number;
-	comment: string | null;
+	comment: string;
 };
 export type Departments = {
 	id: string;

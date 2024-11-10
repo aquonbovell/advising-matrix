@@ -1,8 +1,10 @@
 import { LibsqlDialect } from '@libsql/kysely-libsql';
 import { createClient } from '@libsql/client';
-import { Kysely } from 'kysely';
+import { Kysely, PostgresDialect } from 'kysely';
 import type { DB } from './schema';
 import dotenv from 'dotenv';
+import pg from 'pg';
+const { Pool } = pg;
 
 dotenv.config();
 
@@ -25,23 +27,23 @@ export const client = createClient({
 	authToken: TURSO_AUTH_TOKEN
 });
 
-// const postgresql = new Pool({
-// 	connectionString: DATABASE_URL,
-// 	max: 20,
-// 	idleTimeoutMillis: 3000,
-// 	connectionTimeoutMillis: 20000
-// });
-
-// export { postgresql };
-
-export const db = new Kysely<DB>({
-	dialect: new LibsqlDialect({
-		client
-	})
+const postgresql = new Pool({
+	connectionString: DATABASE_URL,
+	max: 20,
+	idleTimeoutMillis: 3000,
+	connectionTimeoutMillis: 20000
 });
 
+export { postgresql };
+
 // export const db = new Kysely<DB>({
-// 	dialect: new PostgresDialect({
-// 		pool: postgresql
+// 	dialect: new LibsqlDialect({
+// 		client
 // 	})
 // });
+
+export const db = new Kysely<DB>({
+	dialect: new PostgresDialect({
+		pool: postgresql
+	})
+});

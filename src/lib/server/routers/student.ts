@@ -4,7 +4,7 @@ import { paginateTable } from '$lib/utils';
 import { TRPCError } from '@trpc/server';
 import { GRADE_VALUES } from '$lib/types';
 import type { NonNullableGrade } from '$lib/types';
-import { fetchMyStudents, fetchStudents } from '$lib/actions/advisor.action';
+import { paginateStudents } from '$lib/actions/advisor.action';
 import { fetchDegree } from '$lib/actions/degree.actions';
 import { fetchStudentCourses, updateStudentGrades } from '$lib/actions/student.actions';
 import { fetchCourseCodes } from '$lib/actions/course.action';
@@ -17,66 +17,6 @@ const UpdateGradeInputSchema = z.object({
 });
 
 export const studentRouter = router({
-	findManyStudents: protectedProcedure
-		.input(
-			paginateTable({
-				order: z.enum(['asc', 'desc']).optional().default('asc')
-			})
-		)
-		.query(async ({ input, ctx }) => {
-			const { order, page, size } = input;
-			const userId = ctx.user?.id;
-
-			if (!userId) {
-				throw new TRPCError({ code: 'UNAUTHORIZED' });
-			}
-
-			if (ctx.user?.role !== 'ADVISOR') {
-				throw new TRPCError({ code: 'FORBIDDEN', message: 'Unauthorized' });
-			}
-
-			try {
-				const data = await fetchStudents(size, page, order);
-				return { ...data };
-			} catch (err) {
-				console.error('Error fetching students:', err);
-				throw new TRPCError({
-					code: 'INTERNAL_SERVER_ERROR',
-					message: 'An error occurred while fetching students'
-				});
-			}
-		}),
-	findMyStudents: protectedProcedure
-		.input(
-			paginateTable({
-				order: z.enum(['asc', 'desc']).optional().default('asc')
-			})
-		)
-		.query(async ({ input, ctx }) => {
-			const { order, page, size } = input;
-			const userId = ctx.user?.id;
-
-			if (!userId) {
-				throw new TRPCError({ code: 'UNAUTHORIZED' });
-			}
-
-			if (ctx.user?.role !== 'ADVISOR') {
-				throw new TRPCError({ code: 'FORBIDDEN', message: 'Unauthorized' });
-			}
-
-			try {
-				const data = await fetchMyStudents(userId, size, page, order);
-
-				return { ...data };
-			} catch (err) {
-				console.error('Error fetching students:', err);
-				throw new TRPCError({
-					code: 'INTERNAL_SERVER_ERROR',
-					message: 'An error occurred while fetching students'
-				});
-			}
-		}),
-
 	// getStudentCourses: protectedProcedure.query(async ({ ctx }) => {
 	// 	const student = await db
 	// 		.selectFrom('Student')
@@ -156,7 +96,7 @@ export const studentRouter = router({
 			return { ...grades };
 		}),
 
-	updatestudentGrades: protectedProcedure
+	updateStudentGrades: protectedProcedure
 		.input(z.object({ grades: z.array(UpdateGradeInputSchema), studentId: z.string().uuid() }))
 		.mutation(async ({ input, ctx }) => {
 			updateStudentGrades(input.studentId, input.grades);
