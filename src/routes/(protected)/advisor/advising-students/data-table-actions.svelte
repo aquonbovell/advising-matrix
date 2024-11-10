@@ -3,7 +3,6 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
-	import { notifications } from '$lib/stores/notifications';
 	import { selectedStudent } from '$lib/stores/advisor';
 	import { getToastState } from '$lib/components/toast/toast-state.svelte';
 
@@ -40,20 +39,17 @@
 			{#if token}
 				<DropdownMenu.Item
 					on:click={async () => {
-						if (token === null) return '';
-						if (typeof window === 'undefined') return '';
+						if (token === null) return;
+						if (typeof window === 'undefined') return;
+
 						navigator.clipboard.writeText(`${window.location.origin}/register?token=${token}`);
 
-						const form = new FormData();
-
-						form.append('token', token);
-
-						const res = await fetch('/api/senduseremail', {
+						const result = await fetch('/api/sendemail', {
 							method: 'POST',
-							body: form
+							body: JSON.stringify({ id: code })
 						});
 
-						const data = await res.json();
+						const data = await result.json();
 
 						if (data.status === 200) {
 							toastState.add('Notice', 'Invitation sent successfully!', 'success');
@@ -66,17 +62,18 @@
 			{#if expires && new Date(expires) < new Date()}
 				<DropdownMenu.Item
 					on:click={async () => {
-						const response = await fetch(`/api/student/${code}/reset-token`, {
-							method: 'POST'
+						const response = await fetch('/api/renewtoken', {
+							method: 'POST',
+							body: JSON.stringify({ id: code })
 						});
 
 						const data = await response.json();
 
-						if (data.success) {
+						if (data.status === 200) {
 							window.location.reload();
-							notifications.info('Token reset', 5000);
+							toastState.add('Notice', data.message, 'success');
 						} else {
-							notifications.info('Failed to reset token', 5000);
+							toastState.add('Notice', data.message, 'error');
 						}
 					}}>Reset Token</DropdownMenu.Item
 				>
@@ -93,7 +90,7 @@
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item href={'/advisor/advising-students' + '/' + code + '/'}
-			>View Student</DropdownMenu.Item
+			>View Student Details</DropdownMenu.Item
 		>
 		<DropdownMenu.Item
 			on:click={() => {

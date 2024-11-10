@@ -19,25 +19,38 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	import { cn } from '$lib/utils';
-	import type { RouterOutputs } from '$lib/server/routes/_app';
+	import type { RouterOutputs } from '$lib/server/routers';
+	import { trpc } from '$lib/trpc';
 
-	export let data: RouterOutputs['courses']['getCourses'];
+	const index = writable(0);
+	const size = writable(10);
+	const orderBy = writable<'asc' | 'desc'>('asc');
+	const search = writable('');
 
-	const paginatedData = writable(data.courses);
-	const countStore = writable(data.count);
+	$: courses = trpc.courses.fetch.query({
+		page: $index,
+		size: $size,
+		orderBy: $orderBy,
+		search: $search
+	});
+
+	const paginatedData = writable<RouterOutputs['courses']['fetch']['courses']>([]);
+
+	const countStore = writable(0);
 
 	$: {
-		$paginatedData = data.courses;
-		$countStore = data.count;
+		if ($courses.isSuccess) {
+			paginatedData.set($courses.data.courses);
+			countStore.set($courses.data.count);
+		}
 	}
 
 	const table = createTable(paginatedData, {
 		page: addPagination({
 			serverSide: true,
 			serverItemCount: countStore,
-			initialPageIndex: parseInt($page.url.searchParams.get('pageIndex') || '0', 10),
-			initialPageSize: parseInt($page.url.searchParams.get('pageSize') || '10', 10)
+			initialPageIndex: 0,
+			initialPageSize: 10
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({

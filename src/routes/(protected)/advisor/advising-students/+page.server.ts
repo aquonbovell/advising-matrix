@@ -1,7 +1,6 @@
 import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/db';
-import { trpcServer } from '$lib/server/server';
 import { restrict } from '$lib/utils';
 
 export const load: PageServerLoad = async (event) => {
@@ -9,27 +8,7 @@ export const load: PageServerLoad = async (event) => {
 		error(401, 'Unauthorized');
 	}
 
-	const order = restrict(event.url.searchParams.get('order'), ['asc', 'desc']) ?? 'asc';
-	const pageIndex = Math.max(0, parseInt(event.url.searchParams.get('pageIndex') ?? '0', 10));
-	const pageSize = Math.max(
-		1,
-		Math.min(100, parseInt(event.url.searchParams.get('pageSize') ?? '10', 10))
-	);
-
-	const result = await trpcServer.students.fetchMyStudents.ssr(
-		{
-			order,
-			page: pageIndex,
-			size: pageSize
-		},
-		event
-	);
-
-	return {
-		students: result!.students,
-		count: result!.count,
-		name: event.locals.user?.name ?? ''
-	};
+	return {};
 };
 
 export const actions: Actions = {

@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
+	import { site } from '$lib/utils';
 </script>
+
+<svelte:head>
+	<title>{site}: Advisor Dashboard</title>
+</svelte:head>
 
 <h1>Dashboard</h1>
 <p>Welcome to Advising Matrix!</p>

@@ -18,32 +18,41 @@
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 
 	import DataTableTag from './data-table-tag.svelte';
-	import type { RouterOutputs } from '$lib/server/routes/_app';
-	import { page } from '$app/stores';
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
-	import type { User } from '$lib/db/schema';
+	import { trpc } from '$lib/trpc';
+	import type { RouterOutputs } from '$lib/server/routers';
 
-	export let data:
-		| RouterOutputs['students']['getStudents']
-		| RouterOutputs['students']['getMyStudents'];
+	export let mode: 'all' | 'mine' = 'all';
 
-	export let user: string;
+	const index = writable(0);
+	const size = writable(10);
+	const orderBy = writable<'asc' | 'desc'>('asc');
+	const search = writable('');
 
-	const paginatedData = writable(data.students);
-	const countStore = writable(data.count);
+	$: students = trpc.advisor.students.query({
+		page: $index,
+		size: $size,
+		orderBy: $orderBy,
+		search: $search.trim(),
+		mode
+	});
+
+	const paginatedData = writable<RouterOutputs['advisor']['students']['students']>([]);
+
+	const countStore = writable(0);
 
 	$: {
-		$paginatedData = data.students;
-		$countStore = data.count;
+		if ($students.isSuccess) {
+			paginatedData.set($students.data.students);
+			countStore.set($students.data.count);
+		}
 	}
 
 	const table = createTable(paginatedData, {
 		page: addPagination({
 			serverSide: true,
 			serverItemCount: countStore,
-			initialPageIndex: parseInt($page.url.searchParams.get('pageIndex') || '0', 10),
-			initialPageSize: parseInt($page.url.searchParams.get('pageSize') || '10', 10)
+			initialPageIndex: $index,
+			initialPageSize: $size
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -126,8 +135,8 @@
 		}),
 
 		table.column({
-			accessor: ({ student_id, invite_token, invite_expires, advisor_names }) => {
-				return { student_id, invite_token, invite_expires, advisor_names };
+			accessor: ({ student_id, invite_token, invite_expires, advisor_names, exists }) => {
+				return { student_id, invite_token, invite_expires, advisor_names, exists };
 			},
 			header: 'Actions',
 			cell: ({ value }) => {
@@ -135,7 +144,7 @@
 					code: value.student_id,
 					token: value.invite_token,
 					expires: value.invite_expires,
-					exists: value.advisor_names.includes(user)
+					exists: value.exists
 				});
 			},
 			plugins: {
@@ -167,21 +176,19 @@
 		.filter(([, hide]) => !hide)
 		.map(([id]) => id);
 
-	const hidableCols = ['created_at', 'updated_at', 'token', 'advisor', 'email'];
+	filterValue.subscribe((value) => {
+		search.set(value);
+	});
 
-	$: {
-		if (browser) {
-			const q = new URLSearchParams($page.url.searchParams);
-			q.set('pageIndex', $pageIndex.toString());
-			q.set('pageSize', $pageSize.toString());
-			// Order
-			// if ($sortKeys.length) {
-			// 	q.set('sort', ($sortKeys[0]!.order === 'asc' ? '+' : '-') + $sortKeys[0]!.id);
-			// }
-			goto(`?${q}`, { noScroll: true });
-		}
-	}
+	const hidableCols = ['created_at', 'updated_at', 'token', 'advisor', 'email'];
 </script>
+
+<h1 class="text-2xl font-bold text-stone-800">
+	All Students
+	{#if $students.data}
+		({$students.data.count})
+	{/if}
+</h1>
 
 <div>
 	<div class="flex-1 text-right text-sm text-muted-foreground">
@@ -191,7 +198,7 @@
 	<div class="flex items-center py-4">
 		<Input
 			class="max-w-sm"
-			placeholder="Filter course names or codes..."
+			placeholder="Filter student names or programs..."
 			type="text"
 			bind:value={$filterValue}
 		/>
