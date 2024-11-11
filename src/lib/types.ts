@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Courses, LevelRestriction, RequirementType } from './db/schema';
+import type { Courses } from './db/schema';
 
 export const GRADE_VALUES = [
 	'A+',
@@ -38,11 +38,7 @@ export const isGrade = (value: unknown): value is NonNullableGrade => {
 };
 
 export const calculateGradePoint = (grade: NonNullableGrade[], credits: number): number => {
-	let courseGradePoint = 0;
-	grade.forEach((g) => {
-		courseGradePoint += gradePoints[g] * credits;
-	});
-	return courseGradePoint;
+	return grade.reduce((acc, g) => acc + gradePoints[g] * credits, 0);
 };
 
 export type Student =

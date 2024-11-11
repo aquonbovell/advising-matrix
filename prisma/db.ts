@@ -1,1 +1,1 @@
-export { db, postgresql } from '../src/lib/db/';
+export { db } from '../src/lib/db/';

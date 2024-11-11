@@ -19,7 +19,8 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
 		"db:push": "prisma db push",
-		"db:seed": "tsx scripts/seed.ts",
+		"db:seed": "tsx prisma/seed.ts",
+		"testt": "tsx prisma/migrate.mjs",
 		"prepare": "husky"
 	},
 	"dependencies": {
@@ -28,6 +29,7 @@
 		"@libsql/kysely-libsql": "^0.4.1",
 		"@lucia-auth/adapter-sqlite": "^3.0.2",
 		"@neondatabase/serverless": "^0.9.5",
+		"@node-rs/argon2": "^2.0.0",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
 		"@prisma/adapter-libsql": "^5.22.0",
@@ -38,6 +40,7 @@
 		"@trpc/client": "^10.45.2",
 		"@trpc/server": "^10.45.2",
 		"@xyflow/svelte": "^0.1.21",
+		"better-sqlite3": "^11.5.0",
 		"chart.js": "^4.4.3",
 		"devalue": "^5.0.0",
 		"dotenv": "^16.4.5",
@@ -45,6 +48,7 @@
 		"kysely": "^0.27.3",
 		"layerchart": "^0.58.4",
 		"moment": "^2.30.1",
+		"nanoid": "^5.0.8",
 		"node-mailjet": "^6.0.6",
 		"oslo": "^1.2.1",
 		"pg": "^8.12.0",

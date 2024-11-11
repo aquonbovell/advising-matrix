@@ -1,4 +1,5 @@
-import { lucia } from '$lib/server/auth';
+import { dev } from '$app/environment';
+import { validateSessionToken } from '$lib/auth';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
@@ -11,40 +12,34 @@ const preloadFonts: Handle = async ({ event, resolve }) => {
 };
 
 const handleAuth: Handle = async ({ event, resolve }) => {
-	const sessionId = event.cookies.get(lucia.sessionCookieName);
-
-	if (!sessionId) {
-		if (event.route.id?.includes('protected') || event.url.pathname === '/') {
-			throw redirect(303, '/login');
-		}
+	const sessionToken = event.cookies.get('session');
+	if (!sessionToken) {
+		event.locals.user = null;
+		event.locals.session = null;
 		return resolve(event);
 	}
 
-	const { session, user } = await lucia.validateSession(sessionId);
+	const { session, user } = await validateSessionToken(sessionToken);
 
-	if (session && session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
+	if (session) {
+		event.cookies.set('session', sessionToken, {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'lax',
+			expires: session.expiresAt,
+			secure: !dev
 		});
-	}
-	if (!session) {
-		const sessionCookie = lucia.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
+	} else {
+		event.cookies.delete('session', {
+			path: '/'
 		});
-		if (event.route.id?.includes('protected') || event.url.pathname === '/') {
-			throw redirect(303, '/login');
-		}
 	}
 
 	event.locals.user = user;
 	event.locals.session = session;
-
 	return resolve(event);
 };
+
 const handleRole: Handle = async ({ event, resolve }) => {
 	const { user } = event.locals;
 	if (event.route.id?.includes('logout')) {

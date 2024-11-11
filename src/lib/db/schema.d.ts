@@ -4,33 +4,6 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
-export const RequirementType = {
-    CREDITS: "CREDITS",
-    POOL: "POOL"
-} as const;
-export type RequirementType = (typeof RequirementType)[keyof typeof RequirementType];
-export const UserRole = {
-    STUDENT: "STUDENT",
-    ADVISOR: "ADVISOR",
-    ADMIN: "ADMIN"
-} as const;
-export type UserRole = (typeof UserRole)[keyof typeof UserRole];
-export const prerequisiteType = {
-    ALL: "ALL",
-    ONE: "ONE"
-} as const;
-export type prerequisiteType = (typeof prerequisiteType)[keyof typeof prerequisiteType];
-export const requirementDetailsType = {
-    COURSES: "COURSES",
-    AREAS: "AREAS",
-    FACULTIES: "FACULTIES"
-} as const;
-export type requirementDetailsType = (typeof requirementDetailsType)[keyof typeof requirementDetailsType];
-export const requirementOption = {
-    REQUIRED: "REQUIRED",
-    OPTIONAL: "OPTIONAL"
-} as const;
-export type requirementOption = (typeof requirementOption)[keyof typeof requirementOption];
 export type Advisor = {
     advisor_id: string;
     student_id: string;
@@ -44,7 +17,10 @@ export type Courses = {
     departmentId: string;
     prerequisiteAmount: number;
     comment: string | null;
-    prerequisiteType: prerequisiteType;
+    /**
+     * @kyselyType('ALL' | 'ONE')
+     */
+    prerequisiteType: 'ALL' | 'ONE';
 };
 export type Departments = {
     id: string;
@@ -67,8 +43,14 @@ export type MajorRequirements = {
     majorId: string;
     credits: number;
     details: string;
-    detailsType: requirementDetailsType;
-    option: requirementOption;
+    /**
+     * @kyselyType('COURSES' | 'AREAS' | 'FACULTIES')
+     */
+    detailsType: 'COURSES' | 'AREAS' | 'FACULTIES';
+    /**
+     * @kyselyType('REQUIRED' | 'OPTIONAL')
+     */
+    option: 'REQUIRED' | 'OPTIONAL';
     level: string;
 };
 export type Majors = {
@@ -80,8 +62,14 @@ export type MinorRequirements = {
     minorId: string;
     credits: number;
     details: string;
-    detailsType: requirementDetailsType;
-    option: requirementOption;
+    /**
+     * @kyselyType('COURSES' | 'AREAS' | 'FACULTIES')
+     */
+    detailsType: 'COURSES' | 'AREAS' | 'FACULTIES';
+    /**
+     * @kyselyType('REQUIRED' | 'OPTIONAL')
+     */
+    option: 'REQUIRED' | 'OPTIONAL';
     level: string;
 };
 export type Minors = {
@@ -95,7 +83,7 @@ export type Prerequisites = {
 };
 export type Session = {
     id: Generated<string>;
-    expires_at: Timestamp;
+    expires_at: number;
     user_id: string;
 };
 export type Student = {
@@ -104,9 +92,9 @@ export type Student = {
     major_id: string;
     minor_id: string | null;
     invite_token: string | null;
-    invite_expires: Timestamp | null;
-    created_at: Generated<Timestamp>;
-    updated_at: Timestamp;
+    invite_expires: number | null;
+    created_at: number;
+    updated_at: number;
 };
 export type StudentCourses = {
     id: string;
@@ -121,9 +109,12 @@ export type User = {
     name: string;
     email: string;
     password: string;
-    role: UserRole;
-    created_at: Generated<Timestamp>;
-    updated_at: Timestamp;
+    /**
+     * @kyselyType('STUDENT' | 'ADVISOR' | 'ADMIN')
+     */
+    role: 'STUDENT' | 'ADVISOR' | 'ADMIN';
+    created_at: number;
+    updated_at: number;
     alternate_email: string;
 };
 export type DB = {
