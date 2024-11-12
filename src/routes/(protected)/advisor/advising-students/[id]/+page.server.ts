@@ -9,7 +9,7 @@ import { sql } from 'kysely';
 async function getForm(student: {
 	id: string;
 	major_id: string;
-	minor_id: string;
+	minor_id: string | null;
 	email: string;
 	name: string;
 	role: UserRole;

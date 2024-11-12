@@ -41,7 +41,10 @@
 				label: minors.find((minor) => minor.id === $formData.minorId)?.name,
 				value: $formData.minorId
 			}
-		: undefined;
+		: {
+				label: 'No Minor',
+				value: null
+			};
 </script>
 
 <form method="POST" use:enhance class="" action="?/update">
@@ -105,8 +108,6 @@
 				<Select.Root
 					selected={selectedMinorId}
 					onSelectedChange={(v) => {
-						console.log(v);
-
 						v && ($formData.minorId = v.value);
 					}}
 				>
@@ -114,6 +115,7 @@
 						<Select.Value placeholder="Select a Major/Minor" />
 					</Select.Trigger>
 					<Select.Content class="max-h-60 overflow-auto">
+						<Select.Item value={null}>No Minor</Select.Item>
 						{#each minors as minor}
 							<Select.Item value={minor.id}>{minor.name}</Select.Item>
 						{/each}

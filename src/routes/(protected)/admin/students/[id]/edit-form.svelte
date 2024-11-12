@@ -50,8 +50,6 @@
 	});
 </script>
 
-<pre>{JSON.stringify($formData, null, 2)}</pre>
-
 <form method="POST" use:enhance class="space-y-4" action="?/edit">
 	<Form.Field {form} name="userId">
 		<Form.Control let:attrs>

@@ -10,7 +10,7 @@ export const formSchema = z.object({
 	alternateEmail: z.string().trim().email(),
 	name: z.string().trim().min(3).max(50),
 	majorId: z.string().trim().uuid(),
-	minorId: z.string().trim().uuid()
+	minorId: z.string().trim().uuid().nullish()
 });
 
 export type FormSchema = typeof formSchema;
