@@ -1,13 +1,11 @@
 import { z } from 'zod';
 
 export const formSchema = z.object({
-	email: z
-		.string()
-		.email()
-		.regex(
-			/(@cavehill\.uwi\.edu|@mycavehill\.uwi\.edu)$/i,
-			'Must be a UWI Cave Hill email address'
-		),
+	email: z.string().email(),
+	// .regex(
+	// 	/(@cavehill\.uwi\.edu|@mycavehill\.uwi\.edu)$/i,
+	// 	'Must be a UWI Cave Hill email address'
+	// ),
 	password: z
 		.string()
 		.trim()

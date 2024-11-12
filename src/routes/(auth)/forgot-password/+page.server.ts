@@ -41,7 +41,14 @@ export const actions: Actions = {
 			.executeTakeFirst();
 
 		if (!user) {
-			return fail(400, { errors: { user: 'Invalid Credentials' } });
+			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or alternate email'];
+			form.errors.alternate_email = [
+				...(form.errors.alternate_email ?? ''),
+				'Invalid email or alternate email'
+			];
+			form.errors.password = [...(form.errors.password ?? ''), 'Invalid email or alternate email'];
+
+			return fail(400, { form });
 		}
 
 		const encoder = new TextEncoder();

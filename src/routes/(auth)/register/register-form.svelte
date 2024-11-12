@@ -24,7 +24,7 @@
 <form method="POST" use:enhance>
 	<Form.Field {form} name="token">
 		<Form.Control let:attrs>
-			<Form.Label>Token</Form.Label>
+			<Form.Label>Access Token</Form.Label>
 			<Input {...attrs} bind:value={$formData.token} />
 		</Form.Control>
 		<Form.FieldErrors />
@@ -36,6 +36,18 @@
 				{...attrs}
 				bind:value={$formData.email}
 				placeholder="m@mycavehill.uwi.edu"
+				type="email"
+			/>
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="alternate_email">
+		<Form.Control let:attrs>
+			<Form.Label>Alternate Email</Form.Label>
+			<Input
+				{...attrs}
+				bind:value={$formData.alternate_email}
+				placeholder="example@outlook.com"
 				type="email"
 			/>
 		</Form.Control>

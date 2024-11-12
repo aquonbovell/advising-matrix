@@ -7,48 +7,40 @@ import { superValidate } from 'sveltekit-superforms';
 import { formSchema } from './schema';
 import { zod } from 'sveltekit-superforms/adapters';
 
-async function getForm(token: string | null, isValid: boolean = true, error: boolean = false) {
+async function getForm(token: string | null, isValid: boolean = true, message?: string) {
 	const form = await superValidate(zod(formSchema));
 	form.data.token = token ?? '';
 	if (!isValid) {
-		form.errors.token = [...(form.errors.token ?? ''), 'Invalid token or expired invitation'];
+		form.errors.token = [
+			...(form.errors.token ?? ''),
+			message ?? 'Invalid token or your invitation has expired'
+		];
 	}
 
 	return form;
 }
 
-export const load: PageServerLoad = async ({ url, locals }) => {
+export const load: PageServerLoad = async ({ url }) => {
 	const token = url.searchParams.get('token');
 
-	// if (locals.user) {
-	// 	throw redirect(302, '/');
-	// }
-
 	if (!token) {
-		// Validate token
+		return {};
+	}
 
-		try {
-			const student = await db
-				.selectFrom('Student')
-				.where('invite_token', '=', token)
-				.select(['id', 'invite_expires'])
-				.executeTakeFirst();
+	try {
+		// Check if the token is valid
+		const student = await db
+			.selectFrom('Student')
+			.where('invite_token', '=', token)
+			.select(['id', 'invite_expires'])
+			.executeTakeFirst();
 
-			if (!student || (student.invite_expires && new Date(student.invite_expires) < new Date())) {
-				return {
-					token: null,
-					error: 'Invalid token or expired invitation',
-					form: await getForm(null, false)
-				};
-			}
-		} catch (error) {
-			console.error('Database error:', error);
-			return {
-				token: null,
-				error: 'An error occurred. Please try again later.',
-				form: await getForm(null, true, true)
-			};
+		if (!student || (student.invite_expires && new Date(student.invite_expires) < new Date())) {
+			return {};
 		}
+	} catch (err) {
+		console.error('Database error:', err);
+		error(500, { message: 'An error occurred. Please try again later.' });
 	}
 
 	return { token, form: await getForm(token) };
@@ -63,6 +55,7 @@ export const actions: Actions = {
 		}
 
 		const email = form.data.email;
+		const alternate_email = form.data.alternate_email;
 		const token = form.data.token;
 		const defaultPassword = form.data.defaultPassword;
 		const password = form.data.password;
@@ -73,13 +66,17 @@ export const actions: Actions = {
 			.innerJoin('User', 'User.id', 'Student.user_id')
 			.where('invite_token', '=', token)
 			.where('invite_expires', '>', new Date(0))
-			.where('email', '=', email)
+			.where((eb) => eb('email', '=', email).or('alternate_email', '=', alternate_email))
 			.select(['User.id', 'password', 'role', 'Student.user_id'])
 			.executeTakeFirst();
 
 		if (!user) {
-			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or token'];
-			form.errors.token = [...(form.errors.token ?? ''), 'Invalid email or token'];
+			form.errors.alternate_email = [
+				...(form.errors.alternate_email ?? ''),
+				'Invalid email or access token'
+			];
+			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or access token'];
+			form.errors.token = [...(form.errors.token ?? ''), 'Invalid email or access token'];
 			return fail(400, { form });
 		}
 
@@ -87,11 +84,15 @@ export const actions: Actions = {
 		const secret = encoder.encode(process.env.SECRET!);
 		const argon2id = new Argon2id({ secret });
 
-		const old_password_hash = await argon2id.hash(DEFAULT_PASSWORD);
+		const defaultHash = await argon2id.hash(DEFAULT_PASSWORD);
 
-		const userPassword = await argon2id.verify(old_password_hash, defaultPassword);
+		const userPassword = await argon2id.verify(defaultHash, defaultPassword);
 
 		if (!userPassword) {
+			form.errors.alternate_email = [
+				...(form.errors.alternate_email ?? ''),
+				'Invalid email or password'
+			];
 			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or password'];
 			form.errors.password = [...(form.errors.password ?? ''), 'Invalid email or password'];
 			form.errors.passwordConfirm = [
@@ -110,13 +111,13 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const hashedPassword = await argon2id.hash(password);
+		const passwordHash = await argon2id.hash(password);
 
 		try {
 			await db.transaction().execute(async (trx) => {
 				await trx
 					.updateTable('User')
-					.set({ password: hashedPassword, updated_at: new Date(Date.now()) })
+					.set({ password: passwordHash, updated_at: new Date(Date.now()) })
 					.where('id', '=', user.id)
 					.execute();
 				await trx

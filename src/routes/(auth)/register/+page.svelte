@@ -8,7 +8,7 @@
 	export let data: PageData;
 </script>
 
-{#if data.token}
+{#if data.form}
 	<Card.Root class="w-full max-w-md rounded-3xl bg-white p-4 shadow-lg">
 		<Card.Header>
 			<img src={'/uwi_banner.png'} alt="UWI Banner" />
