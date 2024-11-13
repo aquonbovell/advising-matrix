@@ -1,4 +1,4 @@
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { db } from '$lib/db';
 import { generateTokenWithExpiration } from '$lib/server/auth';
@@ -24,17 +24,10 @@ export const load: PageServerLoad = async () => {
 		.groupBy('Minors.id')
 		.execute();
 
-	const noMinor = await db
-		.selectFrom('Minors')
-		.select(['Minors.id as id', 'name'])
-		.where('Minors.name', 'like', '%No%')
-		.execute();
-
 	return {
 		form: await superValidate(zod(formSchema)),
 		majors,
 		minors: [
-			...noMinor,
 			...minors.map((m) => {
 				return { id: m.id, name: m.name.concat(' (Minor)') };
 			}),
@@ -144,6 +137,8 @@ export const actions: Actions = {
 					})
 					.execute();
 			});
+
+			return message(form, 'Student invited successfully!');
 
 			const emailform = new FormData();
 

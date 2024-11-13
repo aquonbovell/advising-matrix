@@ -90,8 +90,6 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		console.log(form.data);
-
 		try {
 			await db.transaction().execute(async (db) => {
 				const student = await db

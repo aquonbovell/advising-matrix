@@ -68,7 +68,7 @@
 	<div class="flex flex-col justify-between gap-5 md:flex-row">
 		<Form.Field {form} name="majorId">
 			<Form.Control let:attrs>
-				<Form.Label>Major</Form.Label>
+				<Form.Label>First Major</Form.Label>
 				<Select.Root
 					selected={selectedMajorId}
 					onSelectedChange={(v) => {
@@ -78,7 +78,7 @@
 					}}
 				>
 					<Select.Trigger class="w-[280px]" {...attrs}>
-						<Select.Value placeholder="Select a Major" />
+						<Select.Value placeholder="Select first major" />
 					</Select.Trigger>
 					<Select.Content class="max-h-60 overflow-auto">
 						{#each majors as major}
@@ -92,19 +92,18 @@
 		</Form.Field>
 		<Form.Field {form} name="minorId">
 			<Form.Control let:attrs>
-				<Form.Label>Major/Minor</Form.Label>
+				<Form.Label>Second Major/Minor</Form.Label>
 				<Select.Root
 					selected={selectedMinorId}
 					onSelectedChange={(v) => {
-						console.log(v);
-
 						v && ($formData.minorId = v.value);
 					}}
 				>
 					<Select.Trigger class="w-[280px]" {...attrs}>
-						<Select.Value placeholder="Select a Major/Minor" />
+						<Select.Value placeholder="Select second Major/Minor" />
 					</Select.Trigger>
 					<Select.Content class="max-h-60 overflow-auto">
+						<Select.Item value={null}>No Minor</Select.Item>
 						{#each minors as minor}
 							<Select.Item value={minor.id}>{minor.name}</Select.Item>
 						{/each}

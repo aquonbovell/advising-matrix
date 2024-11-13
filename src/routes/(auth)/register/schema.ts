@@ -4,11 +4,12 @@ export const formSchema = z.object({
 	email: z
 		.string()
 		.email()
-		.regex(
-			/(@cavehill\.uwi\.edu|@mycavehill\.uwi\.edu)$/i,
-			'Must be a UWI Cave Hill email address'
-		),
-	alternate_email: z.string().email(),
+		.regex(/(@cavehill\.uwi\.edu|@mycavehill\.uwi\.edu)$/i, 'Must be a UWI Cave Hill email address')
+		.transform((v) => v.toLowerCase()),
+	alternate_email: z
+		.string()
+		.email()
+		.transform((v) => v.toLowerCase()),
 	token: z.string().min(6).max(64),
 	defaultPassword: z.string().min(8).max(64),
 	password: z

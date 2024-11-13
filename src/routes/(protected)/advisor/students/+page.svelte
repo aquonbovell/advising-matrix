@@ -3,8 +3,6 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { selectedStudent } from '$lib/stores/advisor';
 	import StudentChart from '$lib/components/matrix/StudentChart.svelte';
-	import type { PageData } from './$types';
-	export let data: PageData;
 </script>
 
 <DataTable mode="all" />

@@ -7,11 +7,13 @@ export const userSchema = z.object({
 		.string()
 		.email()
 		.trim()
-		.regex(
-			/(@cavehill\.uwi\.edu|@mycavehill\.uwi\.edu)$/i,
-			'Must be a UWI Cave Hill email address'
-		),
-	alternate_email: z.string().email().trim(),
+		.regex(/(@cavehill\.uwi\.edu|@mycavehill\.uwi\.edu)$/i, 'Must be a UWI Cave Hill email address')
+		.transform((v) => v.toLowerCase()),
+	alternate_email: z
+		.string()
+		.email()
+		.trim()
+		.transform((v) => v.toLowerCase()),
 	role: z.enum(userOptions)
 });
 

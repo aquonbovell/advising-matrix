@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
 export const formSchema = z.object({
-	email: z.string().email(),
+	email: z
+		.string()
+		.email()
+		.transform((v) => v.toLowerCase()),
 	// .regex(
 	// 	/(@cavehill\.uwi\.edu|@mycavehill\.uwi\.edu)$/i,
 	// 	'Must be a UWI Cave Hill email address'

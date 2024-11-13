@@ -3,7 +3,7 @@ import type { Courses, LevelRestriction } from '$lib/db/schema';
 import type { CoursesWithPrerequisites, Degree, requirement, restriction } from '$lib/types';
 import { getName, isValidUUID } from '$lib/utils';
 
-export async function fetchDegree(majorId: string, minorId: string) {
+export async function fetchDegree(majorId: string, minorId: string | null) {
 	if (!isValidUUID(majorId)) {
 		throw new Error('Invalid majorId');
 	}
