@@ -1,7 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	export let data: PageData;
-
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import {
 		addPagination,
@@ -10,7 +7,7 @@
 		addHiddenColumns,
 		addSelectedRows
 	} from 'svelte-headless-table/plugins';
-	import { readable } from 'svelte/store';
+	import { writable } from 'svelte/store';
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 	import * as Table from '$lib/components/ui/table';
 	import DataTableActions from './data-table-actions.svelte';
@@ -19,11 +16,39 @@
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
+	import { trpc } from '$lib/trpc';
+	import type { RouterOutputs } from '$lib/server/routers';
 
-	const minors = [...data.minors];
+	const index = writable(0);
+	const size = writable(10);
+	const orderBy = writable<'asc' | 'desc'>('asc');
+	const search = writable('');
 
-	const table = createTable(readable(minors), {
-		page: addPagination({ initialPageSize: 10 }),
+	$: courses = trpc.admin.minors.query({
+		page: $index,
+		size: $size,
+		orderBy: $orderBy,
+		search: $search
+	});
+
+	const paginatedData = writable<RouterOutputs['admin']['minors']['minors']>([]);
+
+	const countStore = writable(0);
+
+	$: {
+		if ($courses.isSuccess) {
+			paginatedData.set($courses.data.minors);
+			countStore.set($courses.data.count);
+		}
+	}
+
+	const table = createTable(paginatedData, {
+		page: addPagination({
+			serverSide: true,
+			serverItemCount: countStore,
+			initialPageIndex: 0,
+			initialPageSize: 10
+		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())

@@ -7,5 +7,5 @@
 
 <div class="mx-auto max-w-xl">
 	<h1 class="font-bold">Create minor</h1>
-	<CreateForm data={data.form} courses={data.courses} faculties={data.faculties} />
+	<CreateForm data={data.form} />
 </div>

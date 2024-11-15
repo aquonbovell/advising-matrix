@@ -3,8 +3,7 @@ import { db } from '$lib/db';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-	const minors = await db.selectFrom('Minors').selectAll().execute();
-	return { minors };
+	return {};
 };
 
 export const actions: Actions = {
@@ -15,13 +14,13 @@ export const actions: Actions = {
 		if (!minorId) {
 			return { status: 400, body: { message: 'Minor ID is required' } };
 		}
+		try {
+			await deleteMinor(minorId);
 
-		const data = await deleteMinor(minorId);
-
-		if (!data) {
-			return { status: 500, body: { message: 'An error occurred. Please try again later.' } };
+			return { status: 200, body: { message: 'Minor deleted successfully' } };
+		} catch (error) {
+			console.error('Failed to delete minor:', error);
+			return { status: 500, body: { message: 'An error occurred while deleting the minor' } };
 		}
-
-		return { status: 200, body: { message: 'Minor deleted successfully' } };
 	}
 };

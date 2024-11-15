@@ -11,17 +11,22 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { options, requirementDetailsType, requirementOption, types } from '$lib/types.js';
+	import { trpc } from '$lib/trpc.js';
 
 	export let data: SuperValidated<Infer<MinorSchema>>;
 
-	export let courses: { id: string; level: number; name: string; credits: number; code: string }[];
-	export let faculties: { id: string; name: string }[];
+	$: coursesDTO = trpc.admin.courseNames.query();
+	$: facultiesDTO = trpc.admin.faculties.query();
 
 	const form = superForm(data, {
 		delayMs: 200,
 		validators: zodClient(minorSchema),
 		dataType: 'json'
 	});
+
+	$: courses = $coursesDTO.isSuccess ? $coursesDTO.data : [];
+
+	$: faculties = $facultiesDTO.isSuccess ? $facultiesDTO.data : [];
 
 	const { form: formData, enhance, message } = form;
 

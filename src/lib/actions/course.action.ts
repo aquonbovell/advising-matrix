@@ -224,7 +224,10 @@ export async function fetchCourses() {
 	return data;
 }
 export async function fetchCourseNames() {
-	const courses = await db.selectFrom('Courses').select(['id', 'name']).execute();
+	const courses = await db
+		.selectFrom('Courses')
+		.select(['id', 'name', 'code', 'credits'])
+		.execute();
 
 	return courses;
 }

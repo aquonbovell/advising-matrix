@@ -2,6 +2,9 @@ import { z } from 'zod';
 import { protectedProcedure, router } from '../trpc';
 import { paginateTable } from '$lib/utils';
 import { count, paginate, paginateStudents, remove } from '$lib/actions/admin.action';
+import { fetchMinorsCount, fetchPaginatedMinors } from '$lib/actions/minor.actions';
+import { fetchFaculties } from '$lib/actions/faculty.action';
+import { fetchCourseNames } from '$lib/actions/course.action';
 
 export const adminRouter = router({
 	users: protectedProcedure
@@ -74,6 +77,45 @@ export const adminRouter = router({
 		} catch (err) {
 			console.error('Error deleting course:', err);
 			throw new Error('Failed to delete course');
+		}
+	}),
+	minors: protectedProcedure
+		.input(
+			paginateTable({
+				orderBy: z.enum(['asc', 'desc']).default('asc'),
+				search: z.string().default('')
+			})
+		)
+		.query(async ({ input, ctx }) => {
+			const { orderBy, page, size, search } = input;
+			try {
+				const [minors, count] = await Promise.all([
+					fetchPaginatedMinors(page, size, search, orderBy),
+					fetchMinorsCount()
+				]);
+				return { minors, count: count?.count || 0 };
+			} catch (err) {
+				console.error('Error fetching minors:', err);
+				throw err;
+			}
+		}),
+
+	faculties: protectedProcedure.query(async () => {
+		try {
+			const faculties = await fetchFaculties();
+			return faculties;
+		} catch (err) {
+			console.error('Error fetching faculties:', err);
+			throw err;
+		}
+	}),
+	courseNames: protectedProcedure.query(async () => {
+		try {
+			const courses = await fetchCourseNames();
+			return courses;
+		} catch (err) {
+			console.error('Error fetching course names:', err);
+			throw err;
 		}
 	})
 });

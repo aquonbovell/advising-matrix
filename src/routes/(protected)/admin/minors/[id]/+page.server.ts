@@ -51,15 +51,12 @@ export const actions: Actions = {
 		try {
 			console.log(form.data);
 
-			const data = await updateMinor(form.data);
-
-			if (!data) {
-				fail(404, { message: 'Minor not found' });
-			}
+			await updateMinor(form.data.id, form.data.name, form.data.requirements);
 		} catch (err) {
 			console.error(err);
 			error(500, { message: 'An error occurred. Please try again later.' });
 		}
+		redirect(303, `/admin/minors/${form.data.id}`);
 
 		return message(form, 'Minor updated successfully');
 	}
