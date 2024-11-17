@@ -1,59 +1,33 @@
-import globals from 'globals';
+import prettier from 'eslint-config-prettier';
 import js from '@eslint/js';
-import prettier from 'eslint-plugin-prettier/recommended';
 import svelte from 'eslint-plugin-svelte';
+import globals from 'globals';
 import ts from 'typescript-eslint';
 
 export default ts.config(
 	js.configs.recommended,
 	...ts.configs.recommended,
 	...svelte.configs['flat/recommended'],
-	...svelte.configs['flat/prettier'],
 	prettier,
+	...svelte.configs['flat/prettier'],
 	{
 		languageOptions: {
-			globals: { ...globals.browser, ...globals.es2017 }
-		}
-	},
-	{
-		files: ['**/*.cjs', '**/*.mjs'],
-		languageOptions: {
-			globals: { ...globals.node }
+			globals: {
+				...globals.browser,
+				...globals.node
+			}
 		}
 	},
 	{
 		files: ['**/*.svelte'],
+
 		languageOptions: {
-			parserOptions: { parser: ts.parser }
+			parserOptions: {
+				parser: ts.parser
+			}
 		}
 	},
 	{
-		rules: {
-			'@typescript-eslint/no-unused-vars': [
-				'warn',
-				{
-					argsIgnorePattern: '^_',
-					caughtErrorsIgnorePattern: '^_',
-					varsIgnorePattern: '^_'
-				}
-			]
-		}
-	},
-	{
-		rules: { 'prettier/prettier': 'warn' }
-	},
-	{ ignores: ['**/.svelte-kit', 'build/', 'dist/'] },
-	{
-		/* location of your components where you would like to apply these rules  */
-		files: ['**/components/ui/**/*.svelte'],
-		rules: {
-			'@typescript-eslint/no-unused-vars': [
-				'warn',
-				{
-					argsIgnorePattern: '^_',
-					varsIgnorePattern: '^$$(Props|Events|Slots|Generic)$'
-				}
-			]
-		}
+		ignores: ['build/', '.svelte-kit/', 'dist/']
 	}
 );

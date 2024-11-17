@@ -1,17 +1,11 @@
 <script lang="ts">
-	import '../app.pcss';
-	import { QueryClientProvider } from '@tanstack/svelte-query';
-	import type { LayoutData } from './$types';
-	import { trpc } from '$lib/trpc';
-
-	export let data: LayoutData;
-
-	const queryClient = trpc.hydrateFromServer(data.trpc);
+	import '../app.css';
+	let { children } = $props();
 </script>
 
-<QueryClientProvider client={queryClient}>
-	<div class="main">
-		<div class="gradient" />
-	</div>
-	<slot />
-</QueryClientProvider>
+<div class="main">
+	<div class="gradient"></div>
+</div>
+<div class="z-10 h-dvh">
+	{@render children()}
+</div>

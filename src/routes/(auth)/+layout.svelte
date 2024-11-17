@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { setToastState } from '$lib/components/toast/toast-state.svelte';
-	import Toast from '$lib/components/toast/Toast.svelte';
+	import type { Snippet } from 'svelte';
+	import type { LayoutData } from './$types';
 
-	setToastState();
+	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 </script>
 
-<Toast />
-
-<div class="relative z-10 flex min-h-full min-w-80 items-center justify-center p-5 font-sans">
-	<slot />
+<div class="relative flex min-h-full min-w-80 items-center justify-center p-5 font-sans">
+	{@render children()}
 </div>

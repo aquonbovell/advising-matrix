@@ -1,163 +1,35 @@
-datasource db {
-  provider  = "sqlite"
-  url = "file:./dev.db"
-}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator kysely {
   provider = "prisma-kysely"
+  output   = "../src/lib/server/db"
+  fileName = "schema.ts"
+}
 
-  output   = "../src/lib/db"
-  fileName = "schema.d.ts"
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
-  id              String           @id @unique
-  name            String
-  email           String           @unique
-  password        String
+  id             String    @id @unique
+  email          String    @unique
+  alternateEmail String    @unique
+  name           String    @unique
+  username       String    @unique
+  passwordHash   String
   /// @kyselyType('STUDENT' | 'ADVISOR' | 'ADMIN')
-  role            String
-  created_at      Int
-  updated_at      Int
-  alternate_email String
-  advisor         Advisor[]
-  sessions        Session[]
-  Student         Student[]
-  StudentCourses  StudentCourses[]
+  role           String
+  onboarded      Boolean
+  sessions       Session[]
 }
 
 model Session {
-  id         String @id @default(uuid())
-  expires_at Int
-  user_id    String
-  user       User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id        String @id @unique
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  expiresAt BigInt
+
+  @@index([userId])
 }
-
-model Advisor {
-  advisor_id String
-  student_id String
-  user       User    @relation(fields: [advisor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Student    Student @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([advisor_id, student_id])
-}
-
-model Student {
-  id             String           @id
-  user_id        String
-  major_id       String
-  minor_id       String?
-  invite_token   String?
-  invite_expires Int?
-  created_at     Int
-  updated_at     Int
-  Advisor        Advisor[]
-  Majors         Majors           @relation(fields: [major_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user           User             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  StudentCourses StudentCourses[]
-}
-
-model Faculties {
-  id          String        @id @unique
-  name        String
-  Departments Departments[]
-}
-
-model Departments {
-  id        String    @id @unique
-  facultyId String
-  name      String
-  Courses   Courses[]
-  faculty   Faculties @relation(fields: [facultyId], references: [id])
-}
-
-model Courses {
-  id                 String             @id @unique
-  code               String             @unique
-  name               String
-  level              Int
-  credits            Int
-  departmentId       String
-  prerequisiteAmount Int
-  comment            String?
-  /// @kyselyType('ALL' | 'ONE')
-  prerequisiteType   String
-  department         Departments        @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  LevelRestriction   LevelRestriction[]
-  courseprerequisite Prerequisites[]    @relation("CoursePrerequisite")
-  prerequisitecourse Prerequisites[]    @relation("PrerequisiteCourse")
-  StudentCourses     StudentCourses[]
-}
-
-model LevelRestriction {
-  id       String  @id @unique
-  courseId String
-  area     String
-  credits  Int
-  level    String
-  courses  Courses @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-model Prerequisites {
-  id             String  @id @unique @default(uuid())
-  courseId       String
-  prerequisiteId String
-  course         Courses @relation("CoursePrerequisite", fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  prerequisite   Courses @relation("PrerequisiteCourse", fields: [prerequisiteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-model Majors {
-  id                String              @id @unique
-  name              String              @unique(map: "Majors_name_idx")
-  MajorRequirements MajorRequirements[]
-  Student           Student[]
-}
-
-model Minors {
-  id                String              @id @unique
-  name              String              @unique(map: "Minors_name_idx")
-  MinorRequirements MinorRequirements[]
-}
-
-model MajorRequirements {
-  id          String @id
-  majorId     String
-  credits     Int
-  details     String
-  /// @kyselyType('COURSES' | 'AREAS' | 'FACULTIES')
-  detailsType String
-  /// @kyselyType('REQUIRED' | 'OPTIONAL')
-  option      String
-  level       String
-  Majors      Majors @relation(fields: [majorId], references: [id], onUpdate: NoAction)
-}
-
-model MinorRequirements {
-  id          String @id
-  minorId     String
-  credits     Int
-  details     String
-  /// @kyselyType('COURSES' | 'AREAS' | 'FACULTIES')
-  detailsType String
-  /// @kyselyType('REQUIRED' | 'OPTIONAL')
-  option      String
-  level       String
-  Minors      Minors @relation(fields: [minorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model StudentCourses {
-  id            String  @id
-  grade         String
-  requirementId String
-  studentId     String
-  courseId      String
-  userId        String?
-  courses       Courses @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Student       Student @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  User          User?   @relation(fields: [userId], references: [id])
-}
-
-// enum RequirementType {
-//   CREDITS
-//   POOL
-// }

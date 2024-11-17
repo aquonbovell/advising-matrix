@@ -1,3 +1,4 @@
+test-results
 node_modules
 
 # Output
@@ -20,8 +21,5 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Idea
-.idea
-
-*.sql
-.netlify
+# SQLite
+*.db

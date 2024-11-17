@@ -1,50 +1,121 @@
-import { Lucia, TimeSpan } from 'lucia';
-import { dev } from '$app/environment';
-import type { DB } from '$lib/db/schema';
-import { postgresql } from '$lib/db';
-import { alphabet, generateRandomString } from 'oslo/crypto';
-import { createDate } from 'oslo';
-import { LibSQLAdapter } from '@lucia-auth/adapter-sqlite';
-import { NodePostgresAdapter } from '@lucia-auth/adapter-postgresql';
+import type { RequestEvent } from '@sveltejs/kit';
+import { sha256 } from '@oslojs/crypto/sha2';
+import { encodeBase32LowerCase, encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
+import { db } from '$lib/server/db';
+import type { Session, User } from './db/schema';
+import { hash, verify } from '@node-rs/argon2';
 
-// const adapter = new LibSQLAdapter(client, {
-// 	user: 'User',
-// 	session: 'Session'
-// });
+const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-const adapter = new NodePostgresAdapter(postgresql, {
-	user: 'User',
-	session: 'Session'
-});
+export const sessionCookieName = 'auth-session';
 
-export const lucia = new Lucia(adapter, {
-	sessionExpiresIn: new TimeSpan(30, 'm'),
-	sessionCookie: {
-		attributes: {
-			secure: !dev
-		}
-	},
-	getUserAttributes(db) {
-		return {
-			name: db.name,
-			email: db.email,
-			role: db.role
-		};
-	}
-});
-declare module 'lucia' {
-	interface Register {
-		Lucia: typeof lucia;
-		DatabaseUserAttributes: DB['User'];
-	}
+export function generateSessionToken() {
+	const bytes = crypto.getRandomValues(new Uint8Array(18));
+	const token = encodeBase64url(bytes);
+	return token;
 }
 
-export function generateTokenWithExpiration(
-	expiresIn: TimeSpan = new TimeSpan(30, 'm'),
-	tokenLength = 32,
-	tokenChars = alphabet('0-9')
-) {
-	const expiresAt = createDate(expiresIn).getTime();
-	const token = generateRandomString(tokenLength, tokenChars);
-	return { token, expiresAt };
+export async function createSession(token: string, userId: string) {
+	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+	const session: Session = {
+		id: sessionId,
+		userId,
+		expiresAt: new Date(Date.now() + DAY_IN_MS * 30).getTime()
+	};
+	await db.insertInto('Session').values(session).execute();
+	return session;
+}
+
+export async function validateSessionToken(token: string) {
+	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+	const [result] = await db
+		.selectFrom('Session')
+		.innerJoin('User', 'Session.userId', 'User.id')
+		.where('Session.id', '==', sessionId)
+		.select([
+			'User.id',
+			'User.username',
+			'User.email',
+			'User.name',
+			'User.role',
+			'Session.id as sessionId',
+			'Session.userId',
+			'Session.expiresAt'
+		])
+		.execute();
+
+	if (!result) {
+		return { session: null, user: null };
+	}
+	const session: Session = {
+		id: result.sessionId,
+		userId: result.userId,
+		expiresAt: result.expiresAt
+	};
+
+	const user: Omit<User, 'passwordHash' | 'alternateEmail' | 'username' | 'onboarded'> = {
+		id: result.id,
+		role: result.role,
+		email: result.email,
+		name: result.name
+	};
+
+	const sessionExpired = Date.now() >= new Date(session.expiresAt).getTime();
+	if (sessionExpired) {
+		await db.deleteFrom('Session').where('Session.id', '==', session.id).execute();
+		return { session: null, user: null };
+	}
+
+	const renewSession = Date.now() >= new Date(session.expiresAt).getTime() - DAY_IN_MS * 15;
+	if (renewSession) {
+		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30).getTime();
+		await db
+			.updateTable('Session')
+			.set({ expiresAt: session.expiresAt })
+			.where('Session.id', '==', session.id)
+			.execute();
+	}
+
+	return { session, user };
+}
+
+export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
+
+export async function invalidateSession(sessionId: string) {
+	await db.deleteFrom('Session').where('Session.id', '==', sessionId).execute();
+}
+
+export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
+	event.cookies.set(sessionCookieName, token, {
+		expires: expiresAt,
+		path: '/'
+	});
+}
+
+export function deleteSessionTokenCookie(event: RequestEvent) {
+	event.cookies.delete(sessionCookieName, {
+		path: '/'
+	});
+}
+
+export function generateId() {
+	// ID with 120 bits of entropy, or about the same as UUID v4.
+	const bytes = crypto.getRandomValues(new Uint8Array(20));
+	const id = encodeBase32LowerCase(bytes);
+	return id;
+}
+
+export async function hashPassword(password: string): Promise<string> {
+	const passwordHash = await hash(password, {
+		// recommended minimum parameters
+		memoryCost: 19456,
+		timeCost: 2,
+		outputLen: 32,
+		parallelism: 1
+	});
+	return passwordHash;
+}
+
+export async function verifyPassword(passwordHash: string, password: string): Promise<boolean> {
+	return await verify(passwordHash, password);
 }
