@@ -3,7 +3,8 @@
 	"version": "0.0.1",
 	"type": "module",
 	"prisma": {
-		"seed": "vite-node ./prisma/seed.ts"
+		"seed": "vite-node ./prisma/seed.ts",
+		"seedCourses": "vite-node ./prisma/main.ts"
 	},
 	"scripts": {
 		"dev": "vite dev",
@@ -16,9 +17,10 @@
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"db:push": "prisma push",
+		"db:push": "prisma db push",
 		"db:generate": "prisma generate",
 		"db:seed": "prisma db seed",
+		"db:seedCourses": "prisma db seedCourses",
 		"db:migrate": "prisma migrate",
 		"db:studio": "prisma studio"
 	},

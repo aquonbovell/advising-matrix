@@ -1,6 +1,7 @@
 import { Kysely } from 'kysely';
 import 'dotenv/config';
 import { LibsqlDialect } from '@libsql/kysely-libsql';
+import type { DB } from './schema';
 
 export function generateId() {
 	// ID with 120 bits of entropy, or about the same as UUID v4.
@@ -20,37 +21,8 @@ export async function hashPassword(password: string): Promise<string> {
 	return passwordHash;
 }
 
-import type { ColumnType } from 'kysely';
 import { encodeBase32LowerCase } from '@oslojs/encoding';
 import { hash } from '@node-rs/argon2';
-export type Generated<T> =
-	T extends ColumnType<infer S, infer I, infer U>
-		? ColumnType<S, I | undefined, U>
-		: ColumnType<T, T | undefined, T>;
-export type Timestamp = ColumnType<Date, Date | string, Date | string>;
-
-export type Session = {
-	id: string;
-	userId: string;
-	expiresAt: number;
-};
-export type User = {
-	id: string;
-	email: string;
-	alternateEmail: string;
-	name: string;
-	username: string;
-	passwordHash: string;
-	/**
-	 * @kyselyType('STUDENT' | 'ADVISOR' | 'ADMIN')
-	 */
-	role: 'STUDENT' | 'ADVISOR' | 'ADMIN';
-	onboarded: number;
-};
-export type DB = {
-	Session: Session;
-	User: User;
-};
 const defaultPassword = process.env.DEFAULT_PASSWORD;
 const tursoAuth = process.env.TURSO_AUTH_TOKEN;
 const tursoDatabase = process.env.TURSO_DATABASE_URL;
@@ -65,7 +37,7 @@ if (!tursoAuth || !tursoDatabase) {
 
 export const db = new Kysely<DB>({
 	dialect: new LibsqlDialect({
-		url: 'file:/dev.db',
+		url: 'file:./testlocal.db',
 		syncUrl: tursoDatabase,
 		authToken: tursoAuth,
 		syncInterval: 60000
@@ -92,7 +64,9 @@ const seed = async () => {
 				alternateEmail: 'administrator@outlook.com',
 				passwordHash: defaultHash,
 				onboarded: 1,
-				username: 'admin'
+				username: 'admin',
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString()
 			})
 			.execute();
 
@@ -109,7 +83,9 @@ const seed = async () => {
 				alternateEmail: 'advisor@outlook.com',
 				passwordHash: defaultHash,
 				onboarded: 1,
-				username: 'advisor'
+				username: 'advisor',
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString()
 			})
 			.execute();
 
@@ -124,7 +100,9 @@ const seed = async () => {
 				alternateEmail: 'student@outlook.com',
 				passwordHash: defaultHash,
 				onboarded: 1,
-				username: 'student'
+				username: 'student',
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString()
 			})
 			.execute();
 	});

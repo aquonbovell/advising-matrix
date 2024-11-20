@@ -4,7 +4,7 @@ import { env } from '$env/dynamic/private';
 import type { User } from '$lib/server/db/schema';
 
 export const createUser = async (
-	user: Omit<User, 'id' | 'onboarded' | 'role' | 'passwordHash'>
+	user: Omit<User, 'id' | 'onboarded' | 'role' | 'passwordHash' | 'created_at' | 'updated_at'>
 ) => {
 	try {
 		const result = await db
@@ -14,7 +14,9 @@ export const createUser = async (
 				id: generateId(),
 				onboarded: 0,
 				role: 'STUDENT',
-				passwordHash: await hashPassword(env.DEFAULT_PASSWORD)
+				passwordHash: await hashPassword(env.DEFAULT_PASSWORD),
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString()
 			})
 			.returning('id')
 			.executeTakeFirstOrThrow();
@@ -52,6 +54,7 @@ export const fetchUsers = async () => {
 	return db
 		.selectFrom('User')
 		.select(['id', 'name', 'username', 'role', 'alternateEmail', 'email'])
+		.where('role', '!=', 'ADMIN')
 		.execute();
 };
 
@@ -74,7 +77,9 @@ export const deleteUser = async (id: string) => {
 	await db.deleteFrom('User').where('id', '=', id).execute();
 };
 
-export const updateUser = async (user: Omit<User, 'passwordHash'>) => {
+export const updateUser = async (
+	user: Omit<User, 'passwordHash' | 'updated_at' | 'created_at'>
+) => {
 	await db
 		.updateTable('User')
 		.set({
@@ -83,7 +88,8 @@ export const updateUser = async (user: Omit<User, 'passwordHash'>) => {
 			username: user.username,
 			alternateEmail: user.alternateEmail,
 			onboarded: user.onboarded,
-			role: user.role
+			role: user.role,
+			updated_at: new Date().toISOString()
 		})
 		.where('id', '=', user.id)
 		.execute();
