@@ -10,8 +10,6 @@
 	let { user }: { user: { name: string | undefined; role: UserRole } } = $props();
 
 	let sheetOpen = $state(false);
-
-	let url = $page.url.toString();
 </script>
 
 <header
@@ -32,7 +30,8 @@
 				</a>
 				<a
 					href="/"
-					class={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground ${url.endsWith(user.role.toLowerCase()) ? 'text-primary' : ''}`}
+					onclick={() => (sheetOpen = false)}
+					class={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground ${$page.route.id?.endsWith('/(app)') ? 'text-orange-600' : ''}`}
 				>
 					<Icon icon="fluent:home-24-filled" />
 					Dashboard
@@ -42,7 +41,7 @@
 						<a
 							href={item.href}
 							onclick={() => (sheetOpen = false)}
-							class={`mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground ${url.includes(item.href) ? 'text-primary' : ''}`}
+							class={`mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground ${$page.route.id?.includes(item.href) ? 'text-orange-600' : ''}`}
 						>
 							<Icon icon={item.icon} />
 							<span>{item.label}</span>
