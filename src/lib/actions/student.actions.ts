@@ -1,6 +1,7 @@
 import { generateId } from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import type { Student } from '$lib/server/db/schema';
+import { sql } from 'kysely';
 
 export const fetchStudents = async () => {
 	return db
@@ -21,23 +22,49 @@ export const fetchStudents = async () => {
 };
 
 export const fetchAdvisingStudents = async (advisorId: string) => {
-	return db
+	const students = await db
 		.selectFrom('Advisor')
-		.innerJoin('Student', 'Advisor.studentId', 'Student.id')
-		.innerJoin('User', 'Student.userId', 'User.id')
+		.innerJoin('Student', 'Student.id', 'Advisor.studentId')
+		.innerJoin('User as StudentUser', 'StudentUser.id', 'Student.userId')
+		.innerJoin('User as AdvisorUser', 'AdvisorUser.id', 'Advisor.advisorId')
+		.innerJoin('Majors as Major1', 'Major1.id', 'Student.majorId')
+		.leftJoin('Minors', 'Minors.id', 'Student.minorId')
+		.leftJoin('Majors as Major2', 'Major2.id', 'Student.minorId')
 		.select([
+			sql<string>`STRING_AGG("AdvisorUser".name, ', ')`.as('advisor_names'),
+			sql<string>`STRING_AGG(CAST("AdvisorUser".id AS text), ', ')`.as('advisor_ids'),
 			'Student.id',
-			'name',
-			'username',
-			'role',
-			'alternateEmail',
-			'email',
-			'majorId',
-			'minorId'
+			'StudentUser.name as studentName',
+			'StudentUser.email as studentEmail',
+			'StudentUser.created_at as studentCreatedAt',
+			'StudentUser.updated_at as studentUpdatedAt',
+			'Student.invite_token as studentInviteToken',
+			'Student.invite_expires as studentInviteExpires',
+			'Major1.name as major',
+			'Minors.name as minor',
+			'Major2.name as major2'
 		])
-		.where('role', '=', 'STUDENT')
-		.where('advisorId', '=', advisorId)
+		.orderBy('StudentUser.name')
+		.where('StudentUser.role', '=', 'STUDENT')
+		.where('Advisor.advisorId', '=', advisorId)
 		.execute();
+
+	return students.map((student) => {
+		console.log(student.advisor_ids);
+
+		return {
+			id: student.id,
+			advisor_names: student.advisor_names,
+			exists: +student.advisor_ids,
+			studentName: student.studentName,
+			studentEmail: student.studentEmail,
+			studentCreatedAt: student.studentCreatedAt,
+			studentUpdatedAt: student.studentUpdatedAt,
+			studentInviteToken: student.studentInviteToken,
+			studentInviteExpires: student.studentInviteExpires,
+			program: `${student.major} ${student.minor ? ' with ' + student.minor : student.major2 ? ' and ' + student.major2 : ''}`
+		};
+	});
 };
 
 export const fetchAvailableUsers = async () => {
@@ -117,6 +144,14 @@ export const fetchStudentDetails = async (id: string) => {
 		.execute();
 
 	return { ...student, advisors: advisors.map(({ name }) => name) };
+};
+export const fetchStudentByUserId = async (id: string) => {
+	const student = await db
+		.selectFrom('Student')
+		.select(['Student.id', 'userId', 'majorId', 'minorId'])
+		.where('Student.userId', '=', id)
+		.executeTakeFirstOrThrow();
+	return { ...student };
 };
 
 export const fetchStudent = async (id: string) => {

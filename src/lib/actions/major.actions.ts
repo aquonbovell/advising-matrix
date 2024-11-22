@@ -1,6 +1,7 @@
 import { generateId } from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import type { MajorDetails, requirementOption, requirementType } from '$lib/types';
+import majors from '$lib/data/majors.json';
 
 export const fetchMajors = async () => {
 	return db.selectFrom('Majors').select(['name', 'id']).execute();
@@ -85,9 +86,6 @@ export const fetchMajor = async (majorId: string) => {
 			.where('majorId', '=', majorId)
 			.select(['id', 'option', 'details', 'type', 'credits', 'level'])
 			.execute();
-
-		console.log(requirements);
-
 		return {
 			...major,
 			requirements: requirements.map((requirement) => ({
@@ -114,3 +112,33 @@ export const fetchMajorDetails = async (majorId: string) => {
 export const deleteMajor = async (majorId: string) => {
 	return db.deleteFrom('Majors').where('id', '=', majorId).execute();
 };
+
+export async function initMajors() {
+	for (const major of majors) {
+		const majorId = await db
+			.insertInto('Majors')
+			.values({
+				id: crypto.randomUUID(),
+				name: major.name
+			})
+			.returning('id')
+			.executeTakeFirst();
+		if (majorId) {
+			const majorRequirements = major.requirements;
+			for (const requirement of majorRequirements) {
+				await db
+					.insertInto('MajorRequirement')
+					.values({
+						id: crypto.randomUUID(),
+						majorId: majorId.id,
+						detailsType: requirement.detailsType.toUpperCase() as requirementType,
+						level: requirement.level.join(','),
+						credits: requirement.credits,
+						details: requirement.details.join(','),
+						option: requirement.option as requirementOption
+					})
+					.execute();
+			}
+		}
+	}
+}
