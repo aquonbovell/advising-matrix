@@ -55,6 +55,22 @@
 		];
 	}
 
+	function clearDetails(id: string) {
+		console.log('clearing details', id);
+
+		const requirement = $formData.requirements.find((r) => r.id === id);
+		if (requirement) {
+			requirement.details = [];
+
+			$formData.requirements = $formData.requirements.map((r) => {
+				if (r.id === id) {
+					return requirement;
+				}
+				return r;
+			});
+		}
+	}
+
 	function removeRequirement(id: string) {
 		$formData.requirements = $formData.requirements.filter((r) => r.id !== id);
 	}
@@ -135,7 +151,11 @@
 
 						<!-- Course Dropdown  -->
 						{#if requirement.type === 'COURSES'}
-							<div class="text-sm font-semibold">Courses Details</div>
+							<div class="text-sm font-semibold">
+								Courses Details <button type="button" onclick={() => clearDetails(requirement.id)}
+									>x</button
+								>
+							</div>
 							<Select.Root type="multiple" bind:value={requirement.details}>
 								<Select.Trigger class="h-fit">
 									{#if requirement.details && requirement.details.length > 0}
@@ -155,7 +175,11 @@
 								</Select.Content>
 							</Select.Root>
 						{:else if requirement.type === 'DISCIPLINES'}
-							<div class="text-sm font-semibold">Discipline Details</div>
+							<div class="text-sm font-semibold">
+								Discipline Details<button type="button" onclick={() => clearDetails(requirement.id)}
+									>x</button
+								>
+							</div>
 							<Select.Root type="multiple" bind:value={requirement.details}>
 								<Select.Trigger class="h-fit">
 									{#if requirement.details && requirement.details.length > 0}
@@ -175,7 +199,11 @@
 								</Select.Content>
 							</Select.Root>
 						{:else if requirement.type === 'FACULTIES'}
-							<div class="text-sm font-semibold">Faculties Details</div>
+							<div class="text-sm font-semibold">
+								Faculties Details<button type="button" onclick={() => clearDetails(requirement.id)}
+									>x</button
+								>
+							</div>
 							<Select.Root type="multiple" bind:value={requirement.details}>
 								<Select.Trigger class="h-fit">
 									{#if requirement.details && requirement.details.length > 0}
