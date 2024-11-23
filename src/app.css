@@ -124,4 +124,8 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+
+	.glass {
+		@apply h-fit w-full rounded-md border border-gray-200 bg-gray-400 bg-opacity-10 bg-clip-padding backdrop-blur-md backdrop-filter;
+	}
 }

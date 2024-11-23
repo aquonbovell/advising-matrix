@@ -2,7 +2,6 @@ import { z } from 'zod';
 export const prerequisiteOptions = ['ALL', 'ONE'] as const;
 export const courseCreationSchema = z
 	.object({
-		id: z.string(),
 		departmentId: z.string(),
 		name: z.string(),
 		code: z
@@ -11,7 +10,7 @@ export const courseCreationSchema = z
 			.max(8, 'Course Code must be 8 alpha numeric characters long')
 			.regex(
 				/^[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9]/,
-				'Code must start with 4 alpha characters and end with 4 numeric characters'
+				'Course Code must start with 4 alpha characters and end with 4 numeric characters'
 			),
 		credits: z.number(),
 		restrictions: z.array(
@@ -25,7 +24,7 @@ export const courseCreationSchema = z
 
 		prerequisiteType: z.enum(prerequisiteOptions),
 		prerequisiteCount: z.number(),
-		level: z.number(),
+		level: z.number().default(undefined),
 		comment: z.string().default(''),
 		prerequisites: z.array(z.string())
 	})
@@ -35,7 +34,7 @@ export const courseCreationSchema = z
 			return values.prerequisiteType === 'ONE' ? 1 : values.prerequisites.length;
 		},
 		get level() {
-			return parseInt(values.code[4] ?? '0');
+			return parseInt(values.code[4]);
 		}
 	}));
 
