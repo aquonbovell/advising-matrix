@@ -15,6 +15,8 @@
 	import * as Button from '$lib/components/ui/button/';
 	import disciplines from './disciplines.json';
 	import Icon from '@iconify/svelte';
+	import { toast } from 'svelte-sonner';
+	import { invalidateAll } from '$app/navigation';
 	let {
 		data,
 		departments,
@@ -27,7 +29,6 @@
 
 	const form = superForm(data, {
 		validators: zodClient(courseUpdateSchema),
-
 		dataType: 'json'
 	});
 
@@ -35,7 +36,11 @@
 
 	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
 	});
 
@@ -232,7 +237,7 @@
 	</Form.Field>
 	<div class="flex items-center justify-between">
 		<h3 class="font-semibold">Level Restrictions</h3>
-		<Button.Root variant="ghost" onclick={addRestriction} class="w-fit px-0"
+		<Button.Root variant="secondary" onclick={addRestriction} class="w-fit"
 			>Add Restriction</Button.Root
 		>
 	</div>

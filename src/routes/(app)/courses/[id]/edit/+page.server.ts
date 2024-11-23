@@ -1,15 +1,16 @@
 import {
 	deleteCourse,
+	exist,
 	fetchCourseCodes,
 	fetchCourseDetails,
 	updateCourse
 } from '$lib/actions/course.actions';
-import { fail, superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { courseUpdateSchema } from './courseUpdate.schema';
 import type { Actions, PageServerLoad } from './$types';
 import { fetchDepartmentsAll } from '$lib/actions/department.actions';
-import { redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
@@ -25,24 +26,44 @@ export const load: PageServerLoad = async ({ params }) => {
 
 export const actions: Actions = {
 	edit: async (event) => {
-		if (event.locals.user?.role !== 'ADVISOR') {
-			return fail(403, { message: 'You do not have permission to delete courses' });
-		}
 		const form = await superValidate(event, zod(courseUpdateSchema));
 
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(
+				form,
+				{ message: 'You do not have permission to edit courses', type: 'failure' },
+				{ status: 403 }
+			);
+		}
+
 		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		const courseName = await exist(form.data.name, 'name');
+		if (courseName) {
+			form.errors.name = [...(form.errors.name ?? ''), 'Course name already exists'];
+			return fail(400, { form });
+		}
+		const courseCode = await exist(form.data.code, 'code');
+		if (courseCode) {
+			form.errors.code = [...(form.errors.code ?? ''), 'Course code already exists'];
 			return fail(400, { form });
 		}
 		try {
 			await updateCourse(form.data);
 		} catch (err) {
 			console.error(err);
-			return fail(500, { message: 'Failed to update course' });
+			return message(
+				form,
+				{ message: 'Failed to update course', type: 'failure' },
+				{ status: 400 }
+			);
 		}
-		return { success: true };
+		return message(form, { message: 'Course updated', type: 'success' });
 	},
 	delete: async ({ request, locals }) => {
-		if (locals.user?.role !== 'ADVISOR') {
+		if (locals.user?.role !== 'ADMIN') {
 			return fail(403, { message: 'You do not have permission to delete courses' });
 		}
 		const id = (await request.formData()).get('id')?.toString();
