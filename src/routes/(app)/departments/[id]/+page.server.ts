@@ -1,11 +1,6 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteFaculty, fetchFaculty } from '$lib/actions/faculty.actions';
-import {
-	deleteDepartment,
-	fetchDepartment,
-	fetchDepartmentDetails
-} from '$lib/actions/department.actions';
+import { deleteDepartment, fetchDepartmentDetails } from '$lib/actions/department.actions';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
@@ -14,7 +9,10 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	delete: async ({ params }) => {
+	delete: async ({ params, locals }) => {
+		if (locals.user?.role !== 'ADVISOR') {
+			return fail(403, { message: 'You do not have permission to delete departments' });
+		}
 		const { id } = params;
 		try {
 			await deleteDepartment(id);
@@ -22,6 +20,6 @@ export const actions: Actions = {
 			console.error(err);
 			return fail(500, { message: 'Failed to delete department' });
 		}
-		return redirect(302, '/departments');
+		return { success: true };
 	}
 };

@@ -12,6 +12,7 @@
 		departmentUpdateSchema,
 		type DepartmentUpdateSchema
 	} from './departmentUpdateSchema.schema';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		data,
@@ -29,10 +30,13 @@
 
 	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
 	});
-
 	const triggerContent = $derived(
 		faculties.find((f) => f.id === $formData.facultyId)?.name ?? 'Select a registered faculty'
 	);

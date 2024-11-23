@@ -11,6 +11,7 @@
 		departmentCreationSchema,
 		type DepartmentCreationSchema
 	} from './departmentCreation.schema';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		data,
@@ -31,7 +32,11 @@
 
 	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
 	});
 	const triggerContent = $derived(
@@ -53,7 +58,7 @@
 		<Form.Control>
 			{#snippet children({ props })}
 				<Form.Label class="font-semibold">Faculty Name</Form.Label>
-				<Select.Root type="single" {...props} bind:value={$formData.facultyId}>
+				<Select.Root type="single" {...props} bind:value={$formData.facultyId} required>
 					<Select.Trigger>
 						{triggerContent}
 					</Select.Trigger>

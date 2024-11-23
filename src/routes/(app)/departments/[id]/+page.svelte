@@ -4,17 +4,19 @@
 	import * as Label from '$lib/components/ui/label';
 	import * as Input from '$lib/components/ui/input/';
 	import * as Button from '$lib/components/ui/button/';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-	import * as Checkbox from '$lib/components/ui/checkbox/';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/';
 	import { buttonVariants } from '$lib/components/ui/button/';
 	import { enhance } from '$app/forms';
 
 	let { data }: { data: PageData } = $props();
 </script>
 
-<Card.Root class="mx-auto max-w-xl border-0 bg-inherit">
+<Card.Root class="glass mx-auto max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title>{data.department.departmentName}</Card.Title>
+		<Card.Title class="flex items-center justify-between"
+			>Matrix Department - {data.department.departmentName}</Card.Title
+		>
+
 		<Card.Description>Manage this department details</Card.Description>
 	</Card.Header>
 	<Card.Content>
@@ -42,27 +44,32 @@
 		</form>
 	</Card.Content>
 	<Card.Footer class="flex justify-between">
-		<Button.Root variant="outline" href={`/departments/${data.department.id}/edit`}
-			>Edit</Button.Root
-		>
-		<AlertDialog.Root>
-			<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive' })}>
-				Delete
-			</AlertDialog.Trigger>
-			<AlertDialog.Content>
-				<AlertDialog.Header>
-					<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-					<AlertDialog.Description>
-						This action cannot be undone. This will permanently delete this record from our servers.
-					</AlertDialog.Description>
-				</AlertDialog.Header>
-				<AlertDialog.Footer>
-					<form method="POST" action="?/delete" use:enhance class="flex gap-2">
-						<AlertDialog.Cancel type="button">Cancel</AlertDialog.Cancel>
-						<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
-					</form>
-				</AlertDialog.Footer>
-			</AlertDialog.Content>
-		</AlertDialog.Root>
+		{#if data.user?.role === 'ADMIN'}
+			<Button.Root variant="outline" href={`/departments/${data.department.id}/edit`}
+				>Edit</Button.Root
+			>
+		{/if}
+		{#if data.user?.role === 'ADMIN'}
+			<AlertDialog.Root>
+				<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive' })}>
+					Delete
+				</AlertDialog.Trigger>
+				<AlertDialog.Content>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+						<AlertDialog.Description>
+							This action cannot be undone. This will permanently delete this record from our
+							servers.
+						</AlertDialog.Description>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<form method="POST" action="?/delete" use:enhance class="flex gap-2">
+							<AlertDialog.Cancel type="button">Cancel</AlertDialog.Cancel>
+							<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+						</form>
+					</AlertDialog.Footer>
+				</AlertDialog.Content>
+			</AlertDialog.Root>
+		{/if}
 	</Card.Footer>
 </Card.Root>
