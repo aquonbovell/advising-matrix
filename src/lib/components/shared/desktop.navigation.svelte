@@ -32,7 +32,15 @@
 					Home
 				</a>
 				{#if user.role}
-					{#each UserMenuItems[user.role] ?? [] as item}
+					{#each UserMenuItems[user.role].sort((a, b) => {
+						if (a.label < b.label) {
+							return -1;
+						}
+						if (a.label > b.label) {
+							return 1;
+						}
+						return 0;
+					}) ?? [] as item}
 						<a
 							href={item.href}
 							class={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${$page.route.id?.includes(item.href) ? 'text-orange-500' : ''}`}

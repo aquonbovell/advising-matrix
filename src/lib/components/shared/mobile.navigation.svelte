@@ -37,7 +37,15 @@
 					Dashboard
 				</a>
 				{#if user.role}
-					{#each UserMenuItems[user.role] ?? [] as item}
+					{#each UserMenuItems[user.role].sort((a, b) => {
+						if (a.label < b.label) {
+							return -1;
+						}
+						if (a.label > b.label) {
+							return 1;
+						}
+						return 0;
+					}) ?? [] as item}
 						<a
 							href={item.href}
 							onclick={() => (sheetOpen = false)}
