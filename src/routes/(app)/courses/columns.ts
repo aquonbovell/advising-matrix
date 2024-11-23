@@ -2,6 +2,7 @@ import type { ColumnDef } from '@tanstack/table-core';
 import { Checkbox } from '$lib/components/ui/checkbox/index.js';
 import { renderComponent } from '$lib/components/ui/data-table';
 import DataTableActions from './data-table-actions.svelte';
+import type { UserRole } from '$lib/types';
 
 // This type is used to define the shape of our data.
 export type Course = {
@@ -9,6 +10,7 @@ export type Course = {
 	name: string;
 	code: string;
 	level: number;
+	role: UserRole;
 };
 
 export const columns: ColumnDef<Course>[] = [
@@ -45,10 +47,11 @@ export const columns: ColumnDef<Course>[] = [
 		header: 'Level'
 	},
 	{
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => {
 			// You can pass whatever you need from `row.original` to the component
-			return renderComponent(DataTableActions, { id: row.original.id });
+			return renderComponent(DataTableActions, { id: row.original.id, role: row.original.role });
 		}
 	}
 ];

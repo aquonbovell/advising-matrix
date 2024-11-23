@@ -25,21 +25,26 @@ export const load: PageServerLoad = async ({ params }) => {
 
 export const actions: Actions = {
 	edit: async (event) => {
+		if (event.locals.user?.role !== 'ADVISOR') {
+			return fail(403, { message: 'You do not have permission to delete courses' });
+		}
 		const form = await superValidate(event, zod(courseUpdateSchema));
 
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-		console.log(form.data);
 		try {
-			const id = await updateCourse(form.data);
+			await updateCourse(form.data);
 		} catch (err) {
 			console.error(err);
 			return fail(500, { message: 'Failed to update course' });
 		}
-		return { form };
+		return { success: true };
 	},
-	delete: async ({ request }) => {
+	delete: async ({ request, locals }) => {
+		if (locals.user?.role !== 'ADVISOR') {
+			return fail(403, { message: 'You do not have permission to delete courses' });
+		}
 		const id = (await request.formData()).get('id')?.toString();
 		if (!id) {
 			return fail(400, { message: 'No id provided' });
@@ -50,6 +55,6 @@ export const actions: Actions = {
 			console.error(err);
 			return fail(500, { message: 'Failed to delete course' });
 		}
-		return redirect(302, '/courses');
+		return { success: true };
 	}
 };

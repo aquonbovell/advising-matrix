@@ -16,37 +16,40 @@
 			<Input.Root id="name" placeholder="Human Anatomy" readonly value={data.course.name} />
 		</div>
 
-		<div class="flex flex-col space-y-1.5">
-			<Label.Root for="username">Code</Label.Root>
-			<Input.Root id="username" placeholder="HUAN1265" readonly value={data.course.code} />
-		</div>
-		<div class="flex flex-col space-y-1.5">
-			<Label.Root for="credits">Credits</Label.Root>
-			<Input.Root id="credits" type="number" readonly value={data.course.credits} />
+		<div class="space-y-1.5">
+			<div class="grid w-full grid-cols-4 gap-4 md:grid-cols-3">
+				<div class="col-span-4 flex w-full flex-col space-y-1.5 md:col-auto">
+					<Label.Root for="username">Code</Label.Root>
+					<Input.Root id="username" placeholder="HUAN1265" readonly value={data.course.code} />
+				</div>
+				<div class="col-span-2 flex w-full flex-col space-y-1.5 md:col-auto">
+					<Label.Root for="credits">Credits</Label.Root>
+					<Input.Root id="credits" readonly value={data.course.credits} />
+				</div>
+				<div class="col-span-2 flex w-full flex-col space-y-1.5 md:col-auto">
+					<Label.Root for="level">Level</Label.Root>
+					<Input.Root id="level" readonly value={data.course.level} />
+				</div>
+			</div>
 		</div>
 		<div class="flex flex-col space-y-1.5">
 			<Label.Root for="comment">Comment</Label.Root>
 			<Input.Root id="comment" type="text" readonly value={data.course.comment} />
 		</div>
-		<div class="flex flex-col space-y-1.5">
-			<Label.Root for="level">Level</Label.Root>
-			<Input.Root id="level" type="number" readonly value={data.course.level} />
-		</div>
+
 		<div class="flex flex-col space-y-1.5">
 			<Label.Root for="prerequisiteType">Type of prerequisite</Label.Root>
-			<RadioGroup.Root
-				bind:value={data.course.prerequisiteType}
-				class="flex flex-col space-y-1"
-				name="prerequisiteType"
-			>
-				{#each prerequisiteOptions as option}
-					<div class="flex items-center space-x-3 space-y-0">
-						<RadioGroup.Item value={option} />
-						<Label.Root class="font-normal"
-							>{option.toLowerCase()} of the following prerequisites</Label.Root
-						>
-					</div>
-				{/each}
+			<RadioGroup.Root bind:value={data.course.prerequisiteType} name="prerequisiteType">
+				<div class="flex flex-col gap-4 md:flex-row">
+					{#each prerequisiteOptions as option}
+						<div class="flex items-center space-x-3">
+							<RadioGroup.Item value={option} />
+							<Label.Root class="font-normal"
+								>{option.toLowerCase()} of the following prerequisites</Label.Root
+							>
+						</div>
+					{/each}
+				</div>
 			</RadioGroup.Root>
 		</div>
 		<div class="flex flex-col space-y-1.5">
@@ -69,7 +72,12 @@
 				{:else}
 					{#each data.course.restrictions as restriction}
 						<div class="flex gap-2">
-							<div>
+							<Badge
+								>{restriction.credits} credits from levels {restriction.level.join(', ')} from {restriction.area.join(
+									', '
+								)}</Badge
+							>
+							<!-- <div>
 								<Label.Root for="restrictionLevel">Level</Label.Root>
 								<Input.Root
 									id="restrictionLevel"
@@ -79,7 +87,7 @@
 								/>
 							</div>
 							<div>
-								<Label.Root for="restrictionArea">Area</Label.Root>
+								<Label.Root for="restrictionArea">Discipline</Label.Root>
 								<Input.Root id="restrictionArea" type="text" readonly value={restriction.area} />
 							</div>
 							<div>
@@ -90,7 +98,7 @@
 									readonly
 									value={restriction.credits}
 								/>
-							</div>
+							</div> -->
 						</div>
 					{/each}
 				{/if}

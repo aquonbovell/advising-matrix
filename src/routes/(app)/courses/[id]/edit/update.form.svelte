@@ -31,7 +31,7 @@
 		dataType: 'json'
 	});
 
-	const { form: formData, enhance, message, allErrors, errors } = form;
+	const { form: formData, enhance, message } = form;
 
 	$effect(() => {
 		if ($message) {
@@ -85,97 +85,52 @@
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
-	<Form.Field {form} name="code">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Course Code</Form.Label>
-				<Input {...props} bind:value={$formData.code} placeholder="HUAN1234..." />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
-	<Form.Field {form} name="credits">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Course Credits</Form.Label>
-				<Input {...props} bind:value={$formData.credits} type="number" />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
-	<Form.Field {form} name="comment">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Course Comments / Warnings</Form.Label>
-				<Input {...props} bind:value={$formData.comment} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
-	<Form.Field {form} name="level">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Course Level</Form.Label>
-				<Select.Root
-					type="single"
-					value={$formData.level.toString()}
-					onValueChange={(value) => {
-						$formData.level = parseInt(value);
-					}}
-					name={props.name}
-				>
-					<Select.Trigger {...props}>
-						{levels.find((l) => l.value == $formData.level.toString())?.label ??
-							'Select a verified level to display'}
-					</Select.Trigger>
-					<Select.Content>
-						{#each levels as level}
-							<Select.Item value={level.value} label={level.label} />
-						{/each}
-					</Select.Content>
-				</Select.Root>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
-	<Form.Field {form} name="prerequisiteType">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Type of prerequisite</Form.Label>
-				<RadioGroup.Root
-					{...props}
-					bind:value={$formData.prerequisiteType}
-					class="flex flex-col space-y-1"
-					name="prerequisiteType"
-				>
-					{#each prerequisiteOptions as option}
-						<div class="flex items-center space-x-3 space-y-0">
-							<Form.Control>
-								{#snippet children({ props })}
-									<RadioGroup.Item value={option} {...props} />
-									<Form.Label class="font-normal"
-										>{option.toLowerCase()} of the following prerequisites</Form.Label
-									>
-								{/snippet}
-							</Form.Control>
-						</div>
-					{/each}
-				</RadioGroup.Root>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
-
-	<Form.Field {form} name="prerequisiteCount">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Course Prerequisite Amount</Form.Label>
-				<Input {...props} bind:value={$formData.prerequisiteCount} type="number" />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
-
+	<div class="grid w-full grid-cols-4 gap-4 md:grid-cols-3">
+		<Form.Field {form} name="code" class="col-span-4 md:col-auto">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label class="font-semibold">Course Code</Form.Label>
+					<Input {...props} bind:value={$formData.code} placeholder="HUAN1234..." />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="mt-2 text-sm" />
+		</Form.Field>
+		<Form.Field {form} name="credits" class="col-span-2 md:col-auto">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label class="font-semibold">Course Credits</Form.Label>
+					<Input {...props} bind:value={$formData.credits} type="number" />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="mt-2 text-sm" />
+		</Form.Field>
+		<Form.Field {form} name="level" class="col-span-2 md:col-auto">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label class="font-semibold">Course Level</Form.Label>
+					<Select.Root
+						type="single"
+						value={$formData.level.toString()}
+						onValueChange={(value) => {
+							$formData.level = parseInt(value);
+						}}
+						name={props.name}
+					>
+						<Select.Trigger {...props}>
+							{levels.find((l) => l.value == $formData.level.toString())?.label ??
+								'Select a verified level to display'}
+						</Select.Trigger>
+						<Select.Content>
+							{#each levels as level}
+								<Select.Item value={level.value} label={level.label} />
+							{/each}
+						</Select.Content>
+					</Select.Root>
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="mt-2 text-sm" />
+		</Form.Field>
+	</div>
 	<Form.Field {form} name="departmentId">
 		<Form.Control>
 			{#snippet children({ props })}
@@ -199,12 +154,61 @@
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
+	<Form.Field {form} name="comment">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label class="font-semibold">Course Comments / Warnings</Form.Label>
+				<Input {...props} bind:value={$formData.comment} />
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors class="mt-2 text-sm" />
+	</Form.Field>
+
+	<div class="grid grid-cols-1 md:grid-cols-2">
+		<Form.Field {form} name="prerequisiteType">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label class="font-semibold">Type of prerequisite</Form.Label>
+					<RadioGroup.Root
+						{...props}
+						bind:value={$formData.prerequisiteType}
+						class="flex flex-col space-y-1"
+						name="prerequisiteType"
+					>
+						{#each prerequisiteOptions as option}
+							<div class="flex items-center space-x-3 space-y-0">
+								<Form.Control>
+									{#snippet children({ props })}
+										<RadioGroup.Item value={option} {...props} />
+										<Form.Label class="font-normal"
+											>{option.toLowerCase()} of the following prerequisites</Form.Label
+										>
+									{/snippet}
+								</Form.Control>
+							</div>
+						{/each}
+					</RadioGroup.Root>
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="mt-2 text-sm" />
+		</Form.Field>
+		<Form.Field {form} name="prerequisiteCount">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label class="font-semibold">Course Prerequisite Amount</Form.Label>
+					<Input {...props} bind:value={$formData.prerequisiteCount} type="number" />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="mt-2 text-sm" />
+		</Form.Field>
+	</div>
+
 	<Form.Field {form} name="prerequisites">
 		<Form.Control>
 			{#snippet children({ props })}
 				<Form.Label class="font-semibold">Prerequisites</Form.Label>
 				<Select.Root type="multiple" {...props} bind:value={$formData.prerequisites}>
-					<Select.Trigger class="flex h-fit w-full flex-wrap justify-start gap-2">
+					<Select.Trigger class="flex  w-full flex-wrap justify-start gap-2">
 						{#if prerequisites === 'Select from registered courses'}
 							{prerequisites}
 						{:else}
@@ -228,7 +232,9 @@
 	</Form.Field>
 	<div class="flex items-center justify-between">
 		<h3 class="font-semibold">Level Restrictions</h3>
-		<Button.Root variant="ghost" onclick={addRestriction}>Add Restriction</Button.Root>
+		<Button.Root variant="ghost" onclick={addRestriction} class="w-fit px-0"
+			>Add Restriction</Button.Root
+		>
 	</div>
 	{#each $formData.restrictions as restriction, i}
 		<Form.Fieldset {form} name={`restrictions[${i}]`} class="space-y-3">
@@ -242,7 +248,7 @@
 				>
 			</div>
 
-			<div class="grid gap-2">
+			<div class="grid grid-cols-1 gap-2 md:grid-cols-2">
 				<Form.Field {form} name={`restrictions[${i}].level`}>
 					<Form.Control>
 						{#snippet children({ props })}
@@ -275,6 +281,22 @@
 					</Form.Control>
 					<Form.FieldErrors class="mt-2 text-sm" />
 				</Form.Field>
+				<Form.Field {form} name={`restrictions[${i}].credits`}>
+					<Form.Control>
+						{#snippet children({ props })}
+							<Form.Label for={restriction.id}>Credits</Form.Label>
+							<Input
+								value={restriction.credits}
+								onblur={(value) => {
+									restriction.credits = parseInt(value.currentTarget.value);
+								}}
+								{...props}
+							/>
+						{/snippet}
+					</Form.Control>
+
+					<Form.FieldErrors class="mt-2 text-sm" />
+				</Form.Field>
 				<Form.Field {form} name={`restrictions[${i}].area`}>
 					<Form.Control>
 						{#snippet children({ props })}
@@ -298,22 +320,6 @@
 							</Select.Root>
 						{/snippet}
 					</Form.Control>
-					<Form.FieldErrors class="mt-2 text-sm" />
-				</Form.Field>
-				<Form.Field {form} name={`restrictions[${i}].credits`}>
-					<Form.Control>
-						{#snippet children({ props })}
-							<Form.Label for={restriction.id}>Credits</Form.Label>
-							<Input
-								value={restriction.credits}
-								onblur={(value) => {
-									restriction.credits = parseInt(value.currentTarget.value);
-								}}
-								{...props}
-							/>
-						{/snippet}
-					</Form.Control>
-
 					<Form.FieldErrors class="mt-2 text-sm" />
 				</Form.Field>
 			</div>
