@@ -64,7 +64,7 @@ export const actions: Actions = {
 		if (locals.user?.role !== 'ADMIN') {
 			return fail(403, { message: 'You do not have permission to delete departments' });
 		}
-		const id = (await request.formData()).get('id')?.toString();
+		const { id } = params;
 		if (!id) {
 			return fail(400, { message: 'No id provided' });
 		}

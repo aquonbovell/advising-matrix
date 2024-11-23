@@ -6,9 +6,11 @@
 	import * as Button from '$lib/components/ui/button/';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/';
 	import { buttonVariants } from '$lib/components/ui/button/';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
+	import { toast } from 'svelte-sonner';
 
 	let { data }: { data: PageData } = $props();
+	let isOpen = $state(false);
 </script>
 
 <Card.Root class="glass mx-auto max-w-xl bg-inherit">
@@ -50,7 +52,7 @@
 			>
 		{/if}
 		{#if data.user?.role === 'ADMIN'}
-			<AlertDialog.Root>
+			<AlertDialog.Root bind:open={isOpen}>
 				<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive' })}>
 					Delete
 				</AlertDialog.Trigger>
@@ -63,7 +65,28 @@
 						</AlertDialog.Description>
 					</AlertDialog.Header>
 					<AlertDialog.Footer>
-						<form method="POST" action="?/delete" use:enhance class="flex gap-2">
+						<form
+							method="POST"
+							action="?/delete"
+							use:enhance={() => {
+								return async ({ result }) => {
+									// `result` is an `ActionResult` object
+
+									if (result.type === 'failure') {
+										isOpen = false;
+										toast.error(result.data?.message as string, { duration: 2000 });
+									} else if (result.type === 'success') {
+										isOpen = false;
+										toast.success('Course deleted successfully', { duration: 2000 });
+									} else {
+										isOpen = false;
+										toast.error('An error occurred', { duration: 2000 });
+									}
+									await applyAction(result);
+								};
+							}}
+							class="flex gap-2"
+						>
 							<AlertDialog.Cancel type="button">Cancel</AlertDialog.Cancel>
 							<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
 						</form>

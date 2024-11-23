@@ -8,8 +8,10 @@
 </script>
 
 <div class="flex justify-between">
-	<h1>Department</h1>
-	<Button.Root variant="link" href="/departments/create">Create Department</Button.Root>
+	<h1 class="text-lg font-bold">Departments</h1>
+	{#if data.user?.role === 'ADMIN'}
+		<Button.Root variant="link" href="/departments/create">Create Department</Button.Root>
+	{/if}
 </div>
 
 <DataTable

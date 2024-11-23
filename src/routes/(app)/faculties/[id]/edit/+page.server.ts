@@ -1,10 +1,8 @@
-import { fetchUser, updateUser } from '$lib/actions/user.actions';
-import { fail, superValidate } from 'sveltekit-superforms';
+import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
-import { error, redirect } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import { deleteFaculty, fetchFaculty, updateFaculty } from '$lib/actions/faculty.actions';
+import { error } from '@sveltejs/kit';
+import { deleteFaculty, exist, fetchFaculty, updateFaculty } from '$lib/actions/faculty.actions';
 import { facultyUpdateSchema } from './facultyUpdateSchema.schema';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -20,16 +18,20 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	edit: async (event) => {
 		const form = await superValidate(event, zod(facultyUpdateSchema));
-		if (!form.valid) return fail(404, { form });
-		console.log(form.data);
 
-		const facultyName = await db
-			.selectFrom('Faculty')
-			.where('name', '=', form.data.name)
-			.where('id', '!=', form.data.id)
-			.select(['name'])
-			.executeTakeFirst();
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(
+				form,
+				{ message: 'You do not have permission to edit faculties', type: 'failure' },
+				{ status: 403 }
+			);
+		}
 
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		const facultyName = await exist(form.data.name, 'name');
 		if (facultyName) {
 			form.errors.name = [
 				...(form.errors.name ?? ''),
@@ -39,21 +41,31 @@ export const actions: Actions = {
 		}
 
 		try {
-			const facultyId = await updateFaculty({ ...form.data });
+			await updateFaculty(form.data);
 		} catch (err) {
 			console.error(err);
-			return fail(500, { message: 'An error occurred' });
+			return message(
+				form,
+				{ message: 'Failed to update faculty', type: 'failure' },
+				{ status: 400 }
+			);
 		}
-		return { form };
+		return message(form, { message: 'Faculty updated', type: 'success' });
 	},
-	delete: async ({ params }) => {
+	delete: async ({ params, locals, request }) => {
+		if (locals.user?.role !== 'ADMIN') {
+			return fail(403, { message: 'You do not have permission to delete faculties' });
+		}
 		const { id } = params;
+		if (!id) {
+			return fail(400, { message: 'No id provided' });
+		}
 		try {
 			await deleteFaculty(id);
 		} catch (err) {
 			console.error(err);
 			return fail(500, { message: 'Failed to delete faculty' });
 		}
-		return redirect(302, '/faculties');
+		return { success: true };
 	}
 };

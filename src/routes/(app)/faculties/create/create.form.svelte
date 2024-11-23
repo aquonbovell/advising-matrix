@@ -7,6 +7,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { facultyCreationSchema, type FacultyCreationSchema } from './facultyCreation.schema';
+	import { toast } from 'svelte-sonner';
 
 	let { data }: { data: SuperValidated<Infer<FacultyCreationSchema>> } = $props();
 
@@ -21,7 +22,11 @@
 
 	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
 	});
 </script>
