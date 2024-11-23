@@ -1,6 +1,7 @@
 import { generateId } from '$lib/server/auth';
 import { db } from '$lib/server/db';
-import type { Department, Faculty } from '$lib/server/db/schema';
+import type { DB, Department } from '$lib/server/db/schema';
+import type { ReferenceExpression } from 'kysely';
 
 export const fetchDepartments = async () => {
 	return db
@@ -80,3 +81,12 @@ export const updateDepartment = async (department: Department) => {
 		throw error;
 	}
 };
+
+export async function exist(value: string, field: ReferenceExpression<DB, 'Department'>) {
+	const department = await db
+		.selectFrom('Department')
+		.where(field, '=', value)
+		.select('id')
+		.executeTakeFirst();
+	return department !== undefined;
+}

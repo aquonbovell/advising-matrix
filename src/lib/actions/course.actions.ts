@@ -1,8 +1,9 @@
 import { db } from '$lib/server/db';
 import courses from '$lib/data/courses.json';
 import type { CourseDetails, prerequisiteType } from '$lib/types';
-import type { Course } from '$lib/server/db/schema';
+import type { DB } from '$lib/server/db/schema';
 import { generateId } from '$lib/server/auth';
+import type { ReferenceExpression } from 'kysely';
 
 export async function initCourses() {
 	await db.deleteFrom('LevelRestriction').execute();
@@ -201,4 +202,13 @@ export async function createCourse(course: Omit<CourseDetails, 'id'>) {
 			})
 			.execute();
 	}
+}
+
+export async function exist(value: string, field: ReferenceExpression<DB, 'Course'>) {
+	const course = await db
+		.selectFrom('Course')
+		.where(field, '=', value)
+		.select('id')
+		.executeTakeFirst();
+	return course !== undefined;
 }
