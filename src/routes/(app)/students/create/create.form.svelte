@@ -9,6 +9,7 @@
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { studentCreationSchema, type StudentCreationSchema } from './studentCreation.schema';
 	import User from '$lib/components/shared/user.avatar.svelte';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		data,
@@ -48,6 +49,16 @@
 					.join(', ')
 			: 'Select a registered user'
 	);
+
+	$effect(() => {
+		if ($message) {
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
+		}
+	});
 </script>
 
 <form method="POST" use:enhance class="space-y-4">
@@ -55,7 +66,7 @@
 		<Form.Control>
 			{#snippet children({ props })}
 				<Form.Label class="font-semibold">Student</Form.Label>
-				<Select.Root type="single" {...props} bind:value={$formData.userId}>
+				<Select.Root type="single" {...props} bind:value={$formData.userId} required>
 					<Select.Trigger>
 						{student}
 					</Select.Trigger>
@@ -76,7 +87,7 @@
 		<Form.Control>
 			{#snippet children({ props })}
 				<Form.Label class="font-semibold">Advisors</Form.Label>
-				<Select.Root type="multiple" {...props} bind:value={$formData.advisors}>
+				<Select.Root type="multiple" {...props} bind:value={$formData.advisors} required>
 					<Select.Trigger>
 						{advisorIds}
 					</Select.Trigger>
@@ -97,7 +108,7 @@
 		<Form.Control>
 			{#snippet children({ props })}
 				<Form.Label class="font-semibold">First Major</Form.Label>
-				<Select.Root type="single" {...props} bind:value={$formData.majorId}>
+				<Select.Root type="single" {...props} bind:value={$formData.majorId} required>
 					<Select.Trigger>
 						{major}
 					</Select.Trigger>
@@ -141,35 +152,5 @@
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
-	<!--<Form.Field {form} name="alternateEmail">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Alternate Email</Form.Label>
-				<Input
-					{...props}
-					bind:value={$formData.alternateEmail}
-					placeholder="example@outlook.components"
-				/>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
-
-	<Form.Field {form} name="role">
-		<Form.Control>
-			{#snippet children({ props })}
-				<RadioGroup.Root bind:value={$formData.role} {...props} class="flex">
-					{#each userOptions as option}
-						<div class="flex flex-row items-center space-x-2">
-							<RadioGroup.Item value={option} id={option} />
-							<Label for={option}>{option}</Label>
-						</div>
-					{/each}
-				</RadioGroup.Root>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field> -->
-
 	<Form.Button type="submit">Create</Form.Button>
 </form>

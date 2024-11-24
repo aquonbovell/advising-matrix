@@ -12,6 +12,7 @@
 	import { majorUpdateSchema, type MajorUpdateSchema } from './majorUpdate.schema';
 	import { requirementOption, requirementType } from '$lib/types';
 	import disciplines from './disciplines.json';
+	import { toast } from 'svelte-sonner';
 	let {
 		data,
 		courses,
@@ -37,7 +38,11 @@
 
 	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
 	});
 
@@ -76,7 +81,7 @@
 	}
 </script>
 
-<form method="POST" use:enhance class="space-y-4">
+<form method="POST" use:enhance class="space-y-4" action="?/edit">
 	<Form.Field {form} name="name">
 		<Form.Control>
 			{#snippet children({ props })}

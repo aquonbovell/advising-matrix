@@ -3,10 +3,11 @@
 	import * as Button from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils';
 	import type { UserRole } from '$lib/types';
+	import { toast } from 'svelte-sonner';
 
 	let { id, role }: { id: string; role: UserRole } = $props();
 	let isOpen = $state(false);
@@ -43,7 +44,7 @@
 		{/if}
 		{#if role === 'ADMIN'}
 			<DropdownMenu.Item class="m-0 p-0">
-				<AlertDialog.Root>
+				<AlertDialog.Root bind:open={isOpen}>
 					<AlertDialog.Trigger
 						class={cn(
 							buttonVariants({ variant: 'destructive' }),
@@ -61,7 +62,27 @@
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
-							<form method="POST" action="?/delete" use:enhance class="flex gap-2">
+							<form
+								method="POST"
+								action="?/delete"
+								use:enhance={() => {
+									return async ({ result }) => {
+										// `result` is an `ActionResult` object
+										if (result.type === 'failure') {
+											isOpen = false;
+											toast.error(result.data?.message as string, { duration: 2000 });
+										} else if (result.type === 'success') {
+											isOpen = false;
+											toast.success('Course deleted successfully', { duration: 2000 });
+										} else {
+											isOpen = false;
+											toast.error('An error occurred', { duration: 2000 });
+										}
+										await applyAction(result);
+									};
+								}}
+								class="flex gap-2"
+							>
 								<label for="id">
 									<input type="hidden" name="id" value={id} />
 								</label>

@@ -18,7 +18,10 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	delete: async ({ params }) => {
+	delete: async ({ params, locals }) => {
+		if (locals.user?.role !== 'ADMIN') {
+			return fail(403, { message: 'You do not have permission to delete majors' });
+		}
 		const { id } = params;
 		try {
 			await deleteMajor(id);
@@ -26,6 +29,6 @@ export const actions: Actions = {
 			console.error(err);
 			return fail(500, { message: 'Failed to delete major' });
 		}
-		return redirect(302, '/majors');
+		return { success: true };
 	}
 };
