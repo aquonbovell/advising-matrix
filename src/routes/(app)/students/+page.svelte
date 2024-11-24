@@ -8,8 +8,15 @@
 </script>
 
 <div class="flex justify-between">
-	<h1>Students</h1>
-	<Button.Root variant="link" href="/students/create">Create Student</Button.Root>
+	<h1 class="text-lg font-bold">Students</h1>
+	{#if data.user?.role === 'ADMIN'}
+		<Button.Root variant="link" href="/students/create">Create Student</Button.Root>
+	{/if}
 </div>
 
-<DataTable data={data.students} {columns} />
+<DataTable
+	data={data.students.map((s) => {
+		return { ...s, role: data.user.role };
+	})}
+	{columns}
+/>
