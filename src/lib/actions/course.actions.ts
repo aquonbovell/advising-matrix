@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
 import courses from '$lib/data/courses.json';
-import type { CourseDetails, prerequisiteType } from '$lib/types';
+import type { CourseDetails, CourseRequirementDetails, prerequisiteType } from '$lib/types';
 import type { DB } from '$lib/server/db/schema';
 import { generateId } from '$lib/server/auth';
 import type { ReferenceExpression } from 'kysely';
@@ -211,4 +211,59 @@ export async function exist(value: string, field: ReferenceExpression<DB, 'Cours
 		.select('id')
 		.executeTakeFirst();
 	return course !== undefined;
+}
+
+export async function fetchCourseHierarchy(id: string) {
+	const course = await db
+		.selectFrom('Course')
+		.selectAll()
+		.where('id', '=', id)
+		.executeTakeFirstOrThrow();
+
+	const prerequisites = await getPrerequisites(course.id);
+
+	return prerequisites;
+}
+
+async function getPrerequisites(
+	courseId: string,
+	visited = new Set<string>()
+): Promise<CourseRequirementDetails | null> {
+	if (visited.has(courseId)) return null;
+	visited.add(courseId);
+
+	const course = await db
+		.selectFrom('Course')
+		.where('Course.id', '=', courseId)
+		.selectAll()
+		.executeTakeFirst();
+
+	if (!course) return null;
+
+	const prerequisites = await db
+		.selectFrom('Prerequisites')
+		.innerJoin('Course', 'Course.id', 'Prerequisites.prerequisiteId')
+		.where('Prerequisites.courseId', '=', courseId)
+		.selectAll()
+		.execute();
+
+	const restrictions = await db
+		.selectFrom('LevelRestriction')
+		.where('courseId', '=', courseId)
+		.selectAll()
+		.execute();
+
+	const prereqsWithHierarchy = await Promise.all(
+		prerequisites.map(async (prereq) => {
+			return await getPrerequisites(prereq.prerequisiteId, new Set(visited));
+		})
+	);
+
+	console.log(prereqsWithHierarchy);
+
+	return {
+		...course,
+		restrictions: restrictions,
+		prerequisites: prereqsWithHierarchy.filter((p) => p !== null) as CourseRequirementDetails[]
+	};
 }

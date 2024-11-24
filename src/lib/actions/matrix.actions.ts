@@ -12,8 +12,9 @@ import { getName } from '$lib/utils';
 export async function fetchDegree(studentId: string): Promise<Program> {
 	const student = await db
 		.selectFrom('Student')
-		.where('id', '=', studentId)
-		.select(['majorId', 'minorId'])
+		.innerJoin('User', 'Student.userId', 'User.id')
+		.where('Student.id', '=', studentId)
+		.select(['majorId', 'minorId', 'name'])
 		.executeTakeFirstOrThrow();
 
 	const major = await db
@@ -49,7 +50,8 @@ export async function fetchDegree(studentId: string): Promise<Program> {
 	let studentData: Program = {
 		id: [student.majorId, student.minorId].join('x'),
 		requirements: [],
-		name: getName(major, minor)
+		name: getName(major, minor),
+		studentName: student.name
 	};
 
 	studentData.requirements = [...major, ...minor].map((requirement) => {
@@ -359,5 +361,18 @@ export async function fetchDegree(studentId: string): Promise<Program> {
 }
 
 export async function fetchStudentCourses(studentId: string) {
-	return db.selectFrom('StudentCourses').where('studentId', '=', studentId).selectAll().execute();
+	return db
+		.selectFrom('StudentCourses')
+		.leftJoin('User', 'StudentCourses.userId', 'User.id')
+		.where('studentId', '=', studentId)
+		.select([
+			'StudentCourses.id',
+			'userId',
+			'courseId',
+			'studentId',
+			'grade',
+			'User.name',
+			'requirementId'
+		])
+		.execute();
 }

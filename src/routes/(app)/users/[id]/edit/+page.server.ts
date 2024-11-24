@@ -3,8 +3,15 @@ import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { userUpdateSchema } from './userUpdate.schema';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
+	const role = locals.user?.role;
+
+	if (role !== 'ADMIN') {
+		redirect(303, '/');
+	}
+
 	const { id } = params;
 	const user = await fetchUser(id);
 	const form = await superValidate({ ...user, onboarded: !!user.onboarded }, zod(userUpdateSchema));

@@ -1,13 +1,19 @@
 import { superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { fetchCourseCodes } from '$lib/actions/course.actions';
 import { fetchFaculties } from '$lib/actions/faculty.actions';
 import { minorCreationSchema } from './minorCreation.schema';
 import { createMinor } from '$lib/actions/minor.actions';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	const role = locals.user?.role;
+
+	if (role !== 'ADMIN') {
+		redirect(303, '/minors');
+	}
+
 	const form = await superValidate(zod(minorCreationSchema));
 	const courses = await fetchCourseCodes();
 	const faculties = await fetchFaculties();

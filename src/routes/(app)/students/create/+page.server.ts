@@ -1,16 +1,19 @@
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { studentCreationSchema } from './studentCreation.schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import { createUser } from '$lib/actions/user.actions';
 import { createStudent, fetchAvailableUsers } from '$lib/actions/student.actions';
 import { fetchAdvisors } from '$lib/actions/advisor.actions';
 import { fetchMajors } from '$lib/actions/major.actions';
 import { fetchMinors } from '$lib/actions/minor.actions';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	const role = locals.user?.role;
+
+	if (role !== 'ADMIN') {
+		redirect(303, '/');
+	}
 	return {
 		form: await superValidate(zod(studentCreationSchema)),
 		availableUsers: await fetchAvailableUsers(),
@@ -23,6 +26,13 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default: async (event) => {
 		const form = await superValidate(event, zod(studentCreationSchema));
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(
+				form,
+				{ message: 'You do not have permission to edit users', type: 'failure' },
+				{ status: 403 }
+			);
+		}
 
 		if (!form.valid) {
 			return fail(404, { form });
@@ -34,8 +44,8 @@ export const actions: Actions = {
 			const studentId = await createStudent(form.data, form.data.advisors);
 		} catch (err) {
 			console.error(err);
-			return fail(500, { message: 'An error occurred' });
+			return message(form, { message: 'Failed to update user', type: 'failure' }, { status: 400 });
 		}
-		return { form };
+		return message(form, { message: 'User created', type: 'success' });
 	}
 };

@@ -5,4 +5,9 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<Testcomp studentDegree={data.degree} studentCourses={data.studentCourses} userId={data.user.id} />
+<Testcomp
+	studentDegree={data.degree}
+	studentCourses={data.studentCourses}
+	userId={data.user.id}
+	studentId={data.student?.id}
+/>

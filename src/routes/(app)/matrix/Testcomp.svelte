@@ -13,16 +13,19 @@
 		codes,
 		degree
 	} from '$lib/stores/matrix';
-	import type { Program } from '$lib/types';
+	import type { NonNullableGrade, Program } from '$lib/types';
 	import GradeDialog from '$lib/components/dialog/Grade.svelte';
 	import CourseSelectionDialog from '$lib/components/dialog/Course.svelte';
 	import CourseCard from '$lib/components/matrix/card.svelte';
 	import { Loader2 } from 'lucide-svelte';
+	import { applyAction, enhance } from '$app/forms';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		studentDegree,
 		studentCourses,
-		userId
+		userId,
+		studentId
 	}: {
 		studentDegree: Program;
 		studentCourses: {
@@ -32,15 +35,17 @@
 			requirementId: string;
 			courseId: string;
 			userId: string | null;
+			name: string | null;
 		}[];
 		userId: string;
+		studentId: string | undefined;
 	} = $props();
 
 	degree.set(studentDegree);
 	studentGrades.set(
 		studentCourses.map((sc) => ({
 			...sc,
-			grade: sc.grade.split(',')
+			grade: JSON.parse(sc.grade) as NonNullableGrade[]
 		}))
 	);
 
@@ -61,16 +66,6 @@
 	let loading = $state(false);
 	let currentRequirementId = $state<string | undefined>(undefined);
 
-	async function saveGrades() {
-		// $updateGradesMutation.mutateAsync({
-		// 	grades: $studentCoursesStore.map((sc) => ({
-		// 		...sc,
-		// 		grades: sc.grade as NonNullableGrade[]
-		// 	})),
-		// 	studentId
-		// });
-	}
-
 	function openCourseDialog(requirementId: string) {
 		currentRequirementId = requirementId;
 		isCourseDialogOpen = true;
@@ -85,14 +80,45 @@
 <div class="mx-auto flex flex-col gap-6" transition:fly={{ y: 30, delay: 200 }}>
 	<Card.Root class="min-w-80 overflow-hidden">
 		<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
-			<Card.Title>{$degree.name}</Card.Title>
-
-			<Button.Root variant="outline" onclick={saveGrades} disabled={loading}
+			<Card.Title>Bsc. {$degree.name}</Card.Title>
+			<form
+				action="?/saveGrades"
+				method="post"
+				use:enhance={() => {
+					return async ({ result }) => {
+						// `result` is an `ActionResult` object
+						if (result.type === 'failure') {
+							toast.error(result.data?.message as string, { duration: 2000 });
+						} else if (result.type === 'success') {
+							toast.success('Course deleted successfully', { duration: 2000 });
+						} else {
+							toast.error('An error occurred', { duration: 2000 });
+						}
+						await applyAction(result);
+					};
+				}}
+			>
+				<label for="studentId" hidden
+					>StudentId
+					<input type="text" name="studentId" id="studentId" value={studentId} />
+				</label>
+				<label for="suggestions" hidden
+					>Grades
+					<input
+						type="text"
+						name="suggestions"
+						id="suggestions"
+						value={JSON.stringify($studentGrades)}
+					/>
+				</label>
+				<Button.Root type="submit" variant="outline">Save</Button.Root>
+			</form>
+			<!-- <Button.Root variant="outline" onclick={saveGrades} disabled={loading}
 				>{#if loading}
 					<Loader2 class="mr-2 size-5 animate-spin" />
 					Saving...
 				{:else}Save Changes{/if}</Button.Root
-			>
+			> -->
 		</Card.Header>
 		<Card.Content class="flex flex-col gap-3 px-4 py-3 ">
 			<div class="flex flex-wrap gap-3">
@@ -108,7 +134,11 @@
 	{#each $degree.requirements as req}
 		<Card.Root class="min-w-80 overflow-hidden pb-0">
 			<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
-				<Card.Title>Level {req.level.join(' / ')} - {req.credits} credits</Card.Title>
+				<Card.Title
+					>{#if req.level.includes(3) && req.level.includes(2)}
+						Electives
+					{:else}Level {req.level.join(' / ')}{/if} - {req.credits} credits</Card.Title
+				>
 				{#if req.option === 'AT MOST' && $studentGrades
 						.filter((sc) => sc.requirementId === req.id)
 						.map((sc) => {

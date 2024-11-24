@@ -78,7 +78,7 @@
 						</Button.Root>
 					{/if}
 					<h3 class="text-sm font-medium text-gray-900">
-						{course.code} - {course.id}
+						{course.code}
 					</h3>
 				</div>
 				<span class="text-gray-500">•</span>
@@ -107,9 +107,9 @@
 						{/if}
 					</div>
 				{/if}
-				<!-- {#if currentCourse?.name}
+				{#if currentCourse?.name}
 					<Badge variant="secondary">Suggested by: {currentCourse?.name}</Badge>
-				{/if} -->
+				{/if}
 			</div>
 		</div>
 		<div class="flex w-full flex-wrap items-center gap-3 @md:col-span-2 @xl:col-span-3">

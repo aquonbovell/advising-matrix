@@ -3,7 +3,13 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { deleteStudent, fetchStudents } from '$lib/actions/student.actions';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	const role = locals.user?.role;
+
+	if (role !== 'ADMIN') {
+		redirect(303, '/');
+	}
+
 	return { students: await fetchStudents() };
 };
 

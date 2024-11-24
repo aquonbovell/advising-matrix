@@ -7,7 +7,7 @@ const UserMenuItems: menuItemsType = {
 		{ label: 'Matrix', href: '/matrix', icon: 'mdi:map-marker-path' },
 		{ label: 'Advisor', href: '/advisor', icon: 'hugeicons:mentoring' },
 		{ label: 'Courses', href: '/courses', icon: 'hugeicons:course' },
-		{ label: 'What courses?', href: '/coursecheck', icon: 'carbon:course' }
+		{ label: 'What courses?', href: '/explore', icon: 'carbon:course' }
 	],
 	ADVISOR: [
 		{ label: 'My Students', href: '/advising-students', icon: 'mdi:users' },

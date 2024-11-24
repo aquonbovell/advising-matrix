@@ -1,7 +1,5 @@
-import { db } from '$lib/server/db';
-import * as auth from '$lib/server/auth';
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import { fail } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
 export const load = (async (event) => {
 	const { user } = event.locals;

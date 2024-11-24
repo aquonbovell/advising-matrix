@@ -35,6 +35,7 @@
 			requirementId: string;
 			courseId: string;
 			userId: string | null;
+			name: string | null;
 		}[];
 		userId: string;
 	} = $props();
@@ -43,7 +44,7 @@
 	let selectedCourses = $state<string[]>([]);
 	let dialogRequirementID = $state<string>('');
 	degree.set(studentDegree);
-	studentGrades.set(studentCourses);
+	studentGrades.set(studentCourses.map((sc) => ({ ...sc, grade: sc.grade.split(',') })));
 
 	function openSuggestionsDialog(id: string) {
 		isOpen = true;
@@ -63,11 +64,11 @@
 				...grades,
 				{
 					id: crypto.randomUUID(),
-					studentId: id,
-					grade: '',
+					grade: [],
 					requirementId: dialogRequirementID,
 					courseId: courseId,
-					userId: userId
+					userId: userId,
+					name: ''
 				}
 			]);
 		});
@@ -79,7 +80,7 @@
 	<!-- Degree Info -->
 	<Card.Root class="min-w-80">
 		<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
-			<Card.Title>{studentDegree.name}</Card.Title>
+			<Card.Title>Student: {studentDegree.studentName} - Bsc. {studentDegree.name}</Card.Title>
 			<form
 				action="?/saveSuggestions"
 				method="post"

@@ -19,7 +19,13 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	delete: async ({ params }) => {
+	delete: async ({ params, locals }) => {
+		const role = locals.user?.role;
+
+		if (role !== 'ADMIN') {
+			return fail(403, { message: 'You do not have permission to delete minors' });
+		}
+
 		const { id } = params;
 		try {
 			await deleteMinor(id);
@@ -27,6 +33,6 @@ export const actions: Actions = {
 			console.error(err);
 			return fail(500, { message: 'Failed to delete minor' });
 		}
-		return redirect(302, '/minors');
+		return { success: true };
 	}
 };

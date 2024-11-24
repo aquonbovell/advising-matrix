@@ -1,18 +1,22 @@
-import type { StudentCourses } from '$lib/server/db/schema';
-import { type CourseRequirementDetails, type NonNullableGrade, type Program } from '$lib/types';
+import {
+	type CourseRequirementDetails,
+	type NonNullableGrade,
+	type Program,
+	type StudentCourse
+} from '$lib/types';
 import { calculateGradePoint, isCourseCompleted, isValidCourse } from '$lib/utils';
-import type { Selected } from 'bits-ui';
-import { derived, get, writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 
-type StudentCourse = Omit<StudentCourses, 'studentId'>;
-
-export const codes = writable<{ id: string; credits: number }[]>([]);
+export const codes = writable<{ id: string; credits: number; code: string; name: string }[]>([]);
 export const studentCourses = writable<StudentCourse[]>([]);
 export const degree = writable<Program>({
 	id: '',
 	name: '',
+	studentName: '',
 	requirements: []
 });
+
+export const selectedCourse = writable<CourseRequirementDetails | undefined>(undefined);
 
 export const completedCredits = derived([studentCourses, codes], ([$studentCourses, $codes]) =>
 	$studentCourses.reduce((total, course) => {
@@ -37,16 +41,15 @@ export const overallGPA = derived([studentCourses, codes], ([$courses, $codes]) 
 		(acc, course) => {
 			const credits = $codes.find((code) => code.id === course.courseId)?.credits || 3;
 			if (course.grade.length > 0) {
-				acc.totalPoints += calculateGradePoint(
-					course.grade.split(',') as NonNullableGrade[],
-					credits
-				);
+				acc.totalPoints += calculateGradePoint(course.grade as NonNullableGrade[], credits);
 				acc.totalCredits += credits * course.grade.length;
 			}
 			return acc;
 		},
 		{ totalPoints: 0, totalCredits: 0 }
 	);
+	console.log(totalPoints, totalCredits);
+
 	return totalCredits > 0 ? parseFloat((totalPoints / totalCredits).toFixed(2)) : 0.0;
 });
 
@@ -63,10 +66,7 @@ export const degreeGPA = derived([studentCourses, degree, codes], ([$courses, $d
 			(acc, course) => {
 				const credits = $codes.find((code) => code.id === course.courseId)?.credits || 3;
 				if (course.grade.length > 0) {
-					acc.totalPoints += calculateGradePoint(
-						course.grade.split(',') as NonNullableGrade[],
-						credits
-					);
+					acc.totalPoints += calculateGradePoint(course.grade as NonNullableGrade[], credits);
 					acc.totalCredits += credits * course.grade.length;
 				}
 				return acc;

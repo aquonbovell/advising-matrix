@@ -2,10 +2,14 @@ import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { userCreationSchema } from './userCreation.schema';
 import { zod } from 'sveltekit-superforms/adapters';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { createUser, exist } from '$lib/actions/user.actions';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	const role = locals.user?.role;
+	if (role !== 'ADMIN') {
+		redirect(303, '/');
+	}
 	return { form: await superValidate(zod(userCreationSchema)) };
 };
 

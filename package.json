@@ -27,8 +27,8 @@
 	"devDependencies": {
 		"@iconify/svelte": "^4.0.2",
 		"@playwright/test": "^1.45.3",
-		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/adapter-auto": "^3.3.1",
+		"@sveltejs/kit": "^2.8.2",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"@types/eslint": "^9.6.0",
 		"autoprefixer": "^10.4.20",
@@ -37,7 +37,6 @@
 		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
-		"formsnap": "^2.0.0-next.1",
 		"globals": "^15.0.0",
 		"lucide-svelte": "^0.460.1",
 		"mode-watcher": "^0.4.1",
@@ -60,6 +59,7 @@
 		"zod": "^3.23.8"
 	},
 	"dependencies": {
+		"@dagrejs/dagre": "^1.1.4",
 		"@libsql/client": "^0.14.0",
 		"@libsql/kysely-libsql": "^0.4.1",
 		"@node-rs/argon2": "^1.1.0",
@@ -71,6 +71,9 @@
 		"@tailwindcss/forms": "^0.5.9",
 		"@tailwindcss/typography": "^0.5.15",
 		"@tanstack/table-core": "^8.20.5",
+		"@xyflow/svelte": "^0.1.24",
+		"formsnap": "^1.0.1",
+		"kit-monorepo": "github:sveltejs/kit",
 		"prisma-kysely": "^1.8.0"
 	}
 }

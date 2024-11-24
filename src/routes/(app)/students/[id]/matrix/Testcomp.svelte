@@ -35,6 +35,7 @@
 			requirementId: string;
 			courseId: string;
 			userId: string | null;
+			name: string | null;
 		}[];
 		userId: string;
 	} = $props();
@@ -45,7 +46,9 @@
 	let dialogRequirementID = $state<string>('');
 
 	degree.set(data);
-	studentGrades.set(studentCourses);
+	studentGrades.set(
+		studentCourses.map((sc) => ({ ...sc, grade: JSON.parse(sc.grade) as NonNullableGrade[] }))
+	);
 
 	// const courseGrades = writable(studentCourses.courses);
 
@@ -69,11 +72,11 @@
 	// 	}
 	// });
 
-	let isAddCourseDialogOpen = false;
-	let isGradeDialogOpen = false;
+	let isAddCourseDialogOpen = $state(false);
+	let isGradeDialogOpen = $state(false);
 	// let selectedCourseId = '';
-	let loading = false;
-	let currentRequirementId: string | null = null;
+	let loading = $state(false);
+	let currentRequirementId = $state<string | undefined>(undefined);
 
 	async function saveGrades() {
 		// $updateGradesMutation.mutateAsync({

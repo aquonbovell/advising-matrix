@@ -1,10 +1,15 @@
 import { fetchDegree, fetchStudentCourses } from '$lib/actions/matrix.actions';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { updateStudentSuggestions } from '$lib/actions/student.actions';
 import type { StudentCourses } from '$lib/server/db/schema';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
+	const role = locals.user?.role;
+
+	if (role === 'STUDENT') {
+		redirect(303, '/');
+	}
 	const { id } = params;
 
 	return {
@@ -14,7 +19,10 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	saveSuggestions: async ({ params, request }) => {
+	saveSuggestions: async ({ params, request, locals }) => {
+		if (locals.user?.role !== 'ADVISOR') {
+			return fail(403, { message: 'You do not have permission to delete make suggestions' });
+		}
 		const { id } = params;
 		const formData = await request.formData();
 		if (!id) {
@@ -24,8 +32,6 @@ export const actions: Actions = {
 			StudentCourses,
 			'studentId'
 		>[];
-
-		console.log(suggestions);
 
 		try {
 			const student = await updateStudentSuggestions(id, suggestions);

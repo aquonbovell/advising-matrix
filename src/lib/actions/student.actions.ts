@@ -231,9 +231,69 @@ export const updateStudentSuggestions = async (
 		} else {
 			await db
 				.insertInto('StudentCourses')
-				.values({ ...suggestion, studentId, id: generateId() })
+				.values({
+					...suggestion,
+					studentId,
+					id: generateId(),
+					grade: JSON.stringify(suggestion.grade)
+				})
 				.execute();
 		}
 	}
 	return studentId;
+};
+export const updateStudentGrades = async (
+	studentId: string,
+	courseGrades: Omit<StudentCourses, 'studentId'>[]
+) => {
+	for (const courseGrade of courseGrades) {
+		console.log(courseGrade);
+
+		const existing = await db
+			.selectFrom('StudentCourses')
+			.where('studentId', '=', studentId)
+			.where('courseId', '=', courseGrade.courseId)
+			.select('id')
+			.executeTakeFirst();
+
+		if (existing) {
+			await db
+				.updateTable('StudentCourses')
+				.set({
+					userId: courseGrade.userId,
+					grade: JSON.stringify(courseGrade.grade),
+					requirementId: courseGrade.requirementId
+				})
+				.where('id', '=', existing.id)
+				.execute();
+		} else {
+			await db
+				.insertInto('StudentCourses')
+				.values({
+					...courseGrade,
+					studentId,
+					id: generateId(),
+					grade: JSON.stringify(courseGrade.grade)
+				})
+				.execute();
+		}
+	}
+	return studentId;
+};
+
+export const fetchAdvisors = async (userId: string) => {
+	const student = await db
+		.selectFrom('Student')
+		.where('userId', '=', userId)
+		.select('id')
+		.executeTakeFirstOrThrow();
+
+	console.log(student);
+
+	return db
+		.selectFrom('Advisor')
+		.innerJoin('User', 'User.id', 'Advisor.advisorId')
+		.where('studentId', '=', student.id)
+		.select(['User.name', 'User.id', 'User.email'])
+		.execute();
 };

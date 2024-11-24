@@ -3,7 +3,7 @@ export const studentUpdateSchema = z.object({
 	id: z.string(),
 	userId: z.string(),
 	majorId: z.string(),
-	minorId: z.string(),
+	minorId: z.string().nullable(),
 	advisors: z.array(z.string())
 });
 

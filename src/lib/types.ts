@@ -80,6 +80,7 @@ export type Requirement = {
 export type Program = {
 	id: string;
 	name: string;
+	studentName: string;
 	requirements: Requirement[];
 };
 
@@ -118,4 +119,7 @@ export const gradePoints = {
 	FAIL: 0
 } as const;
 
-export type StudentCourse = Omit<StudentCourses, 'studentId' | 'grade'> & { grade: string[] };
+export type StudentCourse = Omit<StudentCourses, 'studentId' | 'grade'> & {
+	grade: string[];
+	name: string | null;
+};
