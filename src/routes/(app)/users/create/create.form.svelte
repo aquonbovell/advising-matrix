@@ -7,8 +7,9 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { userCreationSchema, type UserCreationSchema, userOptions } from './userCreation.schema';
+	import { toast } from 'svelte-sonner';
 
-	export let data: SuperValidated<Infer<UserCreationSchema>>;
+	let { data }: { data: SuperValidated<Infer<UserCreationSchema>> } = $props();
 
 	const form = superForm(data, {
 		delayMs: 200,
@@ -19,11 +20,15 @@
 
 	const { form: formData, enhance, message } = form;
 
-	$: {
+	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
-	}
+	});
 </script>
 
 <form method="POST" use:enhance class="space-y-4">

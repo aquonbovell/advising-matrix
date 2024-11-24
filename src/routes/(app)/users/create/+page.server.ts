@@ -1,10 +1,9 @@
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { userCreationSchema } from './userCreation.schema';
 import { zod } from 'sveltekit-superforms/adapters';
-import { fail, redirect } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import { createUser } from '$lib/actions/user.actions';
+import { fail } from '@sveltejs/kit';
+import { createUser, exist } from '$lib/actions/user.actions';
 
 export const load: PageServerLoad = async () => {
 	return { form: await superValidate(zod(userCreationSchema)) };
@@ -13,17 +12,20 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default: async (event) => {
 		const form = await superValidate(event, zod(userCreationSchema));
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(
+				form,
+				{ message: 'You do not have permission to edit users', type: 'failure' },
+				{ status: 403 }
+			);
+		}
 
 		if (!form.valid) {
 			return fail(404, { form });
 		}
 
 		console.log(form.data);
-		const username = await db
-			.selectFrom('User')
-			.where('username', '=', form.data.username)
-			.select(['username'])
-			.executeTakeFirst();
+		const username = await exist(form.data.username, 'username');
 		if (username) {
 			form.errors.username = [
 				...(form.errors.username ?? ''),
@@ -32,11 +34,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const email = await db
-			.selectFrom('User')
-			.where('email', '=', form.data.email)
-			.select(['email'])
-			.executeTakeFirst();
+		const email = await exist(form.data.email, 'email');
 		if (email) {
 			form.errors.email = [
 				...(form.errors.email ?? ''),
@@ -45,11 +43,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const alternateEmail = await db
-			.selectFrom('User')
-			.where('alternateEmail', '=', form.data.alternateEmail)
-			.select(['alternateEmail'])
-			.executeTakeFirst();
+		const alternateEmail = await exist(form.data.alternateEmail, 'alternateEmail');
 		if (alternateEmail) {
 			form.errors.alternateEmail = [
 				...(form.errors.alternateEmail ?? ''),
@@ -62,8 +56,8 @@ export const actions: Actions = {
 			const userId = await createUser(form.data);
 		} catch (err) {
 			console.error(err);
-			return fail(500, { message: 'An error occurred' });
+			return message(form, { message: 'Failed to update user', type: 'failure' }, { status: 400 });
 		}
-		return { form };
+		return message(form, { message: 'User created', type: 'success' });
 	}
 };

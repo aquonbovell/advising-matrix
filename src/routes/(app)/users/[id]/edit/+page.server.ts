@@ -1,32 +1,29 @@
-import { fetchUser, updateUser } from '$lib/actions/user.actions';
-import { fail, superValidate } from 'sveltekit-superforms';
+import { deleteUser, exist, fetchUser, updateUser } from '$lib/actions/user.actions';
+import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { userUpdateSchema } from './userUpdate.schema';
-import { error } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 	const user = await fetchUser(id);
-	if (!user) return { status: 404, error: 'User not found' };
-	if (user.role === 'ADMIN') return error(403, { message: 'Cannot edit an admin' });
 	const form = await superValidate({ ...user, onboarded: !!user.onboarded }, zod(userUpdateSchema));
 	return { form };
 };
 
 export const actions: Actions = {
-	default: async (event) => {
+	edit: async (event) => {
 		const form = await superValidate(event, zod(userUpdateSchema));
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(
+				form,
+				{ message: 'You do not have permission to edit users', type: 'failure' },
+				{ status: 403 }
+			);
+		}
 		if (!form.valid) return fail(404, { form });
-		console.log(form.data);
 
-		const username = await db
-			.selectFrom('User')
-			.where('username', '=', form.data.username)
-			.where('id', '!=', form.data.id)
-			.select(['username'])
-			.executeTakeFirst();
+		const username = await exist(form.data.username, 'username');
 		if (username) {
 			form.errors.username = [
 				...(form.errors.username ?? ''),
@@ -35,12 +32,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const email = await db
-			.selectFrom('User')
-			.where('email', '=', form.data.email)
-			.where('id', '!=', form.data.id)
-			.select(['email'])
-			.executeTakeFirst();
+		const email = await exist(form.data.email, 'email');
 		if (email) {
 			form.errors.email = [
 				...(form.errors.email ?? ''),
@@ -49,12 +41,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const alternateEmail = await db
-			.selectFrom('User')
-			.where('alternateEmail', '=', form.data.alternateEmail)
-			.where('id', '!=', form.data.id)
-			.select(['alternateEmail'])
-			.executeTakeFirst();
+		const alternateEmail = await exist(form.data.alternateEmail, 'alternateEmail');
 		if (alternateEmail) {
 			form.errors.alternateEmail = [
 				...(form.errors.alternateEmail ?? ''),
@@ -64,11 +51,27 @@ export const actions: Actions = {
 		}
 
 		try {
-			const userId = await updateUser({ ...form.data, onboarded: form.data.onboarded ? 1 : 0 });
+			await updateUser({ ...form.data, onboarded: form.data.onboarded ? 1 : 0 });
 		} catch (err) {
 			console.error(err);
-			return fail(500, { message: 'An error occurred' });
+			return message(form, { message: 'Failed to update user', type: 'failure' }, { status: 400 });
 		}
-		return { form };
+		return message(form, { message: 'User updated', type: 'success' });
+	},
+	delete: async ({ params, locals, request }) => {
+		if (locals.user?.role !== 'ADMIN') {
+			return fail(403, { message: 'You do not have permission to delete users' });
+		}
+		const { id } = params;
+		if (!id) {
+			return fail(400, { message: 'No id provided' });
+		}
+		try {
+			await deleteUser(id);
+		} catch (err) {
+			console.error(err);
+			return fail(500, { message: 'Failed to delete user' });
+		}
+		return { success: true };
 	}
 };

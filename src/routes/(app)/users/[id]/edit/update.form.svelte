@@ -9,25 +9,36 @@
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { userUpdateSchema, type UserUpdateSchema, userOptions } from './userUpdate.schema';
 
-	export let data: SuperValidated<Infer<UserUpdateSchema>>;
+	import { toast } from 'svelte-sonner';
+	let { data }: { data: SuperValidated<Infer<UserUpdateSchema>> } = $props();
 
 	const form = superForm(data, {
 		delayMs: 200,
-		validators: zodClient(userUpdateSchema),
-
-		dataType: 'json'
+		validators: zodClient(userUpdateSchema)
 	});
 
 	const { form: formData, enhance, message } = form;
-
-	$: {
+	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
-	}
+	});
 </script>
 
-<form method="POST" use:enhance class="space-y-4">
+<form method="POST" use:enhance class="space-y-4" action="?/edit">
+	<Form.Field {form} name="id" hidden>
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label class="font-semibold" hidden>Id</Form.Label>
+				<Input {...props} bind:value={$formData.id} placeholder="John Doe..." type="hidden" />
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors class="mt-2 text-sm" hidden />
+	</Form.Field>
 	<Form.Field {form} name="name">
 		<Form.Control>
 			{#snippet children({ props })}
