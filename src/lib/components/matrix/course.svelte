@@ -2,7 +2,7 @@
 	import TrashIcon from 'lucide-svelte/icons/trash';
 	import * as Button from '$lib/components/ui/button';
 	import * as Select from '$lib/components/ui/select';
-	import { type CourseRequirementDetails, type Grade } from '$lib/types';
+	import { UserRole, type CourseRequirementDetails, type Grade } from '$lib/types';
 	import type { Selected } from 'bits-ui';
 	import { isCourseCompleted } from '$lib/utils';
 	import { Badge } from '$lib/components/ui/badge';
@@ -10,10 +10,12 @@
 
 	let {
 		course,
-		required
+		required,
+		role
 	}: {
 		course: CourseRequirementDetails;
 		required: boolean;
+		role: UserRole;
 	} = $props();
 
 	let processedGrades = [] as Selected<Grade>[];
@@ -91,7 +93,7 @@
 
 		<div class="flex flex-col gap-4 @xl:flex-row-reverse">
 			<div class="flex max-w-[22rem] flex-row flex-wrap gap-2">
-				{#if $studentCourses.find((sc) => sc.courseId === course.id)?.grade}
+				<!-- {#if $studentCourses.find((sc) => sc.courseId === course.id)?.grade}
 					{#each $studentCourses
 						.find((sc) => sc.courseId === course.id)
 						?.grade.split(',') ?? [] as grade}
@@ -101,7 +103,7 @@
 							</Select.Trigger>
 						</Select.Root>
 					{/each}
-				{/if}
+				{/if} -->
 			</div>
 		</div>
 	</div>

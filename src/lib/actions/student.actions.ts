@@ -1,24 +1,34 @@
 import { generateId } from '$lib/server/auth';
 import { db } from '$lib/server/db';
-import type { Student } from '$lib/server/db/schema';
+import type { Student, StudentCourses } from '$lib/server/db/schema';
 import { sql } from 'kysely';
 
 export const fetchStudents = async () => {
-	return db
+	const students = await db
 		.selectFrom('Student')
 		.innerJoin('User', 'Student.userId', 'User.id')
+		.innerJoin('Majors as Major1', 'Major1.id', 'Student.majorId')
+		.leftJoin('Minors', 'Minors.id', 'Student.minorId')
+		.leftJoin('Majors as Major2', 'Major2.id', 'Student.minorId')
 		.select([
 			'Student.id',
-			'name',
+			'User.name',
 			'username',
-			'role',
 			'alternateEmail',
 			'email',
-			'majorId',
-			'minorId'
+			'Major1.name as major',
+			'Minors.name as minor',
+			'Major2.name as major2'
 		])
 		.where('role', '=', 'STUDENT')
 		.execute();
+
+	return students.map((student) => {
+		return {
+			...student,
+			program: `${student.major} ${student.minor ? ' with ' + student.minor : student.major2 ? ' and ' + student.major2 : ''}`
+		};
+	});
 };
 
 export const fetchAdvisingStudents = async (advisorId: string) => {
@@ -50,8 +60,6 @@ export const fetchAdvisingStudents = async (advisorId: string) => {
 		.execute();
 
 	return students.map((student) => {
-		console.log(student.advisor_ids);
-
 		return {
 			id: student.id,
 			advisor_names: student.advisor_names,
@@ -196,4 +204,36 @@ export const updateStudent = async (
 			.execute();
 	}
 	return student.id;
+};
+
+export const updateStudentSuggestions = async (
+	studentId: string,
+	suggestions: Omit<StudentCourses, 'studentId'>[]
+) => {
+	for (const suggestion of suggestions) {
+		console.log(suggestion);
+
+		const existing = await db
+			.selectFrom('StudentCourses')
+			.where('studentId', '=', studentId)
+			.where('courseId', '=', suggestion.courseId)
+			.select('id')
+			.executeTakeFirst();
+
+		if (existing) {
+			await db
+				.updateTable('StudentCourses')
+				.set({
+					userId: suggestion.userId
+				})
+				.where('id', '=', existing.id)
+				.execute();
+		} else {
+			await db
+				.insertInto('StudentCourses')
+				.values({ ...suggestion, studentId, id: generateId() })
+				.execute();
+		}
+	}
+	return studentId;
 };

@@ -3,39 +3,51 @@
 	import * as Select from '$lib/components/ui/select';
 	import { Badge } from '$lib/components/ui/badge';
 	import { TrashIcon } from 'lucide-svelte';
-	import { studentCourses } from '$lib/stores/matrix';
+	import { selectedCourse, studentCourses } from '$lib/stores/matrix';
 	import { gradePoints } from '$lib/types';
-	import type { CourseDetails } from '$lib/types';
-	import { cn, isCourseCompleted } from '$lib/utils';
+	import type { CourseRequirementDetails, StudentCourse } from '$lib/types';
+	import {
+		cn,
+		isCourseCompleted,
+		arePrerequisitesMet,
+		requiredCourses,
+		isValidCourse
+	} from '$lib/utils';
 
-	export let course: CourseDetails;
-	export let required: boolean = true;
-	export let addGradeDialog: () => void;
+	let {
+		course,
+		required,
+		addGradeDialog
+	}: { course: CourseRequirementDetails; required: boolean; addGradeDialog: () => void } = $props();
 
-	$: currentCourse = $studentCourses.find((c) => c.courseId === course.id);
-	$: isComplete = currentCourse && isCourseCompleted(currentCourse);
+	let currentCourse = $state<StudentCourse | undefined>(undefined);
 
-	$: statusColor = !arePrerequisitesMet(course)
+	studentCourses.subscribe((courses) => {
+		currentCourse = courses.find((c) => c.courseId === course.id);
+	});
+	let isComplete = $derived(isCourseCompleted(currentCourse));
+
+	let statusColor = !arePrerequisitesMet(course)
 		? 'bg-red-50 border-red-100'
 		: 'bg-white hover:bg-gray-50';
 
 	function handleGradeDialogOpen() {
-		selectedCourse.set({ value: course });
+		selectedCourse.set(course);
 		addGradeDialog();
 	}
 
-	function arePrerequisitesMet(course: CourseDetails) {
-		return course.prerequisites.every((prerequisite) =>
-			$studentCourses.some((c) => c.courseId === prerequisite)
-		);
-		throw new Error('Function not implemented.');
-	}
+	// function arePrerequisitesMet(course: CourseDetails) {
+	// 	return course.prerequisites.every((prerequisite) =>
+	// 		$studentCourses.some((c) => c.courseId === prerequisite)
+	// 	);
+	// 	throw new Error('Function not implemented.');
+	// }
 </script>
 
 <div
 	class={cn(
 		'group relative border-y transition-all duration-200 @container',
-		'overflow-hidden',
+
 		statusColor
 	)}
 >
@@ -50,12 +62,14 @@
 							variant="ghost"
 							size="icon"
 							class="h-8 w-8 text-red-500 "
-							on:click={() => {
-								const index = $studentCourses.findIndex((c) => c.courseId === course.id);
-								if (index !== -1) {
+							onclick={() => {
+								const currentCourseIndex = $studentCourses.findIndex(
+									(c) => c.courseId === course.id
+								);
+								if (currentCourseIndex !== -1) {
 									studentCourses.update((courses) => [
-										...courses.slice(0, index),
-										...courses.slice(index + 1)
+										...courses.slice(0, currentCourseIndex),
+										...courses.slice(currentCourseIndex + 1)
 									]);
 								}
 							}}
@@ -64,7 +78,7 @@
 						</Button.Root>
 					{/if}
 					<h3 class="text-sm font-medium text-gray-900">
-						{course.code}
+						{course.code} - {course.id}
 					</h3>
 				</div>
 				<span class="text-gray-500">•</span>
@@ -83,8 +97,8 @@
 								{code}
 							</Badge>
 						{/each}
-						{#if course.levelRestriction.length > 0}
-							{#each course.levelRestriction as level}
+						{#if course.restrictions.length > 0}
+							{#each course.restrictions as level}
 								<Badge variant="destructive" class="w-max text-xs">
 									{level.credits} credits from level {level.level.join(' / ')}
 									{level.area.join(',')}
@@ -93,9 +107,9 @@
 						{/if}
 					</div>
 				{/if}
-				{#if currentCourse?.name}
+				<!-- {#if currentCourse?.name}
 					<Badge variant="secondary">Suggested by: {currentCourse?.name}</Badge>
-				{/if}
+				{/if} -->
 			</div>
 		</div>
 		<div class="flex w-full flex-wrap items-center gap-3 @md:col-span-2 @xl:col-span-3">
@@ -104,31 +118,16 @@
 					variant="outline"
 					size="sm"
 					class="whitespace-nowrap"
-					on:click={handleGradeDialogOpen}
-					disabled={!arePrerequisitesMet(course)}
+					onclick={handleGradeDialogOpen}
 				>
 					Enter grade
 				</Button.Root>
 			{/if}
-
 			{#if currentCourse?.grade}
-				{#each currentCourse.grade as grade}
-					<div class="flex items-center gap-2">
-						<Select.Root
-							required={true}
-							selected={{ value: grade, label: grade }}
-							onSelectedChange={(value) => {
-								if (!value?.value) return;
-								studentCourses.update((courses) =>
-									courses.map((c) =>
-										c.courseId === course.id ? { ...c, grade: [value.value] } : c
-									)
-								);
-							}}
-						>
-							<Select.Trigger class="h-8 w-20 bg-white">
-								<Select.Value placeholder="Grade" />
-							</Select.Trigger>
+				{#each currentCourse.grade as grade, index}
+					<div class="flex flex-wrap items-center gap-2">
+						<Select.Root required bind:value={currentCourse.grade[index]} type="single">
+							<Select.Trigger class="h-8 w-20 bg-white">{grade ?? 'GRade'}</Select.Trigger>
 							<Select.Content>
 								{#each Object.keys(gradePoints) as grade}
 									<Select.Item value={grade} class="text-sm">
@@ -163,5 +162,5 @@
 						? 'bg-yellow-400'
 						: 'bg-gray-200'
 		)}
-	/>
+	></div>
 </div>

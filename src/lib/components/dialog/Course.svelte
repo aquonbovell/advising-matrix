@@ -16,7 +16,11 @@
 		open = $bindable(),
 		dialogRequirementID,
 		selectedCourseId
-	}: { open: boolean; dialogRequirementID: string | null; selectedCourseId: string[] } = $props();
+	}: {
+		open: boolean;
+		dialogRequirementID: string | undefined;
+		selectedCourseId: string[];
+	} = $props();
 	function addCourse(selectedCourseIds: string[], userId: string | null = null) {
 		const requirementIndex = $degree.requirements.findIndex((r) => r.id === dialogRequirementID);
 		console.log(requirementIndex);
@@ -49,8 +53,7 @@
 				...grades,
 				{
 					id: crypto.randomUUID(),
-					studentId: userId,
-					grade: '',
+					grade: [],
 					requirementId: dialogRequirementID ?? '',
 					courseId: courseId,
 					userId: userId

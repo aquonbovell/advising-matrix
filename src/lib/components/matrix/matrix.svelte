@@ -4,7 +4,6 @@
 	import * as Button from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Select from '$lib/components/ui/select';
-	import type { Selected } from 'bits-ui';
 	import { Progress } from '$lib/components/ui/progress';
 	import { fly } from 'svelte/transition';
 	import Course from './course.svelte';
@@ -16,13 +15,19 @@
 		totalCredits,
 		completedCredits
 	} from '$lib/stores/matrix';
+	import { Badge } from '$lib/components/ui/badge';
+	import { toast } from 'svelte-sonner';
+	import { page } from '$app/stores';
+	import { applyAction, enhance } from '$app/forms';
+
+	const { id } = $page.params;
 
 	let {
-		data,
+		studentDegree,
 		studentCourses,
 		userId
 	}: {
-		data: Program;
+		studentDegree: Program;
 		studentCourses: {
 			id: string;
 			studentId: string;
@@ -34,146 +39,96 @@
 		userId: string;
 	} = $props();
 
-	let addCourseDialog = $state(false);
-	let addGradeDialog = $state(false);
-	let selectedCourseId = $state<string[]>([]);
+	let isOpen = $state(false);
+	let selectedCourses = $state<string[]>([]);
 	let dialogRequirementID = $state<string>('');
-
-	degree.set(data);
+	degree.set(studentDegree);
 	studentGrades.set(studentCourses);
 
-	function openGradeDialog() {
-		addGradeDialog = true;
-	}
-
 	function openSuggestionsDialog(id: string) {
-		addCourseDialog = true;
+		isOpen = true;
 		dialogRequirementID = id;
-		selectedCourseId = $studentGrades
+		selectedCourses = $studentGrades
 			.filter((sg) => sg.requirementId === id)
 			.map((sg) => sg.courseId);
 	}
 
-	type StudentRecord = {
-		requirementId: string;
-		grade: Grade[];
-		userId: string | null;
-		name: string | null;
-	};
-
 	function addCourse(selectedCourseIds: string[], userId: string | null) {
-		const requirementIndex = data.requirements.findIndex((r) => r.id === dialogRequirementID);
-		console.log(requirementIndex);
-
-		if (requirementIndex === -1) {
-			return;
-		}
-
 		if (selectedCourseIds.length === 0) {
+			toast.info('No courses were added');
 			return;
 		}
-		let credits = 0;
-
-		const requirement = data.requirements[requirementIndex];
-		for (let courseId of selectedCourseIds) {
-			const course = requirement.courses.find((c) => c.id === courseId);
-			console.log(course);
-
-			if (!course) {
-				return;
-			}
-
-			if (credits >= requirement.credits) {
-				break;
-			}
-
-			credits += course.credits;
-
+		selectedCourseIds.forEach((courseId) => {
 			studentGrades.update((grades) => [
 				...grades,
 				{
 					id: crypto.randomUUID(),
-					studentId: userId,
+					studentId: id,
 					grade: '',
 					requirementId: dialogRequirementID,
 					courseId: courseId,
 					userId: userId
 				}
 			]);
-		}
-
-		selectedCourseId = [];
+		});
+		toast.success('Courses added successfully');
 	}
-
-	// // async function handleSave(id: string) {
-	// // 	const formData = new FormData();
-	// // 	if (role !== 'STUDENT') {
-	// // 		const studentCourses: Record<
-	// // 			string,
-	// // 			{
-	// // 				requirementId: string;
-	// // 				grade: Grade[];
-	// // 				userId: string | null;
-	// // 			}
-	// // 		> = {};
-	// // 		Object.entries($courseGrades).forEach(([courseId, courseData]) => {
-	// // 			if (courseData.userId === userId) {
-	// // 				studentCourses[courseId] = {
-	// // 					grade: courseData.grade as Grade[],
-	// // 					requirementId: courseData.requirementId!,
-	// // 					userId: courseData.userId
-	// // 				};
-	// // 			}
-	// // 		});
-	// // 		formData.append('grades', JSON.stringify(studentCourses));
-	// // 		formData.append('studentId', id);
-	// // 	} else {
-	// // 		formData.append('grades', JSON.stringify($courseGrades));
-	// // 		formData.append('studentId', id);
-	// // 	}
-	// // 	const response = await fetch(`?/save`, {
-	// // 		method: 'POST',
-	// // 		body: formData
-	// // 	});
-
-	// // 	const result: ActionResult = deserialize(await response.text());
-
-	// // 	alert(result.status);
-
-	// // 	if (result.status === 200) {
-	// // 		toastState.add('Notice', 'Grades saved successfully', 'success');
-	// // 	} else if (result.status === 400) {
-	// // 		toastState.add('Error', 'result.data', 'error');
-	// // 	} else if (result.status === 404) {
-	// // 		toastState.add('Error', 'result.data', 'error');
-	// // 	} else {
-	// // 		toastState.add('Error', 'An error occurred while saving grades', 'error');
-	// // 	}
-
-	// // 	return;
-	// // }
 </script>
 
 <div class="mx-auto flex flex-col gap-5" transition:fly={{ y: 30, delay: 200 }}>
 	<!-- Degree Info -->
 	<Card.Root class="min-w-80">
 		<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
-			<Card.Title>{data.name}</Card.Title>
-			<Button.Root variant="outline">
+			<Card.Title>{studentDegree.name}</Card.Title>
+			<form
+				action="?/saveSuggestions"
+				method="post"
+				use:enhance={() => {
+					return async ({ result }) => {
+						// `result` is an `ActionResult` object
+						if (result.type === 'failure') {
+							toast.error(result.data?.message as string, { duration: 2000 });
+						} else if (result.type === 'success') {
+							isOpen = false;
+							toast.success('Course deleted successfully', { duration: 2000 });
+						} else {
+							isOpen = false;
+							toast.error('An error occurred', { duration: 2000 });
+						}
+						await applyAction(result);
+					};
+				}}
+			>
+				<label for="studentId" hidden
+					>StudentId
+					<input type="text" name="studentId" id="studentId" value={id} />
+				</label>
+				<label for="suggestions" hidden
+					>Grades
+					<input
+						type="text"
+						name="suggestions"
+						id="suggestions"
+						value={JSON.stringify($studentGrades)}
+					/>
+				</label>
+				<Button.Root type="submit" variant="outline">Save Suggestions</Button.Root>
+			</form>
+			<!-- <Button.Root variant="outline">
 				<!-- {#if loading}  -->
-				<!-- <Reload class="mr-2 h-4 w-4 animate-spin" /> -->
-				<!-- {/if} -->
-				<!-- {#if role !== 'STUDENT'} -->
-				Save Suggestions
-				<!-- on:click={async () => {
+			<!-- <Reload class="mr-2 h-4 w-4 animate-spin" /> -->
+			<!-- {/if} -->
+			<!-- {#if role !== 'STUDENT'} -->
+			<!-- Save Suggestions -->
+			<!-- on:click={async () => {
             loading = true;
             await handleSave(student.id);
             loading = false;
           }} -->
-				<!-- {:else}
+			<!-- {:else}
 					Save Changes
-				{/if} -->
-			</Button.Root>
+				{/if}
+			</Button.Root> -->
 		</Card.Header>
 		<Card.Content class="flex flex-col gap-3 px-4 py-3 ">
 			<div class="flex flex-wrap gap-3">
@@ -196,7 +151,7 @@
 		</Card.Content>
 	</Card.Root>
 	<!-- Degree Requirements -->
-	{#each data.requirements as req}
+	{#each studentDegree.requirements as req}
 		<Card.Root class="min-w-80">
 			<Card.Header class="flex flex-row items-baseline justify-between px-4 py-3 ">
 				<Card.Title>Level {req.level.join(', ')} {req.option} - {req.credits} credits</Card.Title>
@@ -214,17 +169,15 @@
 			<Card.Content class="p-0">
 				<ul class="grid md:grid-cols-2">
 					{#each req.courses as course}
-						{@const isInStudentCourses = $studentGrades.some(
+						{@const isInStudentCourses = $studentGrades.findIndex(
 							(sc) => sc.courseId === course.id && sc.requirementId === req.id
 						)}
-						{#if req.option === 'ALL' || isInStudentCourses}
-							<Course
-								{course}
-								required={req.option === 'ALL'}
-								requirementId={req.id}
-								role={'ADMIN'}
-								addGradeDialog={openGradeDialog}
-							/>
+						{#if req.option === 'ALL' || isInStudentCourses !== -1}
+							<!-- <pre>{JSON.stringify(course, null, 2)}</pre> -->
+
+							<!-- requirementId={req.id} -->
+							<!-- addGradeDialog={openGradeDialog} -->
+							<Course {course} required={req.option === 'ALL'} role={'ADMIN'} />
 						{/if}
 					{/each}
 				</ul>
@@ -232,38 +185,79 @@
 		</Card.Root>
 	{/each}
 </div>
-<Dialog.Root bind:open={addCourseDialog}>
+<Dialog.Root bind:open={isOpen}>
 	<Dialog.Content class="max-w-min">
 		<Dialog.Header>
-			<Dialog.Title>Select a course</Dialog.Title>
+			<Dialog.Title>Select courses to suggest</Dialog.Title>
 			<Dialog.Description>
 				<p class="pb-4">
-					Select a course from the list below to add. The course will be added to your list of
-					courses.
+					Select from the list below to add. The course will be added to the student's matrix to
+					then accept or reject.
 				</p>
 				<div class="flex flex-col gap-3 md:flex-row">
-					<Select.Root required={true} type="multiple" bind:value={selectedCourseId}>
-						<Select.Trigger class="w-72 md:w-80">
+					<Select.Root
+						required={true}
+						type="multiple"
+						bind:value={selectedCourses}
+						onValueChange={(value) => {
+							const index = $degree.requirements.findIndex((r) => r.id === dialogRequirementID);
+							const requirement = $degree.requirements[index];
+							const validSelections: string[] = [];
+
+							let credits = 0;
+
+							for (let courseId of value) {
+								const course = requirement.courses.find((c) => c.id === courseId);
+
+								if (!course) {
+									continue;
+								}
+
+								if (credits >= requirement.credits) {
+									break;
+								}
+
+								credits += course.credits;
+								validSelections.push(course.id);
+							}
+
+							selectedCourses = validSelections;
+						}}
+					>
+						<Select.Trigger class="flex h-fit w-72 flex-wrap justify-start gap-3 md:w-80">
 							{@const index = $degree.requirements.findIndex((r) => r.id === dialogRequirementID)}
 							{@const requirement = $degree.requirements[index]}
 							{#if requirement}
-								{#if requirement.courses.filter( (course) => selectedCourseId.includes(course.id) ).length > 0}
-									{requirement.courses
-										.filter((course) => selectedCourseId.includes(course.id))
-										.map((c) => c.name)
-										.join(', ')}
+								{#if requirement.courses.filter( (course) => selectedCourses.includes(course.id) ).length > 0}
+									{#each requirement.courses
+										.filter((course) => selectedCourses.includes(course.id))
+										.map((c) => c.name) as selectedCourse}
+										<Badge>{selectedCourse}</Badge>
+									{/each}
 								{:else}
 									Select a course
 								{/if}
 							{:else}
-								Select a course
+								No courses found
 							{/if}
 						</Select.Trigger>
 						<Select.Content class=" max-h-60 overflow-y-auto">
 							{@const index = $degree.requirements.findIndex((r) => r.id === dialogRequirementID)}
 							{@const requirement = $degree.requirements[index]}
 							{#if requirement}
-								{#each requirement.courses.filter((course) => !$studentGrades.some((sg) => sg.courseId === course.id)) as course}
+								{#each requirement.courses
+									.filter((c) => !$studentGrades.some((sg) => sg.courseId === c.id) && !$degree.requirements
+												.filter((r) => r.option === 'ALL')
+												.some((r) => r.details.some((detail) => detail === c.id)))
+									.sort((a, b) => {
+										if (a.code < b.code) {
+											return -1;
+										}
+										if (a.code > b.code) {
+											return 1;
+										}
+										return 0;
+									}) as course}
 									<Select.Item value={course.id}>{course.code} - {course.name}</Select.Item>
 								{/each}
 							{:else}
@@ -273,9 +267,9 @@
 					</Select.Root>
 					<Dialog.Close
 						onclick={() => {
-							addCourse(selectedCourseId, userId);
-							addCourseDialog = false;
-						}}><Button.Root>Add Course</Button.Root></Dialog.Close
+							addCourse(selectedCourses, userId);
+							isOpen = false;
+						}}><Button.Root>Add Suggestions</Button.Root></Dialog.Close
 					>
 				</div>
 			</Dialog.Description>

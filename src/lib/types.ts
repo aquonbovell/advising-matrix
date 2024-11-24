@@ -118,4 +118,4 @@ export const gradePoints = {
 	FAIL: 0
 } as const;
 
-export type StudentCourse = Omit<StudentCourses, 'studentId'>;
+export type StudentCourse = Omit<StudentCourses, 'studentId' | 'grade'> & { grade: string[] };

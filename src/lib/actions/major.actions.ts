@@ -3,6 +3,9 @@ import { db } from '$lib/server/db';
 import type { MajorDetails, requirementOption, requirementType } from '$lib/types';
 import majors from '$lib/data/majors.json';
 
+import type { ReferenceExpression } from 'kysely';
+import type { DB } from '$lib/server/db/schema';
+
 export const fetchMajors = async () => {
 	return db.selectFrom('Majors').select(['name', 'id']).execute();
 };
@@ -141,4 +144,13 @@ export async function initMajors() {
 			}
 		}
 	}
+}
+
+export async function exist(value: string, field: ReferenceExpression<DB, 'Majors'>) {
+	const department = await db
+		.selectFrom('Majors')
+		.where(field, '=', value)
+		.select('id')
+		.executeTakeFirst();
+	return department !== undefined;
 }

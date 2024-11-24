@@ -1,7 +1,9 @@
 import { generateId } from '$lib/server/auth';
 import { db } from '$lib/server/db';
+import type { DB } from '$lib/server/db/schema';
 import type { MinorDetails, requirementOption, requirementType } from '$lib/types';
 
+import type { ReferenceExpression } from 'kysely';
 export const fetchMinors = async () => {
 	return db.selectFrom('Minors').select(['name', 'id']).execute();
 };
@@ -114,3 +116,12 @@ export const fetchMinorDetails = async (minorId: string) => {
 export const deleteMinor = async (minorId: string) => {
 	return db.deleteFrom('Minors').where('id', '=', minorId).execute();
 };
+
+export async function exist(value: string, field: ReferenceExpression<DB, 'Minors'>) {
+	const department = await db
+		.selectFrom('Minors')
+		.where(field, '=', value)
+		.select('id')
+		.executeTakeFirst();
+	return department !== undefined;
+}

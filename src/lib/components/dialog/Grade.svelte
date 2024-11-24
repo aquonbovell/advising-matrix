@@ -6,86 +6,68 @@
 	import { gradePoints } from '$lib/types';
 	import type { Grade, NonNullableGrade } from '$lib/types';
 	import type { Selected } from 'bits-ui';
-	import { studentCourses as studentGrades, degree } from '$lib/stores/matrix';
+	import { studentCourses as studentGrades, degree, selectedCourse } from '$lib/stores/matrix';
+	import { toast } from 'svelte-sonner';
 
-	let {
-		open,
-		requirementId,
-		selectedCourse
-	}: { open: boolean; requirementId: string | undefined; selectedCourse: string } = $props();
-	let selectedGrade = $state('');
+	let { open = $bindable(), requirementId }: { open: boolean; requirementId: string | undefined } =
+		$props();
+	let selectedGrade = $state<string | undefined>(undefined);
 
 	function handleGradeAdd() {
-		const courseId = selectedCourse;
-		const grade = selectedGrade;
+		const courseId = $selectedCourse;
+		const grade = selectedGrade as Grade;
 
-		// if (!courseId || !grade) {
-		// 	toastState.add('Error', 'Please select a course and grade', 'error');
-		// 	return;
-		// }
+		if (!courseId) {
+			toast.info('Please select a course');
+			return;
+		}
 
-		// if (!isGrade(selectedGrade.value)) {
-		// 	toastState.add('Error', 'Invalid grade selected', 'error');
-		// 	return;
-		// }
+		if (!grade) {
+			toast.info('Please select a grade');
+			return;
+		}
 
-		addCourseGrade(courseId, grade);
-		// selectedGrade = { value: undefined, label: '' };
-		selectedGrade = '';
+		addGrade(courseId.id, grade);
+		selectedGrade = undefined;
 		open = false;
 	}
-	function addCourseGrade(courseId: string, grade: string, userId: string | null = null) {
-		const requirementIndex = $degree.requirements.findIndex((r) => r.id === requirementId);
-		console.log(requirementIndex);
+	function addGrade(courseId: string, grade: string, userId: string | null = null) {
+		const courseIndex = $studentGrades.findIndex((g) => g.courseId === courseId);
 
-		if (requirementIndex === -1) {
-			return;
-		}
-
-		if (!selectedCourse) {
-			return;
-		}
-		let credits = 0;
-
-		const requirement = $degree.requirements[requirementIndex];
-		const course = requirement.courses.find((c) => c.id === courseId);
-		console.log(course);
-
-		if (!course) {
-			return;
-		}
-
-		studentGrades.update((grades) => [
-			...grades,
-			{
-				id: crypto.randomUUID(),
-				studentId: userId,
-				grade: '',
-				requirementId: requirementId || '',
-				courseId: courseId,
-				userId: userId
+		studentGrades.update((courses) => {
+			if (courseIndex !== -1) {
+				// Update the existing course
+				return courses.map((course, index) =>
+					index === courseIndex
+						? {
+								...course,
+								grade: [...course.grade, grade]
+							}
+						: course
+				);
+			} else {
+				// Add a new course
+				return [
+					...courses,
+					{
+						id: crypto.randomUUID(),
+						grade: [grade],
+						requirementId: requirementId ?? '',
+						courseId,
+						userId
+					}
+				];
 			}
-		]);
-	}
-
-	function handleClose() {
-		selectedGrade = '';
+		});
 	}
 </script>
 
-<Dialog.Root
-	bind:open
-	onOpenChange={(isOpen) => {
-		if (isOpen) {
-			handleClose();
-		}
-	}}
->
+<Dialog.Root bind:open>
 	<Dialog.Content class="max-w-min">
 		<Dialog.Header>
-			<Dialog.Title>$selectedCourse.value?.code</Dialog.Title>
+			<Dialog.Title>{$selectedCourse?.name}</Dialog.Title>
 			<Dialog.Description>
-				$selectedCourse.value?.name
+				{$selectedCourse?.name} - {$selectedCourse?.code}
 				<div class="flex gap-3 py-4">
 					<Select.Root required={true} type="single" bind:value={selectedGrade}>
 						<Select.Trigger class="w-[200px]">

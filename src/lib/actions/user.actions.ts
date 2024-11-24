@@ -1,10 +1,12 @@
 import { generateId, hashPassword, verifyPassword } from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import { env } from '$env/dynamic/private';
-import type { User } from '$lib/server/db/schema';
+import type { DB, User } from '$lib/server/db/schema';
+
+import type { ReferenceExpression } from 'kysely';
 
 export const createUser = async (
-	user: Omit<User, 'id' | 'onboarded' | 'role' | 'passwordHash' | 'created_at' | 'updated_at'>
+	user: Omit<User, 'id' | 'onboarded' | 'passwordHash' | 'created_at' | 'updated_at'>
 ) => {
 	try {
 		const result = await db
@@ -13,7 +15,6 @@ export const createUser = async (
 				...user,
 				id: generateId(),
 				onboarded: 0,
-				role: 'STUDENT',
 				passwordHash: await hashPassword(env.DEFAULT_PASSWORD),
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString()
@@ -94,3 +95,12 @@ export const updateUser = async (
 		.where('id', '=', user.id)
 		.execute();
 };
+
+export async function exist(value: string, field: ReferenceExpression<DB, 'User'>) {
+	const department = await db
+		.selectFrom('User')
+		.where(field, '=', value)
+		.select('id')
+		.executeTakeFirst();
+	return department !== undefined;
+}

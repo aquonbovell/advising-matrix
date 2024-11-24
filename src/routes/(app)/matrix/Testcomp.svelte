@@ -3,11 +3,8 @@
 	import * as Card from '$lib/components/ui/card';
 	import * as Button from '$lib/components/ui/button/index.js';
 	import { Progress } from '$lib/components/ui/progress';
-	import { writable } from 'svelte/store';
-	import type { Selected } from 'bits-ui';
 
 	import {
-		degree as degreeStore,
 		completedCredits,
 		overallGPA,
 		degreeGPA,
@@ -16,18 +13,18 @@
 		codes,
 		degree
 	} from '$lib/stores/matrix';
-	import type { NonNullableGrade, Program } from '$lib/types';
+	import type { Program } from '$lib/types';
 	import GradeDialog from '$lib/components/dialog/Grade.svelte';
 	import CourseSelectionDialog from '$lib/components/dialog/Course.svelte';
 	import CourseCard from '$lib/components/matrix/card.svelte';
 	import { Loader2 } from 'lucide-svelte';
 
 	let {
-		data,
+		studentDegree,
 		studentCourses,
 		userId
 	}: {
-		data: Program;
+		studentDegree: Program;
 		studentCourses: {
 			id: string;
 			studentId: string;
@@ -39,41 +36,30 @@
 		userId: string;
 	} = $props();
 
-	let addCourseDialog = $state(false);
-	let addGradeDialog = $state(false);
-	let selectedCourseId = $state<string[]>([]);
-	let dialogRequirementID = $state<string>('');
+	degree.set(studentDegree);
+	studentGrades.set(
+		studentCourses.map((sc) => ({
+			...sc,
+			grade: sc.grade.split(',')
+		}))
+	);
 
-	degree.set(data);
-	studentGrades.set(studentCourses);
+	codes.set(
+		studentDegree.requirements
+			.map((req) => req.courses)
+			.flat()
+			.map((course) => ({
+				id: course.id,
+				credits: course.credits,
+				name: course.name,
+				code: course.code
+			}))
+	);
 
-	// const courseGrades = writable(studentCourses.courses);
-
-	// $: courseGrades.set(studentCourses.courses);
-
-	// $: {
-	// 	studentCoursesStore.set(studentCourses.courses);
-	// 	degreeStore.set(degree);
-	// 	codes.set(courseCodes);
-	// }
-
-	// const toastState = getToastState();
-
-	// const updateGradesMutation = trpc.students.updateStudentGrades.mutation({
-	// 	onSuccess: () => {
-	// 		toastState.add('Success', 'Grades updated successfully', 'success');
-	// 	},
-	// 	onError: (error) => {
-	// 		console.error('Failed to update grades:', error);
-	// 		toastState.add('Error', 'Failed to update grades', 'error');
-	// 	}
-	// });
-
-	let isAddCourseDialogOpen = false;
-	let isGradeDialogOpen = false;
-	// let selectedCourseId = '';
-	let loading = false;
-	let currentRequirementId: string | null = null;
+	let isCourseDialogOpen = $state(false);
+	let isGradeDialogOpen = $state(false);
+	let loading = $state(false);
+	let currentRequirementId = $state<string | undefined>(undefined);
 
 	async function saveGrades() {
 		// $updateGradesMutation.mutateAsync({
@@ -85,9 +71,9 @@
 		// });
 	}
 
-	function openAddCourseDialog(requirementId: string) {
+	function openCourseDialog(requirementId: string) {
 		currentRequirementId = requirementId;
-		isAddCourseDialogOpen = true;
+		isCourseDialogOpen = true;
 	}
 
 	function openGradeDialog(requirementId: string) {
@@ -123,7 +109,7 @@
 		<Card.Root class="min-w-80 overflow-hidden pb-0">
 			<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
 				<Card.Title>Level {req.level.join(' / ')} - {req.credits} credits</Card.Title>
-				{#if req.option === 'OPTIONAL' && $studentGrades
+				{#if req.option === 'AT MOST' && $studentGrades
 						.filter((sc) => sc.requirementId === req.id)
 						.map((sc) => {
 							const course = $codes.find((c) => c.id === sc.courseId);
@@ -132,21 +118,21 @@
 						})
 						.filter((c) => c !== undefined)
 						.reduce((total, course) => total + course.credits, 0) < req.credits}
-					<Button.Root class="!m-0" onclick={() => openAddCourseDialog(req.id)}
+					<Button.Root class="!m-0" size="sm" onclick={() => openCourseDialog(req.id)}
 						>Add Course</Button.Root
 					>
 				{/if}
 			</Card.Header>
-			<Card.Content class="px-0 pb-0 @container">
+			<Card.Content class="p-0 pb-0 @container">
 				<ul class="grid @2xl:grid-cols-2">
 					{#each req.courses as course}
 						{@const isInStudentCourses = $studentGrades.some(
 							(sc) => sc.courseId === course.id && sc.requirementId === req.id
 						)}
-						{#if req.option === 'REQUIRED' || isInStudentCourses}
+						{#if req.option === 'ALL' || isInStudentCourses}
 							<CourseCard
 								{course}
-								required={req.option === 'REQUIRED'}
+								required={req.option === 'ALL'}
 								addGradeDialog={() => openGradeDialog(req.id)}
 							/>
 						{/if}
@@ -158,9 +144,9 @@
 </div>
 
 <CourseSelectionDialog
-	bind:open={isAddCourseDialogOpen}
+	bind:open={isCourseDialogOpen}
 	dialogRequirementID={currentRequirementId}
 	selectedCourseId={[]}
 />
 
-<!-- <GradeDialog bind:open={isGradeDialogOpen} requirementId={currentRequirementId} /> -->
+<GradeDialog bind:open={isGradeDialogOpen} requirementId={currentRequirementId} />

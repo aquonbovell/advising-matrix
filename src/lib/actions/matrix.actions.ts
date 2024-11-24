@@ -1,9 +1,15 @@
 import { db } from '$lib/server/db';
 import type { LevelRestriction } from '$lib/server/db/schema';
-import type { CourseRequirementDetails, Program, Requirement } from '$lib/types';
+import type {
+	CourseRequirementDetails,
+	Program,
+	Requirement,
+	requirementOption,
+	requirementType
+} from '$lib/types';
 import { getName } from '$lib/utils';
 
-export async function fetchDegree(studentId: string) {
+export async function fetchDegree(studentId: string): Promise<Program> {
 	const student = await db
 		.selectFrom('Student')
 		.where('id', '=', studentId)
@@ -48,7 +54,10 @@ export async function fetchDegree(studentId: string) {
 
 	studentData.requirements = [...major, ...minor].map((requirement) => {
 		const mappedRequirement = {
-			...requirement,
+			id: requirement.id,
+			credits: requirement.credits,
+			type: requirement.type as requirementType,
+			option: requirement.option as requirementOption,
 			details: requirement.details.split(',') as string[],
 			courses: [],
 			level: requirement.level.split(',').map((level) => parseInt(level))
@@ -60,7 +69,7 @@ export async function fetchDegree(studentId: string) {
 		(requirement) =>
 			requirement.level.includes(1) &&
 			requirement.details.length > 0 &&
-			requirement.option === 'REQUIRED'
+			requirement.option === 'ALL'
 	);
 
 	let levelOneCredits = levelOneRequirements.reduce((acc, requirement) => {
@@ -72,8 +81,9 @@ export async function fetchDegree(studentId: string) {
 			(requirement) =>
 				requirement.level.includes(1) &&
 				requirement.details.length === 0 &&
-				requirement.option === 'OPTIONAL'
+				requirement.option === 'AT MOST'
 		);
+
 		const requirementPoolIds = requirementPool.map((requirement) => requirement.id);
 		studentData.requirements = studentData.requirements.filter(
 			(requirement) => !requirementPoolIds.includes(requirement.id)
@@ -98,7 +108,7 @@ export async function fetchDegree(studentId: string) {
 		if (totalCredits < 24 && requirement) {
 			const newRequirement = {
 				id: requirement.id,
-				option: 'OPTIONAL',
+				option: 'AT MOST',
 				type: 'COURSES',
 				credits: 24 - totalCredits,
 				details: [],
@@ -130,7 +140,7 @@ export async function fetchDegree(studentId: string) {
 		if (requirement) {
 			const newRequirement = {
 				id: requirement.id,
-				option: 'REQUIRED',
+				option: 'ALL',
 				type: 'COURSES',
 				credits: totalCredits,
 				details: requirementDetails,
@@ -156,7 +166,7 @@ export async function fetchDegree(studentId: string) {
 			(requirement) =>
 				!requirement.level.includes(1) &&
 				requirement.details.length === 0 &&
-				requirement.option === 'OPTIONAL'
+				requirement.option === 'AT MOST'
 		);
 		const requirementPoolIds = requirementPool.map((requirement) => requirement.id);
 		studentData.requirements = studentData.requirements.filter(
@@ -166,7 +176,7 @@ export async function fetchDegree(studentId: string) {
 		if (60 - requiredCredits > 0 && requirement) {
 			const newRequirement = {
 				id: requirement.id,
-				option: 'OPTIONAL',
+				option: 'AT MOST',
 				type: 'COURSES',
 				courses: [],
 				credits: 60 - requiredCredits,
@@ -266,7 +276,7 @@ export async function fetchDegree(studentId: string) {
 				studentData.requirements[index].courses = [...courses];
 			}
 		}
-		if (requirement.type === 'AREAS') {
+		if (requirement.type === 'DISCIPLINES') {
 			const courses: CourseRequirementDetails[] = [];
 			for (const area of requirement.details) {
 				const areaCourses = Courses.filter(
