@@ -18,12 +18,16 @@ export const actions: Actions = {
 		}
 
 		const userId = await getUserByCredentials(form.data.email, form.data.password);
+
 		if (!userId) {
+			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email or password'];
+			form.errors.password = [...(form.errors.password ?? ''), 'Invalid email or password'];
+			form.data.password = '';
 			return fail(400, { form });
 		}
 		const sessionToken = auth.generateSessionToken();
 		const session = await auth.createSession(sessionToken, userId);
 		auth.setSessionTokenCookie(event, sessionToken, new Date(session.expiresAt));
-		return redirect(302, '/');
+		return redirect(302, '/onboarding');
 	}
 };

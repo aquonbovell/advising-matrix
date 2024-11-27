@@ -18,7 +18,7 @@
 </script>
 
 <form method="POST" use:enhance class="space-y-4">
-	<Form.Field {form} name="id">
+	<Form.Field {form} name="id" hidden>
 		<Form.Control>
 			{#snippet children({ props })}
 				<Form.Label class="font-semibold">Id</Form.Label>
@@ -56,11 +56,11 @@
 	</Form.Field>
 
 	<Form.Button class="h-12 w-full text-base font-medium">
-		<!-- {#if $submitting}
+		{#if $submitting}
 			<Icon icon="eos-icons:bubble-loading" />
 			<span>Please wait...</span>
-		{:else} -->
-		Continue
-		<!-- {/if} -->
+		{:else}
+			Continue
+		{/if}
 	</Form.Button>
 </form>

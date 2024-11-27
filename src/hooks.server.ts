@@ -16,7 +16,14 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	if (session) {
 		auth.setSessionTokenCookie(event, sessionToken, new Date(session.expiresAt));
 
-		if (event.route.id?.includes('auth') && !event.route.id.includes('logout')) {
+		if (user.onboarded !== 1 && !event.route.id?.includes('onboarding')) {
+			throw redirect(307, '/onboarding');
+		}
+		if (
+			event.route.id?.includes('auth') &&
+			!event.route.id.includes('logout') &&
+			!event.route.id.includes('onboarding')
+		) {
 			throw redirect(307, '/');
 		}
 	} else {

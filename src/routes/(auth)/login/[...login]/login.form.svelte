@@ -8,14 +8,14 @@
 	import { loginSchema, type LoginSchema } from './login.schema';
 	import Icon from '@iconify/svelte';
 
-	export let data: SuperValidated<Infer<LoginSchema>>;
+	let { data }: { data: SuperValidated<Infer<LoginSchema>> } = $props();
 
 	const form = superForm(data, {
 		delayMs: 500,
 		validators: zodClient(loginSchema)
 	});
 
-	const { form: formData, enhance, errors } = form;
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <form method="POST" use:enhance class="space-y-4">
@@ -44,22 +44,22 @@
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 
-	<Form.Button>
-		<!-- {#if $submitting}
+	<Form.Button disabled={$submitting}>
+		{#if $submitting}
 			<Icon icon="eos-icons:bubble-loading" />
 			<span>Please wait...</span>
-		{:else} -->
-		Login
-		<!-- {/if} -->
+		{:else}
+			Login
+		{/if}
 	</Form.Button>
-	<Form.Button variant="link" href={'/register'}>
+	<!-- <Form.Button variant="link" href={'/register'}>
 		<!-- {#if $submitting}
 			<Icon icon="eos-icons:bubble-loading" />
 			<span>Please wait...</span>
-		{:else} -->
+		{:else}
 		Register
-		<!-- {/if} -->
-	</Form.Button>
+		<!-- {/if}
+	</Form.Button> -->
 
 	<Button.Root class="h-12 w-full text-base font-medium" variant="link" href="/forgot-password">
 		Forgot Password?

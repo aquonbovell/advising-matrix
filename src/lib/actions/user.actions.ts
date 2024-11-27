@@ -104,3 +104,27 @@ export async function exist(value: string, field: ReferenceExpression<DB, 'User'
 		.executeTakeFirst();
 	return department !== undefined;
 }
+
+export async function userTokenExpiration(id: string, token: string) {
+	const user = await db
+		.selectFrom('User')
+		.where('id', '=', id)
+		.where('invite_token', '=', token)
+		.select('invite_expires')
+		.executeTakeFirst();
+	return user;
+}
+
+export async function completeOnboarding(userId: string, password: string) {
+	await db
+		.updateTable('User')
+		.set({
+			onboarded: 1,
+			invite_expires: null,
+			invite_token: null,
+			passwordHash: await hashPassword(password),
+			updated_at: new Date().toISOString()
+		})
+		.where('id', '=', userId)
+		.execute();
+}

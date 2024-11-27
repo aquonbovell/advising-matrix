@@ -8,6 +8,7 @@ import {
 	type StudentCourse
 } from './types';
 import { codes, completedCourses } from '$lib/stores/matrix';
+import type { RandomReader } from '@oslojs/crypto/random';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -132,3 +133,9 @@ export function requiredCourses(course: CourseRequirementDetails): string[] {
 		.filter((prerequisite) => !courses.includes(prerequisite.id))
 		.map((prerequisite) => prerequisite.code);
 }
+
+export const random: RandomReader = {
+	read(bytes: Uint8Array): void {
+		crypto.getRandomValues(bytes);
+	}
+};

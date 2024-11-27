@@ -4,8 +4,12 @@ import { encodeBase32LowerCase, encodeBase64url, encodeHexLowerCase } from '@osl
 import { db } from '$lib/server/db';
 import type { Session, User } from './db/schema';
 import { hash, verify } from '@node-rs/argon2';
+import { generateRandomString } from '@oslojs/crypto/random';
+import { alphabet } from '$lib/constants';
+import { random } from '$lib/utils';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
+const HOUR_IN_MS = 1000 * 60 * 60;
 
 export const sessionCookieName = 'auth-session';
 
@@ -20,7 +24,7 @@ export async function createSession(token: string, userId: string) {
 	const session: Session = {
 		id: sessionId,
 		userId,
-		expiresAt: new Date(Date.now() + DAY_IN_MS * 30).getTime()
+		expiresAt: new Date(Date.now() + HOUR_IN_MS / 2).getTime()
 	};
 	await db.insertInto('Session').values(session).execute();
 	return session;
@@ -38,6 +42,7 @@ export async function validateSessionToken(token: string) {
 			'User.email',
 			'User.name',
 			'User.role',
+			'User.onboarded',
 			'Session.id as sessionId',
 			'Session.userId',
 			'Session.expiresAt'
@@ -53,11 +58,21 @@ export async function validateSessionToken(token: string) {
 		expiresAt: result.expiresAt
 	};
 
-	const user: Omit<User, 'passwordHash' | 'alternateEmail' | 'username' | 'onboarded'> = {
+	const user: Omit<
+		User,
+		| 'passwordHash'
+		| 'alternateEmail'
+		| 'username'
+		| 'created_at'
+		| 'updated_at'
+		| 'invite_expires'
+		| 'invite_token'
+	> = {
 		id: result.id,
 		role: result.role,
 		email: result.email,
-		name: result.name
+		name: result.name,
+		onboarded: result.onboarded
 	};
 
 	const sessionExpired = Date.now() >= new Date(session.expiresAt).getTime();
@@ -66,9 +81,9 @@ export async function validateSessionToken(token: string) {
 		return { session: null, user: null };
 	}
 
-	const renewSession = Date.now() >= new Date(session.expiresAt).getTime() - DAY_IN_MS * 15;
+	const renewSession = Date.now() >= new Date(session.expiresAt).getTime() - HOUR_IN_MS / 4;
 	if (renewSession) {
-		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30).getTime();
+		session.expiresAt = new Date(Date.now() + HOUR_IN_MS / 2).getTime();
 		await db
 			.updateTable('Session')
 			.set({ expiresAt: session.expiresAt })
@@ -117,5 +132,19 @@ export async function hashPassword(password: string): Promise<string> {
 }
 
 export async function verifyPassword(passwordHash: string, password: string): Promise<boolean> {
-	return await verify(passwordHash, password);
+	return await verify(passwordHash, password, {
+		memoryCost: 19456,
+		timeCost: 2,
+		outputLen: 32,
+		parallelism: 1
+	});
+}
+
+export function generateTokenWithExpiration(
+	expiresInMinutes = 30, // Default to 30 minutes
+	tokenLength = 32
+) {
+	const expiresAt = (Date.now() + expiresInMinutes * 60 * 1000).toString(); // Calculate expiration time
+	const token = generateRandomString(random, alphabet, tokenLength);
+	return { token, expiresAt };
 }
