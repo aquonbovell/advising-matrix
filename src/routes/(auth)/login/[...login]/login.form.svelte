@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
-	import * as Button from '$lib/components/ui/button';
 	import * as Input from '$lib/components/ui/input';
 	import * as Password from '$lib/components/ui/password';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
@@ -11,7 +10,6 @@
 	let { data }: { data: SuperValidated<Infer<LoginSchema>> } = $props();
 
 	const form = superForm(data, {
-		delayMs: 500,
 		validators: zodClient(loginSchema)
 	});
 
@@ -44,7 +42,7 @@
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 
-	<Form.Button disabled={$submitting}>
+	<Form.Button disabled={$submitting} class="w-full text-base font-semibold">
 		{#if $submitting}
 			<Icon icon="eos-icons:bubble-loading" />
 			<span>Please wait...</span>
@@ -52,16 +50,13 @@
 			Login
 		{/if}
 	</Form.Button>
-	<!-- <Form.Button variant="link" href={'/register'}>
-		<!-- {#if $submitting}
-			<Icon icon="eos-icons:bubble-loading" />
-			<span>Please wait...</span>
-		{:else}
-		Register
-		<!-- {/if}
-	</Form.Button> -->
 
-	<Button.Root class="h-12 w-full text-base font-medium" variant="link" href="/forgot-password">
+	<Form.Button
+		variant="link"
+		class="w-full text-base font-semibold"
+		href="/forgot-password"
+		type="button"
+	>
 		Forgot Password?
-	</Button.Root>
+	</Form.Button>
 </form>

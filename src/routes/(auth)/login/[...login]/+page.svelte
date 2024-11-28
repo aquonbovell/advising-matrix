@@ -6,7 +6,7 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<Card.Root class="w-full max-w-md rounded-3xl bg-white p-4 shadow-lg">
+<Card.Root class="w-full max-w-md rounded-2xl bg-white px-4 shadow-lg">
 	<Card.Header class="flex flex-col items-center text-center">
 		<img src={'/banner.png'} alt="UWI Banner" />
 		<Card.Title class="text-2xl">Login</Card.Title>

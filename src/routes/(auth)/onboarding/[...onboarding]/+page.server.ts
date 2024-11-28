@@ -38,15 +38,19 @@ export const actions: Actions = {
 
 		const expires = await userTokenExpiration(form.data.id, form.data.token);
 
+		// TODO: Determine if this is the correct way to check for expiration
 		if (!expires) {
-			form.errors.token = [...(form.errors.token ?? ''), 'Token has expired'];
+			form.errors.token = [...(form.errors.token ?? ''), 'Invalid token provided'];
 			form.data.password = '';
 			form.data.password1 = '';
 			return fail(400, { form });
 		}
 
 		if (expires.invite_expires && new Date(expires.invite_expires).getTime() < Date.now()) {
-			form.errors.token = [...(form.errors.token ?? ''), 'Token has expired'];
+			form.errors.token = [
+				...(form.errors.token ?? ''),
+				'Token has expired. Please request a new one.'
+			];
 			form.data.password = '';
 			form.data.password1 = '';
 			return fail(400, { form });
