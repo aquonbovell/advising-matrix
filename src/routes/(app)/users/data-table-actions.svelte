@@ -10,7 +10,8 @@
 	import { toast } from 'svelte-sonner';
 
 	let { id, role }: { id: string; role: UserRole } = $props();
-	let isOpen = $state(false);
+	let deleteIsOpenDialog = $state(false);
+	let resetTokenIsOpenDialog = $state(false);
 </script>
 
 <DropdownMenu.Root>
@@ -44,7 +45,54 @@
 		{/if}
 		{#if role === 'ADMIN'}
 			<DropdownMenu.Item class="m-0 p-0">
-				<AlertDialog.Root bind:open={isOpen}>
+				<AlertDialog.Root bind:open={resetTokenIsOpenDialog}>
+					<AlertDialog.Trigger class={cn('m-0  block	 h-full w-full p-2 text-left')}>
+						Reset Token
+					</AlertDialog.Trigger>
+					<AlertDialog.Content>
+						<AlertDialog.Header>
+							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+							<AlertDialog.Description>
+								This action cannot be undone. This will allow the user to access their account with
+								a new token.
+							</AlertDialog.Description>
+						</AlertDialog.Header>
+						<AlertDialog.Footer>
+							<form
+								method="POST"
+								action="?/reset"
+								use:enhance={() => {
+									return async ({ result }) => {
+										// `result` is an `ActionResult` object
+										if (result.type === 'failure') {
+											resetTokenIsOpenDialog = false;
+											toast.error(result.data?.message as string, { duration: 2000 });
+										} else if (result.type === 'success') {
+											resetTokenIsOpenDialog = false;
+											toast.success(result.data?.message as string, { duration: 2000 });
+										} else {
+											resetTokenIsOpenDialog = false;
+											toast.error('An error occured', { duration: 2000 });
+										}
+										await applyAction(result);
+									};
+								}}
+								class="flex gap-2"
+							>
+								<label for="id">
+									<input type="hidden" name="id" value={id} />
+								</label>
+								<AlertDialog.Cancel type="button">Cancel</AlertDialog.Cancel>
+								<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+							</form>
+						</AlertDialog.Footer>
+					</AlertDialog.Content>
+				</AlertDialog.Root>
+			</DropdownMenu.Item>
+		{/if}
+		{#if role === 'ADMIN'}
+			<DropdownMenu.Item class="m-0 p-0">
+				<AlertDialog.Root bind:open={deleteIsOpenDialog}>
 					<AlertDialog.Trigger
 						class={cn(
 							buttonVariants({ variant: 'destructive' }),
@@ -69,13 +117,13 @@
 									return async ({ result }) => {
 										// `result` is an `ActionResult` object
 										if (result.type === 'failure') {
-											isOpen = false;
+											deleteIsOpenDialog = false;
 											toast.error(result.data?.message as string, { duration: 2000 });
 										} else if (result.type === 'success') {
-											isOpen = false;
+											deleteIsOpenDialog = false;
 											toast.success('Course deleted successfully', { duration: 2000 });
 										} else {
-											isOpen = false;
+											deleteIsOpenDialog = false;
 											toast.error('An error occurred', { duration: 2000 });
 										}
 										await applyAction(result);

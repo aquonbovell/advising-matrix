@@ -28,7 +28,6 @@ export const actions: Actions = {
 			return fail(404, { form });
 		}
 
-		console.log(form.data);
 		const username = await exist(form.data.username, 'username');
 		if (username) {
 			form.errors.username = [

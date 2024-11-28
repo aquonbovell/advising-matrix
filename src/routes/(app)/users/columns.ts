@@ -1,6 +1,8 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { Checkbox } from '$lib/components/ui/checkbox/index.js';
 import { renderComponent } from '$lib/components/ui/data-table';
+import DataTableStatusBadge from './data-table-status-badge.svelte';
+import DataTableAccessBadge from './data-table-access-badge.svelte';
 import DataTableActions from './data-table-actions.svelte';
 import DataTableEmailButton from './data-table-email-button.svelte';
 import type { UserRole } from '$lib/types';
@@ -11,6 +13,9 @@ export type User = {
 	email: string;
 	alternateEmail: string;
 	username: string;
+	invite_token: string | null;
+	invite_expires: string | null;
+	onboarded: boolean;
 	userRole: UserRole;
 };
 
@@ -53,6 +58,23 @@ export const columns: ColumnDef<User>[] = [
 	{
 		accessorKey: 'alternateEmail',
 		header: 'Alternate Email'
+	},
+	{
+		header: 'Status',
+		cell: ({ row }) => {
+			return renderComponent(DataTableStatusBadge, {
+				status: row.original.onboarded ? 'Onboarded' : 'Not Onboarded'
+			});
+		}
+	},
+	{
+		header: 'Access',
+		cell: ({ row }) => {
+			return renderComponent(DataTableAccessBadge, {
+				invite_token: row.original.invite_token,
+				invite_expires: row.original.invite_expires
+			});
+		}
 	},
 	{
 		id: 'actions',
