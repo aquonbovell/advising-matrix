@@ -12,6 +12,7 @@
 	import { minorUpdateSchema, type MinorUpdateSchema } from './minorUpdate.schema';
 	import { requirementOption, requirementType } from '$lib/types';
 	import disciplines from './disciplines.json';
+	import { toast } from 'svelte-sonner';
 	let {
 		data,
 		courses,
@@ -33,11 +34,15 @@
 		return { label: `Level ${i + 1}`, value: i.toString() };
 	});
 
-	const { form: formData, enhance, message, allErrors } = form;
+	const { form: formData, enhance, message } = form;
 
 	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
 	});
 
@@ -54,13 +59,33 @@
 			}
 		];
 	}
+
+	function clearDetails(id: string) {
+		console.log('clearing details', id);
+
+		const requirement = $formData.requirements.find((r) => r.id === id);
+		if (requirement) {
+			requirement.details = [];
+
+			$formData.requirements = $formData.requirements.map((r) => {
+				if (r.id === id) {
+					return requirement;
+				}
+				return r;
+			});
+		}
+	}
+
+	function removeRequirement(id: string) {
+		$formData.requirements = $formData.requirements.filter((r) => r.id !== id);
+	}
 </script>
 
-<form method="POST" use:enhance class="space-y-4">
+<form method="POST" use:enhance class="space-y-4" action="?/edit">
 	<Form.Field {form} name="name">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Major</Form.Label>
+				<Form.Label class="font-semibold">Minor</Form.Label>
 				<Input {...props} bind:value={$formData.name} placeholder="Meterology..." />
 			{/snippet}
 		</Form.Control>
@@ -80,7 +105,11 @@
 					<div class="flex flex-col gap-3">
 						<div class="flex items-center justify-between">
 							<h1 class="text-sm font-semibold">Requirement #{i + 1}</h1>
-							<Button.Root variant="outline" type="button">Remove</Button.Root>
+							<Button.Root
+								variant="outline"
+								type="button"
+								onclick={() => removeRequirement(requirement.id)}>Remove</Button.Root
+							>
 						</div>
 						<div class="text-sm font-semibold">Details Type</div>
 						<RadioGroup.Root bind:value={requirement.type} id={requirement.id} class="flex gap-3">
@@ -127,7 +156,11 @@
 
 						<!-- Course Dropdown  -->
 						{#if requirement.type === 'COURSES'}
-							<div class="text-sm font-semibold">Courses Details</div>
+							<div class="text-sm font-semibold">
+								Courses Details <button type="button" onclick={() => clearDetails(requirement.id)}
+									>x</button
+								>
+							</div>
 							<Select.Root type="multiple" bind:value={requirement.details}>
 								<Select.Trigger class="h-fit">
 									{#if requirement.details && requirement.details.length > 0}
@@ -147,7 +180,11 @@
 								</Select.Content>
 							</Select.Root>
 						{:else if requirement.type === 'DISCIPLINES'}
-							<div class="text-sm font-semibold">Discipline Details</div>
+							<div class="text-sm font-semibold">
+								Discipline Details<button type="button" onclick={() => clearDetails(requirement.id)}
+									>x</button
+								>
+							</div>
 							<Select.Root type="multiple" bind:value={requirement.details}>
 								<Select.Trigger class="h-fit">
 									{#if requirement.details && requirement.details.length > 0}
@@ -167,7 +204,11 @@
 								</Select.Content>
 							</Select.Root>
 						{:else if requirement.type === 'FACULTIES'}
-							<div class="text-sm font-semibold">Faculties Details</div>
+							<div class="text-sm font-semibold">
+								Faculties Details<button type="button" onclick={() => clearDetails(requirement.id)}
+									>x</button
+								>
+							</div>
 							<Select.Root type="multiple" bind:value={requirement.details}>
 								<Select.Trigger class="h-fit">
 									{#if requirement.details && requirement.details.length > 0}

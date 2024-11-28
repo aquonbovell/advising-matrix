@@ -1,8 +1,5 @@
-import { deleteUser, fetchUsers } from '$lib/actions/user.actions';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteFaculty, fetchFaculties } from '$lib/actions/faculty.actions';
-import { fetchDepartments } from '$lib/actions/department.actions';
 import { deleteMinor, fetchMinors } from '$lib/actions/minor.actions';
 
 export const load: PageServerLoad = async () => {
@@ -11,9 +8,7 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	delete: async ({ request, locals }) => {
-		const role = locals.user?.role;
-
-		if (role !== 'ADMIN') {
+		if (locals.user?.role !== 'ADMIN') {
 			return fail(403, { message: 'You do not have permission to delete minors' });
 		}
 		const id = (await request.formData()).get('id')?.toString();

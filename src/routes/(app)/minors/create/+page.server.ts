@@ -1,19 +1,13 @@
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
+import { createMinor, exist } from '$lib/actions/minor.actions';
 import { fetchCourseCodes } from '$lib/actions/course.actions';
 import { fetchFaculties } from '$lib/actions/faculty.actions';
 import { minorCreationSchema } from './minorCreation.schema';
-import { createMinor } from '$lib/actions/minor.actions';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const role = locals.user?.role;
-
-	if (role !== 'ADMIN') {
-		redirect(303, '/minors');
-	}
-
+export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(minorCreationSchema));
 	const courses = await fetchCourseCodes();
 	const faculties = await fetchFaculties();
@@ -23,18 +17,32 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	default: async (event) => {
 		const form = await superValidate(event, zod(minorCreationSchema));
-
+		if (event.locals.user?.role !== 'ADMIN') {
+			return message(
+				form,
+				{ message: 'You do not have permission to create faculties', type: 'failure' },
+				{ status: 403 }
+			);
+		}
 		if (!form.valid) {
-			return fail(400, { form });
+			return fail(404, { form });
 		}
 
 		console.log(form.data);
+		const minorName = await exist(form.data.name, 'name');
+		if (minorName) {
+			form.errors.name = [
+				...(form.errors.name ?? ''),
+				'Minor already exists. Please choose another minor name'
+			];
+			return fail(400, { form });
+		}
 		try {
-			const id = await createMinor(form.data);
+			await createMinor(form.data);
 		} catch (err) {
 			console.error(err);
-			return fail(500, { message: 'Failed to update minor' });
+			return message(form, { message: 'Failed to create minor', type: 'failure' }, { status: 400 });
 		}
-		return { form };
+		return message(form, { message: 'Minor created', type: 'success' });
 	}
 };

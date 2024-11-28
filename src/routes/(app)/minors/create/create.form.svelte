@@ -12,6 +12,7 @@
 	import { minorCreationSchema, type MinorCreationSchema } from './minorCreation.schema';
 	import { requirementOption, requirementType } from '$lib/types';
 	import disciplines from './disciplines.json';
+	import { toast } from 'svelte-sonner';
 	let {
 		data,
 		courses,
@@ -37,7 +38,11 @@
 
 	$effect(() => {
 		if ($message) {
-			alert($message);
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
 		}
 	});
 
