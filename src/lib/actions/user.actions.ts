@@ -1,4 +1,9 @@
-import { generateId, hashPassword, verifyPassword } from '$lib/server/auth';
+import {
+	generateId,
+	generateTokenWithExpiration,
+	hashPassword,
+	verifyPassword
+} from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import { env } from '$env/dynamic/private';
 import type { DB, User } from '$lib/server/db/schema';
@@ -6,13 +11,25 @@ import type { DB, User } from '$lib/server/db/schema';
 import type { ReferenceExpression } from 'kysely';
 
 export const createUser = async (
-	user: Omit<User, 'id' | 'onboarded' | 'passwordHash' | 'created_at' | 'updated_at'>
+	user: Omit<
+		User,
+		| 'id'
+		| 'onboarded'
+		| 'passwordHash'
+		| 'created_at'
+		| 'updated_at'
+		| 'invite_token'
+		| 'invite_expires'
+	>
 ) => {
 	try {
+		const access = generateTokenWithExpiration();
 		const result = await db
 			.insertInto('User')
 			.values({
 				...user,
+				invite_expires: access.expiresAt,
+				invite_token: access.token,
 				id: generateId(),
 				onboarded: 0,
 				passwordHash: await hashPassword(env.DEFAULT_PASSWORD),
@@ -28,10 +45,10 @@ export const createUser = async (
 	}
 };
 
-export const getUserByCredentials = async (
+export const verifyUserByCredentials = async (
 	email: string,
 	password: string
-): Promise<null | string> => {
+): Promise<boolean> => {
 	const user = await db
 		.selectFrom('User')
 		.where((eb) => eb('email', '=', email).or('alternateEmail', '=', email))
@@ -39,14 +56,17 @@ export const getUserByCredentials = async (
 		.executeTakeFirst();
 
 	if (!user) {
-		return null;
+		return false;
 	}
 
-	const valid = await verifyPassword(user.passwordHash, password);
-
-	if (!valid) {
-		return null;
-	}
+	return await verifyPassword(user.passwordHash, password);
+};
+export const fetchUserByEmail = async (email: string): Promise<string> => {
+	const user = await db
+		.selectFrom('User')
+		.where((eb) => eb('email', '=', email).or('alternateEmail', '=', email))
+		.select('id')
+		.executeTakeFirstOrThrow();
 
 	return user.id;
 };
@@ -54,7 +74,17 @@ export const getUserByCredentials = async (
 export const fetchUsers = async () => {
 	return db
 		.selectFrom('User')
-		.select(['id', 'name', 'username', 'role', 'alternateEmail', 'email'])
+		.select([
+			'id',
+			'name',
+			'username',
+			'role',
+			'alternateEmail',
+			'email',
+			'invite_token',
+			'invite_expires',
+			'onboarded'
+		])
 		.where('role', '!=', 'ADMIN')
 		.execute();
 };
@@ -79,13 +109,16 @@ export const deleteUser = async (id: string) => {
 };
 
 export const updateUser = async (
-	user: Omit<User, 'passwordHash' | 'updated_at' | 'created_at'>
+	user: Omit<User, 'passwordHash' | 'updated_at' | 'created_at' | 'invite_token' | 'invite_expires'>
 ) => {
+	const access = generateTokenWithExpiration();
 	await db
 		.updateTable('User')
 		.set({
 			email: user.email,
 			name: user.name,
+			invite_expires: access.expiresAt,
+			invite_token: access.token,
 			username: user.username,
 			alternateEmail: user.alternateEmail,
 			onboarded: user.onboarded,
@@ -103,6 +136,19 @@ export async function exist(value: string, field: ReferenceExpression<DB, 'User'
 		.select('id')
 		.executeTakeFirst();
 	return department !== undefined;
+}
+
+export async function resetUser(id: string) {
+	const user = generateTokenWithExpiration();
+	await db
+		.updateTable('User')
+		.set({
+			invite_expires: user.expiresAt,
+			invite_token: user.token,
+			updated_at: new Date().toISOString()
+		})
+		.where('id', '=', id)
+		.execute();
 }
 
 export async function userTokenExpiration(id: string, token: string) {
