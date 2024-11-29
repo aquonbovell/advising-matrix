@@ -13,11 +13,10 @@
 		codes,
 		degree
 	} from '$lib/stores/matrix';
-	import type { NonNullableGrade, Program } from '$lib/types';
+	import type { CourseRequirementDetails, NonNullableGrade, Program } from '$lib/types';
 	import GradeDialog from '$lib/components/dialog/Grade.svelte';
 	import CourseSelectionDialog from '$lib/components/dialog/Course.svelte';
 	import CourseCard from '$lib/components/matrix/card.svelte';
-	import { Loader2 } from 'lucide-svelte';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
 
@@ -65,6 +64,7 @@
 	let isGradeDialogOpen = $state(false);
 	let loading = $state(false);
 	let currentRequirementId = $state<string | undefined>(undefined);
+	let selectedCourse = $state<CourseRequirementDetails | undefined>(undefined);
 
 	function openCourseDialog(requirementId: string) {
 		currentRequirementId = requirementId;
@@ -80,7 +80,7 @@
 <div class="mx-auto flex flex-col gap-6" transition:fly={{ y: 30, delay: 200 }}>
 	<Card.Root class="min-w-80 overflow-hidden">
 		<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
-			<Card.Title>Bsc. {$degree.name}</Card.Title>
+			<Card.Title>Bsc. {$degree.name} {selectedCourse?.code}</Card.Title>
 			<form
 				action="?/saveGrades"
 				method="post"
@@ -164,6 +164,7 @@
 								{course}
 								required={req.option === 'ALL'}
 								addGradeDialog={() => openGradeDialog(req.id)}
+								bind:selectedCourse
 							/>
 						{/if}
 					{/each}
@@ -179,4 +180,8 @@
 	selectedCourseId={[]}
 />
 
-<GradeDialog bind:open={isGradeDialogOpen} requirementId={currentRequirementId} />
+<GradeDialog
+	bind:open={isGradeDialogOpen}
+	bind:requirementId={currentRequirementId}
+	bind:selectedCourse
+/>

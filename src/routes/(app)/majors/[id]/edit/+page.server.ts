@@ -47,6 +47,8 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 		try {
+			console.log(form.data);
+
 			await updateMajor(form.data);
 		} catch (err) {
 			console.error(err);
