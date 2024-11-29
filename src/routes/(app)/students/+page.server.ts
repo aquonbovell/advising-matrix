@@ -1,7 +1,7 @@
 import {} from '$lib/actions/user.actions';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteStudent, fetchStudents } from '$lib/actions/student.actions';
+import { deleteStudent } from '$lib/actions/student.actions';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const role = locals.user?.role;
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		redirect(303, '/');
 	}
 
-	return { students: await fetchStudents() };
+	return {};
 };
 
 export const actions: Actions = {

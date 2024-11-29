@@ -23,26 +23,6 @@
 							<p>Email: <a href={`mailto:${advisor.email}`}>{advisor.email}</a></p>
 						</Card.Content>
 					</Card.Root>
-					<Card.Root>
-						<Card.Header>
-							<Card.Title>Academic Advisor</Card.Title>
-							<Card.Description>For the advising matrix</Card.Description>
-						</Card.Header>
-						<Card.Content>
-							<p>Name: {advisor.name}</p>
-							<p>Email: {advisor.email}</p>
-						</Card.Content>
-					</Card.Root>
-					<Card.Root>
-						<Card.Header>
-							<Card.Title>Academic Advisor</Card.Title>
-							<Card.Description>For the advising matrix</Card.Description>
-						</Card.Header>
-						<Card.Content>
-							<p>Name: {advisor.name}</p>
-							<p>Email: {advisor.email}</p>
-						</Card.Content>
-					</Card.Root>
 				{/each}
 			</div>
 		{:else}

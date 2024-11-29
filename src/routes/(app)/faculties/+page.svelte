@@ -3,8 +3,29 @@
 	import DataTable from './data-table.svelte';
 	import { columns } from './columns';
 	import * as Button from '$lib/components/ui/button';
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	let { data }: { data: PageData } = $props();
+	const faculties = writable<
+		{
+			id: string;
+			code: string;
+			name: string;
+		}[]
+	>([]);
+
+	onMount(async () => {
+		const res = await fetch('/api/faculties');
+
+		const data: {
+			id: string;
+			code: string;
+			name: string;
+		}[] = await res.json();
+
+		faculties.update(() => data);
+	});
 </script>
 
 <div class="flex justify-between">
@@ -15,7 +36,7 @@
 </div>
 
 <DataTable
-	data={data.faculties.map((f) => {
+	data={$faculties.map((f) => {
 		return { ...f, role: data.user.role };
 	})}
 	{columns}

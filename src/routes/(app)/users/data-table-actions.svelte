@@ -9,7 +9,8 @@
 	import type { UserRole } from '$lib/types';
 	import { toast } from 'svelte-sonner';
 
-	let { id, role }: { id: string; role: UserRole } = $props();
+	let { id, role, invite_token }: { id: string; role: UserRole; invite_token: string | null } =
+		$props();
 	let deleteIsOpenDialog = $state(false);
 	let resetTokenIsOpenDialog = $state(false);
 </script>
@@ -28,6 +29,14 @@
 			<DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
 			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
 				Copy User ID
+			</DropdownMenu.Item>
+			<DropdownMenu.Item
+				onclick={() => {
+					navigator.clipboard.writeText(invite_token ?? '');
+					toast.info('Copied invite token');
+				}}
+			>
+				Copy User Access Token
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />

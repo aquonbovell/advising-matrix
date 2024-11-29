@@ -1,9 +1,9 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteMinor, fetchMinors } from '$lib/actions/minor.actions';
+import { deleteMinor } from '$lib/actions/minor.actions';
 
 export const load: PageServerLoad = async () => {
-	return { minors: await fetchMinors() };
+	return {};
 };
 
 export const actions: Actions = {

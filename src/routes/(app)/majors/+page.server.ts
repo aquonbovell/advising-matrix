@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { deleteMajor, fetchMajors } from '$lib/actions/major.actions';
 
 export const load: PageServerLoad = async () => {
-	return { majors: await fetchMajors() };
+	return {};
 };
 
 export const actions: Actions = {

@@ -1,10 +1,33 @@
 <script lang="ts">
-	import type { ActionData, PageData } from './$types';
+	import type { PageData } from './$types';
 	import DataTable from './data-table.svelte';
 	import { columns } from './columns';
 	import * as Button from '$lib/components/ui/button';
+	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let { data }: { data: PageData } = $props();
+	const courses = writable<
+		{
+			id: string;
+			code: string;
+			level: number;
+			name: string;
+		}[]
+	>([]);
+
+	onMount(async () => {
+		const res = await fetch('/api/courses?page=0&size=1');
+
+		const data: {
+			id: string;
+			code: string;
+			level: number;
+			name: string;
+		}[] = await res.json();
+
+		courses.update(() => data);
+	});
 </script>
 
 <div class="flex justify-between">
@@ -15,7 +38,7 @@
 </div>
 
 <DataTable
-	data={data.courses.map((c) => {
+	data={$courses.map((c) => {
 		return { ...c, role: data.user.role };
 	})}
 	{columns}

@@ -1,9 +1,9 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteFaculty, fetchFaculties } from '$lib/actions/faculty.actions';
+import { deleteFaculty } from '$lib/actions/faculty.actions';
 
 export const load: PageServerLoad = async () => {
-	return { faculties: await fetchFaculties() };
+	return {};
 };
 
 export const actions: Actions = {
