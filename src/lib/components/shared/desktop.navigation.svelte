@@ -4,15 +4,6 @@
 	import { page } from '$app/stores';
 	import Icon from '@iconify/svelte';
 	import type { UserRole } from '$lib/types';
-
-	let {
-		user
-	}: {
-		user: {
-			name: string;
-			role: UserRole;
-		};
-	} = $props();
 </script>
 
 <aside class="hidden border-r bg-muted/40 md:block">
@@ -31,8 +22,8 @@
 					<Icon icon="fluent:home-24-filled" class="h-4 w-4" />
 					Home
 				</a>
-				{#if user.role}
-					{#each UserMenuItems[user.role].sort((a, b) => {
+				{#if $page.data.user.role}
+					{#each UserMenuItems[$page.data.user.role as UserRole].sort((a, b) => {
 						if (a.label < b.label) {
 							return -1;
 						}
@@ -52,6 +43,6 @@
 				{/if}
 			</nav>
 		</div>
-		<UserMenu {user} device="desktop" />
+		<UserMenu device="desktop" />
 	</div>
 </aside>

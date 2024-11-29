@@ -3,17 +3,11 @@
 	import * as Button from '$lib/components/ui/button';
 	import User from './user.avatar.svelte';
 	import Icon from '@iconify/svelte';
-	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import type { UserRole } from '$lib/types';
+	import { page } from '$app/stores';
 	let {
-		user,
 		device = 'desktop'
 	}: {
-		user: {
-			name: string | undefined;
-			role: UserRole;
-		} | null;
 		device: 'mobile' | 'desktop';
 	} = $props();
 
@@ -35,10 +29,10 @@
 		<div class="border-t border-gray-200 p-4">
 			<div class="flex w-full items-center justify-between">
 				<div class="flex items-center">
-					<User name={user?.name ?? 'A'} size="sm" />
+					<User size="sm" />
 					<div class="ml-3">
-						<p class="text-left text-sm font-medium text-gray-700">{user?.name}</p>
-						<p class="text-left text-xs text-gray-500">{user?.role}</p>
+						<p class="text-left text-sm font-medium text-gray-700">{$page.data.user.name}</p>
+						<p class="text-left text-xs text-gray-500">{$page.data.user.role}</p>
 					</div>
 				</div>
 			</div>
@@ -49,9 +43,11 @@
 		align={'end'}
 		class="flex w-full max-w-[8rem] flex-col bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5"
 	>
-		<Button.Root variant="ghost">
-			<a href="/settings" class="flex"><Icon icon="mdi:gear-outline" /> Settings </a>
-		</Button.Root>
+		{#if $page.data.user.role === 'ADMIN'}
+			<Button.Root variant="ghost" class=" w-full p-0" href="/settings">
+				<Icon icon="mdi:gear-outline" /> Settings
+			</Button.Root>
+		{/if}
 
 		<Button.Root
 			type="button"

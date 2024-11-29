@@ -1,5 +1,8 @@
 <script lang="ts">
-	let { name, size }: { name: string; size: string } = $props();
+	import { page } from '$app/stores';
+
+	let name: string = $page.data.user.name;
+	let { size }: { size: string } = $props();
 
 	function getSizes(size: string = 'md'): string | undefined {
 		const sizes: { [key: string]: string } = {
@@ -18,6 +21,6 @@
 	)}`}
 >
 	<span class=" absolute font-semibold uppercase leading-none"
-		>{name === undefined ? 'Anonymous' : name[0]}</span
+		>{name === undefined ? 'A' : name.charAt(0)}</span
 	>
 </div>

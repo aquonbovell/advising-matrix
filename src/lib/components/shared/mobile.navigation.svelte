@@ -7,8 +7,6 @@
 	import type { UserRole } from '$lib/types';
 	import Icon from '@iconify/svelte';
 
-	let { user }: { user: { name: string | undefined; role: UserRole } } = $props();
-
 	let sheetOpen = $state(false);
 </script>
 
@@ -36,8 +34,8 @@
 					<Icon icon="fluent:home-24-filled" />
 					Dashboard
 				</a>
-				{#if user.role}
-					{#each UserMenuItems[user.role].sort((a, b) => {
+				{#if $page.data.user.role}
+					{#each UserMenuItems[$page.data.user.role as UserRole].sort((a, b) => {
 						if (a.label < b.label) {
 							return -1;
 						}
@@ -59,5 +57,5 @@
 			</nav>
 		</Sheet.Content>
 	</Sheet.Root>
-	<UserMenu {user} device="mobile" />
+	<UserMenu device="mobile" />
 </header>
