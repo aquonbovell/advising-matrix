@@ -89,6 +89,26 @@ export const fetchUsers = async () => {
 		.execute();
 };
 
+export const getUsers = async (page: number = 0, size: number = 10) => {
+	return db
+		.selectFrom('User')
+		.select([
+			'id',
+			'name',
+			'username',
+			'role',
+			'alternateEmail',
+			'email',
+			'invite_token',
+			'invite_expires',
+			'onboarded'
+		])
+		.where('role', '!=', 'ADMIN')
+		.offset(page * size)
+		.limit(size)
+		.execute();
+};
+
 export const fetchUser = async (id: string) => {
 	const user = await db
 		.selectFrom('User')

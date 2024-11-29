@@ -16,8 +16,6 @@ export const degree = writable<Program>({
 	requirements: []
 });
 
-export const selectedCourse = writable<CourseRequirementDetails | undefined>(undefined);
-
 export const completedCredits = derived([studentCourses, codes], ([$studentCourses, $codes]) =>
 	$studentCourses.reduce((total, course) => {
 		if (isCourseCompleted(course)) {
