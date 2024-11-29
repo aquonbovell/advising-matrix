@@ -3,7 +3,7 @@
 	import * as Select from '$lib/components/ui/select';
 	import { Badge } from '$lib/components/ui/badge';
 	import { TrashIcon } from 'lucide-svelte';
-	import { selectedCourse, studentCourses } from '$lib/stores/matrix';
+	import { studentCourses } from '$lib/stores/matrix';
 	import { gradePoints } from '$lib/types';
 	import type { CourseRequirementDetails, StudentCourse } from '$lib/types';
 	import {
@@ -17,8 +17,14 @@
 	let {
 		course,
 		required,
-		addGradeDialog
-	}: { course: CourseRequirementDetails; required: boolean; addGradeDialog: () => void } = $props();
+		addGradeDialog,
+		selectedCourse = $bindable()
+	}: {
+		course: CourseRequirementDetails;
+		required: boolean;
+		addGradeDialog: () => void;
+		selectedCourse: CourseRequirementDetails | undefined;
+	} = $props();
 
 	let currentCourse = $state<StudentCourse | undefined>(undefined);
 
@@ -32,7 +38,7 @@
 		: 'bg-white hover:bg-gray-50';
 
 	function handleGradeDialogOpen() {
-		selectedCourse.set(course);
+		selectedCourse = course;
 		addGradeDialog();
 	}
 
@@ -57,6 +63,7 @@
 		<div class="flex-grow space-y-2 @md:col-span-4 @xl:col-span-3">
 			<div class="flex items-center gap-3">
 				<div class="flex items-center gap-2">
+					{selectedCourse?.code}
 					{#if !required}
 						<Button.Root
 							variant="ghost"
@@ -119,6 +126,7 @@
 					size="sm"
 					class="whitespace-nowrap"
 					onclick={handleGradeDialogOpen}
+					disabled={!arePrerequisitesMet(course)}
 				>
 					Enter grade
 				</Button.Root>

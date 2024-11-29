@@ -4,17 +4,23 @@
 	import * as Button from '$lib/components/ui/button';
 
 	import { gradePoints } from '$lib/types';
-	import type { Grade, NonNullableGrade } from '$lib/types';
-	import type { Selected } from 'bits-ui';
-	import { studentCourses as studentGrades, degree, selectedCourse } from '$lib/stores/matrix';
+	import type { CourseRequirementDetails, Grade } from '$lib/types';
+	import { studentCourses as studentGrades } from '$lib/stores/matrix';
 	import { toast } from 'svelte-sonner';
 
-	let { open = $bindable(), requirementId }: { open: boolean; requirementId: string | undefined } =
-		$props();
+	let {
+		open = $bindable(),
+		requirementId = $bindable(),
+		selectedCourse = $bindable()
+	}: {
+		open: boolean;
+		requirementId: string | undefined;
+		selectedCourse: CourseRequirementDetails | undefined;
+	} = $props();
 	let selectedGrade = $state<string | undefined>(undefined);
 
 	function handleGradeAdd() {
-		const courseId = $selectedCourse;
+		const courseId = selectedCourse;
 		const grade = selectedGrade as Grade;
 
 		if (!courseId) {
@@ -54,7 +60,8 @@
 						grade: [grade],
 						requirementId: requirementId ?? '',
 						courseId,
-						userId
+						userId,
+						name: ''
 					}
 				];
 			}
@@ -65,9 +72,9 @@
 <Dialog.Root bind:open>
 	<Dialog.Content class="max-w-min">
 		<Dialog.Header>
-			<Dialog.Title>{$selectedCourse?.name}</Dialog.Title>
+			<Dialog.Title>{selectedCourse?.name}</Dialog.Title>
 			<Dialog.Description>
-				{$selectedCourse?.name} - {$selectedCourse?.code}
+				{selectedCourse?.name} - {selectedCourse?.code}
 				<div class="flex gap-3 py-4">
 					<Select.Root required={true} type="single" bind:value={selectedGrade}>
 						<Select.Trigger class="w-[200px]">
