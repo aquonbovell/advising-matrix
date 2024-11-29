@@ -33,6 +33,7 @@
 		get data() {
 			return data;
 		},
+
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),

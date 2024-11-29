@@ -1,4 +1,4 @@
-import { deleteUser, fetchUsers, resetUser } from '$lib/actions/user.actions';
+import { deleteUser, resetUser } from '$lib/actions/user.actions';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (role !== 'ADMIN') {
 		redirect(303, '/');
 	}
-	return { users: await fetchUsers() };
+	return {};
 };
 
 export const actions: Actions = {
