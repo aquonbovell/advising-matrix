@@ -2,7 +2,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms';
 import * as auth from '$lib/server/auth';
 import type { Actions, PageServerLoad } from './$types';
-import { loginSchema } from './login.schema';
+import { loginSchema } from '$lib/schemas/login';
 import { fail, redirect } from '@sveltejs/kit';
 import { fetchUserByEmail, verifyUserByCredentials } from '$lib/actions/user.actions';
 
