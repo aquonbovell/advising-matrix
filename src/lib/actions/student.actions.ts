@@ -3,7 +3,18 @@ import { db } from '$lib/server/db';
 import type { Student, StudentCourses } from '$lib/server/db/schema';
 import { sql } from 'kysely';
 
-export const fetchStudents = async () => {
+export const fetchStudents = async (): Promise<
+	{
+		email: string;
+		alternateEmail: string;
+		username: string;
+		id: string;
+		name: string;
+		major: string;
+		minor: string | null;
+		major2: string | null;
+	}[]
+> => {
 	const students = await db
 		.selectFrom('Student')
 		.innerJoin('User', 'Student.userId', 'User.id')

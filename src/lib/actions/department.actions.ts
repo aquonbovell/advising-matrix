@@ -82,7 +82,20 @@ export const updateDepartment = async (department: Department) => {
 	}
 };
 
-export async function exist(value: string, field: ReferenceExpression<DB, 'Department'>) {
+export async function exist(
+	value: string,
+	field: ReferenceExpression<DB, 'Department'>,
+	id: string | undefined = undefined
+) {
+	if (id) {
+		const department = await db
+			.selectFrom('Department')
+			.where(field, '=', value)
+			.where('id', '!=', id)
+			.select('id')
+			.executeTakeFirst();
+		return department !== undefined;
+	}
 	const department = await db
 		.selectFrom('Department')
 		.where(field, '=', value)

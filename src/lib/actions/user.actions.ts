@@ -149,12 +149,19 @@ export const updateUser = async (
 		.execute();
 };
 
-export async function exist(value: string, field: ReferenceExpression<DB, 'User'>) {
-	const department = await db
-		.selectFrom('User')
-		.where(field, '=', value)
-		.select('id')
-		.executeTakeFirst();
+export async function exist(
+	value: string,
+	field: ReferenceExpression<DB, 'User'>,
+	id: string | undefined = undefined
+) {
+	let query = db.selectFrom('User').where(field, '=', value).select('id');
+	if (id) {
+		query = query.where('id', '!=', id);
+	}
+	const department = await query.executeTakeFirst();
+
+	console.log(department);
+
 	return department !== undefined;
 }
 
