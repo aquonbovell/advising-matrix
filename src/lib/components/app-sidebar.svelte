@@ -52,7 +52,7 @@
 		faculties: [
 			{
 				title: 'Faculties',
-				url: '#',
+				url: '/faculties',
 				icon: Building,
 				isActive: false,
 				items: [
