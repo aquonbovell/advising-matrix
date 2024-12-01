@@ -52,15 +52,15 @@
 
 <div
 	class={cn(
-		'group relative border-y transition-all duration-200 @container',
+		'@container group relative border-y transition-all duration-200',
 
 		statusColor
 	)}
 >
 	<div
-		class="grid flex-col gap-4 p-4 @md:grid-cols-6 sm:flex-row sm:items-start sm:justify-between"
+		class="@md:grid-cols-6 grid flex-col gap-4 p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
-		<div class="flex-grow space-y-2 @md:col-span-4 @xl:col-span-3">
+		<div class="@md:col-span-4 @xl:col-span-3 flex-grow space-y-2">
 			<div class="flex items-center gap-3">
 				<div class="flex items-center gap-2">
 					{selectedCourse?.code}
@@ -119,7 +119,7 @@
 				{/if}
 			</div>
 		</div>
-		<div class="flex w-full flex-wrap items-center gap-3 @md:col-span-2 @xl:col-span-3">
+		<div class="@md:col-span-2 @xl:col-span-3 flex w-full flex-wrap items-center gap-3">
 			{#if !isCourseCompleted(currentCourse)}
 				<Button.Root
 					variant="outline"

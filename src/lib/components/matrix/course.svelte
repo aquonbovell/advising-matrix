@@ -56,8 +56,8 @@
 	let styles = $state('');
 </script>
 
-<li class="border-t-2 px-4 @container">
-	<div class="flex flex-col justify-between gap-4 py-4 @xl:flex-row">
+<li class="@container border-t-2 px-4">
+	<div class="@xl:flex-row flex flex-col justify-between gap-4 py-4">
 		<div class="flex gap-4">
 			<Badge class={`w-0 ${styles} hover:${styles} self-center border-0 p-1.5 `}></Badge>
 			<div class="flex flex-col gap-1">
@@ -91,7 +91,7 @@
 			</div>
 		</div>
 
-		<div class="flex flex-col gap-4 @xl:flex-row-reverse">
+		<div class="@xl:flex-row-reverse flex flex-col gap-4">
 			<div class="flex max-w-[22rem] flex-row flex-wrap gap-2">
 				<!-- {#if $studentCourses.find((sc) => sc.courseId === course.id)?.grade}
 					{#each $studentCourses

@@ -6,20 +6,18 @@
 	let {
 		ref = $bindable(null),
 		class: className,
-		level = 3,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
-		level?: 1 | 2 | 3 | 4 | 5 | 6;
-	} = $props();
+	}: WithElementRef<HTMLAttributes<HTMLSpanElement>> = $props();
 </script>
 
-<div
-	role="heading"
-	aria-level={level}
+<span
 	bind:this={ref}
-	class={cn('text-2xl font-semibold leading-none tracking-tight', className)}
+	role="link"
+	aria-disabled="true"
+	aria-current="page"
+	class={cn('font-normal text-foreground', className)}
 	{...restProps}
 >
 	{@render children?.()}
-</div>
+</span>
