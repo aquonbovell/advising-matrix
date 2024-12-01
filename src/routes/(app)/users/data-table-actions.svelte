@@ -8,6 +8,7 @@
 	import { cn } from '$lib/utils';
 	import type { UserRole } from '$lib/types';
 	import { toast } from 'svelte-sonner';
+	import { goto, invalidate, invalidateAll } from '$app/navigation';
 
 	let { id, role, invite_token }: { id: string; role: UserRole; invite_token: string | null } =
 		$props();
@@ -27,7 +28,12 @@
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
-			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
+			<DropdownMenu.Item
+				onclick={() => {
+					navigator.clipboard.writeText(id);
+					toast.info('Copied user ID');
+				}}
+			>
 				Copy User ID
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
@@ -130,12 +136,13 @@
 											toast.error(result.data?.message as string, { duration: 2000 });
 										} else if (result.type === 'success') {
 											deleteIsOpenDialog = false;
-											toast.success('Course deleted successfully', { duration: 2000 });
+											toast.success('User deleted successfully', { duration: 2000 });
 										} else {
 											deleteIsOpenDialog = false;
 											toast.error('An error occurred', { duration: 2000 });
 										}
 										await applyAction(result);
+										goto('/users', { replaceState: true, invalidateAll: true });
 									};
 								}}
 								class="flex gap-2"

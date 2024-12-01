@@ -42,14 +42,17 @@ export const columns: ColumnDef<User>[] = [
 	},
 	{
 		accessorKey: 'role',
+		id: 'role',
 		header: 'Role'
 	},
 	{
 		accessorKey: 'username',
+		id: 'username',
 		header: 'Username'
 	},
 	{
 		accessorKey: 'email',
+		id: 'email',
 		header: ({ column }) =>
 			renderComponent(DataTableEmailButton, {
 				onclick: () => column.toggleSorting(column.getIsSorted() === 'asc')
@@ -57,10 +60,12 @@ export const columns: ColumnDef<User>[] = [
 	},
 	{
 		accessorKey: 'alternateEmail',
+		id: 'Alternate Email',
 		header: 'Alternate Email'
 	},
 	{
 		header: 'Status',
+		id: 'status',
 		cell: ({ row }) => {
 			return renderComponent(DataTableStatusBadge, {
 				status: row.original.onboarded ? 'Onboarded' : 'Not Onboarded'
@@ -69,6 +74,7 @@ export const columns: ColumnDef<User>[] = [
 	},
 	{
 		header: 'Access',
+		id: 'access',
 		cell: ({ row }) => {
 			return renderComponent(DataTableAccessBadge, {
 				invite_token: row.original.invite_token,
@@ -77,6 +83,7 @@ export const columns: ColumnDef<User>[] = [
 		}
 	},
 	{
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => {
 			// You can pass whatever you need from `row.original` to the component

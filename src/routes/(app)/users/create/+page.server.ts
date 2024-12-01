@@ -47,6 +47,7 @@ export const actions: Actions = {
 		}
 
 		const alternateEmail = await exist(form.data.alternateEmail, 'alternateEmail');
+
 		if (alternateEmail) {
 			form.errors.alternateEmail = [
 				...(form.errors.alternateEmail ?? ''),

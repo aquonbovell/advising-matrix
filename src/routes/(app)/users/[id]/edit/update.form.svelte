@@ -8,7 +8,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { userUpdateSchema, type UserUpdateSchema, userOptions } from './userUpdate.schema';
-
+	import Loader from 'lucide-svelte/icons/loader';
 	import { toast } from 'svelte-sonner';
 	let { data }: { data: SuperValidated<Infer<UserUpdateSchema>> } = $props();
 
@@ -17,7 +17,7 @@
 		validators: zodClient(userUpdateSchema)
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance, message, submitting, allErrors } = form;
 	$effect(() => {
 		if ($message) {
 			if ($message.type === 'success') {
@@ -28,6 +28,8 @@
 		}
 	});
 </script>
+
+<pre>{JSON.stringify($allErrors, null, 2)}</pre>
 
 <form method="POST" use:enhance class="space-y-4" action="?/edit">
 	<Form.Field {form} name="id" hidden>
@@ -94,22 +96,29 @@
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 
-	<Form.Field {form} name="role">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label class="font-semibold">Role</Form.Label>
-				<RadioGroup.Root bind:value={$formData.role} {...props} class="flex">
-					{#each userOptions as option}
+	<Form.Fieldset {form} name="role">
+		<Form.Legend class="font-semibold">Role</Form.Legend>
+		<RadioGroup.Root bind:value={$formData.role} class="flex">
+			{#each userOptions as option}
+				<Form.Control>
+					{#snippet children({ props })}
 						<div class="flex flex-row items-center space-x-2">
-							<RadioGroup.Item value={option} id={option} />
-							<Label for={option}>{option}</Label>
+							<RadioGroup.Item value={option} {...props} />
+							<Form.Label for={option}>{option.toLocaleLowerCase()}</Form.Label>
 						</div>
-					{/each}
-				</RadioGroup.Root>
-			{/snippet}
-		</Form.Control>
+					{/snippet}
+				</Form.Control>
+			{/each}
+		</RadioGroup.Root>
 		<Form.FieldErrors class="mt-2 text-sm" />
-	</Form.Field>
+	</Form.Fieldset>
 
-	<Form.Button type="submit">Update</Form.Button>
+	<Form.Button disabled={$submitting} class="text-base font-semibold">
+		{#if $submitting}
+			<Loader class="time animate-spin-slow" />
+			<span>Please wait...</span>
+		{:else}
+			Update
+		{/if}
+	</Form.Button>
 </form>

@@ -30,7 +30,7 @@ export const actions: Actions = {
 		}
 		if (!form.valid) return fail(404, { form });
 
-		const username = await exist(form.data.username, 'username');
+		const username = await exist(form.data.username, 'username', form.data.id);
 		if (username) {
 			form.errors.username = [
 				...(form.errors.username ?? ''),
@@ -39,7 +39,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const email = await exist(form.data.email, 'email');
+		const email = await exist(form.data.email, 'email', form.data.id);
 		if (email) {
 			form.errors.email = [
 				...(form.errors.email ?? ''),
@@ -48,7 +48,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const alternateEmail = await exist(form.data.alternateEmail, 'alternateEmail');
+		const alternateEmail = await exist(form.data.alternateEmail, 'alternateEmail', form.data.id);
 		if (alternateEmail) {
 			form.errors.alternateEmail = [
 				...(form.errors.alternateEmail ?? ''),
@@ -58,12 +58,13 @@ export const actions: Actions = {
 		}
 
 		try {
-			await updateUser({ ...form.data, onboarded: form.data.onboarded ? 1 : 0 });
+			throw new Error('Not implemented');
+			// await updateUser({ ...form.data, onboarded: form.data.onboarded ? 1 : 0 });
 		} catch (err) {
 			console.error(err);
 			return message(form, { message: 'Failed to update user', type: 'failure' }, { status: 400 });
 		}
-		return message(form, { message: 'User updated', type: 'success' });
+		return message(form, { message: 'User created', type: 'success' });
 	},
 	delete: async ({ params, locals, request }) => {
 		if (locals.user?.role !== 'ADMIN') {

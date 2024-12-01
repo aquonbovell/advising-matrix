@@ -1,11 +1,16 @@
 import { deleteUser, fetchUser } from '$lib/actions/user.actions';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
-	const user = await fetchUser(id);
-	return { person: user };
+	try {
+		const user = await fetchUser(id);
+		return { person: { ...user, role: user.role.toLocaleLowerCase() } };
+	} catch (err) {
+		console.error(err);
+		return error(404, { message: 'Not found' });
+	}
 };
 
 export const actions: Actions = {

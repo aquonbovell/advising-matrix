@@ -9,14 +9,15 @@
 	import { buttonVariants } from '$lib/components/ui/button/';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
 </script>
 
-<Card.Root class="glass mx-auto max-w-xl bg-inherit">
+<Card.Root class="glass mx-auto mb-4  max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title>Matrix User - {data.person.name}</Card.Title>
+		<Card.Title>User - {data.person.name}</Card.Title>
 		<Card.Description>Manage this user account details</Card.Description>
 	</Card.Header>
 	<Card.Content>
@@ -24,12 +25,17 @@
 			<div class="grid w-full items-center gap-4">
 				<div class="flex flex-col space-y-1.5">
 					<Label.Root for="name">Name</Label.Root>
-					<Input.Root id="name" placeholder="Jane Doe" readonly value={data.person.name} />
+					<Input.Root id="name" placeholder="Jane Doe" readonly bind:value={data.person.name} />
 				</div>
 
 				<div class="flex flex-col space-y-1.5">
 					<Label.Root for="username">Username</Label.Root>
-					<Input.Root id="username" placeholder="janedoe" readonly value={data.person.username} />
+					<Input.Root
+						id="username"
+						placeholder="janedoe"
+						readonly
+						bind:value={data.person.username}
+					/>
 				</div>
 				<div class="flex flex-col space-y-1.5">
 					<Label.Root for="email">Email</Label.Root>
@@ -38,7 +44,7 @@
 						placeholder="example@mycavehill.uwi.edu"
 						type="email"
 						readonly
-						value={data.person.email}
+						bind:value={data.person.email}
 					/>
 				</div>
 				<div class="flex flex-col space-y-1.5">
@@ -48,7 +54,7 @@
 						placeholder="example@outlook.com"
 						readonly
 						type="email"
-						value={data.person.alternateEmail}
+						bind:value={data.person.alternateEmail}
 					/>
 				</div>
 				<div class="flex flex-row items-center gap-2 space-y-1.5">
@@ -62,7 +68,7 @@
 				</div>
 				<div class="flex flex-col space-y-1.5">
 					<Label.Root for="role">Role</Label.Root>
-					<Input.Root id="role" placeholder="Student" readonly value={data.person.role} />
+					<Input.Root id="role" placeholder="Student" readonly bind:value={data.person.role} />
 				</div>
 			</div>
 		</form>
@@ -97,12 +103,15 @@
 										toast.error(result.data?.message as string, { duration: 2000 });
 									} else if (result.type === 'success') {
 										isOpen = false;
-										toast.success('Course deleted successfully', { duration: 2000 });
+										toast.success('User deleted successfully', { duration: 2000 });
 									} else {
 										isOpen = false;
 										toast.error('An error occurred', { duration: 2000 });
 									}
 									await applyAction(result);
+									setTimeout(() => {
+										goto('/users', { replaceState: true });
+									}, 2000);
 								};
 							}}
 							class="flex gap-2"
