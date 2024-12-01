@@ -1,5 +1,5 @@
 import { deleteUser, fetchUser } from '$lib/actions/user.actions';
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { deleteStudent, fetchStudentDetails } from '$lib/actions/student.actions';
 
@@ -10,8 +10,19 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		redirect(303, '/');
 	}
 	const { id } = params;
-	const student = await fetchStudentDetails(id);
-	return { student };
+	try {
+		const student = await fetchStudentDetails(id);
+		return {
+			student: {
+				...student,
+				role: student.role.toLowerCase(),
+				program: `${student.major} ${student.minor ? ' with ' + student.minor : student.major2 ? ' and ' + student.major2 : ''}`
+			}
+		};
+	} catch (err) {
+		console.error(err);
+		return error(404, { message: 'Not found' });
+	}
 };
 
 export const actions: Actions = {

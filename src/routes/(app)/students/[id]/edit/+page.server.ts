@@ -7,7 +7,7 @@ import { deleteStudent, fetchStudent, updateStudent } from '$lib/actions/student
 import { fetchAdvisors } from '$lib/actions/advisor.actions';
 import { fetchMajors } from '$lib/actions/major.actions';
 import { fetchMinors } from '$lib/actions/minor.actions';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const role = locals.user?.role;
@@ -16,16 +16,20 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		redirect(303, '/');
 	}
 	const { id } = params;
+	try {
+		const student = await fetchStudent(id);
 
-	const student = await fetchStudent(id);
-
-	return {
-		form: await superValidate({ ...student }, zod(studentUpdateSchema)),
-		user: await fetchUser(student.userId),
-		advisors: await fetchAdvisors(),
-		majors: await fetchMajors(),
-		minors: await fetchMinors()
-	};
+		return {
+			form: await superValidate({ ...student }, zod(studentUpdateSchema)),
+			user: await fetchUser(student.userId),
+			advisors: await fetchAdvisors(),
+			majors: await fetchMajors(),
+			minors: await fetchMinors()
+		};
+	} catch (err) {
+		console.error(err);
+		error(404, { message: 'Not found' });
+	}
 };
 
 export const actions: Actions = {
@@ -51,7 +55,7 @@ export const actions: Actions = {
 				{ status: 400 }
 			);
 		}
-		return message(form, { message: 'Student created', type: 'success' });
+		return message(form, { message: 'Student updated', type: 'success' });
 	},
 	delete: async ({ params, locals }) => {
 		if (locals.user?.role !== 'ADMIN') {

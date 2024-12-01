@@ -38,14 +38,16 @@ export const actions: Actions = {
 			return fail(404, { form });
 		}
 
-		console.log(form.data);
-
 		try {
 			const studentId = await createStudent(form.data, form.data.advisors);
 		} catch (err) {
 			console.error(err);
-			return message(form, { message: 'Failed to update user', type: 'failure' }, { status: 400 });
+			return message(
+				form,
+				{ message: 'Failed to create student', type: 'failure' },
+				{ status: 400 }
+			);
 		}
-		return message(form, { message: 'User created', type: 'success' });
+		return message(form, { message: 'Student created', type: 'success' });
 	}
 };

@@ -140,8 +140,8 @@
 					>
 				{/if}
 			</Card.Header>
-			<Card.Content class="px-0 pb-0 @container">
-				<ul class="grid @2xl:grid-cols-2">
+			<Card.Content class="@container px-0 pb-0">
+				<ul class="@2xl:grid-cols-2 grid">
 					{#each req.courses as course}
 						{@const isInStudentCourses = $studentGrades.some(
 							(sc) => sc.courseId === course.id && sc.requirementId === req.id

@@ -7,17 +7,17 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import * as Checkbox from '$lib/components/ui/checkbox/';
 	import { buttonVariants } from '$lib/components/ui/button/';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
 	let { data }: { data: PageData } = $props();
+	let isOpen = $state(false);
 </script>
 
-<Card.Root class="mx-auto max-w-xl border-0 bg-inherit">
+<Card.Root class="mx-auto mb-4 max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title
-			>Matrix Student - {data.student.role[0] +
-				data.student.role.substring(1).toLowerCase()}</Card.Title
-		>
+		<Card.Title>Student - {data.student.name}</Card.Title>
 		<Card.Description>Manage this user account settings</Card.Description>
 	</Card.Header>
 	<Card.Content>
@@ -25,12 +25,17 @@
 			<div class="grid w-full items-center gap-4">
 				<div class="flex flex-col space-y-1.5">
 					<Label.Root for="name">Name</Label.Root>
-					<Input.Root id="name" placeholder="Jane Doe" readonly value={data.student.name} />
+					<Input.Root id="name" placeholder="Jane Doe" readonly bind:value={data.student.name} />
 				</div>
 
 				<div class="flex flex-col space-y-1.5">
 					<Label.Root for="username">Username</Label.Root>
-					<Input.Root id="username" placeholder="janedoe" readonly value={data.student.username} />
+					<Input.Root
+						id="username"
+						placeholder="janedoe"
+						readonly
+						bind:value={data.student.username}
+					/>
 				</div>
 				<div class="flex flex-col space-y-1.5">
 					<Label.Root for="email">Email</Label.Root>
@@ -39,7 +44,7 @@
 						placeholder="example@mycavehill.uwi.edu"
 						type="email"
 						readonly
-						value={data.student.email}
+						bind:value={data.student.email}
 					/>
 				</div>
 				<div class="flex flex-col space-y-1.5">
@@ -49,7 +54,7 @@
 						placeholder="example@outlook.com"
 						readonly
 						type="email"
-						value={data.student.alternateEmail}
+						bind:value={data.student.alternateEmail}
 					/>
 				</div>
 				<div class="flex flex-col space-y-1.5">
@@ -58,7 +63,7 @@
 						id="program"
 						placeholder="Bsc. Computer Science"
 						readonly
-						value={data.student.major + ', ' + data.student.minor + ', ' + data.student.major2}
+						bind:value={data.student.program}
 					/>
 				</div>
 				<div class="flex flex-col space-y-1.5">
@@ -67,13 +72,13 @@
 						id="advisors"
 						placeholder="Advisor"
 						readonly
-						value={data.student.advisors.join(', ')}
+						bind:value={data.student.advisors}
 					/>
 				</div>
 
 				<div class="flex flex-col space-y-1.5">
 					<Label.Root for="role">Role</Label.Root>
-					<Input.Root id="role" placeholder="Student" readonly value={data.student.role} />
+					<Input.Root id="role" placeholder="Student" readonly bind:value={data.student.role} />
 				</div>
 			</div>
 		</form>
@@ -93,7 +98,31 @@
 					</AlertDialog.Description>
 				</AlertDialog.Header>
 				<AlertDialog.Footer>
-					<form method="POST" action="?/delete" use:enhance class="flex gap-2">
+					<form
+						method="POST"
+						action="?/delete"
+						use:enhance={() => {
+							return async ({ result }) => {
+								// `result` is an `ActionResult` object
+
+								if (result.type === 'failure') {
+									isOpen = false;
+									toast.error(result.data?.message as string, { duration: 2000 });
+								} else if (result.type === 'success') {
+									isOpen = false;
+									toast.success('Student deleted successfully', { duration: 2000 });
+								} else {
+									isOpen = false;
+									toast.error('An error occurred', { duration: 2000 });
+								}
+								await applyAction(result);
+								setTimeout(() => {
+									goto('/students', { replaceState: true });
+								}, 2000);
+							};
+						}}
+						class="flex gap-2"
+					>
 						<AlertDialog.Cancel type="button">Cancel</AlertDialog.Cancel>
 						<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
 					</form>

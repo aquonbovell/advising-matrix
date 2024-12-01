@@ -39,10 +39,12 @@ export const columns: ColumnDef<Student>[] = [
 
 	{
 		accessorKey: 'username',
+		id: 'username',
 		header: 'Username'
 	},
 	{
 		accessorKey: 'email',
+		id: 'email',
 		header: ({ column }) =>
 			renderComponent(DataTableEmailButton, {
 				onclick: () => column.toggleSorting(column.getIsSorted() === 'asc')
@@ -50,13 +52,17 @@ export const columns: ColumnDef<Student>[] = [
 	},
 	{
 		accessorKey: 'alternateEmail',
+		id: 'Alternate Email',
 		header: 'Alternate Email'
 	},
 	{
 		accessorKey: 'program',
+		id: 'program',
 		header: 'Program'
 	},
 	{
+		header: 'Actions',
+
 		id: 'actions',
 		cell: ({ row }) => {
 			// You can pass whatever you need from `row.original` to the component

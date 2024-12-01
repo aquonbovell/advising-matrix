@@ -1,15 +1,12 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
-	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import * as Select from '$lib/components/ui/select';
-	import { Label } from '$lib/components/ui/label';
-	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { studentCreationSchema, type StudentCreationSchema } from './studentCreation.schema';
-	import User from '$lib/components/shared/user.avatar.svelte';
 	import { toast } from 'svelte-sonner';
+	import Loader from 'lucide-svelte/icons/loader';
 
 	let {
 		data,
@@ -29,10 +26,10 @@
 		validators: zodClient(studentCreationSchema)
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance, message, submitting } = form;
 
 	const student = $derived(
-		users.find((u) => u.id === $formData.userId)?.name ?? 'Select a registered user'
+		users.find((u) => u.id === $formData.userId)?.name ?? 'Select a registered student'
 	);
 	const major = $derived(
 		majors.find((u) => u.id === $formData.majorId)?.name ?? 'Select a registered major'
@@ -47,7 +44,7 @@
 					.filter((u) => $formData.advisors.includes(u.id))
 					.map((u) => u.name)
 					.join(', ')
-			: 'Select a registered user'
+			: 'Select registered advisor'
 	);
 
 	$effect(() => {
@@ -72,7 +69,7 @@
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Group>
-							<Select.GroupHeading>Users</Select.GroupHeading>
+							<Select.GroupHeading>Students</Select.GroupHeading>
 							{#each users as user}
 								<Select.Item value={user.id} label={user.name}>{user.name}</Select.Item>
 							{/each}
@@ -152,5 +149,12 @@
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
-	<Form.Button type="submit">Create</Form.Button>
+	<Form.Button disabled={$submitting} class="text-base font-semibold">
+		{#if $submitting}
+			<Loader class="time animate-spin-slow" />
+			<span>Please wait...</span>
+		{:else}
+			Create
+		{/if}
+	</Form.Button>
 </form>

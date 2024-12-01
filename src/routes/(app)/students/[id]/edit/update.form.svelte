@@ -13,6 +13,8 @@
 
 	import { studentUpdateSchema, type StudentUpdateSchema } from './studentUpdate.schema';
 
+	import Loader from 'lucide-svelte/icons/loader';
+	import { toast } from 'svelte-sonner';
 	let {
 		data,
 		user,
@@ -34,7 +36,7 @@
 		dataType: 'json'
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance, message, submitting } = form;
 	const major = $derived(
 		majors.find((u) => u.id === $formData.majorId)?.name ?? 'Select a registered major'
 	);
@@ -50,6 +52,16 @@
 					.join(', ')
 			: 'Select a registered user'
 	);
+
+	$effect(() => {
+		if ($message) {
+			if ($message.type === 'success') {
+				toast.success($message.message);
+			} else {
+				toast.error($message.message);
+			}
+		}
+	});
 </script>
 
 <form method="POST" use:enhance class="space-y-4" action="?/update">
@@ -151,5 +163,12 @@
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 
-	<Form.Button type="submit">Update</Form.Button>
+	<Form.Button disabled={$submitting} class="text-base font-semibold">
+		{#if $submitting}
+			<Loader class="time animate-spin-slow" />
+			<span>Please wait...</span>
+		{:else}
+			Update
+		{/if}
+	</Form.Button>
 </form>
