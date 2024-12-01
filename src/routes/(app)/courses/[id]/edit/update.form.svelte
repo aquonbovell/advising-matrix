@@ -13,7 +13,7 @@
 	} from './courseUpdate.schema';
 	import { Badge } from '$lib/components/ui/badge';
 	import * as Button from '$lib/components/ui/button/';
-	import disciplines from './disciplines.json';
+	import disciplines from '$lib/data/disciplines.json';
 	import Icon from '@iconify/svelte';
 	import { toast } from 'svelte-sonner';
 	import { invalidateAll } from '$app/navigation';

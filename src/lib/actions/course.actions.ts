@@ -204,7 +204,20 @@ export async function createCourse(course: Omit<CourseDetails, 'id'>) {
 	}
 }
 
-export async function exist(value: string, field: ReferenceExpression<DB, 'Course'>) {
+export async function exist(
+	value: string,
+	field: ReferenceExpression<DB, 'Course'>,
+	id: string | undefined = undefined
+) {
+	if (id) {
+		const course = await db
+			.selectFrom('Course')
+			.where(field, '=', value)
+			.where('id', '!=', id)
+			.select('id')
+			.executeTakeFirst();
+		return course !== undefined;
+	}
 	const course = await db
 		.selectFrom('Course')
 		.where(field, '=', value)

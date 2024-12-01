@@ -14,8 +14,10 @@
 		prerequisiteOptions,
 		type CourseCreationSchema
 	} from './courseCreation.schema';
-	import disciplines from './disciplines.json';
+	import disciplines from '$lib/data/disciplines.json';
 	import { toast } from 'svelte-sonner';
+	import Loader from 'lucide-svelte/icons/loader';
+
 	let {
 		data,
 		courses,
@@ -31,7 +33,7 @@
 		dataType: 'json'
 	});
 
-	const { form: formData, enhance, message, allErrors, errors } = form;
+	const { form: formData, enhance, message, allErrors, errors, submitting } = form;
 
 	$effect(() => {
 		if ($message) {
@@ -105,7 +107,7 @@
 					<Form.Label class="font-semibold">Course Level</Form.Label>
 					<Select.Root
 						type="single"
-						value={$formData.level}
+						bind:value={$formData.level}
 						onValueChange={(value) => {
 							$formData.level = parseInt(value);
 						}}
@@ -322,5 +324,12 @@
 		</Form.Fieldset>
 	{/each}
 
-	<Form.Button type="submit">Create</Form.Button>
+	<Form.Button disabled={$submitting} class="text-base font-semibold">
+		{#if $submitting}
+			<Loader class="time animate-spin-slow" />
+			<span>Please wait...</span>
+		{:else}
+			Create
+		{/if}
+	</Form.Button>
 </form>

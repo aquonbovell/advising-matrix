@@ -6,15 +6,16 @@
 	import Update from './update.form.svelte';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
 </script>
 
-<Card.Root class="glass mx-auto max-w-xl bg-inherit">
+<Card.Root class="glass mx-auto mb-4 max-w-xl bg-inherit">
 	<Card.Header>
 		<Card.Title class="flex items-center justify-between"
-			>Matrix Course - {data.form.data.name}
+			>Course - {data.form.data.name}
 			{#if data.user?.role === 'ADMIN'}
 				<AlertDialog.Root bind:open={isOpen}>
 					<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive' })}>
@@ -47,6 +48,9 @@
 											toast.error('An error occurred', { duration: 2000 });
 										}
 										await applyAction(result);
+										setTimeout(() => {
+											goto('/courses');
+										}, 2000);
 									};
 								}}
 								class="flex gap-2"

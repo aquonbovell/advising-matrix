@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 export const actions: Actions = {
 	delete: async ({ params, locals }) => {
-		if (locals.user?.role !== 'ADVISOR') {
+		if (locals.user?.role !== 'ADMIN') {
 			return fail(403, { message: 'You do not have permission to delete courses' });
 		}
 		const { id } = params;

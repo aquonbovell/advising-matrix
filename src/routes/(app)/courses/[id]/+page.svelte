@@ -7,14 +7,15 @@
 	import { applyAction, enhance } from '$app/forms';
 	import View from './view.form.svelte';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
 </script>
 
-<Card.Root class="glass mx-auto max-w-xl bg-inherit">
+<Card.Root class="glass mx-auto mb-4 max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title>Matrix Course - {data.course.name}</Card.Title>
+		<Card.Title>Course - {data.course.name}</Card.Title>
 		<Card.Description>Manage this course details and requirements</Card.Description>
 	</Card.Header>
 	<Card.Content>
@@ -56,6 +57,9 @@
 										toast.error('An error occurred', { duration: 2000 });
 									}
 									await applyAction(result);
+									setTimeout(() => {
+										goto('/courses', { replaceState: true });
+									}, 2000);
 								};
 							}}
 							class="flex gap-2"

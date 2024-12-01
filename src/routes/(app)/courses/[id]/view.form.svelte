@@ -13,28 +13,28 @@
 	<div class="grid w-full items-center gap-4">
 		<div class="flex flex-col space-y-1.5">
 			<Label.Root for="name">Name</Label.Root>
-			<Input.Root id="name" placeholder="Human Anatomy" readonly value={data.course.name} />
+			<Input.Root id="name" placeholder="Human Anatomy" readonly bind:value={data.course.name} />
 		</div>
 
 		<div class="space-y-1.5">
 			<div class="grid w-full grid-cols-4 gap-4 md:grid-cols-3">
 				<div class="col-span-4 flex w-full flex-col space-y-1.5 md:col-auto">
 					<Label.Root for="username">Code</Label.Root>
-					<Input.Root id="username" placeholder="HUAN1265" readonly value={data.course.code} />
+					<Input.Root id="username" placeholder="HUAN1265" readonly bind:value={data.course.code} />
 				</div>
 				<div class="col-span-2 flex w-full flex-col space-y-1.5 md:col-auto">
 					<Label.Root for="credits">Credits</Label.Root>
-					<Input.Root id="credits" readonly value={data.course.credits} />
+					<Input.Root id="credits" readonly bind:value={data.course.credits} />
 				</div>
 				<div class="col-span-2 flex w-full flex-col space-y-1.5 md:col-auto">
 					<Label.Root for="level">Level</Label.Root>
-					<Input.Root id="level" readonly value={data.course.level} />
+					<Input.Root id="level" readonly bind:value={data.course.level} />
 				</div>
 			</div>
 		</div>
 		<div class="flex flex-col space-y-1.5">
 			<Label.Root for="comment">Comment</Label.Root>
-			<Input.Root id="comment" type="text" readonly value={data.course.comment} />
+			<Input.Root id="comment" type="text" readonly bind:value={data.course.comment} />
 		</div>
 
 		<div class="flex flex-col space-y-1.5">
