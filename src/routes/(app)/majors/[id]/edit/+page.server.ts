@@ -38,7 +38,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const majorName = await exist(form.data.name, 'name');
+		const majorName = await exist(form.data.name, 'name', form.data.id);
 		if (majorName) {
 			form.errors.name = [
 				...(form.errors.name ?? ''),

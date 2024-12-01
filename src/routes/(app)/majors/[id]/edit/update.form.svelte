@@ -11,7 +11,7 @@
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { majorUpdateSchema, type MajorUpdateSchema } from './majorUpdate.schema';
 	import { requirementOption, requirementType } from '$lib/types';
-	import disciplines from './disciplines.json';
+	import disciplines from '$lib/data/disciplines.json';
 	import { toast } from 'svelte-sonner';
 	let {
 		data,

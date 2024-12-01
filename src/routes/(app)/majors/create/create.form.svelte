@@ -11,7 +11,7 @@
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { majorCreationSchema, type MajorCreationSchema } from './majorCreation.schema';
 	import { requirementOption, requirementType } from '$lib/types';
-	import disciplines from './disciplines.json';
+	import disciplines from '$lib/data/disciplines.json';
 	import { toast } from 'svelte-sonner';
 	let {
 		data,
@@ -25,9 +25,7 @@
 
 	const form = superForm(data, {
 		delayMs: 200,
-		validators: zodClient(majorCreationSchema),
-
-		dataType: 'json'
+		validators: zodClient(majorCreationSchema)
 	});
 
 	const levels = Array.from({ length: 4 }, (_, i) => {
@@ -98,7 +96,18 @@
 							>
 						</div>
 						<div class="text-sm font-semibold">Details Type</div>
-						<RadioGroup.Root bind:value={requirement.type} id={requirement.id} class="flex gap-3">
+						<RadioGroup.Root
+							bind:value={requirement.type}
+							id={requirement.id}
+							class="flex gap-3"
+							onValueChange={(cv) => {
+								const requirementIndex = $formData.requirements.findIndex(
+									(r) => r.id === requirement.id
+								);
+
+								$formData.requirements[requirementIndex].details = [];
+							}}
+						>
 							{#each Object.values(requirementType) as type}
 								<div class="flex items-center space-x-2">
 									<RadioGroup.Item value={type} />

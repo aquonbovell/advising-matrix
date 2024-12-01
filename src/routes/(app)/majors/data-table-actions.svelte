@@ -25,7 +25,12 @@
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
-			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
+			<DropdownMenu.Item
+				onclick={() => {
+					navigator.clipboard.writeText(id);
+					toast.success('Major ID copied to clipboard', { duration: 2000 });
+				}}
+			>
 				Copy Major ID
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
@@ -73,7 +78,7 @@
 											toast.error(result.data?.message as string, { duration: 2000 });
 										} else if (result.type === 'success') {
 											isOpen = false;
-											toast.success('Course deleted successfully', { duration: 2000 });
+											toast.success('Major deleted successfully', { duration: 2000 });
 										} else {
 											isOpen = false;
 											toast.error('An error occurred', { duration: 2000 });

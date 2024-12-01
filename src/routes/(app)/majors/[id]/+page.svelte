@@ -10,8 +10,9 @@
 	import { buttonVariants } from '$lib/components/ui/button/';
 	import { applyAction, enhance } from '$app/forms';
 	import { requirementOption, requirementType } from '$lib/types';
-	import disciplines from './disciplines.json';
+	import disciplines from '$lib/data/disciplines.json';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
@@ -19,7 +20,7 @@
 
 <Card.Root class="glass mx-auto max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title>Matrix Major -{data.major.name}</Card.Title>
+		<Card.Title>Major -{data.major.name}</Card.Title>
 		<Card.Description>Manage this major details</Card.Description>
 	</Card.Header>
 	<Card.Content>
@@ -154,12 +155,15 @@
 										toast.error(result.data?.message as string, { duration: 2000 });
 									} else if (result.type === 'success') {
 										isOpen = false;
-										toast.success('Course deleted successfully', { duration: 2000 });
+										toast.success('Major deleted successfully', { duration: 2000 });
 									} else {
 										isOpen = false;
 										toast.error('An error occurred', { duration: 2000 });
 									}
 									await applyAction(result);
+									setTimeout(() => {
+										goto('/majors', { replaceState: true });
+									}, 2000);
 								};
 							}}
 							class="flex gap-2"

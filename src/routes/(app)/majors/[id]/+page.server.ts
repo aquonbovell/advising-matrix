@@ -1,20 +1,21 @@
 import type { Actions, PageServerLoad } from './$types';
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { deleteMajor, fetchMajor } from '$lib/actions/major.actions';
 import { fetchCourseCodes } from '$lib/actions/course.actions';
 import { fetchFaculties } from '$lib/actions/faculty.actions';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
-	const major = await fetchMajor(id);
+	try {
+		const major = await fetchMajor(id);
 
-	const courses = await fetchCourseCodes();
-	const faculties = await fetchFaculties();
-
-	if (!major) {
-		redirect(303, '/majors');
+		const courses = await fetchCourseCodes();
+		const faculties = await fetchFaculties();
+		return { major, courses, faculties };
+	} catch (err) {
+		console.error(err);
+		error(404, { message: 'Not Found' });
 	}
-	return { major, courses, faculties };
 };
 
 export const actions: Actions = {

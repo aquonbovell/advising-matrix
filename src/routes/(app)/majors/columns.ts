@@ -34,9 +34,11 @@ export const columns: ColumnDef<Major>[] = [
 	},
 	{
 		accessorKey: 'name',
+		id: 'name',
 		header: 'Major'
 	},
 	{
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => {
 			// You can pass whatever you need from `row.original` to the component
