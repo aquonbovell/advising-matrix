@@ -7,7 +7,7 @@
 
 <Card.Root class="glass mx-auto max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title class="flex items-center justify-between">Create Matrix Department</Card.Title>
+		<Card.Title class="flex items-center justify-between">Create A Department</Card.Title>
 		<Card.Description>Manage this department details</Card.Description>
 	</Card.Header>
 	<Card.Content>
