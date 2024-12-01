@@ -88,14 +88,12 @@ export const fetchMinor = async (minorId: string) => {
 			.select(['id', 'option', 'details', 'type', 'credits', 'level'])
 			.execute();
 
-		console.log(requirements);
-
 		return {
 			...minor,
 			requirements: requirements.map((requirement) => ({
 				...requirement,
-				level: requirement.level.split(',').map((level) => parseInt(level)),
-				details: requirement.details.split(',')
+				level: requirement.level.split(',').map(parseInt).filter(Boolean),
+				details: requirement.details.split(',').filter(Boolean)
 			}))
 		};
 	} catch (error) {
@@ -117,7 +115,20 @@ export const deleteMinor = async (minorId: string) => {
 	return db.deleteFrom('Minors').where('id', '=', minorId).execute();
 };
 
-export async function exist(value: string, field: ReferenceExpression<DB, 'Minors'>) {
+export async function exist(
+	value: string,
+	field: ReferenceExpression<DB, 'Minors'>,
+	id: string | undefined = undefined
+) {
+	if (id) {
+		const department = await db
+			.selectFrom('Minors')
+			.where(field, '=', value)
+			.where('id', '!=', id)
+			.select('id')
+			.executeTakeFirst();
+		return department !== undefined;
+	}
 	const department = await db
 		.selectFrom('Minors')
 		.where(field, '=', value)

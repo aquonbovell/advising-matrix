@@ -30,7 +30,7 @@
 		disciplines: [
 			{
 				title: 'Disciplines',
-				url: '#',
+				url: '/majors',
 				icon: BookType,
 				isActive: false,
 				items: [

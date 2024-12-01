@@ -93,8 +93,8 @@ export const fetchMajor = async (majorId: string) => {
 			...major,
 			requirements: requirements.map((requirement) => ({
 				...requirement,
-				level: requirement.level.split(',').map((level) => parseInt(level)),
-				details: requirement.details.split(',')
+				level: requirement.level.split(',').map(parseInt).filter(Boolean),
+				details: requirement.details.split(',').filter(Boolean)
 			}))
 		};
 	} catch (error) {
@@ -146,7 +146,20 @@ export async function initMajors() {
 	}
 }
 
-export async function exist(value: string, field: ReferenceExpression<DB, 'Majors'>) {
+export async function exist(
+	value: string,
+	field: ReferenceExpression<DB, 'Majors'>,
+	id: string | undefined = undefined
+) {
+	if (id) {
+		const department = await db
+			.selectFrom('Majors')
+			.where(field, '=', value)
+			.where('id', '!=', id)
+			.select('id')
+			.executeTakeFirst();
+		return department !== undefined;
+	}
 	const department = await db
 		.selectFrom('Majors')
 		.where(field, '=', value)
