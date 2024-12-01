@@ -16,9 +16,7 @@
 
 <Card.Root class="glass mx-auto max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title class="flex items-center justify-between"
-			>Matrix Faculty - {data.faculty.name}</Card.Title
-		>
+		<Card.Title class="flex items-center justify-between">Faculty - {data.faculty.name}</Card.Title>
 
 		<Card.Description>Manage this faculty details</Card.Description>
 	</Card.Header>

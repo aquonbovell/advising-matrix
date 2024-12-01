@@ -15,7 +15,7 @@
 <Card.Root class="glass mx-auto max-w-xl bg-inherit">
 	<Card.Header>
 		<Card.Title class="flex items-center justify-between">
-			Matrix Faculty - {data.form.data.name}
+			Faculty - {data.form.data.name}
 			{#if data.user?.role === 'ADMIN'}
 				<AlertDialog.Root bind:open={isOpen}>
 					<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive' })}>

@@ -8,8 +8,8 @@
 
 <Card.Root class="glass mx-auto max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title class="flex items-center justify-between">Create Matrix Faculty</Card.Title>
-		<Card.Description>Manage this yaculty details</Card.Description>
+		<Card.Title class="flex items-center justify-between">Create A Faculty</Card.Title>
+		<Card.Description>Manage this faculty details</Card.Description>
 	</Card.Header>
 	<Card.Content>
 		<Create data={data.form} />
