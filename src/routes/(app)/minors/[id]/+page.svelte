@@ -10,14 +10,15 @@
 	import { buttonVariants } from '$lib/components/ui/button/';
 	import { applyAction, enhance } from '$app/forms';
 	import { requirementOption, requirementType } from '$lib/types';
-	import disciplines from './disciplines.json';
+	import disciplines from '$lib/data/disciplines.json';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
 </script>
 
-<Card.Root class="glass mx-auto max-w-xl bg-inherit">
+<Card.Root class="glass mx-auto mb-4 max-w-xl bg-inherit">
 	<Card.Header>
 		<Card.Title>Matrix Major -{data.minor.name}</Card.Title>
 		<Card.Description>Manage this minor details</Card.Description>
@@ -63,7 +64,7 @@
 							</RadioGroup.Root>
 							<div class="text-sm font-semibold">Levels</div>
 							<Input.Root
-								value={requirement.level.map((l) => `Level ` + l)}
+								value={requirement.level.map((l) => `Level ` + l) ?? 'None'}
 								placeholder="Requirement level(s)"
 								readonly
 							/>
@@ -154,12 +155,15 @@
 										toast.error(result.data?.message as string, { duration: 2000 });
 									} else if (result.type === 'success') {
 										isOpen = false;
-										toast.success('Course deleted successfully', { duration: 2000 });
+										toast.success('Minor deleted successfully', { duration: 2000 });
 									} else {
 										isOpen = false;
 										toast.error('An error occurred', { duration: 2000 });
 									}
 									await applyAction(result);
+									setTimeout(() => {
+										goto('/minors', { replaceState: true });
+									}, 2000);
 								};
 							}}
 							class="flex gap-2"

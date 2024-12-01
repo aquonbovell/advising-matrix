@@ -25,19 +25,24 @@
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
-			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
+			<DropdownMenu.Item
+				onclick={() => {
+					navigator.clipboard.writeText(id);
+					toast.success('Major ID copied to clipboard', { duration: 2000 });
+				}}
+			>
 				Copy Major ID
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item
-			><Button.Root href={`/majors/${id}`} variant="ghost" class="m-0 h-fit p-0"
+			><Button.Root href={`/minors/${id}`} variant="ghost" class="m-0 h-fit p-0"
 				>View Major</Button.Root
 			></DropdownMenu.Item
 		>
 		{#if role === 'ADMIN'}
 			<DropdownMenu.Item>
-				<Button.Root href={`/majors/${id}/edit`} variant="ghost" class="m-0 h-fit p-0"
+				<Button.Root href={`/minors/${id}/edit`} variant="ghost" class="m-0 h-fit p-0"
 					>Edit Major
 				</Button.Root>
 			</DropdownMenu.Item>
@@ -73,7 +78,7 @@
 											toast.error(result.data?.message as string, { duration: 2000 });
 										} else if (result.type === 'success') {
 											isOpen = false;
-											toast.success('Course deleted successfully', { duration: 2000 });
+											toast.success('Minor deleted successfully', { duration: 2000 });
 										} else {
 											isOpen = false;
 											toast.error('An error occurred', { duration: 2000 });

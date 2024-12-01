@@ -11,8 +11,9 @@
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { minorUpdateSchema, type MinorUpdateSchema } from './minorUpdate.schema';
 	import { requirementOption, requirementType } from '$lib/types';
-	import disciplines from './disciplines.json';
+	import disciplines from '$lib/data/disciplines.json';
 	import { toast } from 'svelte-sonner';
+	import Loader from 'lucide-svelte/icons/loader';
 	let {
 		data,
 		courses,
@@ -26,7 +27,6 @@
 	const form = superForm(data, {
 		delayMs: 200,
 		validators: zodClient(minorUpdateSchema),
-
 		dataType: 'json'
 	});
 
@@ -34,7 +34,7 @@
 		return { label: `Level ${i + 1}`, value: i.toString() };
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance, message, submitting } = form;
 
 	$effect(() => {
 		if ($message) {
@@ -234,6 +234,12 @@
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
-
-	<Form.Button type="submit">Update</Form.Button>
+	<Form.Button disabled={$submitting} class="text-base font-semibold">
+		{#if $submitting}
+			<Loader class="time animate-spin-slow" />
+			<span>Please wait...</span>
+		{:else}
+			Update
+		{/if}
+	</Form.Button>
 </form>

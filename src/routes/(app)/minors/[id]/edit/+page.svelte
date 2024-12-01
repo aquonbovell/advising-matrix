@@ -6,11 +6,12 @@
 	import { buttonVariants } from '$lib/components/ui/button/';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
 </script>
 
-<Card.Root class="glass mx-auto max-w-xl bg-inherit">
+<Card.Root class="glass mx-auto mb-4 max-w-xl bg-inherit">
 	<Card.Header>
 		<Card.Title class="flex items-center justify-between">
 			Matrix Faculty - {data.form.data.name}
@@ -40,12 +41,15 @@
 											toast.error(result.data?.message as string, { duration: 2000 });
 										} else if (result.type === 'success') {
 											isOpen = false;
-											toast.success('Course deleted successfully', { duration: 2000 });
+											toast.success('Minor deleted successfully', { duration: 2000 });
 										} else {
 											isOpen = false;
 											toast.error('An error occurred', { duration: 2000 });
 										}
 										await applyAction(result);
+										setTimeout(() => {
+											goto('/minors', { replaceState: true });
+										}, 2000);
 									};
 								}}
 								class="flex gap-2"

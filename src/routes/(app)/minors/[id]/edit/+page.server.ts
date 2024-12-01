@@ -1,25 +1,24 @@
 import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { fail } from '@sveltejs/kit';
-import {
-	createMinor,
-	deleteMinor,
-	exist,
-	fetchMinor,
-	updateMinor
-} from '$lib/actions/minor.actions';
+import { error, fail } from '@sveltejs/kit';
+import { deleteMinor, exist, fetchMinor, updateMinor } from '$lib/actions/minor.actions';
 import { fetchCourseCodes } from '$lib/actions/course.actions';
 import { fetchFaculties } from '$lib/actions/faculty.actions';
 import { minorUpdateSchema } from './minorUpdate.schema';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
-	const minor = await fetchMinor(id);
-	const form = await superValidate({ ...minor }, zod(minorUpdateSchema));
-	const courses = await fetchCourseCodes();
-	const faculties = await fetchFaculties();
-	return { form, courses, faculties };
+	try {
+		const minor = await fetchMinor(id);
+		const form = await superValidate({ ...minor }, zod(minorUpdateSchema));
+		const courses = await fetchCourseCodes();
+		const faculties = await fetchFaculties();
+		return { form, courses, faculties };
+	} catch (err) {
+		console.error(err);
+		return error(404, { message: 'Not Found' });
+	}
 };
 
 export const actions: Actions = {
@@ -38,7 +37,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const minorName = await exist(form.data.name, 'name');
+		const minorName = await exist(form.data.name, 'name', form.data.id);
 		if (minorName) {
 			form.errors.name = [
 				...(form.errors.name ?? ''),

@@ -11,8 +11,9 @@
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { minorCreationSchema, type MinorCreationSchema } from './minorCreation.schema';
 	import { requirementOption, requirementType } from '$lib/types';
-	import disciplines from './disciplines.json';
+	import disciplines from '$lib/data/disciplines.json';
 	import { toast } from 'svelte-sonner';
+	import Loader from 'lucide-svelte/icons/loader';
 	let {
 		data,
 		courses,
@@ -34,7 +35,7 @@
 		return { label: `Level ${i + 1}`, value: i.toString() };
 	});
 
-	const { form: formData, enhance, message, allErrors } = form;
+	const { form: formData, enhance, message, submitting } = form;
 
 	$effect(() => {
 		if ($message) {
@@ -119,6 +120,7 @@
 						<div class="text-sm font-semibold">Levels</div>
 						<Select.Root
 							type="multiple"
+							required
 							value={requirement.level.map((l) => l.toString())}
 							onValueChange={(value) => {
 								requirement.level = value.map((v) => parseInt(v));
@@ -209,5 +211,12 @@
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 
-	<Form.Button type="submit">Create</Form.Button>
+	<Form.Button disabled={$submitting} class="text-base font-semibold">
+		{#if $submitting}
+			<Loader class="time animate-spin-slow" />
+			<span>Please wait...</span>
+		{:else}
+			Create
+		{/if}
+	</Form.Button>
 </form>

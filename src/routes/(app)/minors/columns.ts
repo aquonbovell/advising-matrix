@@ -37,6 +37,7 @@ export const columns: ColumnDef<Minor>[] = [
 		header: 'Minor'
 	},
 	{
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => {
 			// You can pass whatever you need from `row.original` to the component
