@@ -1,13 +1,9 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
-import aspectRatio from '@tailwindcss/aspect-ratio';
-import containerQueries from '@tailwindcss/container-queries';
-import forms from '@tailwindcss/forms';
-import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
 
 const config: Config = {
-	darkMode: ['class'],
+	darkMode: ['selector'],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	safelist: ['dark'],
 	theme: {
@@ -90,11 +86,12 @@ const config: Config = {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'caret-blink': 'caret-blink 1.25s ease-out infinite'
+				'caret-blink': 'caret-blink 1.25s ease-out infinite',
+				'spin-slow': 'spin 3s linear infinite'
 			}
 		}
 	},
-	plugins: [typography, forms, containerQueries, aspectRatio, tailwindcssAnimate]
+	plugins: [tailwindcssAnimate]
 };
 
 export default config;
