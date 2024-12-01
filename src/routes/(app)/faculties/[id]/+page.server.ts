@@ -1,11 +1,16 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { deleteFaculty, fetchFaculty } from '$lib/actions/faculty.actions';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
-	const faculty = await fetchFaculty(id);
-	return { faculty };
+	try {
+		const faculty = await fetchFaculty(id);
+		return { faculty };
+	} catch (err) {
+		console.error(err);
+		error(404, { message: 'Not Found' });
+	}
 };
 
 export const actions: Actions = {

@@ -23,7 +23,6 @@ export const actions: Actions = {
 			return fail(404, { form });
 		}
 
-		console.log(form.data);
 		const facultyName = await exist(form.data.name, 'name');
 		if (facultyName) {
 			form.errors.name = [

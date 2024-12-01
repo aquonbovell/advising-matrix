@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card/';
-	import * as Button from '$lib/components/ui/button/';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import Update from './update.form.svelte';
 	import { applyAction, enhance } from '$app/forms';
 	import { buttonVariants } from '$lib/components/ui/button/';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
@@ -42,12 +42,15 @@
 											toast.error(result.data?.message as string, { duration: 2000 });
 										} else if (result.type === 'success') {
 											isOpen = false;
-											toast.success('Course deleted successfully', { duration: 2000 });
+											toast.success('Faculty deleted successfully', { duration: 2000 });
 										} else {
 											isOpen = false;
 											toast.error('An error occurred', { duration: 2000 });
 										}
 										await applyAction(result);
+										setTimeout(() => {
+											goto('/faculties', { replaceState: true });
+										}, 2000);
 									};
 								}}
 								class="flex gap-2"

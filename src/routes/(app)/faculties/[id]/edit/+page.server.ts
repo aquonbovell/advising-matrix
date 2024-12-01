@@ -7,12 +7,16 @@ import { facultyUpdateSchema } from './facultyUpdateSchema.schema';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
-	const faculty = await fetchFaculty(id);
-	if (!faculty) {
-		return error(404, { message: 'Faculty not found' });
+	try {
+		const faculty = await fetchFaculty(id);
+		const form = await superValidate({ ...faculty }, zod(facultyUpdateSchema));
+		return { form };
+	} catch (err) {
+		console.error(err);
+		return error(404, {
+			message: 'Not found'
+		});
 	}
-	const form = await superValidate({ ...faculty }, zod(facultyUpdateSchema));
-	return { form };
 };
 
 export const actions: Actions = {

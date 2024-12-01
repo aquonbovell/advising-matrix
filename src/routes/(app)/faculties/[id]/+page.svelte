@@ -4,11 +4,11 @@
 	import * as Label from '$lib/components/ui/label';
 	import * as Input from '$lib/components/ui/input/';
 	import * as Button from '$lib/components/ui/button/';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-	import * as Checkbox from '$lib/components/ui/checkbox/';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { buttonVariants } from '$lib/components/ui/button/';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
@@ -31,7 +31,7 @@
 						id="name"
 						placeholder="Science & Technology"
 						readonly
-						value={data.faculty.name}
+						bind:value={data.faculty.name}
 					/>
 				</div>
 			</div>
@@ -67,12 +67,15 @@
 										toast.error(result.data?.message as string, { duration: 2000 });
 									} else if (result.type === 'success') {
 										isOpen = false;
-										toast.success('Course deleted successfully', { duration: 2000 });
+										toast.success('Faculty deleted successfully', { duration: 2000 });
 									} else {
 										isOpen = false;
 										toast.error('An error occurred', { duration: 2000 });
 									}
 									await applyAction(result);
+									setTimeout(() => {
+										goto('/faculties', { replaceState: true });
+									}, 2000);
 								};
 							}}
 							class="flex gap-2"

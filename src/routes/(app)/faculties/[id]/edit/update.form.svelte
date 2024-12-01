@@ -9,6 +9,7 @@
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { facultyUpdateSchema, type FacultyUpdateSchema } from './facultyUpdateSchema.schema';
 	import { toast } from 'svelte-sonner';
+	import { invalidateAll } from '$app/navigation';
 
 	let { data }: { data: SuperValidated<Infer<FacultyUpdateSchema>> } = $props();
 
@@ -25,6 +26,7 @@
 			} else {
 				toast.error($message.message);
 			}
+			invalidateAll();
 		}
 	});
 </script>

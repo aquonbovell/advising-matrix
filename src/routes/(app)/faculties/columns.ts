@@ -37,6 +37,7 @@ export const columns: ColumnDef<Faculty>[] = [
 		header: 'Faculty Name'
 	},
 	{
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => {
 			// You can pass whatever you need from `row.original` to the component
