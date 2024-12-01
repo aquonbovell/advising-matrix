@@ -131,14 +131,11 @@ export const deleteUser = async (id: string) => {
 export const updateUser = async (
 	user: Omit<User, 'passwordHash' | 'updated_at' | 'created_at' | 'invite_token' | 'invite_expires'>
 ) => {
-	const access = generateTokenWithExpiration();
 	await db
 		.updateTable('User')
 		.set({
 			email: user.email,
 			name: user.name,
-			invite_expires: access.expiresAt,
-			invite_token: access.token,
 			username: user.username,
 			alternateEmail: user.alternateEmail,
 			onboarded: user.onboarded,
@@ -158,11 +155,9 @@ export async function exist(
 	if (id) {
 		query = query.where('id', '!=', id);
 	}
-	const department = await query.executeTakeFirst();
+	const user = await query.executeTakeFirst();
 
-	console.log(department);
-
-	return department !== undefined;
+	return user !== undefined;
 }
 
 export async function resetUser(id: string) {
