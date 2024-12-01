@@ -25,7 +25,12 @@
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
-			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
+			<DropdownMenu.Item
+				onclick={() => {
+					navigator.clipboard.writeText(id);
+					toast.success('Department ID copied to clipboard', { duration: 2000 });
+				}}
+			>
 				Copy Department ID
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>

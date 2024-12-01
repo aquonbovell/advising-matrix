@@ -13,7 +13,8 @@
 		type DepartmentUpdateSchema
 	} from './departmentUpdateSchema.schema';
 	import { toast } from 'svelte-sonner';
-
+	import { invalidateAll } from '$app/navigation';
+	import Loader from 'lucide-svelte/icons/loader';
 	let {
 		data,
 		faculties
@@ -26,7 +27,7 @@
 		validators: zodClient(departmentUpdateSchema)
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance, message, submitting } = form;
 
 	$effect(() => {
 		if ($message) {
@@ -35,6 +36,7 @@
 			} else {
 				toast.error($message.message);
 			}
+			invalidateAll();
 		}
 	});
 	const triggerContent = $derived(
@@ -83,6 +85,12 @@
 		</Form.Control>
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
-
-	<Form.Button type="submit">Update</Form.Button>
+	<Form.Button disabled={$submitting} class=" text-base font-semibold">
+		{#if $submitting}
+			<Loader class="time animate-spin-slow" />
+			<span>Please wait...</span>
+		{:else}
+			Update
+		{/if}
+	</Form.Button>
 </form>

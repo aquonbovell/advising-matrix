@@ -8,6 +8,7 @@
 	import { buttonVariants } from '$lib/components/ui/button/';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let isOpen = $state(false);
@@ -16,7 +17,7 @@
 <Card.Root class="glass mx-auto max-w-xl bg-inherit">
 	<Card.Header>
 		<Card.Title class="flex items-center justify-between"
-			>Matrix Department - {data.department.departmentName}</Card.Title
+			>Department - {data.department.departmentName}</Card.Title
 		>
 
 		<Card.Description>Manage this department details</Card.Description>
@@ -77,12 +78,15 @@
 										toast.error(result.data?.message as string, { duration: 2000 });
 									} else if (result.type === 'success') {
 										isOpen = false;
-										toast.success('Course deleted successfully', { duration: 2000 });
+										toast.success('Department deleted successfully', { duration: 2000 });
 									} else {
 										isOpen = false;
 										toast.error('An error occurred', { duration: 2000 });
 									}
 									await applyAction(result);
+									setTimeout(() => {
+										goto('/departments', { replaceState: true });
+									}, 2000);
 								};
 							}}
 							class="flex gap-2"

@@ -1,9 +1,7 @@
-import { fetchUser, updateUser } from '$lib/actions/user.actions';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
-import { error, redirect } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
+import { error } from '@sveltejs/kit';
 import {
 	deleteDepartment,
 	exist,
@@ -15,12 +13,16 @@ import { fetchFaculties } from '$lib/actions/faculty.actions';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
-	const department = await fetchDepartment(id);
-	if (!department) {
-		return error(404, { message: 'Department not found' });
+	try {
+		const department = await fetchDepartment(id);
+		const form = await superValidate({ ...department }, zod(departmentUpdateSchema));
+		return { form, faculties: await fetchFaculties() };
+	} catch (err) {
+		console.error(err);
+		return error(404, {
+			message: 'Not found'
+		});
 	}
-	const form = await superValidate({ ...department }, zod(departmentUpdateSchema));
-	return { form, faculties: await fetchFaculties() };
 };
 
 export const actions: Actions = {
@@ -39,7 +41,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const courseName = await exist(form.data.name, 'name');
+		const courseName = await exist(form.data.name, 'name', form.data.id);
 		if (courseName) {
 			form.errors.name = [
 				...(form.errors.name ?? ''),

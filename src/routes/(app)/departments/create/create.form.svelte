@@ -12,6 +12,7 @@
 		type DepartmentCreationSchema
 	} from './departmentCreation.schema';
 	import { toast } from 'svelte-sonner';
+	import Loader from 'lucide-svelte/icons/loader';
 
 	let {
 		data,
@@ -28,7 +29,7 @@
 		dataType: 'json'
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance, message, submitting } = form;
 
 	$effect(() => {
 		if ($message) {
@@ -76,5 +77,12 @@
 		<Form.FieldErrors class="mt-2 text-sm" />
 	</Form.Field>
 
-	<Form.Button type="submit">Create</Form.Button>
+	<Form.Button disabled={$submitting} class=" text-base font-semibold">
+		{#if $submitting}
+			<Loader class="time animate-spin-slow" />
+			<span>Please wait...</span>
+		{:else}
+			Create
+		{/if}
+	</Form.Button>
 </form>
