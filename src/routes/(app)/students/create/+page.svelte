@@ -5,9 +5,9 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<Card.Root class="glass mx-auto max-w-xl bg-inherit">
+<Card.Root class="glass mx-auto mb-4 max-w-xl bg-inherit">
 	<Card.Header>
-		<Card.Title class="flex items-center justify-between">Create Matrix Student</Card.Title>
+		<Card.Title class="flex items-center justify-between">Create A Student</Card.Title>
 		<Card.Description>Manage this student account details</Card.Description>
 	</Card.Header>
 	<Card.Content>
