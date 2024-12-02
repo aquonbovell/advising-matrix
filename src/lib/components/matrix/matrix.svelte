@@ -13,7 +13,8 @@
 		degreeGPA,
 		overallGPA,
 		totalCredits,
-		completedCredits
+		completedCredits,
+		completedCourses
 	} from '$lib/stores/matrix';
 	import { Badge } from '$lib/components/ui/badge';
 	import { toast } from 'svelte-sonner';
@@ -31,7 +32,7 @@
 		studentCourses: {
 			id: string;
 			studentId: string;
-			grade: string;
+			grade: string[];
 			requirementId: string;
 			courseId: string;
 			userId: string | null;
@@ -44,7 +45,7 @@
 	let selectedCourses = $state<string[]>([]);
 	let dialogRequirementID = $state<string>('');
 	degree.set(studentDegree);
-	studentGrades.set(studentCourses.map((sc) => ({ ...sc, grade: sc.grade.split(',') })));
+	studentGrades.set(studentCourses.map((sc) => ({ ...sc, grade: sc.grade })));
 
 	function openSuggestionsDialog(id: string) {
 		isOpen = true;
@@ -72,15 +73,15 @@
 				}
 			]);
 		});
-		toast.success('Courses added successfully');
+		toast.success('Suggestions saved successfully');
 	}
 </script>
 
-<div class="mx-auto flex flex-col gap-5" transition:fly={{ y: 30, delay: 200 }}>
+<div class="mx-auto mb-4 flex flex-col gap-5" transition:fly={{ y: 30, delay: 200 }}>
 	<!-- Degree Info -->
 	<Card.Root class="min-w-80">
 		<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
-			<Card.Title>Student: {studentDegree.studentName} - Bsc. {studentDegree.name}</Card.Title>
+			<Card.Title>{studentDegree.studentName} - Bsc. {studentDegree.name}</Card.Title>
 			<form
 				action="?/saveSuggestions"
 				method="post"
@@ -135,7 +136,7 @@
 			<div class="flex flex-wrap gap-3">
 				<Button.Root variant="ghost" type="button">Degree GPA: {$degreeGPA}</Button.Root>
 				<Button.Root variant="ghost" type="button">Overall GPA: {$overallGPA}</Button.Root>
-				<Button.Root variant="outline">Completed Courses ({5})</Button.Root>
+				<Button.Root variant="outline">Completed Courses ({$completedCourses.length})</Button.Root>
 			</div>
 			<!-- Courses Statistics -->
 			<div class="flex flex-col gap-3">
@@ -155,7 +156,14 @@
 	{#each studentDegree.requirements as req}
 		<Card.Root class="min-w-80">
 			<Card.Header class="flex flex-row items-baseline justify-between px-4 py-3 ">
-				<Card.Title>Level {req.level.join(', ')} {req.option} - {req.credits} credits</Card.Title>
+				<Card.Title class="text-base">
+					{#if req.level.length > 1}
+						Electives
+					{:else}
+						Level {req.level.join(', ')}
+					{/if}
+					{req.option.toLocaleLowerCase()} - {req.credits} credits from the following</Card.Title
+				>
 				{#if req.option === 'AT MOST' || req.option === 'AT LEAST'}
 					<Button.Root
 						class="!m-0"
