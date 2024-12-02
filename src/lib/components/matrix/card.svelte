@@ -34,8 +34,8 @@
 	let isComplete = $derived(isCourseCompleted(currentCourse));
 
 	let statusColor = !arePrerequisitesMet(course)
-		? 'bg-red-50 border-red-100'
-		: 'bg-white hover:bg-gray-50';
+		? 'bg-red-500 border-red-600'
+		: 'bg-primary-foreground';
 
 	function handleGradeDialogOpen() {
 		selectedCourse = course;
@@ -52,7 +52,7 @@
 
 <div
 	class={cn(
-		'@container group relative border-y transition-all duration-200',
+		'@container group relative border-y  bg-primary transition-all duration-200',
 
 		statusColor
 	)}
@@ -61,9 +61,8 @@
 		class="@md:grid-cols-6 grid flex-col gap-4 p-4 sm:flex-row sm:items-start sm:justify-between"
 	>
 		<div class="@md:col-span-4 @xl:col-span-3 flex-grow space-y-2">
-			<div class="flex items-center gap-3">
+			<div class="flex items-center gap-3 font-semibold">
 				<div class="flex items-center gap-2">
-					{selectedCourse?.code}
 					{#if !required}
 						<Button.Root
 							variant="ghost"
@@ -84,12 +83,12 @@
 							<TrashIcon class="h-4 w-4" />
 						</Button.Root>
 					{/if}
-					<h3 class="text-sm font-medium text-gray-900">
+					<h3 class="text-base">
 						{course.code}
 					</h3>
 				</div>
-				<span class="text-gray-500">•</span>
-				<p class="text-sm text-gray-600">{course.name}</p>
+				<span>•</span>
+				<p class="text-base">{course.name}</p>
 			</div>
 
 			<div class="flex flex-wrap items-center gap-2">
@@ -115,7 +114,7 @@
 					</div>
 				{/if}
 				{#if currentCourse?.name}
-					<Badge variant="secondary">Suggested by: {currentCourse?.name}</Badge>
+					<Badge variant="secondary" class="bg-card">Suggested by: {currentCourse?.name}</Badge>
 				{/if}
 			</div>
 		</div>

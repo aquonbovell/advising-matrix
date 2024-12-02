@@ -10,6 +10,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import { useSidebar } from '$lib/components/ui/sidebar/index.js';
+	import { invalidateAll } from '$app/navigation';
 
 	let {
 		user
@@ -26,6 +27,18 @@
 		.join('');
 
 	const sidebar = useSidebar();
+
+	async function handleLogout() {
+		const response = await fetch('/logout', {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		if (response.ok) {
+			await invalidateAll();
+		}
+	}
 </script>
 
 <Sidebar.Menu>
@@ -60,7 +73,7 @@
 					<div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 						<Avatar.Root class="h-8 w-8 rounded-lg">
 							<!-- <Avatar.Image src={user.avatar} alt={user.name} /> -->
-							<Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
+							<Avatar.Fallback class="rounded-lg">{initals}</Avatar.Fallback>
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-semibold">{user.name}</span>
@@ -68,8 +81,8 @@
 						</div>
 					</div>
 				</DropdownMenu.Label>
-				<DropdownMenu.Separator />
-				<DropdownMenu.Group>
+				<!--<DropdownMenu.Separator />
+				 <DropdownMenu.Group>
 					<DropdownMenu.Item>
 						<Sparkles />
 						Upgrade to Pro
@@ -89,9 +102,9 @@
 						<Bell />
 						Notifications
 					</DropdownMenu.Item>
-				</DropdownMenu.Group>
+				</DropdownMenu.Group> -->
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item>
+				<DropdownMenu.Item onclick={handleLogout}>
 					<LogOut />
 					Log out
 				</DropdownMenu.Item>

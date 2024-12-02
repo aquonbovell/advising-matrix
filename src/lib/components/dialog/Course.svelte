@@ -4,14 +4,6 @@
 	import * as Button from '$lib/components/ui/button';
 	import { degree, studentCourses as studentGrades } from '$lib/stores/matrix';
 
-	// let {
-	// 	addCourseDialog,
-	// 	selectedCourseId,
-	// 	dialogRequirementID,
-	//   open = $bindable()
-	// }: { addCourseDialog: boolean; selectedCourseId: string[]; dialogRequirementID: string } =
-	// 	$props();
-
 	let {
 		open = $bindable(),
 		dialogRequirementID,
@@ -56,7 +48,8 @@
 					grade: [],
 					requirementId: dialogRequirementID ?? '',
 					courseId: courseId,
-					userId: userId
+					userId: userId,
+					name: ''
 				}
 			]);
 		}
@@ -96,7 +89,19 @@
 							{@const index = $degree.requirements.findIndex((r) => r.id === dialogRequirementID)}
 							{@const requirement = $degree.requirements[index]}
 							{#if requirement}
-								{#each requirement.courses.filter((course) => !$studentGrades.some((sg) => sg.courseId === course.id)) as course}
+								{#each requirement.courses
+									.filter((c) => !$studentGrades.some((sg) => sg.courseId === c.id) && !$degree.requirements
+												.filter((r) => r.option === 'ALL')
+												.some((r) => r.details.some((detail) => detail === c.id)))
+									.sort((a, b) => {
+										if (a.code < b.code) {
+											return -1;
+										}
+										if (a.code > b.code) {
+											return 1;
+										}
+										return 0;
+									}) as course}
 									<Select.Item value={course.id}>{course.code} - {course.name}</Select.Item>
 								{/each}
 							{:else}

@@ -63,11 +63,6 @@
 			<div class="flex flex-col gap-1">
 				<small class="text-base">{course.code} - {course.name}</small>
 				<div class={`flex flex-wrap items-center gap-2`}>
-					<!-- {#if $courseGrades[course.id]?.name}
-						<Badge variant="secondary" class="bg-gray-200 px-2 text-gray-600"
-							>Suggested by: {$courseGrades[course.id]?.name}</Badge
-						>
-					{/if} -->
 					{#if !required}
 						<Button.Root
 							variant="ghost"
@@ -87,23 +82,26 @@
 					<Badge class=" bg-green-200 px-2 text-green-600	hover:bg-green-200" variant="secondary"
 						>{course.credits} credits</Badge
 					>
+					{#if $studentCourses.find((sc) => sc.courseId === course.id)?.name}
+						<Badge variant="secondary" class="bg-gray-200 px-2 text-gray-600"
+							>Suggested by: {$studentCourses.find((sc) => sc.courseId === course.id)?.name}</Badge
+						>
+					{/if}
 				</div>
 			</div>
 		</div>
 
 		<div class="@xl:flex-row-reverse flex flex-col gap-4">
 			<div class="flex max-w-[22rem] flex-row flex-wrap gap-2">
-				<!-- {#if $studentCourses.find((sc) => sc.courseId === course.id)?.grade}
-					{#each $studentCourses
-						.find((sc) => sc.courseId === course.id)
-						?.grade.split(',') ?? [] as grade}
+				{#if $studentCourses.find((sc) => sc.courseId === course.id)?.grade}
+					{#each $studentCourses.find((sc) => sc.courseId === course.id)?.grade ?? [] as grade}
 						<Select.Root required={true} type="single">
 							<Select.Trigger class="w-20">
 								{grade ?? ''}
 							</Select.Trigger>
 						</Select.Root>
 					{/each}
-				{/if} -->
+				{/if}
 			</div>
 		</div>
 	</div>

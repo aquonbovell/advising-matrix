@@ -1,7 +1,7 @@
 <script lang="ts" module>
 	import Building from 'lucide-svelte/icons/building';
 	import BookType from 'lucide-svelte/icons/book-type';
-	import SquareTerminal from 'lucide-svelte/icons/users';
+	import Users from 'lucide-svelte/icons/users';
 
 	const data = {
 		user: {
@@ -13,7 +13,7 @@
 			{
 				title: 'Users',
 				url: '/users',
-				icon: SquareTerminal,
+				icon: Users,
 				isActive: true,
 				items: [
 					{
@@ -66,12 +66,65 @@
 					}
 				]
 			}
-		]
+		],
+		students: [
+			{
+				title: 'Students',
+				url: '/advising',
+				icon: Users,
+				items: [
+					{
+						title: 'Advising',
+						url: '/advising'
+					},
+					{
+						title: 'Search',
+						url: '/students'
+					}
+				]
+			}
+		],
+		student: {
+			menu: [
+				{
+					name: 'My Degree',
+					url: '/matrix',
+					icon: BookType
+				},
+				{
+					name: 'My Advisor',
+					url: '/advisor',
+					icon: Users
+				}
+			],
+			items: [
+				{
+					title: 'Explore',
+					url: '/explore',
+					icon: BookType,
+					items: [
+						{
+							title: 'Checklist',
+							url: '/explore'
+						},
+						{
+							title: 'Courses',
+							url: '/courses'
+						},
+						{
+							title: 'What If',
+							url: '/what-if'
+						}
+					]
+				}
+			]
+		}
 	};
 </script>
 
 <script lang="ts">
 	import NavMain from '$lib/components/nav-main.svelte';
+	import NavMainStudent from '$lib/components/nav-main.student.svelte';
 	import NavUser from '$lib/components/nav-user.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import Command from 'lucide-svelte/icons/command';
@@ -79,10 +132,13 @@
 	import NavDisciplines from './nav-disciplines.svelte';
 	import NavFaculties from '$lib/components/nav-faculties.svelte';
 	import { page } from '$app/stores';
+	import NavStudents from './nav-students.svelte';
+	import NavStudent from './nav-student.svelte';
 
 	const user = {
 		name: $page.data.user.name,
-		email: $page.data.user.email
+		email: $page.data.user.email,
+		role: $page.data.user.role
 	};
 
 	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
@@ -111,9 +167,18 @@
 		</Sidebar.Menu>
 	</Sidebar.Header>
 	<Sidebar.Content>
-		<NavMain items={data.navMain} />
-		<NavFaculties items={data.faculties} />
-		<NavDisciplines items={data.disciplines} />
+		{#if user.role === 'ADMIN'}
+			<NavMain items={data.navMain} />
+			<NavFaculties items={data.faculties} />
+			<NavDisciplines items={data.disciplines} />
+		{/if}
+		{#if user.role === 'ADVISOR'}
+			<NavStudents items={data.students} />
+		{/if}
+		{#if user.role === 'STUDENT'}
+			<NavStudent items={data.student.menu} />
+			<NavMainStudent items={data.student.items} />
+		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>
 		<NavUser {user} />
