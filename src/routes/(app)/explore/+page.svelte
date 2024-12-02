@@ -9,9 +9,11 @@
 	let selectedCourse = $state<string | undefined>(undefined);
 </script>
 
-<Card.Root class="glass mx-auto h-max max-w-4xl bg-inherit">
+<Card.Root class="glass mx-auto mb-4 h-max bg-inherit">
 	<Card.Header>
-		<Card.Title class="flex items-center justify-between">Explore Matrix Courses</Card.Title>
+		<Card.Title class="flex items-center justify-between text-base"
+			>Explore Matrix Courses</Card.Title
+		>
 	</Card.Header>
 	<Card.Content>
 		<form action="?/getTree" method="get" class="flex items-center gap-2">
