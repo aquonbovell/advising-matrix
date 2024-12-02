@@ -4,21 +4,26 @@ import {
 	fetchStudentByUserId,
 	updateStudentGrades
 } from '$lib/actions/student.actions';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import type { StudentCourses } from '$lib/server/db/schema';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const id = locals.user?.id;
 	if (!id) {
-		return { status: 401, error: new Error('Unauthorized') };
+		return error(401, 'Unauthorized');
 	}
-	const student = await fetchStudentByUserId(id);
-	return {
-		degree: await fetchDegree(student.id),
-		studentCourses: await fetchStudentCourses(student.id),
-		student
-	};
+	try {
+		const student = await fetchStudentByUserId(id);
+		return {
+			degree: await fetchDegree(student.id),
+			studentCourses: await fetchStudentCourses(student.id),
+			student
+		};
+	} catch (err) {
+		console.error(err);
+		return error(500, 'Failed to load the matrix');
+	}
 };
 export const actions: Actions = {
 	saveGrades: async ({ locals, request }) => {

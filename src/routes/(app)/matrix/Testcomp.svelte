@@ -30,7 +30,7 @@
 		studentCourses: {
 			id: string;
 			studentId: string;
-			grade: string;
+			grade: string[];
 			requirementId: string;
 			courseId: string;
 			userId: string | null;
@@ -41,12 +41,7 @@
 	} = $props();
 
 	degree.set(studentDegree);
-	studentGrades.set(
-		studentCourses.map((sc) => ({
-			...sc,
-			grade: JSON.parse(sc.grade) as NonNullableGrade[]
-		}))
-	);
+	studentGrades.set(studentCourses);
 
 	codes.set(
 		studentDegree.requirements
@@ -80,7 +75,7 @@
 <div class="mx-auto flex flex-col gap-6" transition:fly={{ y: 30, delay: 200 }}>
 	<Card.Root class="min-w-80 overflow-hidden">
 		<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
-			<Card.Title>Bsc. {$degree.name} {selectedCourse?.code}</Card.Title>
+			<Card.Title class="">Bsc. {$degree.name}</Card.Title>
 			<form
 				action="?/saveGrades"
 				method="post"
@@ -90,7 +85,7 @@
 						if (result.type === 'failure') {
 							toast.error(result.data?.message as string, { duration: 2000 });
 						} else if (result.type === 'success') {
-							toast.success('Course deleted successfully', { duration: 2000 });
+							toast.success('Grades saved successfully', { duration: 2000 });
 						} else {
 							toast.error('An error occurred', { duration: 2000 });
 						}
@@ -111,7 +106,7 @@
 						value={JSON.stringify($studentGrades)}
 					/>
 				</label>
-				<Button.Root type="submit" variant="outline">Save</Button.Root>
+				<Button.Root type="submit" variant="outline" size="sm">Save</Button.Root>
 			</form>
 			<!-- <Button.Root variant="outline" onclick={saveGrades} disabled={loading}
 				>{#if loading}
@@ -133,8 +128,8 @@
 	</Card.Root>
 	{#each $degree.requirements as req}
 		<Card.Root class="min-w-80 overflow-hidden pb-0">
-			<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
-				<Card.Title
+			<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3 ">
+				<Card.Title class="text-base"
 					>{#if req.level.includes(3) && req.level.includes(2)}
 						Electives
 					{:else}Level {req.level.join(' / ')}{/if} - {req.credits} credits</Card.Title
@@ -153,8 +148,8 @@
 					>
 				{/if}
 			</Card.Header>
-			<Card.Content class="p-0 pb-0 @container">
-				<ul class="grid @2xl:grid-cols-2">
+			<Card.Content class=" p-0 pb-0">
+				<ul class="grid md:grid-cols-2">
 					{#each req.courses as course}
 						{@const isInStudentCourses = $studentGrades.some(
 							(sc) => sc.courseId === course.id && sc.requirementId === req.id
