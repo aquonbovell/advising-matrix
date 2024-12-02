@@ -84,50 +84,54 @@
 		</form>
 	</Card.Content>
 	<Card.Footer class="flex justify-between">
-		<Button.Root variant="outline" href={`/students/${data.student.id}/edit`}>Edit</Button.Root>
-		<AlertDialog.Root>
-			<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive' })}>
-				Delete
-			</AlertDialog.Trigger>
-			<AlertDialog.Content>
-				<AlertDialog.Header>
-					<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-					<AlertDialog.Description>
-						This action cannot be undone. This will permanently delete the account and remove the
-						data from our servers.
-					</AlertDialog.Description>
-				</AlertDialog.Header>
-				<AlertDialog.Footer>
-					<form
-						method="POST"
-						action="?/delete"
-						use:enhance={() => {
-							return async ({ result }) => {
-								// `result` is an `ActionResult` object
+		{#if data.user?.role === 'ADMIN'}
+			<Button.Root variant="outline" href={`/students/${data.student.id}/edit`}>Edit</Button.Root>
+		{/if}
+		{#if data.user?.role === 'ADMIN'}
+			<AlertDialog.Root>
+				<AlertDialog.Trigger class={buttonVariants({ variant: 'destructive' })}>
+					Delete
+				</AlertDialog.Trigger>
+				<AlertDialog.Content>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+						<AlertDialog.Description>
+							This action cannot be undone. This will permanently delete the account and remove the
+							data from our servers.
+						</AlertDialog.Description>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<form
+							method="POST"
+							action="?/delete"
+							use:enhance={() => {
+								return async ({ result }) => {
+									// `result` is an `ActionResult` object
 
-								if (result.type === 'failure') {
-									isOpen = false;
-									toast.error(result.data?.message as string, { duration: 2000 });
-								} else if (result.type === 'success') {
-									isOpen = false;
-									toast.success('Student deleted successfully', { duration: 2000 });
-								} else {
-									isOpen = false;
-									toast.error('An error occurred', { duration: 2000 });
-								}
-								await applyAction(result);
-								setTimeout(() => {
-									goto('/students', { replaceState: true });
-								}, 2000);
-							};
-						}}
-						class="flex gap-2"
-					>
-						<AlertDialog.Cancel type="button">Cancel</AlertDialog.Cancel>
-						<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
-					</form>
-				</AlertDialog.Footer>
-			</AlertDialog.Content>
-		</AlertDialog.Root>
+									if (result.type === 'failure') {
+										isOpen = false;
+										toast.error(result.data?.message as string, { duration: 2000 });
+									} else if (result.type === 'success') {
+										isOpen = false;
+										toast.success('Student deleted successfully', { duration: 2000 });
+									} else {
+										isOpen = false;
+										toast.error('An error occurred', { duration: 2000 });
+									}
+									await applyAction(result);
+									setTimeout(() => {
+										goto('/students', { replaceState: true });
+									}, 2000);
+								};
+							}}
+							class="flex gap-2"
+						>
+							<AlertDialog.Cancel type="button">Cancel</AlertDialog.Cancel>
+							<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+						</form>
+					</AlertDialog.Footer>
+				</AlertDialog.Content>
+			</AlertDialog.Root>
+		{/if}
 	</Card.Footer>
 </Card.Root>

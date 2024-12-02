@@ -6,7 +6,7 @@ import { deleteStudent } from '$lib/actions/student.actions';
 export const load: PageServerLoad = async ({ locals }) => {
 	const role = locals.user?.role;
 
-	if (role !== 'ADMIN') {
+	if (role === 'STUDENT') {
 		redirect(303, '/');
 	}
 
