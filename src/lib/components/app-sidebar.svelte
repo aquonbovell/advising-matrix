@@ -127,13 +127,12 @@
 	import NavMainStudent from '$lib/components/nav-main.student.svelte';
 	import NavUser from '$lib/components/nav-user.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-	import Command from 'lucide-svelte/icons/command';
 	import type { ComponentProps } from 'svelte';
 	import NavDisciplines from './nav-disciplines.svelte';
 	import NavFaculties from '$lib/components/nav-faculties.svelte';
 	import { page } from '$app/stores';
-	import NavStudents from './nav-students.svelte';
-	import NavStudent from './nav-student.svelte';
+	import NavStudents from '$lib/components/nav-students.svelte';
+	import NavStudent from '$lib/components/nav-student.svelte';
 
 	const user = {
 		name: $page.data.user.name,
@@ -154,7 +153,7 @@
 							<div
 								class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
 							>
-								<Command class="size-4" />
+								<img src="/logo.jpg" alt="Shad" class="rounded-lg" />
 							</div>
 							<div class="grid flex-1 text-left text-sm leading-tight">
 								<span class="truncate font-semibold">UWI Cavehill</span>

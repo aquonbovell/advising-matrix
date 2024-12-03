@@ -6,11 +6,16 @@
 	import LogOut from 'lucide-svelte/icons/log-out';
 	import Sparkles from 'lucide-svelte/icons/sparkles';
 
+	import * as Button from '$lib/components/ui/button/index.js';
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import { useSidebar } from '$lib/components/ui/sidebar/index.js';
 	import { invalidateAll } from '$app/navigation';
+	import Sun from 'lucide-svelte/icons/sun';
+	import Moon from 'lucide-svelte/icons/moon';
+
+	import { toggleMode, mode } from 'mode-watcher';
 
 	let {
 		user
@@ -64,7 +69,7 @@
 				{/snippet}
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content
-				class="w-[--bits-dropdown-menu-anchor-width] min-w-56 rounded-lg"
+				class="w-[--bits-dropdown-menu-anchor-width] min-w-60 rounded-lg"
 				side={sidebar.isMobile ? 'bottom' : 'right'}
 				align="end"
 				sideOffset={4}
@@ -79,6 +84,15 @@
 							<span class="truncate font-semibold">{user.name}</span>
 							<span class="truncate text-xs">{user.email}</span>
 						</div>
+						<Button.Root onclick={toggleMode} variant="outline" size="icon">
+							<Sun
+								class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+							/>
+							<Moon
+								class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+							/>
+							<span class="sr-only">Toggle theme</span>
+						</Button.Root>
 					</div>
 				</DropdownMenu.Label>
 				<!--<DropdownMenu.Separator />
