@@ -1,7 +1,9 @@
 import { Kysely } from 'kysely';
 import 'dotenv/config';
 import { LibsqlDialect } from '@libsql/kysely-libsql';
-import type { DB } from './schema';
+import type { DB } from '../src/lib/server/db/schema';
+import { random } from '../src/lib/utils';
+import { alphabet } from '../src/lib/constants';
 
 export function generateId() {
 	// ID with 120 bits of entropy, or about the same as UUID v4.
@@ -23,6 +25,7 @@ export async function hashPassword(password: string): Promise<string> {
 
 import { encodeBase32LowerCase } from '@oslojs/encoding';
 import { hash } from '@node-rs/argon2';
+import { generateRandomString } from '@oslojs/crypto/random';
 const defaultPassword = process.env.DEFAULT_PASSWORD;
 const tursoAuth = process.env.TURSO_AUTH_TOKEN;
 const tursoDatabase = process.env.TURSO_DATABASE_URL;
@@ -37,10 +40,8 @@ if (!tursoAuth || !tursoDatabase) {
 
 export const db = new Kysely<DB>({
 	dialect: new LibsqlDialect({
-		url: 'file:./testlocal.db',
-		syncUrl: tursoDatabase,
-		authToken: tursoAuth,
-		syncInterval: 60000
+		url: tursoDatabase,
+		authToken: tursoAuth
 	})
 });
 
@@ -54,6 +55,7 @@ const seed = async () => {
 
 		await db.deleteFrom('User').execute();
 
+		const { token, expiresAt } = generateTokenWithExpiration();
 		await db
 			.insertInto('User')
 			.values({
@@ -63,44 +65,10 @@ const seed = async () => {
 				role: 'ADMIN',
 				alternateEmail: 'administrator@outlook.com',
 				passwordHash: defaultHash,
-				onboarded: 1,
+				invite_expires: expiresAt,
+				invite_token: token,
+				onboarded: 0,
 				username: 'admin',
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString()
-			})
-			.execute();
-
-		// Insert User - Advisor
-		const [advisor_id, student_id] = [generateId(), generateId()];
-
-		await db
-			.insertInto('User')
-			.values({
-				id: advisor_id,
-				name: 'Advisor',
-				email: 'advisor@cavehill.uwi.edu',
-				role: 'ADVISOR',
-				alternateEmail: 'advisor@outlook.com',
-				passwordHash: defaultHash,
-				onboarded: 1,
-				username: 'advisor',
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString()
-			})
-			.execute();
-
-		// Insert User - Student
-		await db
-			.insertInto('User')
-			.values({
-				id: student_id,
-				name: 'Student',
-				email: 'student@mycavehill.uwi.edu',
-				role: 'STUDENT',
-				alternateEmail: 'student@outlook.com',
-				passwordHash: defaultHash,
-				onboarded: 1,
-				username: 'student',
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString()
 			})
@@ -120,3 +88,12 @@ seed()
 		console.error(err);
 		process.exit(1);
 	});
+
+export function generateTokenWithExpiration(
+	expiresInMinutes = 30, // Default to 30 minutes
+	tokenLength = 32
+) {
+	const expiresAt = (Date.now() + expiresInMinutes * 60 * 1000).toString(); // Calculate expiration time
+	const token = generateRandomString(random, alphabet, tokenLength);
+	return { token, expiresAt };
+}

@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { onboardingSchema } from './onboarding.schema';
+import { onboardingSchema } from '$lib/schemas/onboarding';
 import { superValidate } from 'sveltekit-superforms';
 import { completeOnboarding, exist, userTokenExpiration } from '$lib/server/actions/user.actions';
 
