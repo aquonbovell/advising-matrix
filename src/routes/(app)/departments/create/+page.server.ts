@@ -3,8 +3,8 @@ import type { Actions, PageServerLoad } from './$types';
 import { departmentCreationSchema } from './departmentCreation.schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
-import { createDepartment, exist } from '$lib/actions/department.actions';
-import { fetchFaculties } from '$lib/actions/faculty.actions';
+import { createDepartment, exist } from '$lib/server/actions/department.actions';
+import { fetchFaculties } from '$lib/server/actions/faculty.actions';
 
 export const load: PageServerLoad = async () => {
 	return {

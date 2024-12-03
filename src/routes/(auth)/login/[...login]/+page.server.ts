@@ -4,7 +4,7 @@ import * as auth from '$lib/server/auth';
 import type { Actions, PageServerLoad } from './$types';
 import { loginSchema } from '$lib/schemas/login';
 import { fail, redirect } from '@sveltejs/kit';
-import { fetchUserByEmail, verifyUserByCredentials } from '$lib/actions/user.actions';
+import { fetchUserByEmail, verifyUserByCredentials } from '$lib/server/actions/user.actions';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = locals;

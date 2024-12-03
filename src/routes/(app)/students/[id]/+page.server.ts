@@ -1,7 +1,7 @@
-import { deleteUser, fetchUser } from '$lib/actions/user.actions';
+import { deleteUser, fetchUser } from '$lib/server/actions/user.actions';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteStudent, fetchStudentDetails } from '$lib/actions/student.actions';
+import { deleteStudent, fetchStudentDetails } from '$lib/server/actions/student.actions';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const role = locals.user?.role;

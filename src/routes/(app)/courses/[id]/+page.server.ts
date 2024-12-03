@@ -1,6 +1,6 @@
 import { fail } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteCourse, fetchCourseDetails } from '$lib/actions/course.actions';
+import { deleteCourse, fetchCourseDetails } from '$lib/server/actions/course.actions';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;

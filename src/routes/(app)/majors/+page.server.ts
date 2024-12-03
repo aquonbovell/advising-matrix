@@ -1,6 +1,6 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteMajor, fetchMajors } from '$lib/actions/major.actions';
+import { deleteMajor, fetchMajors } from '$lib/server/actions/major.actions';
 
 export const load: PageServerLoad = async () => {
 	return {};

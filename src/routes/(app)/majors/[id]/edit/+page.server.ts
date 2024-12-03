@@ -8,9 +8,9 @@ import {
 	exist,
 	fetchMajor,
 	updateMajor
-} from '$lib/actions/major.actions';
-import { fetchCourseCodes } from '$lib/actions/course.actions';
-import { fetchFaculties } from '$lib/actions/faculty.actions';
+} from '$lib/server/actions/major.actions';
+import { fetchCourseCodes } from '$lib/server/actions/course.actions';
+import { fetchFaculties } from '$lib/server/actions/faculty.actions';
 import { majorUpdateSchema } from './majorUpdate.schema';
 
 export const load: PageServerLoad = async ({ params }) => {

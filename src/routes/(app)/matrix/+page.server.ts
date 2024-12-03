@@ -1,9 +1,9 @@
-import { fetchDegree, fetchStudentCourses } from '$lib/actions/matrix.actions';
+import { fetchDegree, fetchStudentCourses } from '$lib/server/actions/matrix.actions';
 import {
 	fetchStudent,
 	fetchStudentByUserId,
 	updateStudentGrades
-} from '$lib/actions/student.actions';
+} from '$lib/server/actions/student.actions';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import type { StudentCourses } from '$lib/server/db/schema';

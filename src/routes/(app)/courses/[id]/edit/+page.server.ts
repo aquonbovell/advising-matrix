@@ -4,12 +4,12 @@ import {
 	fetchCourseCodes,
 	fetchCourseDetails,
 	updateCourse
-} from '$lib/actions/course.actions';
+} from '$lib/server/actions/course.actions';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { courseUpdateSchema } from './courseUpdate.schema';
 import type { Actions, PageServerLoad } from './$types';
-import { fetchDepartmentsAll } from '$lib/actions/department.actions';
+import { fetchDepartmentsAll } from '$lib/server/actions/department.actions';
 import { error, fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params }) => {

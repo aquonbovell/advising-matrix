@@ -1,4 +1,4 @@
-import { deleteUser, fetchUser } from '$lib/actions/user.actions';
+import { deleteUser, fetchUser } from '$lib/server/actions/user.actions';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 

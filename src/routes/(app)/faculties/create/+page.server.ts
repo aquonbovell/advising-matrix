@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { facultyCreationSchema } from './facultyCreation.schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
-import { createFaculty, exist } from '$lib/actions/faculty.actions';
+import { createFaculty, exist } from '$lib/server/actions/faculty.actions';
 
 export const load: PageServerLoad = async () => {
 	return { form: await superValidate(zod(facultyCreationSchema)) };

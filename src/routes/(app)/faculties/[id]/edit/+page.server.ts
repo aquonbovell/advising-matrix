@@ -2,7 +2,12 @@ import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import { deleteFaculty, exist, fetchFaculty, updateFaculty } from '$lib/actions/faculty.actions';
+import {
+	deleteFaculty,
+	exist,
+	fetchFaculty,
+	updateFaculty
+} from '$lib/server/actions/faculty.actions';
 import { facultyUpdateSchema } from './facultyUpdateSchema.schema';
 
 export const load: PageServerLoad = async ({ params }) => {

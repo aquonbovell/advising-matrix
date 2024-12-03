@@ -1,4 +1,4 @@
-import { fetchCourseCodes, fetchCourseHierarchy } from '$lib/actions/course.actions';
+import { fetchCourseCodes, fetchCourseHierarchy } from '$lib/server/actions/course.actions';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ url }) => {

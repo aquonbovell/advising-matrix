@@ -7,9 +7,9 @@ import {
 	exist,
 	fetchDepartment,
 	updateDepartment
-} from '$lib/actions/department.actions';
+} from '$lib/server/actions/department.actions';
 import { departmentUpdateSchema } from './departmentUpdateSchema.schema';
-import { fetchFaculties } from '$lib/actions/faculty.actions';
+import { fetchFaculties } from '$lib/server/actions/faculty.actions';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;

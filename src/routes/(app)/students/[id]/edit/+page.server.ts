@@ -1,12 +1,12 @@
-import { fetchUser, updateUser } from '$lib/actions/user.actions';
+import { fetchUser, updateUser } from '$lib/server/actions/user.actions';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { studentUpdateSchema } from './studentUpdate.schema';
-import { deleteStudent, fetchStudent, updateStudent } from '$lib/actions/student.actions';
-import { fetchAdvisors } from '$lib/actions/advisor.actions';
-import { fetchMajors } from '$lib/actions/major.actions';
-import { fetchMinors } from '$lib/actions/minor.actions';
+import { deleteStudent, fetchStudent, updateStudent } from '$lib/server/actions/student.actions';
+import { fetchAdvisors } from '$lib/server/actions/advisor.actions';
+import { fetchMajors } from '$lib/server/actions/major.actions';
+import { fetchMinors } from '$lib/server/actions/minor.actions';
 import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, locals }) => {

@@ -3,10 +3,10 @@ import type { Actions, PageServerLoad } from './$types';
 import { studentCreationSchema } from './studentCreation.schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
-import { createStudent, fetchAvailableUsers } from '$lib/actions/student.actions';
-import { fetchAdvisors } from '$lib/actions/advisor.actions';
-import { fetchMajors } from '$lib/actions/major.actions';
-import { fetchMinors } from '$lib/actions/minor.actions';
+import { createStudent, fetchAvailableUsers } from '$lib/server/actions/student.actions';
+import { fetchAdvisors } from '$lib/server/actions/advisor.actions';
+import { fetchMajors } from '$lib/server/actions/major.actions';
+import { fetchMinors } from '$lib/server/actions/minor.actions';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const role = locals.user?.role;

@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { onboardingSchema } from './onboarding.schema';
 import { superValidate } from 'sveltekit-superforms';
-import { completeOnboarding, exist, userTokenExpiration } from '$lib/actions/user.actions';
+import { completeOnboarding, exist, userTokenExpiration } from '$lib/server/actions/user.actions';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = locals;

@@ -2,9 +2,9 @@ import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
-import { createMajor, exist } from '$lib/actions/major.actions';
-import { fetchCourseCodes } from '$lib/actions/course.actions';
-import { fetchFaculties } from '$lib/actions/faculty.actions';
+import { createMajor, exist } from '$lib/server/actions/major.actions';
+import { fetchCourseCodes } from '$lib/server/actions/course.actions';
+import { fetchFaculties } from '$lib/server/actions/faculty.actions';
 import { majorCreationSchema } from './majorCreation.schema';
 
 export const load: PageServerLoad = async () => {

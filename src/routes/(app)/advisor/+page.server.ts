@@ -1,4 +1,4 @@
-import { fetchAdvisors } from '$lib/actions/student.actions';
+import { fetchAdvisors } from '$lib/server/actions/student.actions';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {

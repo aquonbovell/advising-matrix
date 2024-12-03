@@ -1,4 +1,4 @@
-import { deleteUser, exist, fetchUser, updateUser } from '$lib/actions/user.actions';
+import { deleteUser, exist, fetchUser, updateUser } from '$lib/server/actions/user.actions';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';

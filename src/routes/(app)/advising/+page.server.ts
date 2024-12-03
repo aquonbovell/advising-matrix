@@ -1,4 +1,4 @@
-import {} from '$lib/actions/user.actions';
+import {} from '$lib/server/actions/user.actions';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 

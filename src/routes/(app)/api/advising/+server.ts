@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { fetchAdvisingStudents } from '$lib/actions/student.actions';
+import { fetchAdvisingStudents } from '$lib/server/actions/student.actions';
 
 export const GET: RequestHandler = async ({ url }) => {
 	const userId = url.searchParams.get('userId');

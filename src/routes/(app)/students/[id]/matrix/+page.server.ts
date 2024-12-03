@@ -1,7 +1,7 @@
-import { fetchDegree, fetchStudentCourses } from '$lib/actions/matrix.actions';
+import { fetchDegree, fetchStudentCourses } from '$lib/server/actions/matrix.actions';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { updateStudentSuggestions } from '$lib/actions/student.actions';
+import { updateStudentSuggestions } from '$lib/server/actions/student.actions';
 import type { StudentCourses } from '$lib/server/db/schema';
 
 export const load: PageServerLoad = async ({ params, locals }) => {

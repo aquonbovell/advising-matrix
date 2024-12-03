@@ -1,4 +1,4 @@
-import { fetchUsers } from '$lib/actions/user.actions';
+import { fetchUsers } from '$lib/server/actions/user.actions';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 

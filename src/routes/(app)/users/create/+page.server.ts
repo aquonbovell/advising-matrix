@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { userCreationSchema } from './userCreation.schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
-import { createUser, exist } from '$lib/actions/user.actions';
+import { createUser, exist } from '$lib/server/actions/user.actions';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const role = locals.user?.role;

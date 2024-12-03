@@ -2,9 +2,9 @@ import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
-import { createCourse, exist, fetchCourseCodes } from '$lib/actions/course.actions';
+import { createCourse, exist, fetchCourseCodes } from '$lib/server/actions/course.actions';
 import { courseCreationSchema } from './courseCreation.schema';
-import { fetchDepartmentsAll } from '$lib/actions/department.actions';
+import { fetchDepartmentsAll } from '$lib/server/actions/department.actions';
 
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(courseCreationSchema));

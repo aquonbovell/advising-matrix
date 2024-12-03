@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { fetchDepartments } from '$lib/actions/department.actions';
+import { fetchDepartments } from '$lib/server/actions/department.actions';
 
 export const GET: RequestHandler = async () => {
 	const departments = await fetchDepartments();
