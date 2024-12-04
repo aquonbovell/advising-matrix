@@ -5,7 +5,7 @@ import {
 	verifyPassword
 } from '$lib/server/auth';
 import { db } from '$lib/server/db';
-import { env } from '$env/dynamic/private';
+import { DEFAULT_PASSWORD } from '$env/static/private';
 import type { DB, User } from '$lib/server/db/schema';
 
 import type { ReferenceExpression } from 'kysely';
@@ -30,9 +30,9 @@ export const createUser = async (
 				...user,
 				invite_expires: access.expiresAt,
 				invite_token: access.token,
-				id: generateId(),
+				id: await generateId(),
 				onboarded: 0,
-				passwordHash: await hashPassword(env.DEFAULT_PASSWORD),
+				passwordHash: await hashPassword(DEFAULT_PASSWORD),
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString()
 			})
