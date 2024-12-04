@@ -37,7 +37,7 @@
 				</Breadcrumb.Root>
 			</div>
 		</header>
-		<main class="h-full px-4">
+		<main class="h-dvh px-4">
 			{@render children()}
 		</main>
 	</Sidebar.Inset>

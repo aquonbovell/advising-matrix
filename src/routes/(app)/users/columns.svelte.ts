@@ -6,6 +6,7 @@ import DataTableAccessBadge from './data-table-access-badge.svelte';
 import DataTableActions from './data-table-actions.svelte';
 import DataTableEmailButton from './data-table-email-button.svelte';
 import type { UserRole } from '$lib/types';
+import { writable } from 'svelte/store';
 
 // This type is used to define the shape of our data.
 export type User = {
@@ -17,6 +18,17 @@ export type User = {
 	invite_expires: string | null;
 	onboarded: boolean;
 	userRole: UserRole;
+};
+export let userId = writable<string | undefined>(undefined);
+export let isOpen = writable<boolean>(false);
+
+export const setUserId = (id: string | undefined, open: boolean = true) => {
+	userId.set(id);
+	isOpen.set(open);
+};
+
+export const getUserId = () => {
+	return { userId, isOpen };
 };
 
 export const columns: ColumnDef<User>[] = [
