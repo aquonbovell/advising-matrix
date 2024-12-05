@@ -58,8 +58,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			throw new Error('Not implemented');
-			// await updateUser({ ...form.data, onboarded: form.data.onboarded ? 1 : 0 });
+			await updateUser({ ...form.data, onboarded: form.data.onboarded ? 1 : 0 });
 		} catch (err) {
 			console.error(err);
 			return message(form, { message: 'Failed to update user', type: 'failure' }, { status: 400 });

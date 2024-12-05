@@ -19,6 +19,7 @@
 
 	$effect(() => {
 		if ($message) {
+			alert($message);
 			if ($message.type === 'success') {
 				toast.success($message.message);
 			} else {
@@ -73,7 +74,7 @@
 
 	<Form.Fieldset {form} name="role">
 		<Form.Legend class="font-semibold">Role</Form.Legend>
-		<RadioGroup.Root bind:value={$formData.role} class="flex">
+		<RadioGroup.Root bind:value={$formData.role} class="flex" name="role">
 			{#each userOptions as option}
 				<Form.Control>
 					{#snippet children({ props })}

@@ -57,6 +57,10 @@ export const actions: Actions = {
 		}
 
 		try {
+			console.log('Creating user');
+
+			console.log(form.data);
+
 			const userId = await createUser(form.data);
 		} catch (err) {
 			console.error(err);

@@ -61,7 +61,7 @@
 	{columns}
 />
 <AlertDialog.Root bind:open={$isOpen}>
-	<AlertDialog.Content class="h-fit max-w-60">
+	<AlertDialog.Content class="">
 		<AlertDialog.Header>
 			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 			<AlertDialog.Description>
@@ -87,7 +87,7 @@
 						await applyAction(result);
 					};
 				}}
-				class="flex gap-2"
+				class="flex items-baseline gap-2"
 			>
 				<label for="id">
 					<input type="hidden" name="id" bind:value={$userId} />

@@ -29,7 +29,7 @@
 	});
 </script>
 
-<pre>{JSON.stringify($allErrors, null, 2)}</pre>
+<pre>{JSON.stringify($message, null, 2)}</pre>
 
 <form method="POST" use:enhance class="space-y-4" action="?/edit">
 	<Form.Field {form} name="id" hidden>
@@ -98,7 +98,7 @@
 
 	<Form.Fieldset {form} name="role">
 		<Form.Legend class="font-semibold">Role</Form.Legend>
-		<RadioGroup.Root bind:value={$formData.role} class="flex">
+		<RadioGroup.Root bind:value={$formData.role} class="flex" name="role">
 			{#each userOptions as option}
 				<Form.Control>
 					{#snippet children({ props })}

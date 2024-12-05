@@ -64,10 +64,51 @@
 			</DropdownMenu.Item>
 		{/if}
 		{#if role === 'ADMIN'}
-			<DropdownMenu.Item onclick={() => setUserId(id)}
-				><Button.Root variant="ghost" class="m-0 h-fit p-0">Reset Token</Button.Root
-				></DropdownMenu.Item
-			>
+			<DropdownMenu.Item class="m-0 p-0">
+				<AlertDialog.Root bind:open={resetTokenIsOpenDialog}>
+					<AlertDialog.Trigger class={cn('m-0  block	 h-full w-full p-2 text-left')}>
+						Reset Token
+					</AlertDialog.Trigger>
+					<AlertDialog.Content>
+						<AlertDialog.Header>
+							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+							<AlertDialog.Description>
+								This action cannot be undone. This will allow the user to access their account with
+								a new token.
+							</AlertDialog.Description>
+						</AlertDialog.Header>
+						<AlertDialog.Footer>
+							<form
+								method="POST"
+								action="?/reset"
+								use:enhance={() => {
+									return async ({ result }) => {
+										// `result` is an `ActionResult` object
+										if (result.type === 'failure') {
+											resetTokenIsOpenDialog = false;
+											toast.error(result.data?.message as string, { duration: 2000 });
+										} else if (result.type === 'success') {
+											resetTokenIsOpenDialog = false;
+											toast.success(result.data?.message as string, { duration: 2000 });
+										} else {
+											resetTokenIsOpenDialog = false;
+											toast.error('An error occured', { duration: 2000 });
+										}
+										await applyAction(result);
+									};
+								}}
+								class="flex items-baseline gap-2"
+							>
+								<label for="id">
+									<input type="hidden" name="id" value={id} />
+								</label>
+								<AlertDialog.Cancel type="button">Cancel</AlertDialog.Cancel>
+								<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+							</form>
+						</AlertDialog.Footer>
+					</AlertDialog.Content>
+				</AlertDialog.Root>
+			</DropdownMenu.Item>
 		{/if}
 		{#if role === 'ADMIN'}
 			<DropdownMenu.Item class="m-0 p-0">
