@@ -8,6 +8,7 @@
 	import { toast } from 'svelte-sonner';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { applyAction, enhance } from '$app/forms';
+	import { cn } from '$lib/utils';
 
 	let { data }: { data: PageData } = $props();
 
@@ -42,10 +43,10 @@
 	});
 </script>
 
-<div class="flex justify-between">
+<div class="flex items-baseline justify-between">
 	<h1 class="text-lg font-bold">Users</h1>
 	{#if data.user?.role === 'ADMIN'}
-		<Button.Root variant="link" href="/users/create">Create User</Button.Root>
+		<Button.Root variant="link" href="/users/create" class="px-0">Create User</Button.Root>
 	{/if}
 </div>
 
@@ -61,7 +62,7 @@
 	{columns}
 />
 <AlertDialog.Root bind:open={$isOpen}>
-	<AlertDialog.Content class="">
+	<AlertDialog.Content class={cn('w-10/12 md:w-full')}>
 		<AlertDialog.Header>
 			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 			<AlertDialog.Description>

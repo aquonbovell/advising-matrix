@@ -30,7 +30,7 @@
 	});
 </script>
 
-<div class="flex justify-between">
+<div class="flex items-baseline justify-between">
 	<h1 class="text-lg font-bold">Courses</h1>
 	{#if data.user?.role === 'ADMIN'}
 		<Button.Root variant="link" href="/courses/create" class="px-0">Create Course</Button.Root>

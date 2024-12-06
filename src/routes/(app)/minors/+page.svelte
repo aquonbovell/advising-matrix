@@ -30,10 +30,10 @@
 	});
 </script>
 
-<div class="flex justify-between">
+<div class="flex items-baseline justify-between">
 	<h1 class="text-lg font-bold">Minor</h1>
 	{#if data.user?.role === 'ADMIN'}
-		<Button.Root variant="link" href="/minors/create">Create Minor</Button.Root>
+		<Button.Root variant="link" href="/minors/create" class="px-0">Create Minor</Button.Root>
 	{/if}
 </div>
 

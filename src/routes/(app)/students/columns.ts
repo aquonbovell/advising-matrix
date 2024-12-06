@@ -4,6 +4,7 @@ import { renderComponent } from '$lib/components/ui/data-table';
 import DataTableActions from './data-table-actions.svelte';
 import DataTableEmailButton from './data-table-email-button.svelte';
 import type { UserRole } from '$lib/types';
+import { writable } from 'svelte/store';
 
 // This type is used to define the shape of our data.
 export type Student = {

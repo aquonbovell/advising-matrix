@@ -47,7 +47,7 @@
 					toast.info('Copied invite token');
 				}}
 			>
-				Copy User Access Token
+				Copy Access Token
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
@@ -66,10 +66,10 @@
 		{#if role === 'ADMIN'}
 			<DropdownMenu.Item class="m-0 p-0">
 				<AlertDialog.Root bind:open={resetTokenIsOpenDialog}>
-					<AlertDialog.Trigger class={cn('m-0  block	 h-full w-full p-2 text-left')}>
+					<AlertDialog.Trigger class={cn('m-0 block h-full w-full p-2 text-left')}>
 						Reset Token
 					</AlertDialog.Trigger>
-					<AlertDialog.Content>
+					<AlertDialog.Content class="w-10/12 md:w-full">
 						<AlertDialog.Header>
 							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 							<AlertDialog.Description>
@@ -121,7 +121,7 @@
 					>
 						Delete
 					</AlertDialog.Trigger>
-					<AlertDialog.Content>
+					<AlertDialog.Content class="w-10/12 md:w-full">
 						<AlertDialog.Header>
 							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 							<AlertDialog.Description>

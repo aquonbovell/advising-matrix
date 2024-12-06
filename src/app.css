@@ -131,6 +131,7 @@
 		opacity: 0.4;
 		filter: invert(1);
 	}
+
 	.gradient {
 		height: fit-content;
 		z-index: 1;
@@ -150,6 +151,15 @@
 		filter: blur(100px) saturate(150%);
 		top: 80px;
 		opacity: 0.15;
+	}
+
+	.table-container {
+		width: calc(100dvw - 2rem);
+	}
+	@screen lg {
+		.table-container {
+			width: auto;
+		}
 	}
 	* {
 		@apply border-border;

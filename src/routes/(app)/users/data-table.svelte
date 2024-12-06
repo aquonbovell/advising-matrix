@@ -96,7 +96,7 @@
 </script>
 
 <div>
-	<div class="flex items-center py-4">
+	<div class="flex items-center gap-4 py-4">
 		<Input.Root
 			placeholder="Filter emails..."
 			value={table.getColumn('email')?.getFilterValue() as string}
@@ -124,7 +124,7 @@
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</div>
-	<div class="rounded-md border">
+	<div class="table-container rounded-md border">
 		<Table.Root>
 			<Table.Header>
 				{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}

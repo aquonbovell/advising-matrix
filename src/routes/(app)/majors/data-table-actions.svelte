@@ -58,7 +58,7 @@
 					>
 						Delete
 					</AlertDialog.Trigger>
-					<AlertDialog.Content>
+					<AlertDialog.Content class="w-10/12 rounded-lg md:w-full">
 						<AlertDialog.Header>
 							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 							<AlertDialog.Description>
@@ -86,7 +86,7 @@
 										await applyAction(result);
 									};
 								}}
-								class="flex gap-2"
+								class="flex items-baseline gap-2"
 							>
 								<label for="id">
 									<input type="hidden" name="id" value={id} />
