@@ -42,12 +42,38 @@
 		addGradeDialog();
 	}
 
-	// function arePrerequisitesMet(course: CourseDetails) {
-	// 	return course.prerequisites.every((prerequisite) =>
-	// 		$studentCourses.some((c) => c.courseId === prerequisite)
-	// 	);
-	// 	throw new Error('Function not implemented.');
-	// }
+	function handleGradeChange() {
+		let grades = currentCourse?.grade ?? [];
+
+		let validGrades: string[] = [];
+
+		for (let i = 0; i < grades.length; i++) {
+			if (grades[i].startsWith('F')) {
+				validGrades.push(grades[i]);
+			} else {
+				validGrades.push(grades[i]);
+				break;
+			}
+		}
+
+		studentCourses.update((courses) => {
+			const currentCourseIndex = courses.findIndex((c) => c.courseId === course.id);
+			if (currentCourseIndex !== -1) {
+				courses[currentCourseIndex].grade = validGrades;
+			}
+			return courses;
+		});
+	}
+
+	function clearGrades() {
+		studentCourses.update((courses) => {
+			const currentCourseIndex = courses.findIndex((c) => c.courseId === course.id);
+			if (currentCourseIndex !== -1) {
+				courses[currentCourseIndex].grade = [];
+			}
+			return courses;
+		});
+	}
 </script>
 
 <div
@@ -92,6 +118,7 @@
 			</div>
 
 			<div class="flex flex-wrap items-center gap-2">
+				<Button.Root variant="secondary" size="sm" onclick={clearGrades}>Clear</Button.Root>
 				<Badge variant="secondary" class="text-xs">Level {course.level}</Badge>
 				<Badge variant="secondary" class="bg-green-100 text-green-700 hover:bg-green-200">
 					{course.credits} credits
@@ -133,8 +160,13 @@
 			{#if currentCourse?.grade}
 				{#each currentCourse.grade as grade, index}
 					<div class="flex flex-wrap items-center gap-2">
-						<Select.Root required bind:value={currentCourse.grade[index]} type="single">
-							<Select.Trigger class="h-8 w-20 bg-white">{grade ?? 'GRade'}</Select.Trigger>
+						<Select.Root
+							required
+							bind:value={currentCourse.grade[index]}
+							type="single"
+							onValueChange={handleGradeChange}
+						>
+							<Select.Trigger class="h-8 w-20">{grade ?? 'Grade'}</Select.Trigger>
 							<Select.Content>
 								{#each Object.keys(gradePoints) as grade}
 									<Select.Item value={grade} class="text-sm">

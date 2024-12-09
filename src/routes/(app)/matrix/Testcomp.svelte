@@ -72,7 +72,7 @@
 	}
 </script>
 
-<div class="mx-auto flex flex-col gap-6" transition:fly={{ y: 30, delay: 200 }}>
+<div class="mx-auto mb-4 flex flex-col gap-6" transition:fly={{ y: 30, delay: 200 }}>
 	<Card.Root class="min-w-80 overflow-hidden">
 		<Card.Header class="flex flex-row items-center justify-between gap-3 px-4 py-3">
 			<Card.Title class="">Bsc. {$degree.name}</Card.Title>

@@ -283,7 +283,9 @@ export const updateStudentGrades = async (
 			await db
 				.insertInto('StudentCourses')
 				.values({
-					...courseGrade,
+					userId: courseGrade.userId,
+					courseId: courseGrade.courseId,
+					requirementId: courseGrade.requirementId,
 					studentId,
 					id: generateId(),
 					grade: JSON.stringify(courseGrade.grade)

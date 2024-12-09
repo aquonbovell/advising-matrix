@@ -53,7 +53,13 @@ export const degreeGPA = derived([studentCourses, degree, codes], ([$courses, $d
 
 			// Check if course is completed and part of a non-level-1 requirement
 			const requirement = $degree.requirements.find((req) => req.id === course.requirementId);
-			return isCourseCompleted(course) && requirement && !requirement.level.includes(1);
+			return (
+				isCourseCompleted(course) &&
+				requirement &&
+				!requirement.level.includes(1) &&
+				!course.grade.includes('PASS') &&
+				!course.grade.includes('FAIL')
+			);
 		})
 		.reduce(
 			(acc, course) => {
