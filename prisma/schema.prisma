@@ -1,0 +1,54 @@
+generator client {
+  provider     = "prisma-kysely"
+  output       = "../src/lib/server/db"
+  fileName     = "schema.ts"
+  enumFileName = "enums.ts"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../local.db"
+}
+
+model email_verification_request {
+  id        String   @id
+  userId    String
+  email     String
+  code      String
+  expiresAt DateTime
+  user      user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model password_reset_session {
+  id                String   @id
+  userId            String
+  email             String
+  code              String
+  expiresAt         DateTime
+  emailVerified     Boolean
+  twoFactorVerified Boolean
+  user              user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model session {
+  id                String   @id
+  userId            String
+  expiresAt         DateTime
+  twoFactorVerified Boolean
+  user              user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model user {
+  id                       String                       @id
+  email                    String                       @unique(map: "sqlite_autoindex_user_email")
+  username                 String
+  passwordHash             String
+  emailVerified            Boolean
+  totpKey                  Bytes?
+  recoveryCode             Bytes
+  emailVerificationRequest email_verification_request[]
+  passwordResetSession     password_reset_session[]
+  session                  session[]
+
+  @@index([email], map: "email_index")
+}
