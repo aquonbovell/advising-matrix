@@ -20,6 +20,7 @@
 <Card.Root class="mx-auto max-w-xs">
 	<Card.Header>
 		<Card.Title class="text-2xl">Set up two-factor authentication</Card.Title>
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		{@html qrcode}
 	</Card.Header>
 	<Card.Content class="space-y-3">

@@ -3,7 +3,7 @@
 	import * as Button from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as InputOTP from '$lib/components/ui/input-otp/index.js';
-	let { data, form } = $props();
+	let { form } = $props();
 </script>
 
 <Card.Root class="mx-auto max-w-md">

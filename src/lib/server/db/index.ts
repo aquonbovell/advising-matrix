@@ -1,4 +1,3 @@
-import { dev } from '$app/environment';
 import { Kysely } from 'kysely';
 import { createClient } from '@libsql/client';
 import { env } from '$env/dynamic/private';
