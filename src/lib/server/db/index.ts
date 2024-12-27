@@ -16,7 +16,7 @@ const authClient = createClient({
 	authToken: env.AUTH_DATABASE_AUTH_TOKEN
 });
 
-const db = createClient({
+export const db = createClient({
 	url: env.APP_DATABASE_URL,
 	authToken: env.APP_DATABASE_AUTH_TOKEN
 });
