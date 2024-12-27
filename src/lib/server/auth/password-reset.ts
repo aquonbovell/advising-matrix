@@ -1,4 +1,4 @@
-import { db } from '$lib/server/db';
+import { authdb } from '$lib/server/db';
 import { encodeHexLowerCase } from '@oslojs/encoding';
 import { sha256 } from '@oslojs/crypto/sha2';
 
@@ -21,7 +21,7 @@ export async function createPasswordResetSession(
 		emailVerified: false,
 		twoFactorVerified: false
 	};
-	await db
+	await authdb
 		.insertInto('password_reset_session')
 		.values({
 			id: session.id,
@@ -41,7 +41,7 @@ export async function validatePasswordResetSessionToken(
 	token: string
 ): Promise<PasswordResetSessionValidationResult> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const row = await db
+	const row = await authdb
 		.selectFrom('password_reset_session')
 		.innerJoin('user', 'user.id', 'password_reset_session.userId')
 		.select([
@@ -81,14 +81,14 @@ export async function validatePasswordResetSessionToken(
 		registered2FA: Boolean(row.twoFactorVerified)
 	};
 	if (Date.now() >= session.expiresAt.getTime()) {
-		db.deleteFrom('password_reset_session').where('id', '==', session.id).execute();
+		authdb.deleteFrom('password_reset_session').where('id', '==', session.id).execute();
 		return { session: null, user: null };
 	}
 	return { session, user };
 }
 
 export async function setPasswordResetSessionAsEmailVerified(sessionId: string): Promise<void> {
-	await db
+	await authdb
 		.updateTable('password_reset_session')
 		.set('emailVerified', 1)
 		.where('id', '==', sessionId)
@@ -96,7 +96,7 @@ export async function setPasswordResetSessionAsEmailVerified(sessionId: string):
 }
 
 export async function setPasswordResetSessionAs2FAVerified(sessionId: string): Promise<void> {
-	await db
+	await authdb
 		.updateTable('password_reset_session')
 		.set('twoFactorVerified', 1)
 		.where('id', '==', sessionId)
@@ -104,7 +104,7 @@ export async function setPasswordResetSessionAs2FAVerified(sessionId: string): P
 }
 
 export async function invalidateUserPasswordResetSessions(userId: string): Promise<void> {
-	await db.deleteFrom('password_reset_session').where('userId', '==', userId).execute();
+	await authdb.deleteFrom('password_reset_session').where('userId', '==', userId).execute();
 }
 
 export async function validatePasswordResetSessionRequest(

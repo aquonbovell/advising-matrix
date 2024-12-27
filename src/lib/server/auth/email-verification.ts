@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { db } from '../db';
+import { authdb } from '../db';
 import { dev } from '$app/environment';
 import { encodeBase32 } from '@oslojs/encoding';
 import { generateRandomOTP } from '../utils';
@@ -16,7 +16,7 @@ export async function getUserEmailVerificationRequest(
 	userId: string,
 	id: string
 ): Promise<EmailVerificationRequest | null> {
-	const row = await db
+	const row = await authdb
 		.selectFrom('email_verification_request')
 		.select(['id', 'userId', 'code', 'email', 'expiresAt'])
 		.where('id', '==', id)
@@ -77,7 +77,7 @@ export async function getUserEmailVerificationRequestFromRequest(
 	return request;
 }
 export async function deleteUserEmailVerificationRequest(userId: string): Promise<void> {
-	await db.deleteFrom('email_verification_request').where('userId', '==', userId).execute();
+	await authdb.deleteFrom('email_verification_request').where('userId', '==', userId).execute();
 }
 
 export async function createEmailVerificationRequest(
@@ -92,7 +92,7 @@ export async function createEmailVerificationRequest(
 	const code = generateRandomOTP();
 	const expiresAt = new Date(Date.now() + 1000 * 60 * 10);
 
-	await db
+	await authdb
 		.insertInto('email_verification_request')
 		.values({
 			id,

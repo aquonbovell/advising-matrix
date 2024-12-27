@@ -1,10 +1,10 @@
 import { hashPassword } from '$lib/server/auth';
-import { db } from '$lib/server/db';
+import { authdb } from '$lib/server/db';
 import { generateRandomId, generateRandomRecoveryCode } from '$lib/server/utils';
 import { decrypt, decryptToString, encryptString } from '$lib/server/auth/encryption';
 
 export async function getUsers() {
-	const result = await db
+	const result = await authdb
 		.selectFrom('user')
 		.select([
 			'user.id',
@@ -19,7 +19,7 @@ export async function getUsers() {
 }
 
 export async function getUserFromEmail(email: string) {
-	const result = await db
+	const result = await authdb
 		.selectFrom('user')
 		.leftJoin('session', 'user.id', 'session.userId')
 		.select(['user.id', 'twoFactorVerified', 'user.emailVerified', 'user.totpKey as registered2FA'])
@@ -29,12 +29,12 @@ export async function getUserFromEmail(email: string) {
 }
 
 export async function checkEmailAvailability(email: string): Promise<boolean> {
-	const row = await db.selectFrom('user').select('email').where('email', '==', email).execute();
+	const row = await authdb.selectFrom('user').select('email').where('email', '==', email).execute();
 	return row.length === 0;
 }
 
 export async function checkUsernameAvailability(username: string): Promise<boolean> {
-	const row = await db
+	const row = await authdb
 		.selectFrom('user')
 		.select('username')
 		.where('username', '==', username)
@@ -43,7 +43,7 @@ export async function checkUsernameAvailability(username: string): Promise<boole
 }
 
 export async function getPasswordHashFromId(id: string) {
-	const result = await db
+	const result = await authdb
 		.selectFrom('user')
 		.select('passwordHash')
 		.where('id', '==', id)
@@ -59,7 +59,7 @@ export async function createUser(username: string, email: string, password: stri
 	const passwordHash = await hashPassword(password);
 	const recoveryCode = generateRandomRecoveryCode();
 	const encryptedRecoveryCode = encryptString(recoveryCode);
-	const result = await db
+	const result = await authdb
 		.insertInto('user')
 		.values({
 			id: generateRandomId(),
@@ -86,7 +86,7 @@ export async function updateUserEmailAndSetEmailAsVerified(
 	userId: string,
 	email: string
 ): Promise<void> {
-	await db
+	await authdb
 		.updateTable('user')
 		.set('email', email)
 		.set('emailVerified', 1)
@@ -103,7 +103,7 @@ export interface User {
 }
 
 export async function getUserRecoverCode(userId: string): Promise<string> {
-	const row = await db
+	const row = await authdb
 		.selectFrom('user')
 		.select('recoveryCode')
 		.where('id', '==', userId)
@@ -112,7 +112,7 @@ export async function getUserRecoverCode(userId: string): Promise<string> {
 }
 
 export async function getUserTOTPKey(userId: string): Promise<Uint8Array<ArrayBufferLike> | null> {
-	const row = await db
+	const row = await authdb
 		.selectFrom('user')
 		.select('totpKey')
 		.where('id', '==', userId)

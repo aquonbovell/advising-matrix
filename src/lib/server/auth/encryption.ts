@@ -3,7 +3,7 @@ import { createCipheriv, createDecipheriv } from 'crypto';
 import { DynamicBuffer } from '@oslojs/binary';
 
 import { ENCRYPTION_KEY } from '$env/static/private';
-import { db } from '$lib/server/db';
+import { authdb } from '$lib/server/db';
 
 const key = decodeBase64(ENCRYPTION_KEY);
 
@@ -41,7 +41,7 @@ export function decryptToString(data: Uint8Array): string {
 
 export async function updateUserTOTPKey(userId: string, key: Uint8Array): Promise<void> {
 	const encrypted = encrypt(key);
-	await db
+	await authdb
 		.updateTable('user')
 		.set('totpKey', Buffer.from(encrypted))
 		.where('id', '==', userId)

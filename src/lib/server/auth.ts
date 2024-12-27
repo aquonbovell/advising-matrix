@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/private';
-import { db } from '$lib/server/db';
+import { authdb } from '$lib/server/db';
 import type { RequestEvent } from '@sveltejs/kit';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
@@ -24,13 +24,13 @@ export async function createSession(token: string, userId: string, flags: Sessio
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30).toISOString(),
 		twoFactorVerified: flags.twoFactorVerified ? 1 : 0
 	};
-	await db.insertInto('session').values(session).execute();
+	await authdb.insertInto('session').values(session).execute();
 	return session;
 }
 
 export async function validateSessionToken(token: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const result = await db
+	const result = await authdb
 		.selectFrom('session')
 		.innerJoin('user', 'session.userId', 'user.id')
 		.select([
@@ -68,14 +68,14 @@ export async function validateSessionToken(token: string) {
 
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();
 	if (sessionExpired) {
-		await db.deleteFrom('session').where('session.id', '==', session.id).execute();
+		await authdb.deleteFrom('session').where('session.id', '==', session.id).execute();
 		return { session: null, user: null };
 	}
 
 	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
 	if (renewSession) {
 		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
-		await db
+		await authdb
 			.updateTable('session')
 			.set({ expiresAt: session.expiresAt.toTimeString() })
 			.where('session.id', '==', session.id)
@@ -88,7 +88,7 @@ export async function validateSessionToken(token: string) {
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
 
 export async function invalidateSession(sessionId: string) {
-	await db.deleteFrom('session').where('session.id', '==', sessionId).execute();
+	await authdb.deleteFrom('session').where('session.id', '==', sessionId).execute();
 }
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
@@ -129,7 +129,7 @@ export interface SessionFlags {
 }
 
 export async function setSessionAs2FAVerified(sessionId: string): Promise<void> {
-	await db
+	await authdb
 		.updateTable('session')
 		.set({ twoFactorVerified: 1 })
 		.where('session.id', '==', sessionId)

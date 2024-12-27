@@ -12,7 +12,7 @@ export const load = (async (event) => {
 		return redirect(302, '/login');
 	}
 
-	if (event.locals.session?.twoFactorVerified) {
+	if (event.locals.session.twoFactorVerified) {
 		return redirect(302, '/dashboard');
 	}
 

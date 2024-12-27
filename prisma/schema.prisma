@@ -1,54 +1,184 @@
 generator client {
   provider     = "prisma-kysely"
   output       = "../src/lib/server/db"
-  fileName     = "schema.ts"
-  enumFileName = "enums.ts"
+  fileName     = "app.schema.ts"
+  enumFileName = "app.enums.ts"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = "file:../local.db"
+  url      = "file:../dev.db"
 }
 
-model email_verification_request {
-  id        String   @id
+// model email_verification_request {
+//   id        String   @id
+//   userId    String
+//   email     String
+//   code      String
+//   expiresAt DateTime
+//   user      user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+// }
+
+// model password_reset_session {
+//   id                String   @id
+//   userId            String
+//   email             String
+//   code              String
+//   expiresAt         DateTime
+//   emailVerified     Boolean
+//   twoFactorVerified Boolean
+//   user              user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+// }
+
+// model session {
+//   id                String   @id
+//   userId            String
+//   expiresAt         DateTime
+//   twoFactorVerified Boolean
+//   user              user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+// }
+
+// model user {
+//   id                       String                       @id
+//   email                    String                       @unique(map: "sqlite_autoindex_user_email")
+//   username                 String
+//   passwordHash             String
+//   emailVerified            Boolean
+//   totpKey                  Bytes?
+//   recoveryCode             Bytes
+//   emailVerificationRequest email_verification_request[]
+//   passwordResetSession     password_reset_session[]
+//   session                  session[]
+
+//   @@index([email], map: "email_index")
+// }
+
+model advisor {
   userId    String
-  email     String
-  code      String
-  expiresAt DateTime
-  user      user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id        String     @id @unique
+  advising  advising[]
+  student   student?   @relation(fields: [studentId], references: [id])
+  studentId String?
 }
 
-model password_reset_session {
-  id                String   @id
-  userId            String
-  email             String
-  code              String
-  expiresAt         DateTime
-  emailVerified     Boolean
-  twoFactorVerified Boolean
-  user              user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model advising {
+  advisorId String
+  studentId String
+  advisor   advisor @relation(fields: [advisorId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student   student @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([advisorId, studentId])
+  @@unique([advisorId, studentId])
 }
 
-model session {
-  id                String   @id
-  userId            String
-  expiresAt         DateTime
-  twoFactorVerified Boolean
-  user              user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model student {
+  id             String          @id @unique
+  userId         String
+  majorId        String?
+  minorId        String?
+  advisor        advisor[]
+  advising       advising[]
+  major          major?          @relation(fields: [majorId], references: [id])
+  studentCourses studentCourse[]
 }
 
-model user {
-  id                       String                       @id
-  email                    String                       @unique(map: "sqlite_autoindex_user_email")
-  username                 String
-  passwordHash             String
-  emailVerified            Boolean
-  totpKey                  Bytes?
-  recoveryCode             Bytes
-  emailVerificationRequest email_verification_request[]
-  passwordResetSession     password_reset_session[]
-  session                  session[]
+model faculty {
+  id          String       @id @unique
+  name        String
+  departments department[]
+}
 
-  @@index([email], map: "email_index")
+model department {
+  id        String   @id @unique
+  facultyId String
+  name      String   @unique
+  courses   course[]
+  faculties faculty  @relation(fields: [facultyId], references: [id])
+}
+
+model major {
+  id                String             @id @unique
+  name              String             @unique
+  majorRequirements majorRequirement[]
+  students          student[]
+}
+
+model minor {
+  id                String             @id @unique
+  name              String             @unique
+  minorRequirements minorRequirement[]
+}
+
+model majorRequirement {
+  id      String @id @unique
+  majorId String
+  credits Int
+  details String
+  /// @kyselyType('courses' | 'disciplines' | 'faculties')
+  type    String
+  /// @kyselyType('all' | 'at most' | 'at least')
+  option  String
+  level   String
+  majors  major  @relation(fields: [majorId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model minorRequirement {
+  id      String @id @unique
+  minorId String
+  credits Int
+  details String
+  /// @kyselyType('courses' | 'disciplines' | 'faculties')
+  type    String
+  /// @kyselyType('all' | 'at most' | 'at least')
+  option  String
+  level   String
+  minors  minor  @relation(fields: [minorId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model course {
+  id                String             @id @unique
+  code              String             @unique
+  name              String             @unique
+  level             Int
+  credits           Int
+  departmentId      String
+  prerequisiteCount Int
+  comment           String
+  /// @kyselyType('all' | 'one')
+  prerequisiteType  String
+  departments       department         @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  levelRestriction  levelRestriction[]
+  course            prerequisites[]    @relation("Course")
+  prerequisites     prerequisites[]    @relation("Prerequisites")
+  studentCourses    studentCourse[]
+}
+
+model prerequisites {
+  id             String @id @unique
+  courseId       String
+  prerequisiteId String
+  course         course @relation("Course", fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  prerequisite   course @relation("Prerequisites", fields: [prerequisiteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([courseId, prerequisiteId])
+}
+
+model levelRestriction {
+  id       String @id @unique
+  courseId String
+  area     String
+  credits  Int
+  level    String
+  courses  course @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model studentCourse {
+  id            String  @id @unique
+  grade         String
+  requirementId String
+  studentId     String
+  courseId      String
+  userId        String
+  courses       course  @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student       student @relation(fields: [studentId], references: [id])
 }

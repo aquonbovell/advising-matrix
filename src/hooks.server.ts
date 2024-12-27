@@ -22,6 +22,29 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		) {
 			throw redirect(307, '/verify-email');
 		}
+
+		if (!user.emailVerified && event.route.id && !event.route.id.includes('verify-email')) {
+			throw redirect(307, '/verify-email');
+		}
+
+		if (
+			user.emailVerified &&
+			!user.registered2FA &&
+			event.route.id &&
+			!event.route.id.includes('2fa/setup')
+		) {
+			throw redirect(307, '/2fa/setup');
+		}
+
+		if (
+			user.registered2FA &&
+			!session.twoFactorVerified &&
+			event.route.id &&
+			!event.route.id.includes('2fa') &&
+			!event.route.id.includes('2fa/setup')
+		) {
+			throw redirect(307, '/2fa');
+		}
 	} else {
 		auth.deleteSessionTokenCookie(event);
 	}

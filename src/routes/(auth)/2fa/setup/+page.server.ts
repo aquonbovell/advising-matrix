@@ -15,10 +15,6 @@ export async function load(event: RequestEvent) {
 		return redirect(302, '/login');
 	}
 
-	if (!event.locals.user.emailVerified) {
-		return redirect(302, '/verify-email');
-	}
-
 	if (event.locals.user.registered2FA) {
 		return redirect(302, '/2fa');
 	}
