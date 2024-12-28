@@ -32,6 +32,10 @@ export type user = {
 	email: string;
 	username: string;
 	passwordHash: string;
+	/**
+	 * @kyselyType('student' | 'advisor' | 'superadvisor' | 'admin')
+	 */
+	role: 'student' | 'advisor' | 'superadvisor' | 'admin';
 	emailVerified: number;
 	totpKey: Buffer | null;
 	recoveryCode: Buffer;

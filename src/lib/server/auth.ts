@@ -37,12 +37,13 @@ export async function validateSessionToken(token: string) {
 			'user.id',
 			'user.username',
 			'user.email',
+			'user.role',
+			'user.emailVerified',
+			'user.totpKey',
 			'session.id as sessionId',
 			'session.userId',
-			'session.expiresAt',
 			'session.twoFactorVerified',
-			'emailVerified',
-			'totpKey'
+			'session.expiresAt'
 		])
 		.where('session.id', '==', sessionId)
 		.executeTakeFirst();
@@ -60,8 +61,9 @@ export async function validateSessionToken(token: string) {
 		user: {
 			id: result.id,
 			username: result.username,
-			emailVerified: result.emailVerified === 1,
 			email: result.email,
+			role: result.role,
+			emailVerified: result.emailVerified === 1,
 			registered2FA: result.totpKey !== null
 		}
 	};

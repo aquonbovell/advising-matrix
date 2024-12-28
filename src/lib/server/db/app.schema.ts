@@ -10,9 +10,8 @@ export type advising = {
 	studentId: string;
 };
 export type advisor = {
-	userId: string;
 	id: string;
-	studentId: string | null;
+	userId: string;
 };
 export type course = {
 	id: string;

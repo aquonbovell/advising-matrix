@@ -16,7 +16,7 @@ datasource db {
 //   email     String
 //   code      String
 //   expiresAt DateTime
-//   user      user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//   user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 // }
 
 // model password_reset_session {
@@ -27,7 +27,7 @@ datasource db {
 //   expiresAt         DateTime
 //   emailVerified     Boolean
 //   twoFactorVerified Boolean
-//   user              user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//   user              user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 // }
 
 // model session {
@@ -35,7 +35,7 @@ datasource db {
 //   userId            String
 //   expiresAt         DateTime
 //   twoFactorVerified Boolean
-//   user              user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//   user              user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 // }
 
 // model user {
@@ -43,6 +43,8 @@ datasource db {
 //   email                    String                       @unique(map: "sqlite_autoindex_user_email")
 //   username                 String
 //   passwordHash             String
+//   /// @kyselyType('student' | 'advisor' | 'superadvisor' | 'admin')
+//   role                     String
 //   emailVerified            Boolean
 //   totpKey                  Bytes?
 //   recoveryCode             Bytes
@@ -54,11 +56,9 @@ datasource db {
 // }
 
 model advisor {
-  userId    String
-  id        String     @id @unique
-  advising  advising[]
-  student   student?   @relation(fields: [studentId], references: [id])
-  studentId String?
+  id       String     @id @unique
+  userId   String
+  advising advising[]
 }
 
 model advising {
@@ -76,7 +76,6 @@ model student {
   userId         String
   majorId        String?
   minorId        String?
-  advisor        advisor[]
   advising       advising[]
   major          major?          @relation(fields: [majorId], references: [id])
   studentCourses studentCourse[]

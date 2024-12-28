@@ -31,7 +31,7 @@ export const actions: Actions = {
 		const usernameAvailable = await checkUsernameAvailability(form.data.username);
 
 		if (!usernameAvailable) {
-			form.errors.username = [...(form.errors.username ?? ''), 'Username already in use'];
+			form.errors.username = [...(form.errors.username ?? ''), 'Invalid username'];
 			form.data.password = '';
 			form.data.passwordConfirm = '';
 			return fail(400, { form });
@@ -40,7 +40,7 @@ export const actions: Actions = {
 		const emailAvailable = await checkEmailAvailability(form.data.email);
 
 		if (!emailAvailable) {
-			form.errors.email = [...(form.errors.email ?? ''), 'Email already in use'];
+			form.errors.email = [...(form.errors.email ?? ''), 'Invalid email'];
 			form.data.password = '';
 			form.data.passwordConfirm = '';
 			return fail(400, { form });
@@ -53,7 +53,12 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const user = await createUser(form.data.username, form.data.email, form.data.password);
+		const user = await createUser(
+			form.data.username,
+			form.data.email,
+			form.data.password,
+			'student'
+		);
 		const emailVerificationRequest = await createEmailVerificationRequest(user.id, user.email);
 		sendVerificationEmail(emailVerificationRequest.email, emailVerificationRequest.code);
 		setEmailVerificationRequestCookie(event, emailVerificationRequest);

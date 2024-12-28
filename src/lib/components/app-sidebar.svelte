@@ -16,22 +16,18 @@
 		},
 		navMain: [
 			{
-				title: 'Playground',
-				url: '#',
+				title: 'Users',
+				url: '/users',
 				icon: SquareTerminal,
 				isActive: true,
 				items: [
 					{
-						title: 'History',
-						url: '#'
+						title: 'Advisors',
+						url: '/users/advisors'
 					},
 					{
-						title: 'Starred',
-						url: '#'
-					},
-					{
-						title: 'Settings',
-						url: '#'
+						title: 'Students',
+						url: '/users/students'
 					}
 				]
 			},
@@ -127,27 +123,22 @@
 	import NavUser from '$lib/components/nav-user.svelte';
 	import TeamSwitcher from '$lib/components/team-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-	import { onMount, type ComponentProps } from 'svelte';
-	import { page } from '$app/state';
-	import { user } from '$lib/stores/user';
-
-	onMount(() => {
-		user.update((user) => {
-			return {
-				...user,
-				...page.data.user
-			};
-		});
-
-		data.user.name = $user?.username || 'Anakin Skywalker';
-		data.user.email = $user?.email || 'email.example.com';
-	});
+	import { type ComponentProps } from 'svelte';
 
 	let {
 		ref = $bindable(null),
 		collapsible = 'icon',
+		user,
 		...restProps
-	}: ComponentProps<typeof Sidebar.Root> = $props();
+	}: ComponentProps<typeof Sidebar.Root> & {
+		user: {
+			id: string;
+			username: string;
+			emailVerified: boolean;
+			email: string;
+			registered2FA: boolean;
+		};
+	} = $props();
 </script>
 
 <Sidebar.Root bind:ref {collapsible} {...restProps}>
@@ -159,7 +150,7 @@
 		<NavProjects projects={data.projects} />
 	</Sidebar.Content>
 	<Sidebar.Footer>
-		<NavUser user={data.user} />
+		<NavUser {user} />
 	</Sidebar.Footer>
 	<Sidebar.Rail />
 </Sidebar.Root>
