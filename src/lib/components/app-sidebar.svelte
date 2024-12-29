@@ -34,9 +34,9 @@
 		],
 		courses: [
 			{
-				name: 'Facilities',
-				url: '/courses/facilities',
-				icon: Frame
+				name: 'Courses',
+				url: '/courses',
+				icon: Map
 			},
 			{
 				name: 'Departments',
@@ -44,9 +44,9 @@
 				icon: ChartPie
 			},
 			{
-				name: 'Courses',
-				url: '/courses',
-				icon: Map
+				name: 'Facilities',
+				url: '/courses/faculties',
+				icon: Frame
 			}
 		],
 		extras: [

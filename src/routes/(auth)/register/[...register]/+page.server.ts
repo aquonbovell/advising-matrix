@@ -2,7 +2,6 @@ import { registerSchema } from '$lib/schemas/register';
 import {
 	checkEmailAvailability,
 	checkUsernameAvailability,
-	createUser,
 	registerUser
 } from '$lib/server/actions/user.actions';
 import * as auth from '$lib/server/auth';

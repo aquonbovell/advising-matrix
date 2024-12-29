@@ -80,7 +80,7 @@ export async function validateSessionToken(token: string) {
 		session.expiresAt = new Date(Date.now() + HOUR_IN_MS / 2);
 		await authdb
 			.updateTable('session')
-			.set({ expiresAt: session.expiresAt.toTimeString() })
+			.set({ expiresAt: session.expiresAt.toISOString() })
 			.where('session.id', '==', session.id)
 			.execute();
 	}

@@ -64,7 +64,7 @@ async function action(event: RequestEvent) {
 
 	console.log(form.data);
 
-	let key = form.data.encodedKey;
+	const key = form.data.encodedKey;
 	try {
 		if (!authenticator.verify({ token: form.data.code, secret: key })) {
 			form.errors.code = [...(form.errors.code ?? ''), 'Invalid code'];
