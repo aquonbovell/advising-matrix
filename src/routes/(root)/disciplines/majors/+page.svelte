@@ -8,4 +8,4 @@
 
 <pre>{JSON.stringify(form, null, 2)}</pre>
 
-<DataTable {columns} data={data.courses} />
+<DataTable {columns} data={data.majors} />

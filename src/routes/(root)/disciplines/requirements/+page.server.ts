@@ -1,7 +1,8 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getCourses, loadCourses } from '$lib/server/actions/courses.actions';
-import { loadPrerequisites } from '$lib/server/actions/prerequisites.actions';
+import { getStudents } from '$lib/server/actions/student.actions';
+import { getMajors, loadMajors } from '$lib/server/actions/major.actions';
+import { getRequirements } from '$lib/server/actions/requirements.actions';
 
 export const load = (async (event) => {
 	if (event.locals.session === null || event.locals.user === null) {
@@ -12,7 +13,7 @@ export const load = (async (event) => {
 		error(403, 'Forbidden');
 	}
 
-	return { courses: await getCourses() };
+	return { requriements: await getRequirements() };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -25,20 +26,7 @@ export const actions: Actions = {
 			fail(403, { message: 'Forbidden' });
 		}
 
-		const load = await loadCourses();
-
-		return { success: load };
-	},
-	loadPrerequisites: async (event) => {
-		if (event.locals.session === null || event.locals.user === null) {
-			return redirect(302, '/login');
-		}
-
-		if (event.locals.user.role !== 'admin') {
-			fail(403, { message: 'Forbidden' });
-		}
-
-		const load = await loadPrerequisites();
+		const load = await loadMajors();
 
 		return { success: load };
 	}

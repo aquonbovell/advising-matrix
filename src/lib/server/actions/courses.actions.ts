@@ -1,5 +1,8 @@
 import { db } from '$lib/server/db';
+import courses from '$lib/server/data/courses.json';
 import { generateRandomId } from '$lib/server/utils';
+import { writeFile } from 'fs/promises';
+import { log } from 'console';
 
 export async function checkCourseAvailability(
 	name: string,
@@ -172,6 +175,7 @@ export async function getCourses() {
 			'course.departmentId',
 			'department.name as department'
 		])
+		.orderBy('course.code asc')
 		.execute();
 	return result;
 }
@@ -208,4 +212,68 @@ export interface Course {
 	prerequisiteCount: number;
 	departmentId: string;
 	department: string;
+}
+
+export async function loadCourses() {
+	await db.deleteFrom('course').execute();
+	const data: {
+		id: string;
+		oldId: string;
+		name: string;
+		code: string;
+		level: number;
+		description: string;
+		credits: number;
+		prerequisiteType: 'all' | 'one';
+		prerequisiteCount: number;
+		departmentId: string;
+		prerequisites: {
+			courseId: string;
+			oldCourseId: string;
+			prerequisiteId: string;
+		}[];
+	}[] = [];
+	for (const course of courses) {
+		log(course.name);
+		const result = await db
+			.insertInto('course')
+			.values({
+				id: generateRandomId(),
+				name: course.name,
+				code: course.code,
+				level: course.level,
+				description: course.comment,
+				credits: course.credits,
+				prerequisiteType: course.prerequisiteType as 'all' | 'one',
+				prerequisiteCount: course.prerequisiteAmount,
+				departmentId: course.departmentId
+			})
+			.returning('id')
+			.executeTakeFirst();
+
+		if (!result) {
+			return false;
+		}
+
+		data.push({
+			id: result.id,
+			oldId: course.id,
+			name: course.name,
+			code: course.code,
+			level: course.level,
+			description: course.comment,
+			credits: course.credits,
+			prerequisiteType: course.prerequisiteType as 'all' | 'one',
+			prerequisiteCount: course.prerequisiteAmount,
+			departmentId: course.departmentId,
+			prerequisites: course.prerequisites.map((prerequisite) => ({
+				courseId: result.id,
+				oldCourseId: prerequisite.courseId,
+				prerequisiteId: prerequisite.prerequisiteId
+			}))
+		});
+	}
+
+	const file = await writeFile('data.json', JSON.stringify(data, null, 2), 'utf-8');
+	return true;
 }

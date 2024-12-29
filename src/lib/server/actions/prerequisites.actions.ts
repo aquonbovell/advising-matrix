@@ -1,4 +1,5 @@
 import { db } from '$lib/server/db';
+import data from '$lib/server/data/data.json';
 import { generateRandomId } from '$lib/server/utils';
 
 export async function addPrerequisites(
@@ -71,4 +72,25 @@ export async function getPrerequisitesFromCourseId(courseId: string): Promise<st
 		.where('courseId', '==', courseId)
 		.execute();
 	return rows.map((row) => row.prerequisiteId);
+}
+
+export async function loadPrerequisites() {
+	await db.deleteFrom('prerequisites').execute();
+	for (const course of data) {
+		for (const prerequisite of course.prerequisites) {
+			const newCourseId = data.find((c) => c.oldId === prerequisite.prerequisiteId)?.id;
+			if (!newCourseId) {
+				continue;
+			}
+			await db
+				.insertInto('prerequisites')
+				.values({
+					id: generateRandomId(),
+					courseId: prerequisite.courseId,
+					prerequisiteId: newCourseId
+				})
+				.execute();
+		}
+	}
+	return true;
 }

@@ -49,6 +49,29 @@
 				icon: Frame
 			}
 		],
+
+		disciplines: [
+			{
+				title: 'Disciplines',
+				url: '/disciplines',
+				icon: SquareTerminal,
+				isActive: false,
+				items: [
+					{
+						title: 'Majors',
+						url: '/disciplines/majors'
+					},
+					{
+						title: 'Minors',
+						url: '/disciplines/minors'
+					},
+					{
+						title: 'Requirements',
+						url: '/disciplines/requirements'
+					}
+				]
+			}
+		],
 		extras: [
 			{
 				title: 'Models',
@@ -126,6 +149,7 @@
 	import TeamSwitcher from '$lib/components/team-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import { type ComponentProps } from 'svelte';
+	import NavDiscipline from './nav-discipline.svelte';
 
 	let {
 		ref = $bindable(null),
@@ -154,6 +178,9 @@
 		{/if}
 		{#if user.role === 'admin'}
 			<NavCourses projects={data.courses} />
+		{/if}
+		{#if user.role === 'admin'}
+			<NavDiscipline items={data.disciplines} />
 		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>

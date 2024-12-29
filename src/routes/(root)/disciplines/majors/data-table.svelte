@@ -102,7 +102,7 @@
 
 <div class="flex items-center justify-between py-4">
 	<Input.Root
-		placeholder="Filter names..."
+		placeholder="Filter majors..."
 		value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
 		onchange={(e) => {
 			table.getColumn('name')?.setFilterValue(e.currentTarget.value);
@@ -137,12 +137,9 @@
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 
-		<Button.Root href="/courses/add">Add a course</Button.Root>
+		<Button.Root href="/disciplines/majors/add">Create a major</Button.Root>
 		<form action="?/load" method="post" use:enhance>
 			<Button.Root type="submit">Load</Button.Root>
-		</form>
-		<form action="?/loadPrerequisites" method="post" use:enhance>
-			<Button.Root type="submit">Load Pre</Button.Root>
 		</form>
 	</div>
 </div>

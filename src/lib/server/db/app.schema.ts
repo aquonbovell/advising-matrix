@@ -48,27 +48,24 @@ export type major = {
 	name: string;
 };
 export type majorRequirement = {
-	id: string;
 	majorId: string;
-	credits: number;
-	details: string;
-	/**
-	 * @kyselyType('courses' | 'disciplines' | 'faculties')
-	 */
-	type: 'courses' | 'disciplines' | 'faculties';
-	/**
-	 * @kyselyType('all' | 'at most' | 'at least')
-	 */
-	option: 'all' | 'at most' | 'at least';
-	level: string;
+	requirementId: string;
 };
 export type minor = {
 	id: string;
 	name: string;
 };
 export type minorRequirement = {
-	id: string;
 	minorId: string;
+	requirementId: string;
+};
+export type prerequisites = {
+	id: string;
+	courseId: string;
+	prerequisiteId: string;
+};
+export type requirement = {
+	id: string;
 	credits: number;
 	details: string;
 	/**
@@ -80,11 +77,6 @@ export type minorRequirement = {
 	 */
 	option: 'all' | 'at most' | 'at least';
 	level: string;
-};
-export type prerequisites = {
-	id: string;
-	courseId: string;
-	prerequisiteId: string;
 };
 export type student = {
 	id: string;
@@ -112,6 +104,7 @@ export type DB = {
 	minor: minor;
 	minorRequirement: minorRequirement;
 	prerequisites: prerequisites;
+	requirement: requirement;
 	student: student;
 	studentCourse: studentCourse;
 };
