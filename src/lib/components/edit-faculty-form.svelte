@@ -18,7 +18,8 @@
 
 	const { form: formData, enhance } = form;
 
-	let isOpen = $state(false);
+	let isOpenUpdate = $state(false);
+	let isOpenDelete = $state(false);
 </script>
 
 <Card.Root class="mx-auto min-w-96 max-w-lg">
@@ -48,7 +49,7 @@
 				<Form.FieldErrors />
 			</Form.Field>
 			<div class="flex flex-row space-x-4">
-				<AlertDialog.Root bind:open={isOpen}>
+				<AlertDialog.Root bind:open={isOpenUpdate}>
 					<AlertDialog.Trigger class={Button.buttonVariants({ class: 'w-full' })}>
 						Update
 					</AlertDialog.Trigger>
@@ -65,13 +66,13 @@
 								type="submit"
 								class={Button.buttonVariants({ variant: 'destructive' })}
 								onclick={() => {
-									isOpen = false;
+									isOpenUpdate = false;
 								}}>Continue</AlertDialog.Action
 							>
 						</AlertDialog.Footer>
 					</AlertDialog.Content>
 				</AlertDialog.Root>
-				<AlertDialog.Root bind:open={isOpen}>
+				<AlertDialog.Root bind:open={isOpenDelete}>
 					<AlertDialog.Trigger
 						class={Button.buttonVariants({ variant: 'destructive', class: 'w-full' })}
 					>
@@ -90,7 +91,7 @@
 								method="POST"
 								action="?/delete"
 								use:formehance={() => {
-									isOpen = false;
+									isOpenDelete = false;
 									return async ({ result }) => {
 										await applyAction(result);
 									};

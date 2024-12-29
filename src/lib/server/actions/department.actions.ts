@@ -110,6 +110,12 @@ export async function getDepartments() {
 	return result;
 }
 
+export async function checkDepartmentIdValidity(id: string) {
+	const result = await db.selectFrom('department').select('id').where('id', '==', id).execute();
+
+	return result.length > 0;
+}
+
 export interface Department {
 	id: string;
 	name: string;

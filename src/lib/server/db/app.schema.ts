@@ -21,7 +21,7 @@ export type course = {
 	credits: number;
 	departmentId: string;
 	prerequisiteCount: number;
-	comment: string;
+	description: string;
 	/**
 	 * @kyselyType('all' | 'one')
 	 */

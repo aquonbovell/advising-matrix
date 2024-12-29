@@ -142,7 +142,7 @@ model course {
   credits           Int
   departmentId      String
   prerequisiteCount Int
-  comment           String
+  description       String
   /// @kyselyType('all' | 'one')
   prerequisiteType  String
   departments       department         @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
