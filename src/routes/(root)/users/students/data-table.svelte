@@ -17,6 +17,7 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import MixerHorizontal from 'lucide-svelte/icons/fold-horizontal';
+	import { enhance } from '$app/forms';
 
 	type DataTableProps<TData, TValue> = {
 		columns: ColumnDef<TData, TValue>[];
@@ -137,6 +138,9 @@
 		</DropdownMenu.Root>
 
 		<Button.Root href="/users/students/add">Add a student</Button.Root>
+		<form action="?/load" method="post" use:enhance>
+			<Button.Root type="submit">Load</Button.Root>
+		</form>
 	</div>
 </div>
 

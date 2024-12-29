@@ -282,3 +282,34 @@ export async function deleteUserFromId(Id: string): Promise<boolean> {
 
 	return result.numDeletedRows > 0;
 }
+
+interface FakeUser {
+	id: number;
+	name: string;
+	age: number;
+	username: string;
+	email: string;
+}
+// id	number
+// name	string
+// age	number
+// username	string
+// email	string
+// address	object
+// phone	string
+// website	string
+// occupation	string
+// hobbies	array
+
+export async function loadUsers() {
+	await db.deleteFrom('student').execute();
+	await authdb.deleteFrom('user').where('role', '==', 'student').execute();
+	const response = await fetch('https://freetestapi.com/api/v1/users');
+	const result: FakeUser[] = await response.json();
+
+	for (const fakeUser of result) {
+		const user = await createUser(fakeUser.username, fakeUser.email, 'student');
+		await createStudent(user.id);
+	}
+	return true;
+}
