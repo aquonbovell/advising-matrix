@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const twoFASchema = z.object({
-	encodedKey: z.string().length(28),
+	encodedKey: z.string(),
 	code: z.string().min(3).max(20)
 });
 

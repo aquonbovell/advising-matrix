@@ -5,7 +5,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { twoFAVerifySchema } from '$lib/schemas/twoFactor';
 import { getUserTOTPKey } from '$lib/server/actions/user.actions';
 import { setSessionAs2FAVerified } from '$lib/server/auth';
-import { verifyTOTP } from '@oslojs/otp';
+import { authenticator } from 'otplib';
 
 export const load = (async (event) => {
 	if (!event.locals.session || !event.locals.user) {
@@ -51,10 +51,17 @@ export const actions: Actions = {
 			form.errors.code = [...(form.errors.code ?? ''), 'Forbidden'];
 			return fail(403, { form });
 		}
-		if (!verifyTOTP(totpKey, 30, 6, form.data.code)) {
+
+		if (
+			!authenticator.verify({
+				token: form.data.code,
+				secret: Buffer.copyBytesFrom(totpKey).toString()
+			})
+		) {
 			form.errors.code = [...(form.errors.code ?? ''), 'Invalid code'];
+			return fail(400, { form });
 		}
 		await setSessionAs2FAVerified(event.locals.session.id);
-		return redirect(302, '/dashboard');
+		return redirect(302, '/');
 	}
 };

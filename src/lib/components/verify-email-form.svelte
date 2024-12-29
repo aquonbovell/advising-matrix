@@ -10,9 +10,7 @@
 	<Card.Header>
 		<Card.Title class="text-2xl">Email Verification</Card.Title>
 		<Card.Description>
-			<p class="inline-flex">
-				We sent an 8-digit code to. Verify your email address below to access your account.
-			</p>
+			We sent an 8-digit code to. Verify your email address below to access your account.
 		</Card.Description>
 	</Card.Header>
 	<Card.Content class="space-y-3">

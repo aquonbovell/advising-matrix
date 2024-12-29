@@ -30,8 +30,8 @@
 							{...props}
 							bind:value={$formData.username}
 							required
-							autocomplete="username"
 							type="text"
+							autocomplete="name webauthn"
 						/>
 					{/snippet}
 				</Form.Control>
@@ -46,7 +46,7 @@
 							{...props}
 							bind:value={$formData.email}
 							required
-							autocomplete="email"
+							autocomplete="email webauthn"
 							type="email"
 						/>
 					{/snippet}

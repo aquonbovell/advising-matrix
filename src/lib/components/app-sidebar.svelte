@@ -14,7 +14,7 @@
 			email: 'email.example.com',
 			avatar: '/avatars/shadcn.jpg'
 		},
-		navMain: [
+		identity: [
 			{
 				title: 'Users',
 				url: '/users',
@@ -30,7 +30,26 @@
 						url: '/users/students'
 					}
 				]
+			}
+		],
+		courses: [
+			{
+				name: 'Facilities',
+				url: '/courses/facilities',
+				icon: Frame
 			},
+			{
+				name: 'Departments',
+				url: '/courses/departments',
+				icon: ChartPie
+			},
+			{
+				name: 'Courses',
+				url: '/courses',
+				icon: Map
+			}
+		],
+		extras: [
 			{
 				title: 'Models',
 				url: '#',
@@ -96,30 +115,13 @@
 					}
 				]
 			}
-		],
-		projects: [
-			{
-				name: 'Design Engineering',
-				url: '#',
-				icon: Frame
-			},
-			{
-				name: 'Sales & Marketing',
-				url: '#',
-				icon: ChartPie
-			},
-			{
-				name: 'Travel',
-				url: '#',
-				icon: Map
-			}
 		]
 	};
 </script>
 
 <script lang="ts">
-	import NavMain from '$lib/components/nav-main.svelte';
-	import NavProjects from '$lib/components/nav-projects.svelte';
+	import NavIdentity from '$lib/components/nav-identity.svelte';
+	import NavCourses from '$lib/components/nav-courses.svelte';
 	import NavUser from '$lib/components/nav-user.svelte';
 	import TeamSwitcher from '$lib/components/team-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
@@ -135,6 +137,7 @@
 			id: string;
 			username: string;
 			emailVerified: boolean;
+			role: 'student' | 'advisor' | 'superadvisor' | 'admin';
 			email: string;
 			registered2FA: boolean;
 		};
@@ -146,8 +149,12 @@
 		<TeamSwitcher />
 	</Sidebar.Header>
 	<Sidebar.Content>
-		<NavMain items={data.navMain} />
-		<NavProjects projects={data.projects} />
+		{#if user.role === 'admin'}
+			<NavIdentity items={data.identity} />
+		{/if}
+		{#if user.role === 'admin'}
+			<NavCourses projects={data.courses} />
+		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>
 		<NavUser {user} />

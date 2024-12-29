@@ -1,6 +1,5 @@
-import { createTOTPKeyURI, verifyTOTP } from '@oslojs/otp';
+import { authenticator } from 'otplib';
 import { fail, redirect } from '@sveltejs/kit';
-import { decodeBase64, encodeBase64 } from '@oslojs/encoding';
 import { updateUserTOTPKey } from '$lib/server/auth/encryption';
 import { setSessionAs2FAVerified } from '$lib/server/auth';
 import { renderSVG } from 'uqr';
@@ -19,11 +18,12 @@ export async function load(event: RequestEvent) {
 		return redirect(302, '/2fa');
 	}
 
-	const totpKey = new Uint8Array(20);
-	crypto.getRandomValues(totpKey);
-	const encodedTOTPKey = encodeBase64(totpKey);
-	const keyURI = createTOTPKeyURI('FST Demo', event.locals.user.email, totpKey, 30, 6);
+	const encodedTOTPKey = authenticator.generateSecret(20);
+
+	const keyURI = authenticator.keyuri('FST Demo', event.locals.user.email, encodedTOTPKey);
+
 	const qrcode = renderSVG(keyURI);
+
 	const form = await superValidate(event.request, zod(twoFASchema));
 
 	form.data.encodedKey = encodedTOTPKey;
@@ -62,23 +62,20 @@ async function action(event: RequestEvent) {
 		});
 	}
 
-	let key: Uint8Array;
+	console.log(form.data);
+
+	let key = form.data.encodedKey;
 	try {
-		key = decodeBase64(form.data.encodedKey);
+		if (!authenticator.verify({ token: form.data.code, secret: key })) {
+			form.errors.code = [...(form.errors.code ?? ''), 'Invalid code'];
+			return fail(400, { form });
+		}
 	} catch {
-		form.errors.encodedKey = [...(form.errors.encodedKey ?? ''), 'Invalid key'];
-		return fail(400, { form });
-	}
-	if (key.byteLength !== 20) {
-		form.errors.encodedKey = [...(form.errors.encodedKey ?? ''), 'Invalid key'];
+		form.errors.code = [...(form.errors.code ?? ''), 'Invalid codeer'];
 		return fail(400, { form });
 	}
 
-	if (!verifyTOTP(key, 30, 6, form.data.code)) {
-		form.errors.code = [...(form.errors.code ?? ''), 'Invalid code'];
-		return fail(400, { form });
-	}
-	await updateUserTOTPKey(event.locals.session.userId, key);
+	await updateUserTOTPKey(event.locals.session.userId, Buffer.from(key));
 	await setSessionAs2FAVerified(event.locals.session.id);
 	return redirect(302, '/recovery-code');
 }

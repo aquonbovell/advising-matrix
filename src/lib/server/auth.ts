@@ -7,6 +7,7 @@ import { hash, verify } from '@node-rs/argon2';
 import type { session } from './db/schema';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
+const HOUR_IN_MS = DAY_IN_MS / 24;
 
 export const sessionCookieName = 'auth-session';
 
@@ -21,7 +22,7 @@ export async function createSession(token: string, userId: string, flags: Sessio
 	const session: session = {
 		id: sessionId,
 		userId: userId,
-		expiresAt: new Date(Date.now() + DAY_IN_MS * 30).toISOString(),
+		expiresAt: new Date(Date.now() + HOUR_IN_MS / 2).toISOString(),
 		twoFactorVerified: flags.twoFactorVerified ? 1 : 0
 	};
 	await authdb.insertInto('session').values(session).execute();
@@ -74,9 +75,9 @@ export async function validateSessionToken(token: string) {
 		return { session: null, user: null };
 	}
 
-	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
+	const renewSession = Date.now() >= session.expiresAt.getTime() - HOUR_IN_MS / 4;
 	if (renewSession) {
-		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
+		session.expiresAt = new Date(Date.now() + HOUR_IN_MS / 2);
 		await authdb
 			.updateTable('session')
 			.set({ expiresAt: session.expiresAt.toTimeString() })

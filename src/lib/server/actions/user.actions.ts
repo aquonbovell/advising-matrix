@@ -99,6 +99,48 @@ export async function createUser(
 	return user;
 }
 
+export async function registerUser(
+	username: string,
+	email: string,
+	password: string,
+	role: 'student' | 'advisor' | 'superadvisor' | 'admin'
+): Promise<User> {
+	const passwordHash = await hashPassword(password);
+	const recoveryCode = generateRandomRecoveryCode();
+	const encryptedRecoveryCode = encryptString(recoveryCode);
+	const result = await authdb
+		.insertInto('user')
+		.values({
+			id: generateRandomId(),
+			username: username,
+			email: email,
+			role: role,
+			emailVerified: 0,
+			passwordHash: passwordHash,
+			recoveryCode: Buffer.from(encryptedRecoveryCode)
+		})
+		.returning('id')
+		.executeTakeFirstOrThrow();
+
+	const user: User = {
+		id: result.id,
+		email: email,
+		role: role,
+		username: username,
+		emailVerified: false,
+		registered2FA: false
+	};
+
+	if (role === 'student') {
+		await createStudent(user.id);
+	}
+
+	if (role === 'advisor' || role === 'superadvisor') {
+		await createAdvisor(user.id);
+	}
+	return user;
+}
+
 export async function updateUser(
 	userId: string,
 	username: string,

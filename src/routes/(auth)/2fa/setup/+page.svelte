@@ -1,10 +1,12 @@
 <script lang="ts">
 	import TwofaSetupForm from '$lib/components/twofa-setup-form.svelte';
 
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 
-	export let data: PageData;
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 </script>
+
+<pre>{JSON.stringify(form, null, 2)}</pre>
 
 <div class="flex h-screen w-full items-center justify-center px-4">
 	<TwofaSetupForm data={data.form} qrcode={data.qrcode} />

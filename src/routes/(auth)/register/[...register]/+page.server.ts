@@ -2,7 +2,8 @@ import { registerSchema } from '$lib/schemas/register';
 import {
 	checkEmailAvailability,
 	checkUsernameAvailability,
-	createUser
+	createUser,
+	registerUser
 } from '$lib/server/actions/user.actions';
 import * as auth from '$lib/server/auth';
 import {
@@ -53,7 +54,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const user = await createUser(
+		const user = await registerUser(
 			form.data.username,
 			form.data.email,
 			form.data.password,
