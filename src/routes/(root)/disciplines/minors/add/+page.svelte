@@ -1,6 +1,5 @@
 <script lang="ts">
 	import AddMinorForm from '$lib/components/add-minor-form.svelte';
-	import AddUserForm from '$lib/components/add-user-form.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

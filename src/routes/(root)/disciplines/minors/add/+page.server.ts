@@ -1,13 +1,7 @@
 import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { advisorSchema } from '$lib/schemas/user';
 import { error, fail, redirect } from '@sveltejs/kit';
-import {
-	checkEmailAvailability,
-	checkUsernameAvailability,
-	createUser
-} from '$lib/server/actions/user.actions';
 import { minorCreationSchema } from '$lib/schemas/minor';
 import { checkMinorAvailability, createMinor } from '$lib/server/actions/minor.actions';
 

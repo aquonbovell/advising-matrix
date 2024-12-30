@@ -4,7 +4,6 @@
 	import * as Form from '$lib/components/ui/form/index.js';
 	import * as Input from '$lib/components/ui/input/index.js';
 	import { minorCreationSchema, type MinorCreationSchema } from '$lib/schemas/minor';
-	import { advisorSchema, type AdvisorSchema } from '$lib/schemas/user';
 	import { toast } from 'svelte-sonner';
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';

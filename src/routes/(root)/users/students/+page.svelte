@@ -3,7 +3,7 @@
 	import { columns } from './columns';
 	import DataTable from './data-table.svelte';
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let { data }: { data: PageData; form: ActionData } = $props();
 </script>
 
 <DataTable {columns} data={data.students} />

@@ -1,6 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getStudents } from '$lib/server/actions/student.actions';
 import { getMinors, loadMinors } from '$lib/server/actions/minor.actions';
 
 export const load = (async (event) => {

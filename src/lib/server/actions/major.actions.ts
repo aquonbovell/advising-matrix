@@ -1,7 +1,6 @@
 import { db } from '$lib/server/db';
 import { generateRandomId } from '$lib/server/utils';
 import majors from '$lib/server/data/majors.json';
-import { writeFile } from 'fs/promises';
 import { log } from 'console';
 
 export async function checkMajorAvailability(
@@ -55,13 +54,43 @@ export async function updateMajor(Id: string, name: string): Promise<Major> {
 	return major;
 }
 
+export async function updateRequirements(
+	majorId: string,
+	requirementIds: string[]
+): Promise<boolean> {
+	await db.deleteFrom('majorRequirement').where('majorId', '==', majorId).execute();
+	let row: number = 0;
+	for (const id of requirementIds) {
+		const result = await db
+			.insertInto('majorRequirement')
+			.values({
+				majorId: majorId,
+				requirementId: id
+			})
+			.returning(['majorRequirement.majorId', 'majorRequirement.requirementId'])
+			.execute();
+		row += result.length;
+	}
+	return row === 0;
+}
+
 export async function getMajorFromId(Id: string) {
 	const result = await db
 		.selectFrom('major')
 		.select(['major.id', 'major.name'])
 		.where('major.id', '==', Id)
 		.executeTakeFirst();
-	return result;
+
+	if (!result) {
+		return undefined;
+	}
+
+	const requirements = await db
+		.selectFrom('majorRequirement')
+		.select(['requirementId'])
+		.where('majorId', '==', Id)
+		.execute();
+	return { ...result, requirements: requirements.map((r) => r.requirementId) };
 }
 
 export async function deleteMajorFromId(Id: string): Promise<boolean> {

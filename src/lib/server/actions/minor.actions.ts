@@ -1,7 +1,6 @@
 import { db } from '$lib/server/db';
 import { generateRandomId } from '$lib/server/utils';
 import minors from '$lib/server/data/majors.json';
-import { writeFile } from 'fs/promises';
 import { log } from 'console';
 
 export async function checkMinorAvailability(

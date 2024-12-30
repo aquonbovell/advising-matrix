@@ -1,22 +1,16 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { advisorUpdateSchema } from '$lib/schemas/user';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import {
-	checkEmailAvailability,
-	checkUsernameAvailability,
-	deleteUserFromId,
-	getUserFromId,
-	updateUser
-} from '$lib/server/actions/user.actions';
 import {
 	checkMajorAvailability,
 	deleteMajorFromId,
 	getMajorFromId,
-	updateMajor
+	updateMajor,
+	updateRequirements
 } from '$lib/server/actions/major.actions';
 import { majorUpdateSchema } from '$lib/schemas/major';
+import { getRequirementDetails } from '$lib/server/actions/requirements.actions';
 
 export const load = (async (event) => {
 	if (event.locals.session === null || event.locals.user === null) {
@@ -36,9 +30,10 @@ export const load = (async (event) => {
 
 	form.data = {
 		id: major.id,
-		name: major.name
+		name: major.name,
+		requirements: major.requirements
 	};
-	return { form };
+	return { form, requirements: await getRequirementDetails() };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -80,6 +75,8 @@ export const actions: Actions = {
 			console.log(form.data);
 
 			await updateMajor(form.data.id, form.data.name);
+
+			await updateRequirements(form.data.id, form.data.requirements);
 		} catch (err) {
 			console.error(err);
 			return message(form, { message: 'Failed to update major', type: 'failure' }, { status: 400 });

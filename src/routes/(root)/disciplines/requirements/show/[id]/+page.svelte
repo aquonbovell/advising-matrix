@@ -6,8 +6,6 @@
 	import * as Input from '$lib/components/ui/input/index.js';
 	import * as Label from '$lib/components/ui/label/index.js';
 	import * as TextArea from '$lib/components/ui/textarea/index.js';
-	import * as RadioGroup from '$lib/components/ui/radio-group';
-	import { roles } from '$lib/schemas/user';
 	import { page } from '$app/state';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';

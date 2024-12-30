@@ -274,6 +274,6 @@ export async function loadCourses() {
 		});
 	}
 
-	const file = await writeFile('data.json', JSON.stringify(data, null, 2), 'utf-8');
+	await writeFile('data.json', JSON.stringify(data, null, 2), 'utf-8');
 	return true;
 }

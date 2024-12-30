@@ -6,9 +6,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
 	import * as Input from '$lib/components/ui/input/index.js';
-	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import { minorUpdateSchema, type MinorUpdateSchema } from '$lib/schemas/minor';
-	import { advisorUpdateSchema, roles, type AdvisorUpdateSchema } from '$lib/schemas/user';
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 

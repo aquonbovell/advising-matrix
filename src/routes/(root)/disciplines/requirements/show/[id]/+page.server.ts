@@ -1,8 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteUserFromId, getUserFromId } from '$lib/server/actions/user.actions';
 import { error } from '@sveltejs/kit';
-import { deleteMajorFromId, getMajorFromId } from '$lib/server/actions/major.actions';
 import {
 	deleteRequirementFromId,
 	getRequirementFromId

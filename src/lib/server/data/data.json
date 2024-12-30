@@ -1,0 +1,5567 @@
+[
+	{
+		"id": "cacd3vxrynlp5r7knbr4y5mpx6mjtqjk",
+		"oldId": "6933",
+		"name": "Biology I",
+		"code": "BIOL0051",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "w2s7bkjwvx3z7ni67uuirrxkevdhxg35",
+		"oldId": "5725",
+		"name": "Biology II",
+		"code": "BIOL0052",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "cn4rsqeij3qknhhr6sftznpc6t27u6d3",
+		"oldId": "9290",
+		"name": "Diversity of Life I",
+		"code": "BIOL1020",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "e54ycchrvfh25umdus3afvinwspczhlh",
+		"oldId": "7719",
+		"name": "Diversity of Life II",
+		"code": "BIOL1025",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "7lkfesvajfl5zg3mhajbzab7r7ysgdpw",
+		"oldId": "12966",
+		"name": "Introduction to Biochemistry",
+		"code": "BIOC1015",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "4wilx6fdpe26z3mhji5lcizkjkwsuzfx",
+		"oldId": "7720",
+		"name": "Introduction to Genetics",
+		"code": "BIOL1030",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "yoxyns3jdqy6e5p7ab4hdiiwm7ithae6",
+		"oldId": "12967",
+		"name": "Primary Metabolism",
+		"code": "BIOC2365",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "yoxyns3jdqy6e5p7ab4hdiiwm7ithae6",
+				"oldCourseId": "12967",
+				"prerequisiteId": "12966"
+			}
+		]
+	},
+	{
+		"id": "ekt63hqfdy64mqdwsq73d5jauhxy3gso",
+		"oldId": "12980",
+		"name": "Protein Biochemistry",
+		"code": "BIOC2366",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ekt63hqfdy64mqdwsq73d5jauhxy3gso",
+				"oldCourseId": "12980",
+				"prerequisiteId": "12966"
+			}
+		]
+	},
+	{
+		"id": "wt4tysglv7t2udrxp2ixf27y36fzndss",
+		"oldId": "12981",
+		"name": "Cell Signals",
+		"code": "BIOC2370",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "wt4tysglv7t2udrxp2ixf27y36fzndss",
+				"oldCourseId": "12981",
+				"prerequisiteId": "12966"
+			}
+		]
+	},
+	{
+		"id": "f6jmshu5wzmq5qeit4eou3r436wnb2n5",
+		"oldId": "12982",
+		"name": "Molecular Techniques",
+		"code": "BIOC2371",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "f6jmshu5wzmq5qeit4eou3r436wnb2n5",
+				"oldCourseId": "12982",
+				"prerequisiteId": "7720"
+			}
+		]
+	},
+	{
+		"id": "gtdfol2idtyejz5omvs3ke3v3662foxr",
+		"oldId": "311",
+		"name": "Biochemistry Exchange Elective",
+		"code": "BIOC2900",
+		"level": 2,
+		"description": "Depends on the Instititution offering the course",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "o2lf3qgfnt3glsovwzay447gilv4t5bg",
+		"oldId": "12985",
+		"name": "Advanced Genetics I",
+		"code": "BIOL2166",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "o2lf3qgfnt3glsovwzay447gilv4t5bg",
+				"oldCourseId": "12985",
+				"prerequisiteId": "7720"
+			}
+		]
+	},
+	{
+		"id": "m4ouocxahhhekshzucyxnkaixpts2m3f",
+		"oldId": "14478",
+		"name": "Bioenergy & Biofuels",
+		"code": "BIOL2054",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "fgjbql23ieewjlwbrdvxgafwwz47w7nr",
+		"oldId": "12986",
+		"name": "Flowering Plant Physiology",
+		"code": "BIOL2370",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "fgjbql23ieewjlwbrdvxgafwwz47w7nr",
+				"oldCourseId": "12986",
+				"prerequisiteId": "12966"
+			},
+			{
+				"courseId": "fgjbql23ieewjlwbrdvxgafwwz47w7nr",
+				"oldCourseId": "12986",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "yqaxm2yybefhipi3fv67p3m3cfh4mffr",
+		"oldId": "12987",
+		"name": "Ecophysiology of Animals",
+		"code": "BIOL2371",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "yqaxm2yybefhipi3fv67p3m3cfh4mffr",
+				"oldCourseId": "12987",
+				"prerequisiteId": "7719"
+			}
+		]
+	},
+	{
+		"id": "pnhsernnqetysy4jnmzulsvxqe5nq3wj",
+		"oldId": "12988",
+		"name": "Plants for Caribbean Landscapes",
+		"code": "BIOL2372",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "pnhsernnqetysy4jnmzulsvxqe5nq3wj",
+				"oldCourseId": "12988",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "ugs2yggyu3vrw5wp3ly6npnwmpmid46j",
+		"oldId": "10710",
+		"name": "Skills for Biologists",
+		"code": "BIOL2373",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "btsm6jjvwh6xj4jdfykorrt7ll7kvot6",
+		"oldId": "8461",
+		"name": "Sustainable Land Use",
+		"code": "BIOL2463",
+		"level": 2,
+		"description": "Permission of the Department is required",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "jbhr6hsdtscftfq7iz42ssx27pb5zviz",
+		"oldId": "8463",
+		"name": "Tropical Horticulture",
+		"code": "BIOL2465",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "jbhr6hsdtscftfq7iz42ssx27pb5zviz",
+				"oldCourseId": "8463",
+				"prerequisiteId": "7719"
+			},
+			{
+				"courseId": "jbhr6hsdtscftfq7iz42ssx27pb5zviz",
+				"oldCourseId": "8463",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "umogxkrcj6pw7ahsa4437cjpwnzhb52q",
+		"oldId": "8462",
+		"name": "Tropical Energy and Bioprocessing",
+		"code": "BIOL2466",
+		"level": 2,
+		"description": "Permission of the Department is required",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "xwc4imz4g65istqoxmrhj5vrqgvfx7f7",
+		"oldId": "148",
+		"name": "Biology Exchange Elective",
+		"code": "BIOL2900",
+		"level": 2,
+		"description": "Depends on the Instititution offering the course",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "2prswf3b6e4kxrcouuihtclma7bpwqc4",
+		"oldId": "380",
+		"name": "Essentials of Ecology",
+		"code": "ECOL2460",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "2prswf3b6e4kxrcouuihtclma7bpwqc4",
+				"oldCourseId": "380",
+				"prerequisiteId": "7719"
+			},
+			{
+				"courseId": "2prswf3b6e4kxrcouuihtclma7bpwqc4",
+				"oldCourseId": "380",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "n76xk5skhre4zv37woqateti6qqnfirw",
+		"oldId": "54",
+		"name": "Caribbean Island Biodiversity",
+		"code": "ECOL2461",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "n76xk5skhre4zv37woqateti6qqnfirw",
+				"oldCourseId": "54",
+				"prerequisiteId": "7719"
+			},
+			{
+				"courseId": "n76xk5skhre4zv37woqateti6qqnfirw",
+				"oldCourseId": "54",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "m5abcnn2msovnlqk4hvyd6qubbdwf7yg",
+		"oldId": "466",
+		"name": "Marine Biota",
+		"code": "ECOL2462",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "m5abcnn2msovnlqk4hvyd6qubbdwf7yg",
+				"oldCourseId": "466",
+				"prerequisiteId": "380"
+			}
+		]
+	},
+	{
+		"id": "tf6l2bvlzdbt5mnighdclhglisvlphvl",
+		"oldId": "719",
+		"name": "Ecology Exchange Elective",
+		"code": "ECOL2900",
+		"level": 2,
+		"description": "Depends on the Instititution offering the course",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "xkanrmc5lz5ce4kmcm5qadxpowhkzl47",
+		"oldId": "53",
+		"name": "Essential Microbiology",
+		"code": "MICR2260",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "xkanrmc5lz5ce4kmcm5qadxpowhkzl47",
+				"oldCourseId": "53",
+				"prerequisiteId": "12966"
+			},
+			{
+				"courseId": "xkanrmc5lz5ce4kmcm5qadxpowhkzl47",
+				"oldCourseId": "53",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "jbuzrjy2hpmrzdyifs6ikqm6cyjzbqjz",
+		"oldId": "267",
+		"name": "Eukaryotic Microbes",
+		"code": "MICR2261",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "jbuzrjy2hpmrzdyifs6ikqm6cyjzbqjz",
+				"oldCourseId": "267",
+				"prerequisiteId": "12966"
+			},
+			{
+				"courseId": "jbuzrjy2hpmrzdyifs6ikqm6cyjzbqjz",
+				"oldCourseId": "267",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "44qhzdje6jlkshunezpmrthg2glk7tr5",
+		"oldId": "13797",
+		"name": "Methods in Microbiology",
+		"code": "MICR2262",
+		"level": 2,
+		"description": "Permission of the Department is required for students not majoring/minoring in Microbiology",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "44qhzdje6jlkshunezpmrthg2glk7tr5",
+				"oldCourseId": "13797",
+				"prerequisiteId": "53"
+			}
+		]
+	},
+	{
+		"id": "qmhluvkthwaywglkfux2sapswxcnzn2n",
+		"oldId": "265",
+		"name": "Microbiology Exchange Elective",
+		"code": "MICR2900",
+		"level": 2,
+		"description": "Depends on the Instititution offering the course",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "zn7mqzqc7hm3xeg7l45v43we6afphvk4",
+		"oldId": "12983",
+		"name": "Principles of Biotechnology",
+		"code": "BIOC3260",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "zn7mqzqc7hm3xeg7l45v43we6afphvk4",
+				"oldCourseId": "12983",
+				"prerequisiteId": "12982"
+			}
+		]
+	},
+	{
+		"id": "pz2frxq2jjt2uwonzxvnml6syjaeobmj",
+		"oldId": "12835",
+		"name": "Mitochondrial Bioenergetics",
+		"code": "BIOC3261",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "pz2frxq2jjt2uwonzxvnml6syjaeobmj",
+				"oldCourseId": "12835",
+				"prerequisiteId": "12982"
+			},
+			{
+				"courseId": "pz2frxq2jjt2uwonzxvnml6syjaeobmj",
+				"oldCourseId": "12835",
+				"prerequisiteId": "12967"
+			}
+		]
+	},
+	{
+		"id": "rbbntnvurfdjibp4xehm55zhhj6fq6vx",
+		"oldId": "12834",
+		"name": "Principles of Bioinformatics",
+		"code": "BIOC3265",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "rbbntnvurfdjibp4xehm55zhhj6fq6vx",
+				"oldCourseId": "12834",
+				"prerequisiteId": "12982"
+			}
+		]
+	},
+	{
+		"id": "zwok6qfwru6b5vijcxc3zpuliykbbwm5",
+		"oldId": "13011",
+		"name": "Biochemistry Project (Minors)",
+		"code": "BIOC3290",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "zwok6qfwru6b5vijcxc3zpuliykbbwm5",
+				"oldCourseId": "13011",
+				"prerequisiteId": "10710"
+			}
+		]
+	},
+	{
+		"id": "lxfyvnutpakt6fa3cwmdcnqy6xiaozcy",
+		"oldId": "12833",
+		"name": "Basis of Human Disease",
+		"code": "BIOC3370",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "lxfyvnutpakt6fa3cwmdcnqy6xiaozcy",
+				"oldCourseId": "12833",
+				"prerequisiteId": "12982"
+			},
+			{
+				"courseId": "lxfyvnutpakt6fa3cwmdcnqy6xiaozcy",
+				"oldCourseId": "12833",
+				"prerequisiteId": "12981"
+			}
+		]
+	},
+	{
+		"id": "jfylowrx7e3vchv64lzbo5oagj6e54c5",
+		"oldId": "12984",
+		"name": "Biochemistry Project",
+		"code": "BIOC3990",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "jfylowrx7e3vchv64lzbo5oagj6e54c5",
+				"oldCourseId": "12984",
+				"prerequisiteId": "10710"
+			}
+		]
+	},
+	{
+		"id": "c52utij4be47vddd5sbmdxhdjx7roqeq",
+		"oldId": "12990",
+		"name": "Professional Placement for Biologists",
+		"code": "BIOL3501",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "c52utij4be47vddd5sbmdxhdjx7roqeq",
+				"oldCourseId": "12990",
+				"prerequisiteId": "10710"
+			}
+		]
+	},
+	{
+		"id": "ssiruokktdiiqyd45xwd6bn6bszvxcam",
+		"oldId": "12989",
+		"name": "Molecular Plant Pathology",
+		"code": "BIOL3025",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ssiruokktdiiqyd45xwd6bn6bszvxcam",
+				"oldCourseId": "12989",
+				"prerequisiteId": "12967"
+			},
+			{
+				"courseId": "ssiruokktdiiqyd45xwd6bn6bszvxcam",
+				"oldCourseId": "12989",
+				"prerequisiteId": "380"
+			},
+			{
+				"courseId": "ssiruokktdiiqyd45xwd6bn6bszvxcam",
+				"oldCourseId": "12989",
+				"prerequisiteId": "53"
+			}
+		]
+	},
+	{
+		"id": "x7526e3g73owulflwpf5cnsvhpy7gsyd",
+		"oldId": "3",
+		"name": "Multidisciplinary Project",
+		"code": "BIOL3901",
+		"level": 3,
+		"description": "Permission of the Department is required",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "xkvkvgif63yk5diwn2lmrwio6pwyiryl",
+		"oldId": "12991",
+		"name": "Biology Project",
+		"code": "BIOL3990",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "xkvkvgif63yk5diwn2lmrwio6pwyiryl",
+				"oldCourseId": "12991",
+				"prerequisiteId": "10710"
+			}
+		]
+	},
+	{
+		"id": "4d5tfyxa7pyqxrog5pqd3fxrepg6hesh",
+		"oldId": "12836",
+		"name": "Statistics for Ecologists",
+		"code": "ECOL3100",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "4d5tfyxa7pyqxrog5pqd3fxrepg6hesh",
+				"oldCourseId": "12836",
+				"prerequisiteId": "380"
+			},
+			{
+				"courseId": "4d5tfyxa7pyqxrog5pqd3fxrepg6hesh",
+				"oldCourseId": "12836",
+				"prerequisiteId": "10710"
+			}
+		]
+	},
+	{
+		"id": "eqgafihfjifotjqo7e7mwwavxyf3obos",
+		"oldId": "506",
+		"name": "Biology and Ecology of Coral Reefs",
+		"code": "ECOL3460",
+		"level": 3,
+		"description": "Students must be able to swim and snorkel competently",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "eqgafihfjifotjqo7e7mwwavxyf3obos",
+				"oldCourseId": "506",
+				"prerequisiteId": "466"
+			}
+		]
+	},
+	{
+		"id": "dlhywody4tvjlipybphrlnd2hkrbifev",
+		"oldId": "12838",
+		"name": "Ecology of a Changing Planet",
+		"code": "ECOL3461",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "dlhywody4tvjlipybphrlnd2hkrbifev",
+				"oldCourseId": "12838",
+				"prerequisiteId": "380"
+			}
+		]
+	},
+	{
+		"id": "vsoozqvl7j4m4qvmvp6kpcyenokdil26",
+		"oldId": "715",
+		"name": "Behaviour: An Evolutionary Approach",
+		"code": "ECOL3462",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "vsoozqvl7j4m4qvmvp6kpcyenokdil26",
+				"oldCourseId": "715",
+				"prerequisiteId": "380"
+			}
+		]
+	},
+	{
+		"id": "ty3d3ukto3vvbdftzl4a6lktwwe2r3ce",
+		"oldId": "8460",
+		"name": "Tropical Crop Ecology",
+		"code": "ECOL3463",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ty3d3ukto3vvbdftzl4a6lktwwe2r3ce",
+				"oldCourseId": "8460",
+				"prerequisiteId": "380"
+			},
+			{
+				"courseId": "ty3d3ukto3vvbdftzl4a6lktwwe2r3ce",
+				"oldCourseId": "8460",
+				"prerequisiteId": "7720"
+			}
+		]
+	},
+	{
+		"id": "cjzkdxvqebqwz3ne4d275665vbvqbfmm",
+		"oldId": "10107",
+		"name": "Ecology Project",
+		"code": "ECOL3990",
+		"level": 3,
+		"description": "Students with GPA greater than 3.0 may take this course",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "cjzkdxvqebqwz3ne4d275665vbvqbfmm",
+				"oldCourseId": "10107",
+				"prerequisiteId": "10710"
+			}
+		]
+	},
+	{
+		"id": "pthlxb4yuvnsfhgezz76cbmaiqellbwj",
+		"oldId": "12821",
+		"name": "Microbiology of Food",
+		"code": "MICR3265",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "pthlxb4yuvnsfhgezz76cbmaiqellbwj",
+				"oldCourseId": "12821",
+				"prerequisiteId": "53"
+			},
+			{
+				"courseId": "pthlxb4yuvnsfhgezz76cbmaiqellbwj",
+				"oldCourseId": "12821",
+				"prerequisiteId": "12966"
+			},
+			{
+				"courseId": "pthlxb4yuvnsfhgezz76cbmaiqellbwj",
+				"oldCourseId": "12821",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "kcvefdi2ucsrnqwvvvednwfdghwgs444",
+		"oldId": "12820",
+		"name": "Ecology of Microorganisms",
+		"code": "MICR3266",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "kcvefdi2ucsrnqwvvvednwfdghwgs444",
+				"oldCourseId": "12820",
+				"prerequisiteId": "53"
+			},
+			{
+				"courseId": "kcvefdi2ucsrnqwvvvednwfdghwgs444",
+				"oldCourseId": "12820",
+				"prerequisiteId": "267"
+			}
+		]
+	},
+	{
+		"id": "egns4zovm3chu6i3ls4qi2rpqlp7d5pv",
+		"oldId": "12819",
+		"name": "Essential Virology",
+		"code": "MICR3267",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "egns4zovm3chu6i3ls4qi2rpqlp7d5pv",
+				"oldCourseId": "12819",
+				"prerequisiteId": "53"
+			},
+			{
+				"courseId": "egns4zovm3chu6i3ls4qi2rpqlp7d5pv",
+				"oldCourseId": "12819",
+				"prerequisiteId": "12966"
+			},
+			{
+				"courseId": "egns4zovm3chu6i3ls4qi2rpqlp7d5pv",
+				"oldCourseId": "12819",
+				"prerequisiteId": "9290"
+			},
+			{
+				"courseId": "egns4zovm3chu6i3ls4qi2rpqlp7d5pv",
+				"oldCourseId": "12819",
+				"prerequisiteId": "7719"
+			}
+		]
+	},
+	{
+		"id": "gbnz2j6oteba56k3r5g6o2npdn5losaz",
+		"oldId": "12818",
+		"name": "Microbial Pathogenesis",
+		"code": "MICR3268",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "gbnz2j6oteba56k3r5g6o2npdn5losaz",
+				"oldCourseId": "12818",
+				"prerequisiteId": "53"
+			},
+			{
+				"courseId": "gbnz2j6oteba56k3r5g6o2npdn5losaz",
+				"oldCourseId": "12818",
+				"prerequisiteId": "12966"
+			},
+			{
+				"courseId": "gbnz2j6oteba56k3r5g6o2npdn5losaz",
+				"oldCourseId": "12818",
+				"prerequisiteId": "9290"
+			},
+			{
+				"courseId": "gbnz2j6oteba56k3r5g6o2npdn5losaz",
+				"oldCourseId": "12818",
+				"prerequisiteId": "7719"
+			}
+		]
+	},
+	{
+		"id": "ztramag5irjgrz4mw6qaoywjrcouo2uq",
+		"oldId": "264",
+		"name": "Microbiology Project",
+		"code": "MICR3990",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ztramag5irjgrz4mw6qaoywjrcouo2uq",
+				"oldCourseId": "264",
+				"prerequisiteId": "53"
+			},
+			{
+				"courseId": "ztramag5irjgrz4mw6qaoywjrcouo2uq",
+				"oldCourseId": "264",
+				"prerequisiteId": "10710"
+			},
+			{
+				"courseId": "ztramag5irjgrz4mw6qaoywjrcouo2uq",
+				"oldCourseId": "264",
+				"prerequisiteId": "13797"
+			}
+		]
+	},
+	{
+		"id": "pl7nyi3o2iadpnxtj2s5znhzgqarx4i6",
+		"oldId": "9497",
+		"name": "Preliminary Chemistry I",
+		"code": "CHEM0615",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "dalp5kv7nrvmke5dmgw7oyy2ivvvrexl",
+		"oldId": "6074",
+		"name": "Preliminary Chemistry II",
+		"code": "CHEM0625",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "lfam4ebnv3pls7fprsmq6ugav7jjvpo6",
+		"oldId": "12994",
+		"name": "Introduction to Organic Chemistry",
+		"code": "CHEM1110",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "k3t3ktfuz3tpk3ol5jafcnc2lpjbmrlq",
+		"oldId": "378",
+		"name": "Introduction to Physical Chemistry",
+		"code": "CHEM1120",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "bgvwseeo2e6kfr6rzhwyfcilxhdqj64g",
+		"oldId": "12993",
+		"name": "Introduction to Experimental Chemistry",
+		"code": "CHEM1125",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "6niknweem6ynv24ykmoeumwmw4mfwwtr",
+		"oldId": "12992",
+		"name": "Introduction to Inorganic Chemistry",
+		"code": "CHEM1130",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "ef4tv3skc3fuaruukixqq6iy3xjfwuxl",
+		"oldId": "12831",
+		"name": "Fundamentals of Teaching Chemistry",
+		"code": "CHEM2513",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ef4tv3skc3fuaruukixqq6iy3xjfwuxl",
+				"oldCourseId": "12831",
+				"prerequisiteId": "12994"
+			},
+			{
+				"courseId": "ef4tv3skc3fuaruukixqq6iy3xjfwuxl",
+				"oldCourseId": "12831",
+				"prerequisiteId": "378"
+			},
+			{
+				"courseId": "ef4tv3skc3fuaruukixqq6iy3xjfwuxl",
+				"oldCourseId": "12831",
+				"prerequisiteId": "12993"
+			},
+			{
+				"courseId": "ef4tv3skc3fuaruukixqq6iy3xjfwuxl",
+				"oldCourseId": "12831",
+				"prerequisiteId": "12992"
+			}
+		]
+	},
+	{
+		"id": "qorpdcutmzfs5emcxhfq6er3a53xi4dg",
+		"oldId": "12995",
+		"name": "Intermediate Inorganic Chemistry",
+		"code": "CHEM2700",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "qorpdcutmzfs5emcxhfq6er3a53xi4dg",
+				"oldCourseId": "12995",
+				"prerequisiteId": "12993"
+			},
+			{
+				"courseId": "qorpdcutmzfs5emcxhfq6er3a53xi4dg",
+				"oldCourseId": "12995",
+				"prerequisiteId": "12992"
+			}
+		]
+	},
+	{
+		"id": "stdkfutfjsczi2qxsh65xwv6uv7z32xg",
+		"oldId": "12996",
+		"name": "Intermediate Organic Chemistry",
+		"code": "CHEM2705",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "stdkfutfjsczi2qxsh65xwv6uv7z32xg",
+				"oldCourseId": "12996",
+				"prerequisiteId": "12994"
+			},
+			{
+				"courseId": "stdkfutfjsczi2qxsh65xwv6uv7z32xg",
+				"oldCourseId": "12996",
+				"prerequisiteId": "12993"
+			}
+		]
+	},
+	{
+		"id": "tq6zgjuz4rdwenph5jlcqgo35jzccwrn",
+		"oldId": "12997",
+		"name": "Intermediate Physical Chemistry",
+		"code": "CHEM2710",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "tq6zgjuz4rdwenph5jlcqgo35jzccwrn",
+				"oldCourseId": "12997",
+				"prerequisiteId": "378"
+			},
+			{
+				"courseId": "tq6zgjuz4rdwenph5jlcqgo35jzccwrn",
+				"oldCourseId": "12997",
+				"prerequisiteId": "12993"
+			}
+		]
+	},
+	{
+		"id": "okyb2r6jhukidy6rhgtjm4gnyppgx5ka",
+		"oldId": "11919",
+		"name": "Laboratory Methods in Chemistry I",
+		"code": "CHEM2715",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "okyb2r6jhukidy6rhgtjm4gnyppgx5ka",
+				"oldCourseId": "11919",
+				"prerequisiteId": "12994"
+			},
+			{
+				"courseId": "okyb2r6jhukidy6rhgtjm4gnyppgx5ka",
+				"oldCourseId": "11919",
+				"prerequisiteId": "12993"
+			},
+			{
+				"courseId": "okyb2r6jhukidy6rhgtjm4gnyppgx5ka",
+				"oldCourseId": "11919",
+				"prerequisiteId": "12992"
+			}
+		]
+	},
+	{
+		"id": "hp7hu5yqjfhrnutiy7hhtohxr5kdnvp3",
+		"oldId": "12999",
+		"name": "Laboratory Methods in Chemistry II",
+		"code": "CHEM2720",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "hp7hu5yqjfhrnutiy7hhtohxr5kdnvp3",
+				"oldCourseId": "12999",
+				"prerequisiteId": "12993"
+			}
+		]
+	},
+	{
+		"id": "ox4qdx2ezg3fsulm7afxj5sxqyu45nlg",
+		"oldId": "12502",
+		"name": "Chemistry of the Environment",
+		"code": "CHEM2725",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ox4qdx2ezg3fsulm7afxj5sxqyu45nlg",
+				"oldCourseId": "12502",
+				"prerequisiteId": "12993"
+			}
+		]
+	},
+	{
+		"id": "q7tfxulwrzifclc37b4ffv2b4b6ktsfg",
+		"oldId": "13000",
+		"name": "Quantitative Chemical Analysis",
+		"code": "CHEM2730",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "q7tfxulwrzifclc37b4ffv2b4b6ktsfg",
+				"oldCourseId": "13000",
+				"prerequisiteId": "378"
+			},
+			{
+				"courseId": "q7tfxulwrzifclc37b4ffv2b4b6ktsfg",
+				"oldCourseId": "13000",
+				"prerequisiteId": "12993"
+			}
+		]
+	},
+	{
+		"id": "xzftg376bnibuglif5nsqaoetnufoe5k",
+		"oldId": "5779",
+		"name": "Chemistry Elective",
+		"code": "CHEM2950",
+		"level": 2,
+		"description": "Depends on the Instititution offering the course",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "e7xd2ozj2ybcgyl526kga5smigtjy3ok",
+		"oldId": "12830",
+		"name": "Advanced Inorganic Chemistry",
+		"code": "CHEM3167",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "e7xd2ozj2ybcgyl526kga5smigtjy3ok",
+				"oldCourseId": "12830",
+				"prerequisiteId": "12995"
+			}
+		]
+	},
+	{
+		"id": "7z6jniu6ktlytt2eipiqknysitvhe7ea",
+		"oldId": "12829",
+		"name": "Advanced Organic Chemistry",
+		"code": "CHEM3175",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "7z6jniu6ktlytt2eipiqknysitvhe7ea",
+				"oldCourseId": "12829",
+				"prerequisiteId": "12996"
+			}
+		]
+	},
+	{
+		"id": "m3frrt2as2kzwqyjbgn2ewe4nf2yzxjr",
+		"oldId": "13012",
+		"name": "Environmental Chemistry and Toxicology",
+		"code": "CHEM3218",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "m3frrt2as2kzwqyjbgn2ewe4nf2yzxjr",
+				"oldCourseId": "13012",
+				"prerequisiteId": "12502"
+			}
+		]
+	},
+	{
+		"id": "xetwsmirohkrgtpclrd2zimauoifsipp",
+		"oldId": "14191",
+		"name": "Advanced Physical Chemistry",
+		"code": "CHEM3620",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "xetwsmirohkrgtpclrd2zimauoifsipp",
+				"oldCourseId": "14191",
+				"prerequisiteId": "12997"
+			}
+		]
+	},
+	{
+		"id": "n26fbypuvbfwd2mlg54rxte4yypwfoo7",
+		"oldId": "12823",
+		"name": "Laboratory Methods in Chemistry III",
+		"code": "CHEM3625",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "n26fbypuvbfwd2mlg54rxte4yypwfoo7",
+				"oldCourseId": "12823",
+				"prerequisiteId": "12999"
+			},
+			{
+				"courseId": "n26fbypuvbfwd2mlg54rxte4yypwfoo7",
+				"oldCourseId": "12823",
+				"prerequisiteId": "11919"
+			}
+		]
+	},
+	{
+		"id": "tnn3npdlrckd3o4x5ienoaupp77yvbck",
+		"oldId": "545",
+		"name": "Methods in Instrumental Analysis",
+		"code": "CHEM3630",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "tnn3npdlrckd3o4x5ienoaupp77yvbck",
+				"oldCourseId": "545",
+				"prerequisiteId": "13000"
+			}
+		]
+	},
+	{
+		"id": "zfevomvk4e4q7s6wixd3mxeq7q5u3vgu",
+		"oldId": "12822",
+		"name": "Biological Inorganic Chemistry",
+		"code": "CHEM3635",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "zfevomvk4e4q7s6wixd3mxeq7q5u3vgu",
+				"oldCourseId": "12822",
+				"prerequisiteId": "12995"
+			}
+		]
+	},
+	{
+		"id": "hdftcpkxxqrl3v4kqdhdjo5a765uggr5",
+		"oldId": "13024",
+		"name": "Nanostructures and Supramolecular Chemistry",
+		"code": "CHEM3800",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "hdftcpkxxqrl3v4kqdhdjo5a765uggr5",
+				"oldCourseId": "13024",
+				"prerequisiteId": "12995"
+			},
+			{
+				"courseId": "hdftcpkxxqrl3v4kqdhdjo5a765uggr5",
+				"oldCourseId": "13024",
+				"prerequisiteId": "12996"
+			}
+		]
+	},
+	{
+		"id": "5zzmxnlhqu5farmdt7el6awyo2mn5x4l",
+		"oldId": "13025",
+		"name": "Basic Project in Chemistry",
+		"code": "CHEM3950",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "5zzmxnlhqu5farmdt7el6awyo2mn5x4l",
+				"oldCourseId": "13025",
+				"prerequisiteId": "12995"
+			},
+			{
+				"courseId": "5zzmxnlhqu5farmdt7el6awyo2mn5x4l",
+				"oldCourseId": "13025",
+				"prerequisiteId": "12996"
+			},
+			{
+				"courseId": "5zzmxnlhqu5farmdt7el6awyo2mn5x4l",
+				"oldCourseId": "13025",
+				"prerequisiteId": "12997"
+			},
+			{
+				"courseId": "5zzmxnlhqu5farmdt7el6awyo2mn5x4l",
+				"oldCourseId": "13025",
+				"prerequisiteId": "11919"
+			},
+			{
+				"courseId": "5zzmxnlhqu5farmdt7el6awyo2mn5x4l",
+				"oldCourseId": "13025",
+				"prerequisiteId": "12999"
+			},
+			{
+				"courseId": "5zzmxnlhqu5farmdt7el6awyo2mn5x4l",
+				"oldCourseId": "13025",
+				"prerequisiteId": "13000"
+			}
+		]
+	},
+	{
+		"id": "v5eocql524voqbsdhau5gc3gq4kvgdhi",
+		"oldId": "13026",
+		"name": "Research Project in Chemistry",
+		"code": "CHEM3955",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "v5eocql524voqbsdhau5gc3gq4kvgdhi",
+				"oldCourseId": "13026",
+				"prerequisiteId": "12995"
+			},
+			{
+				"courseId": "v5eocql524voqbsdhau5gc3gq4kvgdhi",
+				"oldCourseId": "13026",
+				"prerequisiteId": "12996"
+			},
+			{
+				"courseId": "v5eocql524voqbsdhau5gc3gq4kvgdhi",
+				"oldCourseId": "13026",
+				"prerequisiteId": "12997"
+			},
+			{
+				"courseId": "v5eocql524voqbsdhau5gc3gq4kvgdhi",
+				"oldCourseId": "13026",
+				"prerequisiteId": "11919"
+			},
+			{
+				"courseId": "v5eocql524voqbsdhau5gc3gq4kvgdhi",
+				"oldCourseId": "13026",
+				"prerequisiteId": "12999"
+			},
+			{
+				"courseId": "v5eocql524voqbsdhau5gc3gq4kvgdhi",
+				"oldCourseId": "13026",
+				"prerequisiteId": "13000"
+			}
+		]
+	},
+	{
+		"id": "lzohdwq5rzjugdxlalaaiczhfb7jpp4b",
+		"oldId": "13027",
+		"name": "Professional Placement for Chemists",
+		"code": "CHEM3990",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "lzohdwq5rzjugdxlalaaiczhfb7jpp4b",
+				"oldCourseId": "13027",
+				"prerequisiteId": "12995"
+			},
+			{
+				"courseId": "lzohdwq5rzjugdxlalaaiczhfb7jpp4b",
+				"oldCourseId": "13027",
+				"prerequisiteId": "12997"
+			},
+			{
+				"courseId": "lzohdwq5rzjugdxlalaaiczhfb7jpp4b",
+				"oldCourseId": "13027",
+				"prerequisiteId": "11919"
+			},
+			{
+				"courseId": "lzohdwq5rzjugdxlalaaiczhfb7jpp4b",
+				"oldCourseId": "13027",
+				"prerequisiteId": "12999"
+			},
+			{
+				"courseId": "lzohdwq5rzjugdxlalaaiczhfb7jpp4b",
+				"oldCourseId": "13027",
+				"prerequisiteId": "13000"
+			}
+		]
+	},
+	{
+		"id": "oeo2heyhksd4lqkklyqao4iwpkxmywwb",
+		"oldId": "7792",
+		"name": "Special Topics in Physical Chemistry",
+		"code": "CHEM3992",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "oeo2heyhksd4lqkklyqao4iwpkxmywwb",
+				"oldCourseId": "7792",
+				"prerequisiteId": "12997"
+			}
+		]
+	},
+	{
+		"id": "elpb3hyvx3og7mnnxb4djw5oqta4mt4g",
+		"oldId": "7222",
+		"name": "Preliminary Computer Science II",
+		"code": "COMP0002",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "licurk3e6bx7gqpg67ku5t6gtbzsnqdb",
+		"oldId": "6943",
+		"name": "Preliminary Computer Science I",
+		"code": "COMP0001",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "ocvjhlglmj64wzi5dsceqbguascesgky",
+		"oldId": "150",
+		"name": "Entrepreneurship for Computer Scientists",
+		"code": "COMP1170",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "ehkdsnpvjif6sykbmfi76qdycepmjrom",
+		"oldId": "9508",
+		"name": "Mathematics for Computer Science I",
+		"code": "COMP1180",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "okafaghdhpcgnqwm3nvnetq46sfrxfhm",
+		"oldId": "197",
+		"name": "Computing I",
+		"code": "COMP1205",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "dljg4icsuuztv54k7ojk2nuwgeiqi2nt",
+		"oldId": "12804",
+		"name": "Computing II",
+		"code": "COMP1210",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "dljg4icsuuztv54k7ojk2nuwgeiqi2nt",
+				"oldCourseId": "12804",
+				"prerequisiteId": "197"
+			}
+		]
+	},
+	{
+		"id": "hbzxmay2tzqpcddzeqyjluf6zgfe2cig",
+		"oldId": "154",
+		"name": "UNIX",
+		"code": "COMP1215",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "j4p7g2ns66aimyff47eo75u7qjrn466w",
+		"oldId": "13653",
+		"name": "Mathematics for Computer Science II",
+		"code": "COMP2210",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "j4p7g2ns66aimyff47eo75u7qjrn466w",
+				"oldCourseId": "13653",
+				"prerequisiteId": "9508"
+			}
+		]
+	},
+	{
+		"id": "ndwbhxg6vcaubj525h2skmh75vnm27fb",
+		"oldId": "11926",
+		"name": "Computer System Architecture",
+		"code": "COMP2220",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ndwbhxg6vcaubj525h2skmh75vnm27fb",
+				"oldCourseId": "11926",
+				"prerequisiteId": "9508"
+			},
+			{
+				"courseId": "ndwbhxg6vcaubj525h2skmh75vnm27fb",
+				"oldCourseId": "11926",
+				"prerequisiteId": "12804"
+			},
+			{
+				"courseId": "ndwbhxg6vcaubj525h2skmh75vnm27fb",
+				"oldCourseId": "11926",
+				"prerequisiteId": "9591"
+			}
+		]
+	},
+	{
+		"id": "qfgdn4ochv7gs3f5gjngeigzw2dx645u",
+		"oldId": "657",
+		"name": "Software Engineering",
+		"code": "COMP2225",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "qfgdn4ochv7gs3f5gjngeigzw2dx645u",
+				"oldCourseId": "657",
+				"prerequisiteId": "12804"
+			}
+		]
+	},
+	{
+		"id": "gsld2febcwbwzezyadoq2fiwkwhse5dq",
+		"oldId": "703",
+		"name": "Object-Oriented Programming Concepts",
+		"code": "COMP2232",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "gsld2febcwbwzezyadoq2fiwkwhse5dq",
+				"oldCourseId": "703",
+				"prerequisiteId": "12804"
+			}
+		]
+	},
+	{
+		"id": "4k252ni63uq2bevla5wlzyi7lhpimhrh",
+		"oldId": "13507",
+		"name": "Networks I",
+		"code": "COMP2235",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "4k252ni63uq2bevla5wlzyi7lhpimhrh",
+				"oldCourseId": "13507",
+				"prerequisiteId": "12804"
+			},
+			{
+				"courseId": "4k252ni63uq2bevla5wlzyi7lhpimhrh",
+				"oldCourseId": "13507",
+				"prerequisiteId": "154"
+			}
+		]
+	},
+	{
+		"id": "ybun2lq2jbi2xeu5c2imqt26746isbjn",
+		"oldId": "705",
+		"name": "Web Development Concepts, Tools and Practices",
+		"code": "COMP2245",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ybun2lq2jbi2xeu5c2imqt26746isbjn",
+				"oldCourseId": "705",
+				"prerequisiteId": "150"
+			},
+			{
+				"courseId": "ybun2lq2jbi2xeu5c2imqt26746isbjn",
+				"oldCourseId": "705",
+				"prerequisiteId": "204"
+			}
+		]
+	},
+	{
+		"id": "dqg5iexq3xor5v5bc23b55brwg7thmxc",
+		"oldId": "449",
+		"name": "Computing in the Digital Age",
+		"code": "COMP2410",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "dqg5iexq3xor5v5bc23b55brwg7thmxc",
+				"oldCourseId": "449",
+				"prerequisiteId": "12804"
+			}
+		]
+	},
+	{
+		"id": "a2ebjtyxzgc2up46mbjgnrmelxhserhm",
+		"oldId": "488",
+		"name": "Information Technology Engineering",
+		"code": "COMP2415",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "a2ebjtyxzgc2up46mbjgnrmelxhserhm",
+				"oldCourseId": "488",
+				"prerequisiteId": "12804"
+			}
+		]
+	},
+	{
+		"id": "j7we4s5mawgevcy63kt5yt6jdu3u55l4",
+		"oldId": "8431",
+		"name": "Data Structures",
+		"code": "COMP2611",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "j7we4s5mawgevcy63kt5yt6jdu3u55l4",
+				"oldCourseId": "8431",
+				"prerequisiteId": "12804"
+			},
+			{
+				"courseId": "j7we4s5mawgevcy63kt5yt6jdu3u55l4",
+				"oldCourseId": "8431",
+				"prerequisiteId": "154"
+			}
+		]
+	},
+	{
+		"id": "67zilqn63k4cyzch5o7h53ms2qh2pnkc",
+		"oldId": "5780",
+		"name": "Computer Science Elective",
+		"code": "COMP2950",
+		"level": 2,
+		"description": "",
+		"credits": 4,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "ofyy23xr6jf6h2xhn4ouzei3vhooshsd",
+		"oldId": "12803",
+		"name": "Algorithms",
+		"code": "COMP3310",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ofyy23xr6jf6h2xhn4ouzei3vhooshsd",
+				"oldCourseId": "12803",
+				"prerequisiteId": "13653"
+			},
+			{
+				"courseId": "ofyy23xr6jf6h2xhn4ouzei3vhooshsd",
+				"oldCourseId": "12803",
+				"prerequisiteId": "8431"
+			}
+		]
+	},
+	{
+		"id": "ys74ozwbwkhqmj7ldptaamlxrevjai65",
+		"oldId": "12802",
+		"name": "Design Principles of Operating Systems",
+		"code": "COMP3320",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ys74ozwbwkhqmj7ldptaamlxrevjai65",
+				"oldCourseId": "12802",
+				"prerequisiteId": "11926"
+			},
+			{
+				"courseId": "ys74ozwbwkhqmj7ldptaamlxrevjai65",
+				"oldCourseId": "12802",
+				"prerequisiteId": "8431"
+			}
+		]
+	},
+	{
+		"id": "qtirwkx2w27vjwj34njcutvxejfmyr7p",
+		"oldId": "12801",
+		"name": "Database Management Systems I",
+		"code": "COMP3330",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "qtirwkx2w27vjwj34njcutvxejfmyr7p",
+				"oldCourseId": "12801",
+				"prerequisiteId": "8431"
+			}
+		]
+	},
+	{
+		"id": "st33yoideb3uxi4snhqxriza2v7gl3lf",
+		"oldId": "12800",
+		"name": "Networks II",
+		"code": "COMP3360",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "st33yoideb3uxi4snhqxriza2v7gl3lf",
+				"oldCourseId": "12800",
+				"prerequisiteId": "13507"
+			}
+		]
+	},
+	{
+		"id": "zttymqr6ua7g77bco3dwzys2wvkvvjp3",
+		"oldId": "12799",
+		"name": "Networks III",
+		"code": "COMP3365",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "zttymqr6ua7g77bco3dwzys2wvkvvjp3",
+				"oldCourseId": "12799",
+				"prerequisiteId": "12800"
+			}
+		]
+	},
+	{
+		"id": "g53be756phge5at2wmsl7vau742wjuft",
+		"oldId": "12798",
+		"name": "Software Engineering on a Large Scale",
+		"code": "COMP3370",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "g53be756phge5at2wmsl7vau742wjuft",
+				"oldCourseId": "12798",
+				"prerequisiteId": "657"
+			}
+		]
+	},
+	{
+		"id": "7is7radvtuv4hoybexmwsyrcxmqmggf5",
+		"oldId": "12797",
+		"name": "Software Testing & Quality",
+		"code": "COMP3375",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "7is7radvtuv4hoybexmwsyrcxmqmggf5",
+				"oldCourseId": "12797",
+				"prerequisiteId": "657"
+			}
+		]
+	},
+	{
+		"id": "w43uj5a6fehdmxraooi376ezsi7lxiel",
+		"oldId": "12796",
+		"name": "Framework Design for Advanced Web Development",
+		"code": "COMP3385",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "w43uj5a6fehdmxraooi376ezsi7lxiel",
+				"oldCourseId": "12796",
+				"prerequisiteId": "705"
+			}
+		]
+	},
+	{
+		"id": "zxn4fomt27ht42fcz3jl4dd7lmnjfo27",
+		"oldId": "12795",
+		"name": "Scalable Enterprise Web Applications",
+		"code": "COMP3412",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "zxn4fomt27ht42fcz3jl4dd7lmnjfo27",
+				"oldCourseId": "12795",
+				"prerequisiteId": "12801"
+			},
+			{
+				"courseId": "zxn4fomt27ht42fcz3jl4dd7lmnjfo27",
+				"oldCourseId": "12795",
+				"prerequisiteId": "705"
+			}
+		]
+	},
+	{
+		"id": "cjs2noh3wydarq4ol3hdcciqjph3tugk",
+		"oldId": "12794",
+		"name": "Database Management Systems II",
+		"code": "COMP3415",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "cjs2noh3wydarq4ol3hdcciqjph3tugk",
+				"oldCourseId": "12794",
+				"prerequisiteId": "12801"
+			}
+		]
+	},
+	{
+		"id": "rtp332xu7jand4wxwprxkg44damzm32t",
+		"oldId": "12793",
+		"name": "Computer Graphics",
+		"code": "COMP3420",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "rtp332xu7jand4wxwprxkg44damzm32t",
+				"oldCourseId": "12793",
+				"prerequisiteId": "8431"
+			}
+		]
+	},
+	{
+		"id": "ujsou6zbul5l6nst7tvzagfpwekdo7xy",
+		"oldId": "453",
+		"name": "Mobile Applications for iOS Development",
+		"code": "COMP3425",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ujsou6zbul5l6nst7tvzagfpwekdo7xy",
+				"oldCourseId": "453",
+				"prerequisiteId": "8431"
+			},
+			{
+				"courseId": "ujsou6zbul5l6nst7tvzagfpwekdo7xy",
+				"oldCourseId": "453",
+				"prerequisiteId": "657"
+			}
+		]
+	},
+	{
+		"id": "ucmbui2whu25xezhchlbnyomthzptvxs",
+		"oldId": "12792",
+		"name": "User Interface Design",
+		"code": "COMP3435",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ucmbui2whu25xezhchlbnyomthzptvxs",
+				"oldCourseId": "12792",
+				"prerequisiteId": "8431"
+			},
+			{
+				"courseId": "ucmbui2whu25xezhchlbnyomthzptvxs",
+				"oldCourseId": "12792",
+				"prerequisiteId": "657"
+			}
+		]
+	},
+	{
+		"id": "zvx6mllykgdvpjchelkpp4zme6vyrdgl",
+		"oldId": "12791",
+		"name": "E-Commerce",
+		"code": "COMP3440",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "zvx6mllykgdvpjchelkpp4zme6vyrdgl",
+				"oldCourseId": "12791",
+				"prerequisiteId": "705"
+			}
+		]
+	},
+	{
+		"id": "ezhovmf7tii5pzwnnlzdgkd2yzcu3zjc",
+		"oldId": "12790",
+		"name": "Computer Information Systems",
+		"code": "COMP3445",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ezhovmf7tii5pzwnnlzdgkd2yzcu3zjc",
+				"oldCourseId": "12790",
+				"prerequisiteId": "657"
+			},
+			{
+				"courseId": "ezhovmf7tii5pzwnnlzdgkd2yzcu3zjc",
+				"oldCourseId": "12790",
+				"prerequisiteId": "705"
+			}
+		]
+	},
+	{
+		"id": "hnxsxwnra2y2tdvzqzbnmyjhlqkfpdgq",
+		"oldId": "12789",
+		"name": "Fundamentals of Artificial Intelligence",
+		"code": "COMP3450",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "hnxsxwnra2y2tdvzqzbnmyjhlqkfpdgq",
+				"oldCourseId": "12789",
+				"prerequisiteId": "13653"
+			},
+			{
+				"courseId": "hnxsxwnra2y2tdvzqzbnmyjhlqkfpdgq",
+				"oldCourseId": "12789",
+				"prerequisiteId": "8431"
+			}
+		]
+	},
+	{
+		"id": "dqhf2l5jpf5nvbd2wvenmgn2iv5mfeoi",
+		"oldId": "541",
+		"name": "Research Project in Computer Science",
+		"code": "COMP3490",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "3w5h5gnv2aenwyovw3d57xvfizlnyokx",
+		"oldId": "542",
+		"name": "Major Research Project in Computer Science",
+		"code": "COMP3495",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "cnya5x5q2xyt7vdsi23djsnbth5wiaen",
+		"oldId": "543",
+		"name": "Group Research Project in Computer Science",
+		"code": "COMP3499",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "dcliibbqgwxprzvrlkmy37dnhddzj4ei",
+		"oldId": "10106",
+		"name": "Computer Science Internship",
+		"code": "COMP3955",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "qnnivzufpgcq7zfjelbwpfodsgxy7d5b",
+		"oldId": "12788",
+		"name": "Basic Circuit Analysis",
+		"code": "ELET1200",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "qnnivzufpgcq7zfjelbwpfodsgxy7d5b",
+				"oldCourseId": "12788",
+				"prerequisiteId": "12965"
+			}
+		]
+	},
+	{
+		"id": "v35etew6z7mafq3v3e2uzjhe3f4iwgss",
+		"oldId": "12787",
+		"name": "Computer Aided Design",
+		"code": "ELET1205",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "4oczm5bnhmpqlybhlkigcimsy2bfyguq",
+		"oldId": "9591",
+		"name": "Digital Electronics I",
+		"code": "ELET1210",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "f2ospkvwabovej53a5dab7bqpynwnubr",
+		"oldId": "157",
+		"name": "Digital Electronics II",
+		"code": "ELET1215",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "f2ospkvwabovej53a5dab7bqpynwnubr",
+				"oldCourseId": "157",
+				"prerequisiteId": "9591"
+			}
+		]
+	},
+	{
+		"id": "x4k7ppkgtvlglzer64bf5plcshvixf5a",
+		"oldId": "12965",
+		"name": "Introduction to Electronics",
+		"code": "ELET1220",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "iz26tflgpktkcxgsgbup6h2xblzpk22b",
+		"oldId": "512",
+		"name": "Microprocessor Systems",
+		"code": "ELET2215",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "iz26tflgpktkcxgsgbup6h2xblzpk22b",
+				"oldCourseId": "512",
+				"prerequisiteId": "157"
+			}
+		]
+	},
+	{
+		"id": "q2fxjv73j5gn52c4ndfiyktrwgzdpqus",
+		"oldId": "514",
+		"name": "Circuit Simulation and Applications",
+		"code": "ELET2220",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "q2fxjv73j5gn52c4ndfiyktrwgzdpqus",
+				"oldCourseId": "514",
+				"prerequisiteId": "12788"
+			}
+		]
+	},
+	{
+		"id": "7h2erghsfsemjpacmtesevjdv3wmc77p",
+		"oldId": "660",
+		"name": "Discrete Component Electronics",
+		"code": "ELET2225",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "7h2erghsfsemjpacmtesevjdv3wmc77p",
+				"oldCourseId": "660",
+				"prerequisiteId": "12788"
+			}
+		]
+	},
+	{
+		"id": "kdzxermgsh54zr4lepvki2bjusxl6u56",
+		"oldId": "8050",
+		"name": "Digital Communication Systems I",
+		"code": "ELET2230",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "kdzxermgsh54zr4lepvki2bjusxl6u56",
+				"oldCourseId": "8050",
+				"prerequisiteId": "157"
+			},
+			{
+				"courseId": "kdzxermgsh54zr4lepvki2bjusxl6u56",
+				"oldCourseId": "8050",
+				"prerequisiteId": "9508"
+			},
+			{
+				"courseId": "kdzxermgsh54zr4lepvki2bjusxl6u56",
+				"oldCourseId": "8050",
+				"prerequisiteId": "383"
+			},
+			{
+				"courseId": "kdzxermgsh54zr4lepvki2bjusxl6u56",
+				"oldCourseId": "8050",
+				"prerequisiteId": "13507"
+			}
+		]
+	},
+	{
+		"id": "a72oelelcrerj4xwzjcwn26kjemm4x7w",
+		"oldId": "587",
+		"name": "Automation Technology and Applications",
+		"code": "ELET2235",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "a72oelelcrerj4xwzjcwn26kjemm4x7w",
+				"oldCourseId": "587",
+				"prerequisiteId": "157"
+			}
+		]
+	},
+	{
+		"id": "tjhfirpvlwpsr5gxhqfpgvgbwz36os3q",
+		"oldId": "13072",
+		"name": "Sensor and Actuation Devices",
+		"code": "ELET2240",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "tjhfirpvlwpsr5gxhqfpgvgbwz36os3q",
+				"oldCourseId": "13072",
+				"prerequisiteId": "12965"
+			}
+		]
+	},
+	{
+		"id": "xs2njcoqhtjlveatyzayvnlqt4ztb3ur",
+		"oldId": "682",
+		"name": "Electronics Exchange Elective",
+		"code": "ELET2951",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "yfoxg4xcbwg2m75qpz42dub4mwfmgqwv",
+		"oldId": "12786",
+		"name": "Microcontroller Technology",
+		"code": "ELET3215",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "yfoxg4xcbwg2m75qpz42dub4mwfmgqwv",
+				"oldCourseId": "12786",
+				"prerequisiteId": "512"
+			}
+		]
+	},
+	{
+		"id": "hz2qa6vkggnn2b2x3ixsaqfwgxbjqkb3",
+		"oldId": "12785",
+		"name": "Control Systems",
+		"code": "ELET3220",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "hz2qa6vkggnn2b2x3ixsaqfwgxbjqkb3",
+				"oldCourseId": "12785",
+				"prerequisiteId": "660"
+			}
+		]
+	},
+	{
+		"id": "oj56pbzwogceqdnm2ko7uznfxlgg2mwr",
+		"oldId": "12784",
+		"name": "Essentials of Digital Signal Processing",
+		"code": "ELET3230",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "oj56pbzwogceqdnm2ko7uznfxlgg2mwr",
+				"oldCourseId": "12784",
+				"prerequisiteId": "383"
+			},
+			{
+				"courseId": "oj56pbzwogceqdnm2ko7uznfxlgg2mwr",
+				"oldCourseId": "12784",
+				"prerequisiteId": "9508"
+			},
+			{
+				"courseId": "oj56pbzwogceqdnm2ko7uznfxlgg2mwr",
+				"oldCourseId": "12784",
+				"prerequisiteId": "13507"
+			}
+		]
+	},
+	{
+		"id": "g4xxe2y7qyurp2ps3tm64wi7glxs4j25",
+		"oldId": "12783",
+		"name": "Digital Communication Systems II",
+		"code": "ELET3235",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "g4xxe2y7qyurp2ps3tm64wi7glxs4j25",
+				"oldCourseId": "12783",
+				"prerequisiteId": "8050"
+			}
+		]
+	},
+	{
+		"id": "h3t4n3gt6r44rgjtigc6oinvsfsf6nfa",
+		"oldId": "12782",
+		"name": "Digital Communication Systems III",
+		"code": "ELET3240",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "h3t4n3gt6r44rgjtigc6oinvsfsf6nfa",
+				"oldCourseId": "12782",
+				"prerequisiteId": "12783"
+			}
+		]
+	},
+	{
+		"id": "aa7ne44ceurgtpesf65uapcjfgfr5w6f",
+		"oldId": "12781",
+		"name": "Biomedical Instrumentation",
+		"code": "ELET3250",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "aa7ne44ceurgtpesf65uapcjfgfr5w6f",
+				"oldCourseId": "12781",
+				"prerequisiteId": "587"
+			}
+		]
+	},
+	{
+		"id": "axg27bkt5zx2yajzufw67m2hspyqfttr",
+		"oldId": "12780",
+		"name": "Wireless Communications",
+		"code": "ELET3255",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "axg27bkt5zx2yajzufw67m2hspyqfttr",
+				"oldCourseId": "12780",
+				"prerequisiteId": "8050"
+			},
+			{
+				"courseId": "axg27bkt5zx2yajzufw67m2hspyqfttr",
+				"oldCourseId": "12780",
+				"prerequisiteId": "660"
+			}
+		]
+	},
+	{
+		"id": "say3n5riuqv5eq2sosfbyehxkfmww4en",
+		"oldId": "12779",
+		"name": "Advanced Microprocessors & Systems",
+		"code": "ELET3260",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "say3n5riuqv5eq2sosfbyehxkfmww4en",
+				"oldCourseId": "12779",
+				"prerequisiteId": "512"
+			}
+		]
+	},
+	{
+		"id": "dfu7xmqmrqh2vjeyyltkgfx7ljkjciq7",
+		"oldId": "475",
+		"name": "Semester Electronics Research Project",
+		"code": "ELET3290",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "2nxgzcpktuj3l74625sl4oqcdddmyoqv",
+		"oldId": "474",
+		"name": "Major Electronics Research Project",
+		"code": "ELET3295",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "va752nw5gwqjvuhdo6qelq6qtekkz55o",
+		"oldId": "547",
+		"name": "Group Electronics Research Project",
+		"code": "ELET3298",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "ccxcrqsopbty3f56wvh2qhaflvmueblb",
+		"oldId": "13213",
+		"name": "Electronics Internship",
+		"code": "ELET3955",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "kz63r25vtpbcfzckpdsbhubqhguwkqse",
+		"oldId": "52",
+		"name": "Earth and its Environment",
+		"code": "ENSC1000",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "mvfv6probsgyqd4pbjpo6fnv5nmqqpua",
+		"oldId": "155",
+		"name": "An Introduction to Physical Geology: Dynamic Earth",
+		"code": "ENSC1001",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "tic6exzagzbicbvankbuewgyqywkgftg",
+		"oldId": "11771",
+		"name": "Landform Dynamics",
+		"code": "ENSC1005",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "u53jdsuggwlmqoq3iiqrjydnrnfgt5yo",
+		"oldId": "327",
+		"name": "Essentials of Oceanography",
+		"code": "ENSC2000",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "u53jdsuggwlmqoq3iiqrjydnrnfgt5yo",
+				"oldCourseId": "327",
+				"prerequisiteId": "52"
+			},
+			{
+				"courseId": "u53jdsuggwlmqoq3iiqrjydnrnfgt5yo",
+				"oldCourseId": "327",
+				"prerequisiteId": "325"
+			}
+		]
+	},
+	{
+		"id": "rd6dtrfoxx2mwuqvc7bcyr2gaptpyslo",
+		"oldId": "9398",
+		"name": "Earth's Climate",
+		"code": "ENSC2002",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "rd6dtrfoxx2mwuqvc7bcyr2gaptpyslo",
+				"oldCourseId": "9398",
+				"prerequisiteId": "52"
+			},
+			{
+				"courseId": "rd6dtrfoxx2mwuqvc7bcyr2gaptpyslo",
+				"oldCourseId": "9398",
+				"prerequisiteId": "325"
+			}
+		]
+	},
+	{
+		"id": "n226lfox6soaybzn3ilg53fut2ve6ehf",
+		"oldId": "491",
+		"name": "Sustainable Energy Systems",
+		"code": "ENSC2003",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "duru4zlqvjf5t3ujzieyaqd3hoqla22k",
+		"oldId": "11792",
+		"name": "Earth-Life Cycles",
+		"code": "ENSC2005",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "duru4zlqvjf5t3ujzieyaqd3hoqla22k",
+				"oldCourseId": "11792",
+				"prerequisiteId": "52"
+			},
+			{
+				"courseId": "duru4zlqvjf5t3ujzieyaqd3hoqla22k",
+				"oldCourseId": "11792",
+				"prerequisiteId": "325"
+			},
+			{
+				"courseId": "duru4zlqvjf5t3ujzieyaqd3hoqla22k",
+				"oldCourseId": "11792",
+				"prerequisiteId": "155"
+			},
+			{
+				"courseId": "duru4zlqvjf5t3ujzieyaqd3hoqla22k",
+				"oldCourseId": "11792",
+				"prerequisiteId": "11771"
+			}
+		]
+	},
+	{
+		"id": "c4lc7ulde577j26avvgvssq2eqdilnam",
+		"oldId": "11794",
+		"name": "Environmental Science Exchange",
+		"code": "ENSC2900",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "urc7eas5l4trwm37zjf6wpe4demskjm4",
+		"oldId": "13049",
+		"name": "Climate Variation and Change",
+		"code": "ENSC3000",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "urc7eas5l4trwm37zjf6wpe4demskjm4",
+				"oldCourseId": "13049",
+				"prerequisiteId": "9398"
+			}
+		]
+	},
+	{
+		"id": "tnmhmx3pw2pkrqtner7evdghzqomqa7s",
+		"oldId": "13635",
+		"name": "Natural Hazards and Disasters",
+		"code": "ENSC3001",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "tnmhmx3pw2pkrqtner7evdghzqomqa7s",
+				"oldCourseId": "13635",
+				"prerequisiteId": "155"
+			},
+			{
+				"courseId": "tnmhmx3pw2pkrqtner7evdghzqomqa7s",
+				"oldCourseId": "13635",
+				"prerequisiteId": "11771"
+			},
+			{
+				"courseId": "tnmhmx3pw2pkrqtner7evdghzqomqa7s",
+				"oldCourseId": "13635",
+				"prerequisiteId": "327"
+			},
+			{
+				"courseId": "tnmhmx3pw2pkrqtner7evdghzqomqa7s",
+				"oldCourseId": "13635",
+				"prerequisiteId": "9398"
+			}
+		]
+	},
+	{
+		"id": "wmry6xqrjicxeshuxdyfqr4pzvaolh5d",
+		"oldId": "11731",
+		"name": "Urban Geomorphology",
+		"code": "ENSC3005",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "wmry6xqrjicxeshuxdyfqr4pzvaolh5d",
+				"oldCourseId": "11731",
+				"prerequisiteId": "11792"
+			}
+		]
+	},
+	{
+		"id": "3tcdcoontpdnsknnwhctilmig6w2sp5d",
+		"oldId": "495",
+		"name": "Case Study in Environmental Sciences",
+		"code": "ENSC3020",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "b26kiaf2akdb76r6c5ekvyq533hq3kss",
+		"oldId": "11795",
+		"name": "Professional Placement for Environmental Science",
+		"code": "ENSC3090",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "xq2jwuvsahprsvrmppnxnbhryd7sgyos",
+		"oldId": "470",
+		"name": "Research Project in Environmental Science",
+		"code": "ENSC3900",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "bhvuseayemjow2vcr2z4xcq4kijudjp3",
+		"oldId": "13857",
+		"name": "Principles of Sustainability",
+		"code": "ENSC3100",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "rnzjher3wtn2ywpk355pukdx3sy5zqfd",
+		"oldId": "13858",
+		"name": "Climate and Weather in the Caribbean",
+		"code": "ENSC3101",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "7hwxbce3gouhlvw4crzvmsgbmkwx3kq3",
+		"oldId": "13859",
+		"name": "Biodiversity in the Caribbean",
+		"code": "ENSC3102",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "grvyua3andjc7csxsvevfpyrmf25gaic",
+		"oldId": "13877",
+		"name": "Barbados Research Project",
+		"code": "ENSC3901",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "rhh5ywgzrkvko667b63nc7vu4deubdzi",
+		"oldId": "9190",
+		"name": "Pre-Calculus",
+		"code": "MATH0100",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "in3mzvuedmonllb74icpx2lcyjxudayt",
+		"oldId": "13151",
+		"name": "Preliminary Mathematics I",
+		"code": "MATH0101",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "o4wcc2jr2zrmhgixwuizxotodwvnvpk2",
+		"oldId": "10026",
+		"name": "Preliminary Mathematics II",
+		"code": "MATH0102",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "of6xowl3nabkjccqhqtdanopz3xa4lvz",
+		"oldId": "9270",
+		"name": "Calculus and Analytical Geometry",
+		"code": "MATH0110",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "4egqfv6ickgqfzwhv7umczcuuwloq52y",
+		"oldId": "146",
+		"name": "Introductory Linear Algebra and Analytical Geometry",
+		"code": "MATH1141",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "pveeywwzdgpijhxaivhnyajp77g37tji",
+		"oldId": "315",
+		"name": "Sets and Number Systems",
+		"code": "MATH1152",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "pveeywwzdgpijhxaivhnyajp77g37tji",
+				"oldCourseId": "315",
+				"prerequisiteId": "146"
+			}
+		]
+	},
+	{
+		"id": "e32twwakhp4tszrduuzz3jb4ltmzsohb",
+		"oldId": "383",
+		"name": "Calculus A",
+		"code": "MATH1190",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "lruiekuuvyoknh6olzslvjkg3ylgiaqr",
+		"oldId": "319",
+		"name": "Calculus B",
+		"code": "MATH1195",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "lruiekuuvyoknh6olzslvjkg3ylgiaqr",
+				"oldCourseId": "319",
+				"prerequisiteId": "383"
+			}
+		]
+	},
+	{
+		"id": "3vuglxi3skqev2fmkr27ymvinaersqr2",
+		"oldId": "10188",
+		"name": "Introductory Applied Statistics I",
+		"code": "MATH1230",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "efpffvta52rrk354lrjzhfofyxlml7ui",
+		"oldId": "382",
+		"name": "Python Programming and Mathematical Software",
+		"code": "MATH1235",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "5p2rcrlkhqmmth427phkgd7s4go6apll",
+		"oldId": "694",
+		"name": "Multivariable Calculus",
+		"code": "MATH2304",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "5p2rcrlkhqmmth427phkgd7s4go6apll",
+				"oldCourseId": "694",
+				"prerequisiteId": "146"
+			},
+			{
+				"courseId": "5p2rcrlkhqmmth427phkgd7s4go6apll",
+				"oldCourseId": "694",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "5p2rcrlkhqmmth427phkgd7s4go6apll",
+				"oldCourseId": "694",
+				"prerequisiteId": "382"
+			}
+		]
+	},
+	{
+		"id": "oqgiguokv447j66tmgyeoks6smyx74a4",
+		"oldId": "693",
+		"name": "Differential Equations",
+		"code": "MATH2305",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "oqgiguokv447j66tmgyeoks6smyx74a4",
+				"oldCourseId": "693",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "oqgiguokv447j66tmgyeoks6smyx74a4",
+				"oldCourseId": "693",
+				"prerequisiteId": "382"
+			}
+		]
+	},
+	{
+		"id": "4dcz4rpl5s42n4y2x6juzp222xdcrjn7",
+		"oldId": "674",
+		"name": "Abstract Algebra 1",
+		"code": "MATH2310",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "4dcz4rpl5s42n4y2x6juzp222xdcrjn7",
+				"oldCourseId": "674",
+				"prerequisiteId": "674"
+			}
+		]
+	},
+	{
+		"id": "64a6aykvcgyo2f7sdwtq2bxkupcfwejg",
+		"oldId": "8432",
+		"name": "Linear Algebra 1",
+		"code": "MATH2315",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "64a6aykvcgyo2f7sdwtq2bxkupcfwejg",
+				"oldCourseId": "8432",
+				"prerequisiteId": "382"
+			},
+			{
+				"courseId": "64a6aykvcgyo2f7sdwtq2bxkupcfwejg",
+				"oldCourseId": "8432",
+				"prerequisiteId": "315"
+			}
+		]
+	},
+	{
+		"id": "5y46sssj6gmwlnpnqxtlvkdbzsxbx5fr",
+		"oldId": "13638",
+		"name": "Real Analysis 1",
+		"code": "MATH2321",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "5y46sssj6gmwlnpnqxtlvkdbzsxbx5fr",
+				"oldCourseId": "13638",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "5y46sssj6gmwlnpnqxtlvkdbzsxbx5fr",
+				"oldCourseId": "13638",
+				"prerequisiteId": "315"
+			}
+		]
+	},
+	{
+		"id": "qmpu3c3ur3i3jbha2tlwhdjb5prztlsb",
+		"oldId": "527",
+		"name": "Elementary Number Theory",
+		"code": "MATH2325",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "qmpu3c3ur3i3jbha2tlwhdjb5prztlsb",
+				"oldCourseId": "527",
+				"prerequisiteId": "382"
+			},
+			{
+				"courseId": "qmpu3c3ur3i3jbha2tlwhdjb5prztlsb",
+				"oldCourseId": "527",
+				"prerequisiteId": "315"
+			}
+		]
+	},
+	{
+		"id": "2co3sswqbhgbkiw7bcnfghzup73eg3o7",
+		"oldId": "696",
+		"name": "Probability Theory 1",
+		"code": "MATH2330",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "2co3sswqbhgbkiw7bcnfghzup73eg3o7",
+				"oldCourseId": "696",
+				"prerequisiteId": "319"
+			}
+		]
+	},
+	{
+		"id": "t4glfczywqvfcwkvhdpkbvmuxo6o4elk",
+		"oldId": "476",
+		"name": "Statistics 1",
+		"code": "MATH2335",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "t4glfczywqvfcwkvhdpkbvmuxo6o4elk",
+				"oldCourseId": "476",
+				"prerequisiteId": "382"
+			},
+			{
+				"courseId": "t4glfczywqvfcwkvhdpkbvmuxo6o4elk",
+				"oldCourseId": "476",
+				"prerequisiteId": "696"
+			}
+		]
+	},
+	{
+		"id": "a5thvm3mst6yye24ado7t5a6iucj7mx7",
+		"oldId": "12778",
+		"name": "Abstract Algebra 2",
+		"code": "MATH3543",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "a5thvm3mst6yye24ado7t5a6iucj7mx7",
+				"oldCourseId": "12778",
+				"prerequisiteId": "674"
+			},
+			{
+				"courseId": "a5thvm3mst6yye24ado7t5a6iucj7mx7",
+				"oldCourseId": "12778",
+				"prerequisiteId": "8432"
+			}
+		]
+	},
+	{
+		"id": "jy7zgi2ccubi53m4s56olihnbrreg3jz",
+		"oldId": "12777",
+		"name": "Linear Algebra 2",
+		"code": "MATH3545",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "jy7zgi2ccubi53m4s56olihnbrreg3jz",
+				"oldCourseId": "12777",
+				"prerequisiteId": "674"
+			},
+			{
+				"courseId": "jy7zgi2ccubi53m4s56olihnbrreg3jz",
+				"oldCourseId": "12777",
+				"prerequisiteId": "8432"
+			},
+			{
+				"courseId": "jy7zgi2ccubi53m4s56olihnbrreg3jz",
+				"oldCourseId": "12777",
+				"prerequisiteId": "693"
+			}
+		]
+	},
+	{
+		"id": "53ood24dal4ibrcppxkkfjjrjk37iwpi",
+		"oldId": "12771",
+		"name": "Real Analysis 2",
+		"code": "MATH3550",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "53ood24dal4ibrcppxkkfjjrjk37iwpi",
+				"oldCourseId": "12771",
+				"prerequisiteId": "13638"
+			}
+		]
+	},
+	{
+		"id": "67dsjwns6s4jhdx65doalpywzvwjrpxf",
+		"oldId": "12772",
+		"name": "Complex Analysis",
+		"code": "MATH3555",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "67dsjwns6s4jhdx65doalpywzvwjrpxf",
+				"oldCourseId": "12772",
+				"prerequisiteId": "12771"
+			}
+		]
+	},
+	{
+		"id": "xxlmcd5ta3rpr6xte5grcp36xeeqlqzw",
+		"oldId": "12776",
+		"name": "Metric Spaces",
+		"code": "MATH3560",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "xxlmcd5ta3rpr6xte5grcp36xeeqlqzw",
+				"oldCourseId": "12776",
+				"prerequisiteId": "12771"
+			}
+		]
+	},
+	{
+		"id": "tk7ux2lmqoy3kqk5xlkdqe6skqysmtya",
+		"oldId": "12775",
+		"name": "Probability Theory 2",
+		"code": "MATH3565",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "tk7ux2lmqoy3kqk5xlkdqe6skqysmtya",
+				"oldCourseId": "12775",
+				"prerequisiteId": "696"
+			},
+			{
+				"courseId": "tk7ux2lmqoy3kqk5xlkdqe6skqysmtya",
+				"oldCourseId": "12775",
+				"prerequisiteId": "476"
+			},
+			{
+				"courseId": "tk7ux2lmqoy3kqk5xlkdqe6skqysmtya",
+				"oldCourseId": "12775",
+				"prerequisiteId": "694"
+			},
+			{
+				"courseId": "tk7ux2lmqoy3kqk5xlkdqe6skqysmtya",
+				"oldCourseId": "12775",
+				"prerequisiteId": "13638"
+			}
+		]
+	},
+	{
+		"id": "djzvnhpoc3i2tzhozo3xbsccxfwmjxbk",
+		"oldId": "12774",
+		"name": "Statistics II",
+		"code": "MATH3570",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "djzvnhpoc3i2tzhozo3xbsccxfwmjxbk",
+				"oldCourseId": "12774",
+				"prerequisiteId": "476"
+			},
+			{
+				"courseId": "djzvnhpoc3i2tzhozo3xbsccxfwmjxbk",
+				"oldCourseId": "12774",
+				"prerequisiteId": "12775"
+			}
+		]
+	},
+	{
+		"id": "igx5zmbq4ue6nqaaqugnihkafnavodwn",
+		"oldId": "12773",
+		"name": "Topics in Numerical Analysis",
+		"code": "MATH3575",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "igx5zmbq4ue6nqaaqugnihkafnavodwn",
+				"oldCourseId": "12773",
+				"prerequisiteId": "693"
+			},
+			{
+				"courseId": "igx5zmbq4ue6nqaaqugnihkafnavodwn",
+				"oldCourseId": "12773",
+				"prerequisiteId": "8432"
+			},
+			{
+				"courseId": "igx5zmbq4ue6nqaaqugnihkafnavodwn",
+				"oldCourseId": "12773",
+				"prerequisiteId": "12771"
+			}
+		]
+	},
+	{
+		"id": "km6wu55jou6fkeh7rqczruid67lwkabw",
+		"oldId": "8216",
+		"name": "Fourier Analysis with Partial Differential Equations",
+		"code": "MATH3580",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "km6wu55jou6fkeh7rqczruid67lwkabw",
+				"oldCourseId": "8216",
+				"prerequisiteId": "693"
+			},
+			{
+				"courseId": "km6wu55jou6fkeh7rqczruid67lwkabw",
+				"oldCourseId": "8216",
+				"prerequisiteId": "8432"
+			},
+			{
+				"courseId": "km6wu55jou6fkeh7rqczruid67lwkabw",
+				"oldCourseId": "8216",
+				"prerequisiteId": "12771"
+			}
+		]
+	},
+	{
+		"id": "fn2t6fl3rqdsjdfxyezfc4lfaol4enfy",
+		"oldId": "575",
+		"name": "Topics in Discrete and Computational Geometry",
+		"code": "MATH3600",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "fn2t6fl3rqdsjdfxyezfc4lfaol4enfy",
+				"oldCourseId": "575",
+				"prerequisiteId": "315"
+			},
+			{
+				"courseId": "fn2t6fl3rqdsjdfxyezfc4lfaol4enfy",
+				"oldCourseId": "575",
+				"prerequisiteId": "382"
+			}
+		]
+	},
+	{
+		"id": "dsiclfj5m4rzxszizuisrootb7fzv5oe",
+		"oldId": "576",
+		"name": "Topics in Graph Theory",
+		"code": "MATH3605",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "dsiclfj5m4rzxszizuisrootb7fzv5oe",
+				"oldCourseId": "576",
+				"prerequisiteId": "315"
+			},
+			{
+				"courseId": "dsiclfj5m4rzxszizuisrootb7fzv5oe",
+				"oldCourseId": "576",
+				"prerequisiteId": "382"
+			}
+		]
+	},
+	{
+		"id": "jsjki3uoqknn7s424pnsqhfy6qeguice",
+		"oldId": "12770",
+		"name": "Financial Mathematics I",
+		"code": "MATH3620",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "jsjki3uoqknn7s424pnsqhfy6qeguice",
+				"oldCourseId": "12770",
+				"prerequisiteId": "694"
+			},
+			{
+				"courseId": "jsjki3uoqknn7s424pnsqhfy6qeguice",
+				"oldCourseId": "12770",
+				"prerequisiteId": "696"
+			},
+			{
+				"courseId": "jsjki3uoqknn7s424pnsqhfy6qeguice",
+				"oldCourseId": "12770",
+				"prerequisiteId": "8432"
+			},
+			{
+				"courseId": "jsjki3uoqknn7s424pnsqhfy6qeguice",
+				"oldCourseId": "12770",
+				"prerequisiteId": "476"
+			}
+		]
+	},
+	{
+		"id": "b6gp5zlztdpw7mrlgfjui37bc2b63tc2",
+		"oldId": "12769",
+		"name": "Financial Mathematics II",
+		"code": "MATH3621",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "b6gp5zlztdpw7mrlgfjui37bc2b63tc2",
+				"oldCourseId": "12769",
+				"prerequisiteId": "12770"
+			},
+			{
+				"courseId": "b6gp5zlztdpw7mrlgfjui37bc2b63tc2",
+				"oldCourseId": "12769",
+				"prerequisiteId": "12775"
+			}
+		]
+	},
+	{
+		"id": "mjdg6we7v642djgcxpktucfqnpa7ckxc",
+		"oldId": "13230",
+		"name": "Mathematics Internship",
+		"code": "MATH3955",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "4zuc2s5ygecxdfg3lhb4bp5n3jp57zok",
+		"oldId": "325",
+		"name": "Introduction to Oceans and Climate",
+		"code": "METE1110",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "3rof346lwm36qz3dghmrqzlv5tiawkgl",
+		"oldId": "11350",
+		"name": "Introduction to Physical Meteorology",
+		"code": "METE1130",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "3dck427ch2ido4dta7dgggiutxb4fe5q",
+		"oldId": "13633",
+		"name": "Meteorological Observations, Instruments and Basic Analysis",
+		"code": "METE1125",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "jftg2w7y5sj7xcihyawyatoyc52bed2w",
+		"oldId": "13632",
+		"name": "Introduction to Dynamic Meteorology",
+		"code": "METE1135",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "mwpmj3srjtcyfdp4hoh2udquzsfvuvps",
+		"oldId": "573",
+		"name": "Introduction to Climate Change and Society",
+		"code": "METE1305",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "tf4ql7nxkv6jfrziy3as4icq5osljicd",
+		"oldId": "12817",
+		"name": "Atmospheric Thermodynamics",
+		"code": "METE2110",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "tf4ql7nxkv6jfrziy3as4icq5osljicd",
+				"oldCourseId": "12817",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "tf4ql7nxkv6jfrziy3as4icq5osljicd",
+				"oldCourseId": "12817",
+				"prerequisiteId": "383"
+			},
+			{
+				"courseId": "tf4ql7nxkv6jfrziy3as4icq5osljicd",
+				"oldCourseId": "12817",
+				"prerequisiteId": "325"
+			},
+			{
+				"courseId": "tf4ql7nxkv6jfrziy3as4icq5osljicd",
+				"oldCourseId": "12817",
+				"prerequisiteId": "11350"
+			},
+			{
+				"courseId": "tf4ql7nxkv6jfrziy3as4icq5osljicd",
+				"oldCourseId": "12817",
+				"prerequisiteId": "13633"
+			},
+			{
+				"courseId": "tf4ql7nxkv6jfrziy3as4icq5osljicd",
+				"oldCourseId": "12817",
+				"prerequisiteId": "13632"
+			}
+		]
+	},
+	{
+		"id": "pwzemn5oldxz5h6bvwxdtkx3yyhazgoc",
+		"oldId": "12816",
+		"name": "Physical Meteorology",
+		"code": "METE2120",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "pwzemn5oldxz5h6bvwxdtkx3yyhazgoc",
+				"oldCourseId": "12816",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "pwzemn5oldxz5h6bvwxdtkx3yyhazgoc",
+				"oldCourseId": "12816",
+				"prerequisiteId": "383"
+			},
+			{
+				"courseId": "pwzemn5oldxz5h6bvwxdtkx3yyhazgoc",
+				"oldCourseId": "12816",
+				"prerequisiteId": "325"
+			},
+			{
+				"courseId": "pwzemn5oldxz5h6bvwxdtkx3yyhazgoc",
+				"oldCourseId": "12816",
+				"prerequisiteId": "11350"
+			},
+			{
+				"courseId": "pwzemn5oldxz5h6bvwxdtkx3yyhazgoc",
+				"oldCourseId": "12816",
+				"prerequisiteId": "13633"
+			},
+			{
+				"courseId": "pwzemn5oldxz5h6bvwxdtkx3yyhazgoc",
+				"oldCourseId": "12816",
+				"prerequisiteId": "13632"
+			}
+		]
+	},
+	{
+		"id": "xxojirs6gn6zifcwk4aqkiuorvgqwe55",
+		"oldId": "12815",
+		"name": "Dynamic Meteorology",
+		"code": "METE2125",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "xxojirs6gn6zifcwk4aqkiuorvgqwe55",
+				"oldCourseId": "12815",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "xxojirs6gn6zifcwk4aqkiuorvgqwe55",
+				"oldCourseId": "12815",
+				"prerequisiteId": "383"
+			},
+			{
+				"courseId": "xxojirs6gn6zifcwk4aqkiuorvgqwe55",
+				"oldCourseId": "12815",
+				"prerequisiteId": "325"
+			},
+			{
+				"courseId": "xxojirs6gn6zifcwk4aqkiuorvgqwe55",
+				"oldCourseId": "12815",
+				"prerequisiteId": "11350"
+			},
+			{
+				"courseId": "xxojirs6gn6zifcwk4aqkiuorvgqwe55",
+				"oldCourseId": "12815",
+				"prerequisiteId": "13633"
+			},
+			{
+				"courseId": "xxojirs6gn6zifcwk4aqkiuorvgqwe55",
+				"oldCourseId": "12815",
+				"prerequisiteId": "13632"
+			}
+		]
+	},
+	{
+		"id": "4mavzdiwec2ickg3az2srnrpg36u4stu",
+		"oldId": "12814",
+		"name": "Synoptic Meteorology",
+		"code": "METE2210",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "4mavzdiwec2ickg3az2srnrpg36u4stu",
+				"oldCourseId": "12814",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "4mavzdiwec2ickg3az2srnrpg36u4stu",
+				"oldCourseId": "12814",
+				"prerequisiteId": "383"
+			},
+			{
+				"courseId": "4mavzdiwec2ickg3az2srnrpg36u4stu",
+				"oldCourseId": "12814",
+				"prerequisiteId": "325"
+			},
+			{
+				"courseId": "4mavzdiwec2ickg3az2srnrpg36u4stu",
+				"oldCourseId": "12814",
+				"prerequisiteId": "11350"
+			},
+			{
+				"courseId": "4mavzdiwec2ickg3az2srnrpg36u4stu",
+				"oldCourseId": "12814",
+				"prerequisiteId": "13633"
+			},
+			{
+				"courseId": "4mavzdiwec2ickg3az2srnrpg36u4stu",
+				"oldCourseId": "12814",
+				"prerequisiteId": "13632"
+			},
+			{
+				"courseId": "4mavzdiwec2ickg3az2srnrpg36u4stu",
+				"oldCourseId": "12814",
+				"prerequisiteId": "724"
+			}
+		]
+	},
+	{
+		"id": "qtrspev4dc4d3bu33l5nemaxj4unoj2b",
+		"oldId": "12813",
+		"name": "Synoptic Meteorology Lab I",
+		"code": "METE2215",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "qtrspev4dc4d3bu33l5nemaxj4unoj2b",
+				"oldCourseId": "12813",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "qtrspev4dc4d3bu33l5nemaxj4unoj2b",
+				"oldCourseId": "12813",
+				"prerequisiteId": "383"
+			},
+			{
+				"courseId": "qtrspev4dc4d3bu33l5nemaxj4unoj2b",
+				"oldCourseId": "12813",
+				"prerequisiteId": "325"
+			},
+			{
+				"courseId": "qtrspev4dc4d3bu33l5nemaxj4unoj2b",
+				"oldCourseId": "12813",
+				"prerequisiteId": "11350"
+			},
+			{
+				"courseId": "qtrspev4dc4d3bu33l5nemaxj4unoj2b",
+				"oldCourseId": "12813",
+				"prerequisiteId": "13633"
+			},
+			{
+				"courseId": "qtrspev4dc4d3bu33l5nemaxj4unoj2b",
+				"oldCourseId": "12813",
+				"prerequisiteId": "13632"
+			},
+			{
+				"courseId": "qtrspev4dc4d3bu33l5nemaxj4unoj2b",
+				"oldCourseId": "12813",
+				"prerequisiteId": "724"
+			}
+		]
+	},
+	{
+		"id": "442rvv7z2h4ritp4glmrhqhd7jkqh5mw",
+		"oldId": "12812",
+		"name": "Fundamentals of Hydrometeorology",
+		"code": "METE2305",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "442rvv7z2h4ritp4glmrhqhd7jkqh5mw",
+				"oldCourseId": "12812",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "442rvv7z2h4ritp4glmrhqhd7jkqh5mw",
+				"oldCourseId": "12812",
+				"prerequisiteId": "383"
+			}
+		]
+	},
+	{
+		"id": "bvms2zkvgp4nuhetademashnb42khhtl",
+		"oldId": "5783",
+		"name": "Meteorology Elective",
+		"code": "METE2950",
+		"level": 2,
+		"description": "",
+		"credits": 4,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "mv3ekquh5h7ibouizdqb5dkunmvu5sbx",
+		"oldId": "12811",
+		"name": "Advanced Dynamic Meteorology",
+		"code": "METE3110",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "mv3ekquh5h7ibouizdqb5dkunmvu5sbx",
+				"oldCourseId": "12811",
+				"prerequisiteId": "12815"
+			},
+			{
+				"courseId": "mv3ekquh5h7ibouizdqb5dkunmvu5sbx",
+				"oldCourseId": "12811",
+				"prerequisiteId": "12814"
+			},
+			{
+				"courseId": "mv3ekquh5h7ibouizdqb5dkunmvu5sbx",
+				"oldCourseId": "12811",
+				"prerequisiteId": "12813"
+			}
+		]
+	},
+	{
+		"id": "o4rsywbcxgllxrk3hponz7fgahoi2edg",
+		"oldId": "12810",
+		"name": "Advanced Synoptic Meteorology",
+		"code": "METE3210",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "o4rsywbcxgllxrk3hponz7fgahoi2edg",
+				"oldCourseId": "12810",
+				"prerequisiteId": "12815"
+			},
+			{
+				"courseId": "o4rsywbcxgllxrk3hponz7fgahoi2edg",
+				"oldCourseId": "12810",
+				"prerequisiteId": "12814"
+			}
+		]
+	},
+	{
+		"id": "4e7qap5gozfcw3qypaoedu7ybbzdwnso",
+		"oldId": "12809",
+		"name": "Synoptic Meteorology Lab II",
+		"code": "METE3215",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "4e7qap5gozfcw3qypaoedu7ybbzdwnso",
+				"oldCourseId": "12809",
+				"prerequisiteId": "12815"
+			},
+			{
+				"courseId": "4e7qap5gozfcw3qypaoedu7ybbzdwnso",
+				"oldCourseId": "12809",
+				"prerequisiteId": "12814"
+			},
+			{
+				"courseId": "4e7qap5gozfcw3qypaoedu7ybbzdwnso",
+				"oldCourseId": "12809",
+				"prerequisiteId": "12813"
+			}
+		]
+	},
+	{
+		"id": "svqbro6it36ebpnomr7jumkkf36x4rn5",
+		"oldId": "12808",
+		"name": "The Tropics and Tropical Weather Systems",
+		"code": "METE3310",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "svqbro6it36ebpnomr7jumkkf36x4rn5",
+				"oldCourseId": "12808",
+				"prerequisiteId": "12815"
+			},
+			{
+				"courseId": "svqbro6it36ebpnomr7jumkkf36x4rn5",
+				"oldCourseId": "12808",
+				"prerequisiteId": "12814"
+			},
+			{
+				"courseId": "svqbro6it36ebpnomr7jumkkf36x4rn5",
+				"oldCourseId": "12808",
+				"prerequisiteId": "12813"
+			}
+		]
+	},
+	{
+		"id": "fxsuni5amz5cwx6o2jvjynwm7ahyikea",
+		"oldId": "12807",
+		"name": "Radar Meteorology",
+		"code": "METE3420",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "fxsuni5amz5cwx6o2jvjynwm7ahyikea",
+				"oldCourseId": "12807",
+				"prerequisiteId": "12817"
+			},
+			{
+				"courseId": "fxsuni5amz5cwx6o2jvjynwm7ahyikea",
+				"oldCourseId": "12807",
+				"prerequisiteId": "12816"
+			},
+			{
+				"courseId": "fxsuni5amz5cwx6o2jvjynwm7ahyikea",
+				"oldCourseId": "12807",
+				"prerequisiteId": "12814"
+			},
+			{
+				"courseId": "fxsuni5amz5cwx6o2jvjynwm7ahyikea",
+				"oldCourseId": "12807",
+				"prerequisiteId": "12813"
+			}
+		]
+	},
+	{
+		"id": "az2fyhartd4ng6xhktvfccwsumcdrwsj",
+		"oldId": "12806",
+		"name": "Satellite Meteorology",
+		"code": "METE3425",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "az2fyhartd4ng6xhktvfccwsumcdrwsj",
+				"oldCourseId": "12806",
+				"prerequisiteId": "12817"
+			},
+			{
+				"courseId": "az2fyhartd4ng6xhktvfccwsumcdrwsj",
+				"oldCourseId": "12806",
+				"prerequisiteId": "12816"
+			},
+			{
+				"courseId": "az2fyhartd4ng6xhktvfccwsumcdrwsj",
+				"oldCourseId": "12806",
+				"prerequisiteId": "12814"
+			},
+			{
+				"courseId": "az2fyhartd4ng6xhktvfccwsumcdrwsj",
+				"oldCourseId": "12806",
+				"prerequisiteId": "12813"
+			}
+		]
+	},
+	{
+		"id": "yiqhyygxawcslszam2resdsd6job4tlk",
+		"oldId": "10547",
+		"name": "Climate, Biospherse and Ecosystems",
+		"code": "METE3505",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "yiqhyygxawcslszam2resdsd6job4tlk",
+				"oldCourseId": "10547",
+				"prerequisiteId": "325"
+			},
+			{
+				"courseId": "yiqhyygxawcslszam2resdsd6job4tlk",
+				"oldCourseId": "10547",
+				"prerequisiteId": "9290"
+			}
+		]
+	},
+	{
+		"id": "f24dj62anmvz2dtbiogkdqtbrplfbbzi",
+		"oldId": "12805",
+		"name": "Numerical Weather Prediction and Computational Methods",
+		"code": "METE3600",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "f24dj62anmvz2dtbiogkdqtbrplfbbzi",
+				"oldCourseId": "12805",
+				"prerequisiteId": "12804"
+			},
+			{
+				"courseId": "f24dj62anmvz2dtbiogkdqtbrplfbbzi",
+				"oldCourseId": "12805",
+				"prerequisiteId": "12811"
+			},
+			{
+				"courseId": "f24dj62anmvz2dtbiogkdqtbrplfbbzi",
+				"oldCourseId": "12805",
+				"prerequisiteId": "12814"
+			}
+		]
+	},
+	{
+		"id": "yakqdxemef2bcflxpaxlkei2hxv6o4t6",
+		"oldId": "10730",
+		"name": "Preliminary Physics I",
+		"code": "PHYS0070",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "3pcnewv7oqf2m6ry3qvdvwmzntbz5hgw",
+		"oldId": "13654",
+		"name": "Preliminary Physics II",
+		"code": "PHYS0071",
+		"level": 0,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "ezma72plmoqw57y2mwqy4i2lyossjhcw",
+		"oldId": "161",
+		"name": "Physics I: Mechanics of Translational Motion",
+		"code": "PHYS1200",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "nrc5hmkaeotgi52ahudabscqxuhssxmr",
+		"oldId": "213",
+		"name": "Physics II: Rotation, Waves and Thermodynamics",
+		"code": "PHYS1205",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "h6q3pshwpil2juhmbdzprtv6kjx3qnnr",
+		"oldId": "214",
+		"name": "Physics III: Electric Fields, Currents and Circuits",
+		"code": "PHYS1210",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "riueteibc5vm2h2lshaz6622fsocbdoa",
+		"oldId": "215",
+		"name": "Physics IV: Magnetism, Electromagnetic Waves and Optics",
+		"code": "PHYS1220",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "pwnkjxuou7vdhdl4456ictm3h5nlz7qz",
+		"oldId": "724",
+		"name": "Mathematical Methods in Physics I",
+		"code": "PHYS2400",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "pwnkjxuou7vdhdl4456ictm3h5nlz7qz",
+				"oldCourseId": "724",
+				"prerequisiteId": "319"
+			},
+			{
+				"courseId": "pwnkjxuou7vdhdl4456ictm3h5nlz7qz",
+				"oldCourseId": "724",
+				"prerequisiteId": "383"
+			}
+		]
+	},
+	{
+		"id": "z7dczkywcyzzghxgpd63sds36gwoahmm",
+		"oldId": "726",
+		"name": "Mathematical Methods in Physics II",
+		"code": "PHYS2405",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "z7dczkywcyzzghxgpd63sds36gwoahmm",
+				"oldCourseId": "726",
+				"prerequisiteId": "724"
+			}
+		]
+	},
+	{
+		"id": "m3ehgd7u6kqgwv3ty6ojmnrbaojh4qs2",
+		"oldId": "727",
+		"name": "Modern Physics",
+		"code": "PHYS2410",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "m3ehgd7u6kqgwv3ty6ojmnrbaojh4qs2",
+				"oldCourseId": "727",
+				"prerequisiteId": "161"
+			},
+			{
+				"courseId": "m3ehgd7u6kqgwv3ty6ojmnrbaojh4qs2",
+				"oldCourseId": "727",
+				"prerequisiteId": "213"
+			},
+			{
+				"courseId": "m3ehgd7u6kqgwv3ty6ojmnrbaojh4qs2",
+				"oldCourseId": "727",
+				"prerequisiteId": "214"
+			},
+			{
+				"courseId": "m3ehgd7u6kqgwv3ty6ojmnrbaojh4qs2",
+				"oldCourseId": "727",
+				"prerequisiteId": "215"
+			}
+		]
+	},
+	{
+		"id": "w5zsty7w6xhrjxaf6ecz352cqoyhnq5b",
+		"oldId": "729",
+		"name": "Theory of Classical Mechanics",
+		"code": "PHYS2415",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "w5zsty7w6xhrjxaf6ecz352cqoyhnq5b",
+				"oldCourseId": "729",
+				"prerequisiteId": "161"
+			},
+			{
+				"courseId": "w5zsty7w6xhrjxaf6ecz352cqoyhnq5b",
+				"oldCourseId": "729",
+				"prerequisiteId": "213"
+			},
+			{
+				"courseId": "w5zsty7w6xhrjxaf6ecz352cqoyhnq5b",
+				"oldCourseId": "729",
+				"prerequisiteId": "214"
+			},
+			{
+				"courseId": "w5zsty7w6xhrjxaf6ecz352cqoyhnq5b",
+				"oldCourseId": "729",
+				"prerequisiteId": "215"
+			}
+		]
+	},
+	{
+		"id": "tbt37zvjp6egiecj2xu37ogjj4f6jvgg",
+		"oldId": "478",
+		"name": "Advanced Physics Laboratory I",
+		"code": "PHYS2420",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "tbt37zvjp6egiecj2xu37ogjj4f6jvgg",
+				"oldCourseId": "478",
+				"prerequisiteId": "161"
+			},
+			{
+				"courseId": "tbt37zvjp6egiecj2xu37ogjj4f6jvgg",
+				"oldCourseId": "478",
+				"prerequisiteId": "213"
+			},
+			{
+				"courseId": "tbt37zvjp6egiecj2xu37ogjj4f6jvgg",
+				"oldCourseId": "478",
+				"prerequisiteId": "214"
+			},
+			{
+				"courseId": "tbt37zvjp6egiecj2xu37ogjj4f6jvgg",
+				"oldCourseId": "478",
+				"prerequisiteId": "215"
+			}
+		]
+	},
+	{
+		"id": "xui5xrclapxah673yg7warhfnnmi235a",
+		"oldId": "480",
+		"name": "Computational Methods in Physics",
+		"code": "PHYS2425",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "xui5xrclapxah673yg7warhfnnmi235a",
+				"oldCourseId": "480",
+				"prerequisiteId": "161"
+			},
+			{
+				"courseId": "xui5xrclapxah673yg7warhfnnmi235a",
+				"oldCourseId": "480",
+				"prerequisiteId": "213"
+			},
+			{
+				"courseId": "xui5xrclapxah673yg7warhfnnmi235a",
+				"oldCourseId": "480",
+				"prerequisiteId": "214"
+			},
+			{
+				"courseId": "xui5xrclapxah673yg7warhfnnmi235a",
+				"oldCourseId": "480",
+				"prerequisiteId": "215"
+			}
+		]
+	},
+	{
+		"id": "c5vf344bhtmvl2aapoj6ldilxsxoav2k",
+		"oldId": "5784",
+		"name": "Physics Elective",
+		"code": "PHYS2950",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "t4tw4nlzdc3ki3hdpfdbgejlnd7mibbx",
+		"oldId": "12767",
+		"name": "Electromagnetic Theory I",
+		"code": "PHYS3420",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "t4tw4nlzdc3ki3hdpfdbgejlnd7mibbx",
+				"oldCourseId": "12767",
+				"prerequisiteId": "726"
+			}
+		]
+	},
+	{
+		"id": "alqjsdiu3uxlpml2ecwi4rcmmmjmzfws",
+		"oldId": "12766",
+		"name": "Fundamentals of General Relativity and Cosmology",
+		"code": "PHYS3445",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "alqjsdiu3uxlpml2ecwi4rcmmmjmzfws",
+				"oldCourseId": "12766",
+				"prerequisiteId": "727"
+			},
+			{
+				"courseId": "alqjsdiu3uxlpml2ecwi4rcmmmjmzfws",
+				"oldCourseId": "12766",
+				"prerequisiteId": "726"
+			}
+		]
+	},
+	{
+		"id": "qg4irnmhtmjdxud2enb5c4mdglysvcma",
+		"oldId": "578",
+		"name": "Fluid Mechanics",
+		"code": "PHYS3450",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "qg4irnmhtmjdxud2enb5c4mdglysvcma",
+				"oldCourseId": "578",
+				"prerequisiteId": "729"
+			}
+		]
+	},
+	{
+		"id": "n5rjr2cgjlmlaymil2shmjurevlxglfz",
+		"oldId": "12765",
+		"name": "Lasers and Optical Systems",
+		"code": "PHYS3455",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "n5rjr2cgjlmlaymil2shmjurevlxglfz",
+				"oldCourseId": "12765",
+				"prerequisiteId": "724"
+			}
+		]
+	},
+	{
+		"id": "bzqdhbtuzscueq6fdymh2gf5spzlt7ss",
+		"oldId": "12764",
+		"name": "Physics of Sustainable Energy Systems",
+		"code": "PHYS3460",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "bzqdhbtuzscueq6fdymh2gf5spzlt7ss",
+				"oldCourseId": "12764",
+				"prerequisiteId": "729"
+			}
+		]
+	},
+	{
+		"id": "df4apy32z257fkx6lbt7egg5onwiojzu",
+		"oldId": "12763",
+		"name": "Electromagnetic Theory II",
+		"code": "PHYS3465",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "df4apy32z257fkx6lbt7egg5onwiojzu",
+				"oldCourseId": "12763",
+				"prerequisiteId": "12767"
+			}
+		]
+	},
+	{
+		"id": "56335le5dxreqikzykbjg6wezwxrprrk",
+		"oldId": "12762",
+		"name": "Biological Physics",
+		"code": "PHYS3470",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "56335le5dxreqikzykbjg6wezwxrprrk",
+				"oldCourseId": "12762",
+				"prerequisiteId": "12759"
+			}
+		]
+	},
+	{
+		"id": "cajr4ymnymvrlr22d4g7utx3alslswuh",
+		"oldId": "12761",
+		"name": "Fundamentals of Solid State Physics",
+		"code": "PHYS3475",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "cajr4ymnymvrlr22d4g7utx3alslswuh",
+				"oldCourseId": "12761",
+				"prerequisiteId": "727"
+			}
+		]
+	},
+	{
+		"id": "vurlw7k2yzfxzo2eawqn7htea3thimq6",
+		"oldId": "12760",
+		"name": "Theory of Quantum Mechanics",
+		"code": "PHYS3480",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "vurlw7k2yzfxzo2eawqn7htea3thimq6",
+				"oldCourseId": "12760",
+				"prerequisiteId": "727"
+			},
+			{
+				"courseId": "vurlw7k2yzfxzo2eawqn7htea3thimq6",
+				"oldCourseId": "12760",
+				"prerequisiteId": "726"
+			}
+		]
+	},
+	{
+		"id": "m5ma373ckfmi2rvhqhyfifko4miincqr",
+		"oldId": "12759",
+		"name": "Theory of Statistical Mechanics",
+		"code": "PHYS3485",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "m5ma373ckfmi2rvhqhyfifko4miincqr",
+				"oldCourseId": "12759",
+				"prerequisiteId": "727"
+			},
+			{
+				"courseId": "m5ma373ckfmi2rvhqhyfifko4miincqr",
+				"oldCourseId": "12759",
+				"prerequisiteId": "724"
+			}
+		]
+	},
+	{
+		"id": "j3xqqcdn4ct46homkpk7r6rf4yewjhmd",
+		"oldId": "582",
+		"name": "Physics One-Semester Research Project",
+		"code": "PHYS3490",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "2fjipwb337sogsol7zsbumprnmg2zo4p",
+		"oldId": "583",
+		"name": "Physics Two-Semester Research Project",
+		"code": "PHYS3495",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "uwqgqlfqqn6pxnekcxa56pdptdrnaw6g",
+		"oldId": "13214",
+		"name": "Physics Internship",
+		"code": "PHYS3955",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "42cvonuo3ofohetfbispjbm76asc4iuu",
+		"oldId": "145",
+		"name": "An Introduction to Computing I",
+		"code": "SWEN1000",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "475dvpjnfwqid73s37tng75pe37topvh",
+		"oldId": "385",
+		"name": "An Introduction to Object Oriented Programming",
+		"code": "SWEN1001",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "475dvpjnfwqid73s37tng75pe37topvh",
+				"oldCourseId": "385",
+				"prerequisiteId": "145"
+			},
+			{
+				"courseId": "475dvpjnfwqid73s37tng75pe37topvh",
+				"oldCourseId": "385",
+				"prerequisiteId": "317"
+			}
+		]
+	},
+	{
+		"id": "fsbkih37o6y3lr56fzjuwolpl2wk7cvz",
+		"oldId": "149",
+		"name": "Computing in Society",
+		"code": "SWEN1002",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "g22gtxnpchsjvxiko2ocqwvjpxzhefpv",
+		"oldId": "202",
+		"name": "Current and Future Trends in Computing for Software Engineers",
+		"code": "SWEN1003",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "hf5nosb6nzkylkzrlferbb444jiz5ptm",
+		"oldId": "203",
+		"name": "Mathematics for Software Engineers",
+		"code": "SWEN1004",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "4iolktniafneb55dci6re6vresk73l6c",
+		"oldId": "204",
+		"name": "Mobile Web Programming",
+		"code": "SWEN1005",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "mb6ulgjpk6h3btjrox7moaq2fl76rwdo",
+		"oldId": "205",
+		"name": "Research Methods for Software Engineers",
+		"code": "SWEN1006",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "2lnl67vp347rzynanfexydkv3texzlrr",
+		"oldId": "206",
+		"name": "Software Engineering Essentials",
+		"code": "SWEN1007",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "vvquaqw4mpf5jgdl3m3vwcak3dgpubu5",
+		"oldId": "207",
+		"name": "Technical Writing for Software Engineers",
+		"code": "SWEN1008",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "vvquaqw4mpf5jgdl3m3vwcak3dgpubu5",
+				"oldCourseId": "207",
+				"prerequisiteId": "205"
+			}
+		]
+	},
+	{
+		"id": "s2m7ib5vrf3al3qt6g4j323dpfbi6dkc",
+		"oldId": "317",
+		"name": "An Introduction to Computing II",
+		"code": "SWEN1009",
+		"level": 1,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "s2m7ib5vrf3al3qt6g4j323dpfbi6dkc",
+				"oldCourseId": "317",
+				"prerequisiteId": "145"
+			}
+		]
+	},
+	{
+		"id": "ym3ayolktnunexoxkpytpkxt6i2whd5n",
+		"oldId": "12741",
+		"name": "An Introduction to Requirements Engineering",
+		"code": "SWEN2000",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ym3ayolktnunexoxkpytpkxt6i2whd5n",
+				"oldCourseId": "12741",
+				"prerequisiteId": "206"
+			},
+			{
+				"courseId": "ym3ayolktnunexoxkpytpkxt6i2whd5n",
+				"oldCourseId": "12741",
+				"prerequisiteId": "160"
+			}
+		]
+	},
+	{
+		"id": "krveadtrqmilbgsn2rehcwt2edu2lwvm",
+		"oldId": "160",
+		"name": "An Introduction to Software Engineering",
+		"code": "SWEN2001",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "krveadtrqmilbgsn2rehcwt2edu2lwvm",
+				"oldCourseId": "160",
+				"prerequisiteId": "385"
+			}
+		]
+	},
+	{
+		"id": "25uz35ltiisa5ktruk3gm6cuper6ew4h",
+		"oldId": "12742",
+		"name": "An Introduction to the Analysis of Algorithms",
+		"code": "SWEN2002",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "25uz35ltiisa5ktruk3gm6cuper6ew4h",
+				"oldCourseId": "12742",
+				"prerequisiteId": "145"
+			},
+			{
+				"courseId": "25uz35ltiisa5ktruk3gm6cuper6ew4h",
+				"oldCourseId": "12742",
+				"prerequisiteId": "385"
+			},
+			{
+				"courseId": "25uz35ltiisa5ktruk3gm6cuper6ew4h",
+				"oldCourseId": "12742",
+				"prerequisiteId": "203"
+			},
+			{
+				"courseId": "25uz35ltiisa5ktruk3gm6cuper6ew4h",
+				"oldCourseId": "12742",
+				"prerequisiteId": "317"
+			}
+		]
+	},
+	{
+		"id": "bavrllcobqan45xtaaam6hdhjkj235py",
+		"oldId": "163",
+		"name": "Computer Networking and Security",
+		"code": "SWEN2003",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "kd33byhajyn33esifanrrforpqgzhpnm",
+		"oldId": "12743",
+		"name": "Computer Organisation",
+		"code": "SWEN2004",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "kd33byhajyn33esifanrrforpqgzhpnm",
+				"oldCourseId": "12743",
+				"prerequisiteId": "145"
+			},
+			{
+				"courseId": "kd33byhajyn33esifanrrforpqgzhpnm",
+				"oldCourseId": "12743",
+				"prerequisiteId": "385"
+			},
+			{
+				"courseId": "kd33byhajyn33esifanrrforpqgzhpnm",
+				"oldCourseId": "12743",
+				"prerequisiteId": "203"
+			},
+			{
+				"courseId": "kd33byhajyn33esifanrrforpqgzhpnm",
+				"oldCourseId": "12743",
+				"prerequisiteId": "317"
+			}
+		]
+	},
+	{
+		"id": "jt4ngysv6beht4iw4aug54midp5vqgvh",
+		"oldId": "12744",
+		"name": "Database Systems",
+		"code": "SWEN2005",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "jt4ngysv6beht4iw4aug54midp5vqgvh",
+				"oldCourseId": "12744",
+				"prerequisiteId": "145"
+			},
+			{
+				"courseId": "jt4ngysv6beht4iw4aug54midp5vqgvh",
+				"oldCourseId": "12744",
+				"prerequisiteId": "317"
+			},
+			{
+				"courseId": "jt4ngysv6beht4iw4aug54midp5vqgvh",
+				"oldCourseId": "12744",
+				"prerequisiteId": "163"
+			}
+		]
+	},
+	{
+		"id": "du7hoxwffay2doduiouj265mkud7az3b",
+		"oldId": "321",
+		"name": "Discrete Mathematics for Software Engineers",
+		"code": "SWEN2006",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "du7hoxwffay2doduiouj265mkud7az3b",
+				"oldCourseId": "321",
+				"prerequisiteId": "203"
+			}
+		]
+	},
+	{
+		"id": "ohttvmj7mzfj4b6akw4eaxyuw7z745ig",
+		"oldId": "322",
+		"name": "Object Oriented Design and Implementation",
+		"code": "SWEN2007",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ohttvmj7mzfj4b6akw4eaxyuw7z745ig",
+				"oldCourseId": "322",
+				"prerequisiteId": "160"
+			}
+		]
+	},
+	{
+		"id": "iqf6uwmum66qm6fcwptbw2rf76p2urra",
+		"oldId": "12745",
+		"name": "Elementary Chinese Culture and Language",
+		"code": "SWEN2013",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "sr6sxuiszntim2l442summpvvel5xq3u",
+		"oldId": "12750",
+		"name": "Intermediate Chinese Culture and Language",
+		"code": "SWEN2014",
+		"level": 2,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "pq2mzwnaaitotquntnpqyjxyg67vm5jp",
+		"oldId": "670",
+		"name": "Application Development for IOS Devices",
+		"code": "SWEN3000",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "pq2mzwnaaitotquntnpqyjxyg67vm5jp",
+				"oldCourseId": "670",
+				"prerequisiteId": "322"
+			}
+		]
+	},
+	{
+		"id": "oroncglc72s64haghyv7doxrbjkg3fyj",
+		"oldId": "12751",
+		"name": "Android Application Development I",
+		"code": "SWEN3001",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "oroncglc72s64haghyv7doxrbjkg3fyj",
+				"oldCourseId": "12751",
+				"prerequisiteId": "322"
+			},
+			{
+				"courseId": "oroncglc72s64haghyv7doxrbjkg3fyj",
+				"oldCourseId": "12751",
+				"prerequisiteId": "12744"
+			}
+		]
+	},
+	{
+		"id": "mxhbe6nkew3tsgtcvm2wplvmyhw6fs4g",
+		"oldId": "672",
+		"name": "Android Application Development II",
+		"code": "SWEN3002",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "mxhbe6nkew3tsgtcvm2wplvmyhw6fs4g",
+				"oldCourseId": "672",
+				"prerequisiteId": "12751"
+			}
+		]
+	},
+	{
+		"id": "h65usygubszxlombps4rdpynz7h43vqw",
+		"oldId": "12752",
+		"name": "Web & Mobile Application Development I",
+		"code": "SWEN3003",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "h65usygubszxlombps4rdpynz7h43vqw",
+				"oldCourseId": "12752",
+				"prerequisiteId": "204"
+			},
+			{
+				"courseId": "h65usygubszxlombps4rdpynz7h43vqw",
+				"oldCourseId": "12752",
+				"prerequisiteId": "206"
+			}
+		]
+	},
+	{
+		"id": "xthlz4m2yotq6jaz4xri2b5n6u7c77gw",
+		"oldId": "12753",
+		"name": "Web & Mobile Application Development II",
+		"code": "SWEN3004",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "xthlz4m2yotq6jaz4xri2b5n6u7c77gw",
+				"oldCourseId": "12753",
+				"prerequisiteId": "12752"
+			}
+		]
+	},
+	{
+		"id": "gmgjhx42vzhfzdkg4yeyoyg6u7pobi75",
+		"oldId": "11402",
+		"name": "Web and Mobile Application Development I",
+		"code": "SWEN3010",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "4jxesrixydxdp5ddvmxg3qsrinwavi2q",
+		"oldId": "12754",
+		"name": "Software Architecture",
+		"code": "SWEN3120",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "4jxesrixydxdp5ddvmxg3qsrinwavi2q",
+				"oldCourseId": "12754",
+				"prerequisiteId": "12741"
+			},
+			{
+				"courseId": "4jxesrixydxdp5ddvmxg3qsrinwavi2q",
+				"oldCourseId": "12754",
+				"prerequisiteId": "160"
+			},
+			{
+				"courseId": "4jxesrixydxdp5ddvmxg3qsrinwavi2q",
+				"oldCourseId": "12754",
+				"prerequisiteId": "322"
+			}
+		]
+	},
+	{
+		"id": "vkwssw4pj5wmt32wdsvuika7rlehxkhs",
+		"oldId": "12755",
+		"name": "Software Project Management",
+		"code": "SWEN3130",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "vkwssw4pj5wmt32wdsvuika7rlehxkhs",
+				"oldCourseId": "12755",
+				"prerequisiteId": "12755"
+			}
+		]
+	},
+	{
+		"id": "aybhtaulimjawbtceyzni4o76f63u6ez",
+		"oldId": "12757",
+		"name": "Software Testing",
+		"code": "SWEN3165",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "aybhtaulimjawbtceyzni4o76f63u6ez",
+				"oldCourseId": "12757",
+				"prerequisiteId": "322"
+			},
+			{
+				"courseId": "aybhtaulimjawbtceyzni4o76f63u6ez",
+				"oldCourseId": "12757",
+				"prerequisiteId": "160"
+			}
+		]
+	},
+	{
+		"id": "uzfo5xsnctti2rabjoni25euy7ky65xm",
+		"oldId": "10227",
+		"name": "Internship in Computing II",
+		"code": "SWEN3912",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "n2mpib2trpnjroenujgvfwxpncqjvgo7",
+		"oldId": "12758",
+		"name": "Capstone Project",
+		"code": "SWEN3920",
+		"level": 3,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "n2mpib2trpnjroenujgvfwxpncqjvgo7",
+				"oldCourseId": "12758",
+				"prerequisiteId": "321"
+			},
+			{
+				"courseId": "n2mpib2trpnjroenujgvfwxpncqjvgo7",
+				"oldCourseId": "12758",
+				"prerequisiteId": "12755"
+			},
+			{
+				"courseId": "n2mpib2trpnjroenujgvfwxpncqjvgo7",
+				"oldCourseId": "12758",
+				"prerequisiteId": "12756"
+			}
+		]
+	},
+	{
+		"id": "gm7so7qo46d7cstwbd4j6hpx3tslyccx",
+		"oldId": "8413",
+		"name": "Advanced Database Systems",
+		"code": "SWEN4001",
+		"level": 4,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "gm7so7qo46d7cstwbd4j6hpx3tslyccx",
+				"oldCourseId": "8413",
+				"prerequisiteId": "12744"
+			}
+		]
+	},
+	{
+		"id": "hfddylvd6ofk2oxtapg2s6sbaby7uavs",
+		"oldId": "12756",
+		"name": "Software Modelling",
+		"code": "SWEN3145",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "hfddylvd6ofk2oxtapg2s6sbaby7uavs",
+				"oldCourseId": "12756",
+				"prerequisiteId": "322"
+			},
+			{
+				"courseId": "hfddylvd6ofk2oxtapg2s6sbaby7uavs",
+				"oldCourseId": "12756",
+				"prerequisiteId": "160"
+			}
+		]
+	},
+	{
+		"id": "wrc56rzqpqxb2mubcv4zehb7sat2ad3w",
+		"oldId": "8417",
+		"name": "IT Certification I",
+		"code": "SWEN4008",
+		"level": 4,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "ablkr3ny4puf7xp6xn4cbgq5pe5w7evv",
+		"oldId": "8419",
+		"name": "Software Engineering Capstone Project I",
+		"code": "SWEN4050",
+		"level": 4,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "ablkr3ny4puf7xp6xn4cbgq5pe5w7evv",
+				"oldCourseId": "8419",
+				"prerequisiteId": "12757"
+			},
+			{
+				"courseId": "ablkr3ny4puf7xp6xn4cbgq5pe5w7evv",
+				"oldCourseId": "8419",
+				"prerequisiteId": "12756"
+			},
+			{
+				"courseId": "ablkr3ny4puf7xp6xn4cbgq5pe5w7evv",
+				"oldCourseId": "8419",
+				"prerequisiteId": "672"
+			},
+			{
+				"courseId": "ablkr3ny4puf7xp6xn4cbgq5pe5w7evv",
+				"oldCourseId": "8419",
+				"prerequisiteId": "670"
+			},
+			{
+				"courseId": "ablkr3ny4puf7xp6xn4cbgq5pe5w7evv",
+				"oldCourseId": "8419",
+				"prerequisiteId": "12753"
+			}
+		]
+	},
+	{
+		"id": "wxlycpqzfdhz2cuoqk4eoenttkx7zgxf",
+		"oldId": "8420",
+		"name": "Software Engineering Capstone Project II",
+		"code": "SWEN4055",
+		"level": 4,
+		"description": "",
+		"credits": 6,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": []
+	},
+	{
+		"id": "qfks62yzi4ruyjab2fspzyz5e2n3y24q",
+		"oldId": "56452",
+		"name": "Fisheries Biology",
+		"code": "ECOL3454",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "qfks62yzi4ruyjab2fspzyz5e2n3y24q",
+				"oldCourseId": "56452",
+				"prerequisiteId": "466"
+			}
+		]
+	},
+	{
+		"id": "egmj4wurau7p4pcz6j37buex2tnwhftq",
+		"oldId": "154368",
+		"name": "Landscapes and Landforms of the Lesser Antilles",
+		"code": "ENSC3103",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "egmj4wurau7p4pcz6j37buex2tnwhftq",
+				"oldCourseId": "154368",
+				"prerequisiteId": "327"
+			},
+			{
+				"courseId": "egmj4wurau7p4pcz6j37buex2tnwhftq",
+				"oldCourseId": "154368",
+				"prerequisiteId": "9398"
+			},
+			{
+				"courseId": "egmj4wurau7p4pcz6j37buex2tnwhftq",
+				"oldCourseId": "154368",
+				"prerequisiteId": "11792"
+			}
+		]
+	},
+	{
+		"id": "rvshafpm2yfipwzgax3emiqxu5l7fvkb",
+		"oldId": "12768",
+		"name": "Mathematics Research Project",
+		"code": "MATH3590",
+		"level": 3,
+		"description": "",
+		"credits": 3,
+		"prerequisiteType": "all",
+		"prerequisiteCount": 1,
+		"departmentId": "ik3efpazazjrieq3npwmsmhlyof65ic6",
+		"prerequisites": [
+			{
+				"courseId": "rvshafpm2yfipwzgax3emiqxu5l7fvkb",
+				"oldCourseId": "12768",
+				"prerequisiteId": "674"
+			},
+			{
+				"courseId": "rvshafpm2yfipwzgax3emiqxu5l7fvkb",
+				"oldCourseId": "12768",
+				"prerequisiteId": "8432"
+			},
+			{
+				"courseId": "rvshafpm2yfipwzgax3emiqxu5l7fvkb",
+				"oldCourseId": "12768",
+				"prerequisiteId": "693"
+			},
+			{
+				"courseId": "rvshafpm2yfipwzgax3emiqxu5l7fvkb",
+				"oldCourseId": "12768",
+				"prerequisiteId": "13638"
+			},
+			{
+				"courseId": "rvshafpm2yfipwzgax3emiqxu5l7fvkb",
+				"oldCourseId": "12768",
+				"prerequisiteId": "694"
+			}
+		]
+	}
+]

@@ -1,15 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { advisorUpdateSchema } from '$lib/schemas/user';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import {
-	checkEmailAvailability,
-	checkUsernameAvailability,
-	deleteUserFromId,
-	getUserFromId,
-	updateUser
-} from '$lib/server/actions/user.actions';
 import {
 	checkMinorAvailability,
 	deleteMinorFromId,

@@ -6,13 +6,25 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
 	import * as Input from '$lib/components/ui/input/index.js';
-	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
+	import * as Select from '$lib/components/ui/select/index.js';
 	import { majorUpdateSchema, type MajorUpdateSchema } from '$lib/schemas/major';
-	import { advisorUpdateSchema, roles, type AdvisorUpdateSchema } from '$lib/schemas/user';
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	let { data }: { data: SuperValidated<Infer<MajorUpdateSchema>> } = $props();
+	let {
+		data,
+		requirements
+	}: {
+		data: SuperValidated<Infer<MajorUpdateSchema>>;
+		requirements: {
+			level: number[];
+			details: (string | undefined)[];
+			id: string;
+			type: 'courses' | 'disciplines' | 'faculties';
+			credits: number;
+			option: 'all' | 'at most' | 'at least';
+		}[];
+	} = $props();
 
 	const form = superForm(data, {
 		validators: zodClient(majorUpdateSchema)
@@ -50,6 +62,49 @@
 					{/snippet}
 				</Form.Control>
 				<Form.Description>This is the public displayed major name.</Form.Description>
+				<Form.FieldErrors />
+			</Form.Field>
+			<Form.Field {form} name="requirements">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Requirements</Form.Label>
+						<Select.Root
+							type="multiple"
+							bind:value={() => $formData.requirements, (v) => ($formData.requirements = v)}
+							name={props.name}
+						>
+							<Select.Trigger {...props} class="h-fit text-wrap">
+								{$formData.requirements.length > 0
+									? requirements
+											.filter((r) => $formData.requirements.includes(r.id))
+											.map(
+												(r) =>
+													+r.credits + ' credits from' + r.type + ' ' + r.details.join(',\n----')
+											)
+											.join('\n############\n')
+									: 'Select verified requirements to display'}
+							</Select.Trigger>
+							<Select.Content class="max-w-lg">
+								{#each requirements.sort((a, b) => {
+									if (a.type === b.type) {
+										return a.credits - b.credits;
+									}
+									return a.type.localeCompare(b.type);
+								}) as requriement (requriement.id)}
+									<Select.Item
+										value={requriement.id}
+										label={requriement.credits +
+											' credits form ' +
+											requriement.type +
+											' ' +
+											requriement.details.join(',\n')}
+									/>
+								{/each}
+							</Select.Content>
+						</Select.Root>
+					{/snippet}
+				</Form.Control>
+				<Form.Description>This is the public displayed major requriements.</Form.Description>
 				<Form.FieldErrors />
 			</Form.Field>
 			<div class="flex flex-row space-x-1">

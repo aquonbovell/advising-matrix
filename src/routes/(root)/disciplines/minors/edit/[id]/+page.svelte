@@ -1,6 +1,5 @@
 <script lang="ts">
 	import EditMinorForm from '$lib/components/edit-minor-form.svelte';
-	import EditUserForm from '$lib/components/edit-user-form.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

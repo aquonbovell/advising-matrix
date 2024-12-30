@@ -7,7 +7,8 @@ export type MajorCreationSchema = typeof majorCreationSchema;
 
 export const majorUpdateSchema = z.object({
 	id: z.string(),
-	name: z.string().trim().min(4).max(255)
+	name: z.string().trim().min(4).max(255),
+	requirements: z.array(z.string())
 });
 
 export type MajorUpdateSchema = typeof majorUpdateSchema;

@@ -1,8 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteUserFromId, getUserFromId } from '$lib/server/actions/user.actions';
 import { error } from '@sveltejs/kit';
 import { deleteMajorFromId, getMajorFromId } from '$lib/server/actions/major.actions';
+import { getRequirementDetailsFromMajorId } from '$lib/server/actions/requirements.actions';
 
 export const load = (async (event) => {
 	if (event.locals.session === null || event.locals.user === null) {
@@ -17,7 +17,12 @@ export const load = (async (event) => {
 	if (!major) {
 		error(404, 'Major not found');
 	}
-	return { major };
+
+	const requriements = await getRequirementDetailsFromMajorId(event.params.id);
+
+	console.log('requriements', requriements);
+
+	return { major: { ...major, requriements } };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

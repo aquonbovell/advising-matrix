@@ -1,8 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getStudents } from '$lib/server/actions/student.actions';
-import { getMajors, loadMajors } from '$lib/server/actions/major.actions';
-import { getRequirements } from '$lib/server/actions/requirements.actions';
+import { getRequirements, loadRequirements } from '$lib/server/actions/requirements.actions';
 
 export const load = (async (event) => {
 	if (event.locals.session === null || event.locals.user === null) {
@@ -26,7 +24,7 @@ export const actions: Actions = {
 			fail(403, { message: 'Forbidden' });
 		}
 
-		const load = await loadMajors();
+		const load = await loadRequirements();
 
 		return { success: load };
 	}

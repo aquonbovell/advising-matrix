@@ -5,7 +5,6 @@
 	import * as Input from '$lib/components/ui/input/index.js';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
-	import { majorCreationSchema, type MajorCreationSchema } from '$lib/schemas/major';
 	import {
 		disciplines,
 		levels,
@@ -14,7 +13,6 @@
 		types,
 		type RequirementCreationSchema
 	} from '$lib/schemas/requirement';
-	import { advisorSchema, type AdvisorSchema } from '$lib/schemas/user';
 	import { toast } from 'svelte-sonner';
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';

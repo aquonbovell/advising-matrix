@@ -5,8 +5,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Input from '$lib/components/ui/input/index.js';
 	import * as Label from '$lib/components/ui/label/index.js';
-	import * as RadioGroup from '$lib/components/ui/radio-group';
-	import { roles } from '$lib/schemas/user';
+	import * as Textarea from '$lib/components/ui/textarea/index.js';
 	import { page } from '$app/state';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
@@ -77,6 +76,10 @@
 						value={data.major.name}
 						class="w-full"
 					/>
+				</div>
+				<div class="grid gap-2">
+					<Label.Root for="name">Requirements</Label.Root>
+					<Textarea.Root id="name" required readonly value={data.major.requriements.join('\n')} />
 				</div>
 				<div class="flex flex-row space-x-1">
 					<Button.Root

@@ -72,6 +72,14 @@
 				]
 			}
 		],
+		advising: [
+			{
+				name: 'Students',
+				url: '/students',
+				icon: Map
+			}
+		],
+
 		extras: [
 			{
 				title: 'Models',
@@ -150,6 +158,7 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import { type ComponentProps } from 'svelte';
 	import NavDiscipline from './nav-discipline.svelte';
+	import NavStudents from './nav-students.svelte';
 
 	let {
 		ref = $bindable(null),
@@ -181,6 +190,10 @@
 		{/if}
 		{#if user.role === 'admin'}
 			<NavDiscipline items={data.disciplines} />
+		{/if}
+
+		{#if user.role === 'superadvisor'}
+			<NavStudents projects={data.advising} />
 		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>

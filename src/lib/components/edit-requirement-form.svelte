@@ -8,7 +8,6 @@
 	import * as Input from '$lib/components/ui/input/index.js';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
-	import { majorUpdateSchema, type MajorUpdateSchema } from '$lib/schemas/major';
 	import {
 		disciplines,
 		levels,
@@ -17,7 +16,6 @@
 		types,
 		type RequirementUpdateSchema
 	} from '$lib/schemas/requirement';
-	import { advisorUpdateSchema, roles, type AdvisorUpdateSchema } from '$lib/schemas/user';
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
