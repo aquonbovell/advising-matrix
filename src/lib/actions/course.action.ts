@@ -1,11 +1,12 @@
 import { db } from '$lib/db';
+import type { Courses } from '$lib/db/schema';
 import type {
-	Courses,
+	Course,
+	CoursesWithPrerequisites,
 	prerequisiteType,
 	requirementDetailsType,
 	requirementOption
-} from '$lib/db/schema';
-import type { Course, CoursesWithPrerequisites } from '$lib/types';
+} from '$lib/types';
 import courses from '../../../courses.json';
 
 export async function updateMajor(majorData: {

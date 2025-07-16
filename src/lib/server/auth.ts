@@ -1,21 +1,21 @@
 import { Lucia, TimeSpan } from 'lucia';
 import { dev } from '$app/environment';
 import type { DB } from '$lib/db/schema';
-import { postgresql } from '$lib/db';
+import { client } from '$lib/db';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { createDate } from 'oslo';
 import { LibSQLAdapter } from '@lucia-auth/adapter-sqlite';
 import { NodePostgresAdapter } from '@lucia-auth/adapter-postgresql';
 
-// const adapter = new LibSQLAdapter(client, {
-// 	user: 'User',
-// 	session: 'Session'
-// });
-
-const adapter = new NodePostgresAdapter(postgresql, {
+const adapter = new LibSQLAdapter(client, {
 	user: 'User',
 	session: 'Session'
 });
+
+// const adapter = new NodePostgresAdapter(postgresql, {
+// 	user: 'User',
+// 	session: 'Session'
+// });
 
 export const lucia = new Lucia(adapter, {
 	sessionExpiresIn: new TimeSpan(30, 'm'),

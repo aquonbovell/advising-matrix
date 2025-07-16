@@ -115,8 +115,8 @@ export async function renewToken(studentId: string) {
 		.updateTable('Student')
 		.set({
 			invite_token: token,
-			invite_expires: new Date(expiresAt),
-			updated_at: new Date()
+			invite_expires: new Date(expiresAt).toISOString(),
+			updated_at: new Date().toISOString()
 		})
 		.where('id', '=', studentId)
 		.returning('id')

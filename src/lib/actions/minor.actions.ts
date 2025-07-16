@@ -1,6 +1,6 @@
 import { invalidate } from '$app/navigation';
 import { db } from '$lib/db';
-import type { requirementDetailsType, requirementOption } from '$lib/db/schema';
+import type { requirementDetailsType, requirementOption } from '$lib/types';
 import minors from '../../../minors.json';
 
 type requirement = {

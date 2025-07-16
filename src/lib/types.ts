@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Courses, LevelRestriction, RequirementType } from './db/schema';
+import type { Courses, LevelRestriction } from './db/schema';
 
 export const GRADE_VALUES = [
 	'A+',
@@ -133,3 +133,14 @@ export const prerequisiteType = {
 	ONE: 'ONE'
 } as const;
 export type prerequisiteType = (typeof prerequisiteType)[keyof typeof prerequisiteType];
+
+enum RequirementType {
+	CREDITS,
+	POOL
+}
+
+enum UserRole {
+	STUDENT,
+	ADVISOR,
+	ADMIN
+}

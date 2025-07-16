@@ -17,17 +17,17 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 	const student = await db
 		.selectFrom('Student')
-		.select(['major_id', 'minor_id', 'id'])
+		.select(['major_id', 'id'])
 		.where('id', '=', params.id)
 		.executeTakeFirst();
 
 	if (!student) error(404, 'Student not found');
-	const degree = await fetchDegree(student.major_id, student.minor_id);
+	const degree = await fetchDegree(student.major_id, null);
 
 	const studentCourses = await fetchStudentCourses(student.id);
 
 	return {
-		student,
+		student: { ...student, minor_id: 'heygh' },
 		role: locals.user?.role,
 		userId,
 		degree,

@@ -1,5 +1,5 @@
 import { db } from '$lib/db';
-import type { requirementDetailsType, requirementOption } from '$lib/db/schema';
+import type { requirementOption, requirementDetailsType } from '$lib/types';
 import majors from '../../../majors.json';
 
 export async function updateMajor(majorData: {
